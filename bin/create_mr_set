@@ -14,6 +14,10 @@ import modules.create_mr_set.utils.pdbtools as pdbtools
 import random
 import modules.create_mr_set.utils.rcsb as rcsb
 import modules.create_mr_set.tasks.choose_structures as choose_structures
+import modules.create_mr_set.tasks.prepare_structure_data as prepare_structure_data
+import modules.create_mr_set.tasks.get_sequences as get_sequences
+import modules.create_mr_set.tasks.find_homologues as find_homologues
+import modules.create_mr_set.tasks.run_mr as prepare_and_do_mr
 import sys
 import modules.create_mr_set.tasks.tasks as tasks
 import urllib.request
@@ -42,7 +46,7 @@ def add_optional_arguments(parser):
   optional.add_argument("--num-models", type=int, metavar="N", default=10, help="Maximum number of models to choose for each unique chain (default: 10)")
   optional.add_argument("--num-structures", type=int, metavar="N", default=200, help="Maximum number of structures to find in each resolution bin (default: 200)")
   optional.add_argument("--res-bins", type=int, metavar="N", default=10, help="Number of resolution bins (default: 10)")
-  optional.add_argument("--res-max", type=float, metavar="X", default=3.5, help="Maximum resolution (exclusive) (default: 3.5)")
+  optional.add_argument("--res-max", type=float, metavar="X", default=2.5, help="Maximum resolution (exclusive) (default: 3.5)")
   optional.add_argument("--res-min", type=float, metavar="X", default=1.0, help="Minimum resolution (inclusive) (default: 1.0)")
   optional.add_argument("--stop-before-mr", action="store_true", help="Prepare the models but stop before performing MR")
   optional.add_argument("--structure-structure-max-seqid", type=int, metavar="[95,90,70,50,40,30]", choices=[95,90,70,50,40,30], default=50, help="Maximum sequence identity used for filtering structures with similar chains (default: 50)")
@@ -92,14 +96,7 @@ if __name__ == "__main__":
   args = parse_args()
 
   print("Getting a list of PDB structures ...\n")
-  #original version by Paul to check all PDB files
-  rcsb_structures = rcsb.structures()
-  #My new version to look at the PDB files in a local copy
-  #rcsb_structures = rcsb.structures(args.pdb_coords)
-
-  #added that line back in to work with existing list of downloaded strucure ids
-  #existing = os.listdir("structures")
-  #better would be the lines below
+  rcsb_structures = rcsb.structures(args)
   if os.path.exists("structures"):
     existing = os.listdir("structures")
     if len(existing) > 0:
@@ -107,19 +104,18 @@ if __name__ == "__main__":
        structures = { s.id: s for s in structures.values() if "error" not in s.metadata }
        print("Working on %d existing structures without errors" % len(structures))
   else:
-    structures = choose_structures.choose_structures(rcsb_structures)
+    structures = choose_structures.choose_structures(rcsb_structures, args)
     if len(structures) < 1: sys.exit("ERROR: No structures chosen")
-    get_sequences(structures)
-    prepare_structure_data(structures)
-    remove_structures(structures)
-#
-#
-#  chains = {c.global_id: c for s in structures.values() for c in s.chains.values()}
-#  find_homologues(chains)
-#
-#  homologues = {h.global_id: h for c in chains.values() for h in c.homologues.values() if h.todo}
-#  if len(homologues) > 0:
-#    prepare_and_do_mr(homologues)
+    get_sequences.get_sequences(structures, args)
+    prepare_structure_data.prepare_structure_data(structures, args)
+
+  chains = {c.global_id: c for s in structures.values() for c in s.chains.values()}
+  print("Number of chains to search for", len(chains))
+  find_homologues.find_homologues(chains, args)
+  
+  homologues = {h.global_id: h for c in chains.values() for h in c.homologues.values() if h.todo}
+  if len(homologues) > 0:
+    prepare_and_do_mr.prepare_and_do_mr(homologues, args)
 
   print("------------------")
   print("Normal termination")

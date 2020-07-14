@@ -24,14 +24,14 @@ import xml.etree.ElementTree as ET
 ## CHOOSE STRUCTURES
 
 class ResolutionBin:
-  def __init__(self, i):
+  def __init__(self, i, args):
     self.min_res = args.res_min + i * args.res_step
     self.max_res = args.res_min + (i + 1) * args.res_step
     self.structures = []
     self.chosen = []
 
-def assign_resolution_bins(structures):
-  bins = [ResolutionBin(i) for i in range(args.res_bins)]
+def assign_resolution_bins(structures, args):
+  bins = [ResolutionBin(i, args) for i in range(args.res_bins)]
   for structure in structures.values():
     if (structure.resolution < args.res_min or
         structure.resolution >= args.res_max):
@@ -40,26 +40,26 @@ def assign_resolution_bins(structures):
     bins[i].structures.append(structure)
   return bins
 
-def gzipped_coords(pdb_id):
+def path_coords(pdb_id, args):
   pdb = pdb_id.lower()
-  return os.path.join(args.pdb_coords, pdb[1:3], "pdb%s.ent.gz" % pdb)
+  return os.path.join(args.pdb_coords, pdb[1:3], "%s_final.pdb" % pdb)
 
-def gzipped_sfs(pdb_id):
+def path_sfs(pdb_id, args):
   pdb = pdb_id.lower()
-  return os.path.join(args.pdb_sfs, pdb[1:3], "r%ssf.ent.gz" % pdb)
+  return os.path.join(args.pdb_sfs, pdb[1:3], "%s_final.mtz" % pdb)
 
-def gzipped_report(pdb_id):
+def gzipped_report(pdb_id, args):
   pdb = pdb_id.lower()
   return os.path.join(args.pdb_reports, pdb[1:3], pdb, "%s_validation.xml.gz" % pdb)
 
-def input_files_exist(structure):
+def input_files_exist(structure, args):
   return all(os.path.exists(path) for path in {
-    gzipped_coords(structure.id),
-    gzipped_sfs(structure.id),
-    gzipped_report(structure.id),
+    path_coords(structure.id, args),
+    path_sfs(structure.id, args),
+    gzipped_report(structure.id, args),
   })
 
-def validation_report_okay(structure):
+def validation_report_okay(structure, args):
   attrib_key_dict = {
     "relative-percentile-DCC_Rfree": "validation_rfree",
     "relative-percentile-clashscore": "validation_clash",
@@ -67,7 +67,7 @@ def validation_report_okay(structure):
     "relative-percentile-percent-rama-outliers": "validation_rama",
     "relative-percentile-percent-rota-outliers": "validation_rota",
   }
-  path = gzipped_report(structure.id)
+  path = gzipped_report(structure.id, args)
   if not os.path.exists(path): return False
   with gzip.open(path) as f:
     content = f.read()
@@ -81,9 +81,9 @@ def validation_report_okay(structure):
     setattr(structure, key, percentile)
   return True
 
-def choose_structures(structures):
+def choose_structures(structures, args):
   utils.print_section_title("Choosing Structures")
-  res_bins = assign_resolution_bins(structures)
+  res_bins = assign_resolution_bins(structures, args)
   chosen_clusters = set()
   cluster_attr = "cluster%d" % args.structure_structure_max_seqid
   res_bins.sort(key=lambda res_bin: len(res_bin.structures))
@@ -99,14 +99,14 @@ def choose_structures(structures):
     for structure in res_bin.structures:
       passed = True
       num_checked += 1
-      if not input_files_exist(structure):
+      if not input_files_exist(structure, args):
         num_missing_files += 1
         passed = False
       clusters = {getattr(c, cluster_attr) for c in structure.chains.values()}
       if any(c in chosen_clusters for c in clusters):
         num_too_similar += 1
         passed = False
-      if not validation_report_okay(structure):
+      if not validation_report_okay(structure, args):
         num_failed_validation += 1
         passed = False
       if passed:

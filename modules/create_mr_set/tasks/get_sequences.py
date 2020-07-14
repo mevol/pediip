@@ -8,17 +8,20 @@ import datetime
 import gemmi
 import glob
 import gzip
-import modules.create_mr_set.models as models
+import modules.create_mr_set.utils.models as models
 import os
-import modules.create_mr_set.pdbtools as pdbtools
+import modules.create_mr_set.utils.pdbtools as pdbtools
 import random
-import modules.create_mr_set.rcsb as rcsb
+import modules.create_mr_set.utils.rcsb as rcsb
 import sys
-import modules.create_mr_set.tasks as tasks
+import modules.create_mr_set.tasks.tasks as tasks
 import urllib.request
-import modules.create_mr_set.utils as utils
+import modules.create_mr_set.utils.utils as utils
 import uuid
 import xml.etree.ElementTree as ET
+
+
+
 
 ## GET SEQUENCES
 
@@ -34,9 +37,9 @@ def extract_sequences(structures):
   print("Extracting sequences ...")
   for record in Bio.SeqIO.parse("sequences.fasta", "fasta"):
     structure_id = record.id[:4]
-    print(structure_id)
+#    print(structure_id)
     chain_id = record.id[5:6]
-    print(chain_id)
+#    print(chain_id)
     if structure_id in structures:
       structure = structures[structure_id]
       if chain_id in structure.chains:
@@ -53,11 +56,11 @@ def write_sequence(structure, path):
   Bio.SeqIO.write(records, path, "fasta")
   return structure
 
-def write_deposited_sequence(key, structure):
+def write_deposited_sequence(key, structure, args):
   structure = write_sequence(structure, structure.path("deposited.fasta"))
   return key, structure
 
-def remove_duplicate_chains(key, structure):
+def remove_duplicate_chains(key, structure, args):
   seq_copies_dict = {}
   for chain_id, chain in sorted(structure.chains.items()):
     if chain.metadata["seq"] not in seq_copies_dict:
@@ -70,15 +73,15 @@ def remove_duplicate_chains(key, structure):
     chain.add_metadata("copies", seq_copies_dict[chain.metadata["seq"]])
   return key, structure
 
-def write_unique_sequence(key, structure):
+def write_unique_sequence(key, structure, args):
   structure = write_sequence(structure, structure.path("unique.fasta"))
   return key, structure
 
-def get_sequences(structures):
+def get_sequences(structures, args):
   utils.print_section_title("Getting Full Sequences")
   download_sequences(structures)
   extract_sequences(structures)
-  utils.parallel("Writing deposited sequences", write_deposited_sequence, structures, args.jobs)
-  utils.parallel("Removing duplicate chains", remove_duplicate_chains, structures, args.jobs)
-  utils.parallel("Writing unique sequences", write_unique_sequence, structures, args.jobs)
+  utils.parallel("Writing deposited sequences", write_deposited_sequence, structures, args, args.jobs)
+  utils.parallel("Removing duplicate chains", remove_duplicate_chains, structures, args, args.jobs)
+  utils.parallel("Writing unique sequences", write_unique_sequence, structures, args, args.jobs)
   print("")

@@ -44,14 +44,6 @@ def run(executable, args=[], stdin=[], stdout=None, stderr=None):
   pstdout = None if stdout is None else open(stdout, "w")
   pstderr = None if stderr is None else open(stderr, "w")
   command = [executable] + args
-#  p = subprocess.check_call(command,
-#    stdin=pstdin, stdout=pstdout, stderr=pstderr, encoding="utf8", timeout=3600)
-
-#  p = subprocess.run(command,
-#    stdin=pstdin, stdout=pstdout, stderr=pstderr, encoding="utf8", timeout=3600)
-
-#  p = subprocess.Popen(command,
-#    stdin=pstdin, stdout=pstdout, stderr=pstderr, encoding="utf8").wait(timeout=3600)
 
   p = subprocess.Popen(command,
     stdin=pstdin, stdout=pstdout, stderr=pstderr, encoding="utf8")
@@ -60,9 +52,8 @@ def run(executable, args=[], stdin=[], stdout=None, stderr=None):
       p.stdin.write(line + "\n")
     p.stdin.close()
   p.wait(timeout=3600)
-#  p.wait()
 
-def parallel(title, func, dictionary, processes=None):
+def parallel(title, func, dictionary, args, processes=None):
   progress_bar = ProgressBar(title, len(dictionary))
   def callback(item):
     key, value = item
@@ -72,10 +63,11 @@ def parallel(title, func, dictionary, processes=None):
     traceback.print_exception(type(exc), exc, exc.__traceback__)
   pool = multiprocessing.Pool(processes)
   for key, value in dictionary.items():
-    pool.apply_async(func, args=(key, value), callback=callback, error_callback=error_callback)
+    pool.apply_async(func, args=(key, value, args), callback=callback, error_callback=error_callback)
   pool.close()
   pool.join()
   progress_bar.finish()
+
 
 def remove_errors(model_dictionary):
   model_type = type(next(iter(model_dictionary.values()))).__name__.lower()
@@ -87,7 +79,8 @@ def remove_errors(model_dictionary):
         if message not in error_counts: error_counts[message] = 0
         error_counts[message] += 1
         model.add_metadata("error", message)
-        del model_dictionary[model_id]
+        if model_dictionary[model_id] in model_dictionary:
+          del model_dictionary[model_id]
   if len(error_counts) > 0:
     print("Some %ss were removed due to errors:" % model_type)
     for error in error_counts:

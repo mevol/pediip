@@ -245,7 +245,6 @@ def select_and_rename_columns(hklin, colin, colout, prefix):
   ], stdout=result["stdout"], stderr=result["stderr"])
   return result
 
-
 def structural_homologues(xyzin, chain, prefix, archive, threads="auto"):
   """Search for structural homologues with a GESAMT achrive search"""
   result = {
@@ -260,7 +259,6 @@ def structural_homologues(xyzin, chain, prefix, archive, threads="auto"):
     "-o", result["txtout"],
   ], stdout=result["stdout"], stderr=result["stderr"])
   return result
-
 
 def superpose(xyzin1, chain1, xyzin2, chain2, prefix):
   """Superpose one chain over another with GESAMT"""
@@ -296,7 +294,7 @@ def superpose(xyzin1, chain1, xyzin2, chain2, prefix):
 def trim_model(model, chain, alignment, prefix):
   """Trim a molecular replacement model with SCULPTOR"""
   result = {
-    "xyzout": "%s_%s.pdb" % (prefix, os.path.basename(model)[:-3]),
+    "xyzout": "%s_%s.pdb" % (prefix, os.path.basename(model)[:-4]),
     "stdout": "%s.log" % prefix,
     "stderr": "%s.err" % prefix,
   }
