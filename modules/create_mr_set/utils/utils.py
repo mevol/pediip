@@ -51,7 +51,7 @@ def run(executable, args=[], stdin=[], stdout=None, stderr=None):
     for line in stdin:
       p.stdin.write(line + "\n")
     p.stdin.close()
-  p.wait(timeout=3600)
+  p.wait(timeout=14400)
 
 def parallel(title, func, dictionary, args, processes=None):
   progress_bar = ProgressBar(title, len(dictionary))

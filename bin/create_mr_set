@@ -1,29 +1,20 @@
 #!/usr/bin/env python3
 
 import argparse
-import Bio.Seq
-import Bio.SeqIO
-import Bio.SeqRecord
 import datetime
-import gemmi
-import glob
-import gzip
-import modules.create_mr_set.utils.models as models
 import os
+import sys
+import modules.create_mr_set.utils.models as models
 import modules.create_mr_set.utils.pdbtools as pdbtools
-import random
 import modules.create_mr_set.utils.rcsb as rcsb
 import modules.create_mr_set.tasks.choose_structures as choose_structures
 import modules.create_mr_set.tasks.prepare_structure_data as prepare_structure_data
 import modules.create_mr_set.tasks.get_sequences as get_sequences
 import modules.create_mr_set.tasks.find_homologues as find_homologues
 import modules.create_mr_set.tasks.run_mr as prepare_and_do_mr
-import sys
 import modules.create_mr_set.tasks.tasks as tasks
-import urllib.request
 import modules.create_mr_set.utils.utils as utils
-import uuid
-import xml.etree.ElementTree as ET
+from modules.create_mr_set.db.database import DB
 
 ## ARGUMENTS
 
@@ -76,8 +67,6 @@ def parse_args():
   add_calculated_arguments(args)
   return args
 
-
-
 ## MAIN
 
 if __name__ == "__main__":
@@ -116,6 +105,23 @@ if __name__ == "__main__":
   homologues = {h.global_id: h for c in chains.values() for h in c.homologues.values() if h.todo}
   if len(homologues) > 0:
     prepare_and_do_mr.prepare_and_do_mr(homologues, args)
+    
+# Taken database function out for now; plan is to have a separate set of scripts to do the job.
+#  # Create the database
+#  db = DB(overwrite=True)
+#
+#  # Check it exists
+#  if not os.path.exists("results.sqlite"):
+#    raise RuntimeError("Failed to initialise")
+#  print("Database has been initialised")
+#  redo_stats_in = os.path.join(args.pdb_coords, "alldata_noHeader.txt")
+#  
+#  for homologue in homologues:
+#    db.add_mr_ssm_stats(homologue)
+#    
+#  #db.add_pdb_redo(redo_stats_in)
+
+
 
   print("------------------")
   print("Normal termination")

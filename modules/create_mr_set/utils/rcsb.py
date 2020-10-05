@@ -35,7 +35,7 @@ class _Chain:
 def _get_structures(args):
   global _structures
   global add_pdb_redo_info
-  db = "/dls/science/users/ghp45345/pediip/modules/pdb_redo_db/pdb_redo_db.sqlite"
+  db = "/dls/science/users/ghp45345/pediip/modules/db_files/pdb_redo_db.sqlite"
   
   download_columns = ["entityMacromoleculeType",
                       "experimentalTechnique",

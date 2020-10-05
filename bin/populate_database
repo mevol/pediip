@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+
+import argparse
+import datetime
+import os
+import sys
+from modules.create_mr_set.db.database import DB
+
+## ARGUMENTS
+
+def add_required_arguments(parser):
+  required = parser.add_argument_group("Required arguments")
+  required.add_argument("--mr-results", metavar="DIR", required=True, help="Directory containing MR and SSM results")
+
+
+def parse_args():
+  description = "Creates a new molecular replacement test set."
+  parser = argparse.ArgumentParser(description=description, add_help=False)
+  add_required_arguments(parser)
+  args = parser.parse_args()
+  for arg in sorted(vars(args)):
+    user_arg = "--%s" % arg.replace("_", "-")
+    print("%-31s  %s" % (user_arg, getattr(args, arg)))
+  print("")
+  return args
+
+## MAIN
+
+if __name__ == "__main__":
+  print("#######################")
+  print("## Populate database ##")
+  print("#######################")
+  print("")
+  print("Time: %s\n" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+  args = parse_args()
+
+  # Create the database
+  db = DB(overwrite=True)
+
+  # Check it exists
+  if not os.path.exists("results.sqlite"):
+    raise RuntimeError("Failed to initialise")
+  print("Database has been initialised")
+
+  structures_dir = os.path.join(args.mr_results, "structures")
+  #print("Structures directory", structures_dir)
+  
+  results_dir = os.chdir(args.mr_results)
+  print("I AM HERE", results_dir)
+  
+  structures_lst = os.listdir("structures")
+  
+  for structure in structures_lst:
+    structure_location = os.path.join(structures_dir, structure)
+    chain_location = os.path.join(structure_location, "chains")
+    chain_name = os.listdir(chain_location)
+    chain_details = os.path.join(chain_location, chain_name[0])
+
+    db.add_pdb_targets(structure, args.mr_results)
+
+    homologue_dir = os.path.join(chain_details, "homologues")
+    if os.path.exists(homologue_dir):
+      homologue_lst = os.listdir(homologue_dir)
+      for homologue in homologue_lst:
+        homologue_path = os.path.join(homologue_dir, homologue)
+        h_split = homologue_path.split("/")
+        h_split_sel = os.path.join(*h_split[-6:])
+        h_split_sel_replace = h_split_sel.replace("/", "_")
+
+        db.add_mr_ssm_stats(h_split_sel_replace)
+
+
+  
+  
+#  redo_stats_in = os.path.join(args.pdb_coords, "alldata_noHeader.txt")
+#  
+#  for homologue in homologues:
+#    db.add_mr_ssm_stats(homologue)
+#    
+#  #db.add_pdb_redo(redo_stats_in)
