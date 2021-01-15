@@ -101,75 +101,23 @@ def prepare_training_data(
           try: 
             map_to_map = gemmi.read_ccp4_map(temp_out_file)
             print(1111111111, map_to_map.grid)
-            map_to_map.grid.unit_cell
-            sg = map_to_map.grid.spacegroup
-            map_to_map.setup()
-           
- 
-            map_to_grid = map_to_map.grid
-            map_to_grid_newcell = map_to_grid.set_unit_cell(gemmi.UnitCell(200, 200, 200, 90, 90, 90))
-            #print(map_to_grid_newcell.grid.unit_cell)
-            print(333333333, map_to_grid.unit_cell)
-
-            
-
-
-
-            #print(map_to_grid_newcell.grid)
-            #map_to_grid_newcell.setup()
-           # print(map_to_grid_newcell)
-            map_to_grid.spacegroup = map_to_map.grid.spacegroup
-           # print(map_to_grid.spacegroup)
-           # print("The grid of current map is: ", map_to_map.grid)
-
-
-
-           # print("The grid unit cell is: ", map_to_map.grid.unit_cell)
-           # print("The grid space group is: ", map_to_map.grid.spacegroup)
-           # map_to_map = map_to_map.set_unit_cell(gemmi.UnitCell(200, 200, 200, 90, 90, 90))
-           # print("The expanded grid unit cell is: ", map_to_map.grid.unit_cell)
-           # map_to_map = map_to_map.setup()
-           # print("The the updated grid of map is: ", map_to_map.grid)
-            #grid = gemmi.FloatGrid(200, 200, 200)
-            #map_to_map = map_to_map.grid
-            #map_to_map.grid
-           # print("The grid of new map is:", map_to_map.grid)
-           #ccp4.grid = xmap
+            xyz_limits = [200, 200, 200]
+            upper_limit = gemmi.Position(*xyz_limits)
+            box = gemmi.FractionalBox()
+            box.minimum = gemmi.Fractional(0, 0, 0)
+            box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
+            map_to_map.set_extent(box)
+            print(22222222, map_to_map.grid)
           except Exception:
             logging.error(f"Could not expand map {map_to_map}")          
             raise
-          #set new extent for 200A, i.e. replace the 5
-          #  m.set_extent(st.calculate_fractional_box(margin=5))
-          #except Exception:
-          #  logging.error(f"Could not expand map for {temp_out_file}")
-          #  raise
 
-          #final = os.path.join(output_dir, struct+"_"+homo+".ccp4")
-          #try:
-          #  m.write_ccp4_map(final)
-          #except Exception:
-          #  logging.error(f"Could not write final map {final}")
-          #write out the standardised map
-            1/0
-
-
-# try:
-            
-
-         # try:
-         #   cell_info_dict[homo] = mtz_get_cell(homo_mtz)
-         # except Exception:
-         #   logging.error(f"Could not get cell info from {homo_mtz}")
-         #   raise
-#          try:
-#            space_group_dict[homo] = find_space_group(homo_mtz)
-#          except Exception:
-#            logging.error(f"Could not get space group from {homo_mtz}")
-#            raise
-
-   # logging.info("Collected cell info and space group")
-
-    1/0
+          final = os.path.join(output_dir, struct+"_"+homo+".ccp4")
+          try:
+            map_to_map.write_ccp4_map(final)
+          except Exception:
+            logging.error(f"Could not write final map {final}")
+         
 
     # Set up function to get space group depending on suffix
     if Path(mtz_directory).suffix == ".mtz":
