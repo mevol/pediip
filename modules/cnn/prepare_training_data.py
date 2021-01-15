@@ -102,7 +102,7 @@ def prepare_training_data(
             map_to_map = gemmi.read_ccp4_map(temp_out_file)
             print(1111111111, map_to_map.grid)
             map_to_map.grid.unit_cell
-            map_to_map.grid.spacegroup
+            sg = map_to_map.grid.spacegroup
             map_to_map.setup()
            
  
@@ -110,6 +110,11 @@ def prepare_training_data(
             map_to_grid_newcell = map_to_grid.set_unit_cell(gemmi.UnitCell(200, 200, 200, 90, 90, 90))
             #print(map_to_grid_newcell.grid.unit_cell)
             print(333333333, map_to_grid.unit_cell)
+
+            
+
+
+
             #print(map_to_grid_newcell.grid)
             #map_to_grid_newcell.setup()
            # print(map_to_grid_newcell)
