@@ -100,6 +100,7 @@ def prepare_training_data(
           
           try: 
             map_to_map = gemmi.read_ccp4_map(temp_out_file)
+            map_to_map.setup()
             print(1111111111, map_to_map.grid)
             xyz_limits = [200, 200, 200]
             upper_limit = gemmi.Position(*xyz_limits)
