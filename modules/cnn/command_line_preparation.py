@@ -105,6 +105,7 @@ def main():
         parameters["mtz_file"],
         parameters["xyz_limits"],
         parameters["maps_dir"],
+        parameters["db_file"],
     )
 
 

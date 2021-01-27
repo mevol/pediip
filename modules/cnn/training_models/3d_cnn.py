@@ -5,7 +5,7 @@ from typing import Tuple
 from keras import Sequential, optimizers
 from keras.layers import Conv3D, Dense, Dropout, Flatten, MaxPooling3D
 
-from topaz3.training_models.training_pipeline_3d import pipeline_from_command_line
+from modules.cnn.training_models.training_pipeline_3d import pipeline_from_command_line
 
 def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     print(1111, input_shape)

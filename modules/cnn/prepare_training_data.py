@@ -3,6 +3,9 @@ import logging
 import os
 import yaml
 import gemmi
+import csv
+import sqlite3
+#import multiprocessing
 
 from pathlib import Path
 from typing import List
@@ -14,6 +17,7 @@ def prepare_training_data(
     mtz_file: str,
     xyz_limits: List[int],
     output_directory: str,
+    db_file: str,
     delete_temp: bool = True,
 ):
     """Convert both the original and inverse hands of a structure into a regular map file based on information
@@ -47,48 +51,53 @@ def prepare_training_data(
         )
         raise
 
+    # Innitialise connection to database
+    try:
+        conn = sqlite3.connect(db_file)
+        cur = conn.cursor()
+    except Exception:
+        logging.error(
+            f"Could not connect to database at {db_file}"
+        )
+        raise
+
+
+    with open(os.path.join(output_dir, "conv_map_list.csv"), "a") as out_csv:
+      writer = csv.writer(out_csv)
+      writer.writerow(["filename", "ai_lable"])
+      
+
     # Get lists of child directories
     mtz_structs = [struct.stem for struct in mtz_dir.iterdir()]
     mtz_structs = sorted(mtz_structs)
     logging.debug(f"Following structures found to transform: {mtz_structs}")
 
-    # Get cell info and space group
-    cell_info_dict = {}
-    space_group_dict = {}
-
+#this below works but runs serial
     for struct in mtz_structs:
       struct_dir = Path(os.path.join(mtz_dir, struct))
       homo_lst = [homo.stem for homo in struct_dir.iterdir()] 
       for homo in homo_lst:
         homo_dir = os.path.join(struct_dir, homo)
         logging.info(
-          f"Collecting info from {struct}, {mtz_structs.index(struct)+1}/{len(mtz_structs)}")
+          f"Converting results for structure {struct}, {mtz_structs.index(struct)+1}/{len(mtz_structs)}")
         if mtz_file in os.listdir(homo_dir):
-          print("found MTZ file") 
           logging.info(
-            f"Collecting info from {homo}, {homo_lst.index(homo)+1}/{len(homo_lst)}")
-
+            f"Collecting info for {homo}, {homo_lst.index(homo)+1}/{len(homo_lst)}")
           homo_mtz = Path(os.path.join(homo_dir, mtz_file))
           try:
             homo_mtz = Path(os.path.join(homo_dir, mtz_file))
             assert homo_mtz.exists()
           except Exception:
-            logging.error(f"Could not find cell info file at {homo_mtz}")
+            logging.error(f"Could not find homologue phased MTZ file {homo_mtz}")
             raise
-
           try:
             data = gemmi.read_mtz_file(str(homo_mtz))
             cell = data.cell
-            print("The MTZ unit cell is: ", cell)
             sg = data.spacegroup
-            print("The MTZ space group is: ", sg)
           except Exception:
             logging.error(f"Could not read {homo_mtz}")
             raise
           temp_out_file = os.path.join(output_dir, "temp_"+struct+"_"+homo+".ccp4")
-          print(temp_out_file)
-
-
           try:
             data_to_map = gemmi.Ccp4Map()
             data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=4)
@@ -96,50 +105,41 @@ def prepare_training_data(
             data_to_map.write_ccp4_map(temp_out_file) 
           except Exception:
             logging.error(f"Could not create map from {homo_mtz}")
-            raise
-          
+            raise         
           try: 
             map_to_map = gemmi.read_ccp4_map(temp_out_file)
             map_to_map.setup()
-            print(1111111111, map_to_map.grid)
             xyz_limits = [200, 200, 200]
             upper_limit = gemmi.Position(*xyz_limits)
             box = gemmi.FractionalBox()
             box.minimum = gemmi.Fractional(0, 0, 0)
             box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
             map_to_map.set_extent(box)
-            print(22222222, map_to_map.grid)
           except Exception:
             logging.error(f"Could not expand map {map_to_map}")          
             raise
-
-          final = os.path.join(output_dir, struct+"_"+homo+".ccp4")
+          mtz_state = str(mtz_file).strip(".mtz")
+          final = os.path.join(output_dir, struct+"_"+homo+"_"+mtz_state+".ccp4")
           try:
             map_to_map.write_ccp4_map(final)
+            cur.execute('''
+                         SELECT refinement_success_lable, homologue_name_id
+                         FROM homologue_stats
+                         INNER JOIN homologue_name
+                         ON homologue_name.id = homologue_stats.homologue_name_id
+                         INNER JOIN pdb_id
+                         ON pdb_id.id = homologue_name.pdb_id_id
+                         WHERE homologue_name = "%s"
+                         AND pdb_id.pdb_id = "%s"
+                         '''%(homo, struct))
+            lable = (cur.fetchone())[0]
+            print(lable) 
+            with open(os.path.join(output_dir, "conv_map_list.csv"), "a", newline = "") as out_csv:
+              writer = csv.writer(out_csv)
+              writer.writerow([final, lable])
           except Exception:
             logging.error(f"Could not write final map {final}")
-         
-
-    # Set up function to get space group depending on suffix
-    if Path(mtz_directory).suffix == ".mtz":
-        find_space_group = mtz_find_space_group
-    else:
-        find_space_group = textfile_find_space_group
-
-    for struct in mtz_structs:
-        logging.info(
-            f"Collecting info from {struct}, {mtz_structs.index(struct)+1}/{len(mtz_structs)}"
-        )
-
-    # Begin transformation
-    for struct in mtz_structs:
-        logging.info(
-            f"Converting {struct}, {mtz_structs.index(struct)+1}/{len(mtz_structs)}"
-        )
-    if delete_temp is True:
-        delete_temp_files(output_directory)
-        logging.info("Deleted temporary files in output directory")
-
+              
     return True
 
 
@@ -177,6 +177,7 @@ def params_from_cmd(args):
         "mtz_file": args.mtz_file,
         "xyz_limits": args.xyz,
         "output_dir": args.maps_dir,
+        "db_file": args.db_file,
         "delete_temp": True,
     }
     if args.keep_temp:
@@ -217,6 +218,9 @@ if __name__ == "__main__":
         "output_dir", type=str, help="directory to output all map files to"
     )
     cmd_parser.add_argument(
+        "db_file", type=str, help="database file with training lables"
+    )
+    cmd_parser.add_argument(
         "--keep_temp",
         action="store_false",
         help="keep the temporary files after processing",
@@ -236,6 +240,7 @@ if __name__ == "__main__":
             parameters["mtz_file"],
             parameters["xyz_limits"],
             parameters["maps_dir"],
+            parameters["db_file"],
             parameters["delete_temp"],
         )
     except KeyError as e:

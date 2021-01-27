@@ -29,9 +29,9 @@ import yaml
 from keras import Model
 from keras.preprocessing.image import ImageDataGenerator
 
-from topaz3.training_models.plot_history import history_to_csv, figure_from_csv
-from topaz3.evaluate_model_3d import evaluate
-from topaz3.training_models.data_generator import DataGenerator
+from modules.cnn.training_models.plot_history import history_to_csv, figure_from_csv
+from modules.cnn.evaluate_model_3d import evaluate
+from modules.cnn.training_models.data_generator import DataGenerator
 
 MAP_DIM = (201, 201, 201)
 

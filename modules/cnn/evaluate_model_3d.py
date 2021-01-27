@@ -12,7 +12,7 @@ import numpy as np
 import pandas
 from keras.preprocessing.image import ImageDataGenerator
 from sklearn.metrics import classification_report, confusion_matrix
-from topaz3.training_models.data_generator_resnet import DataGenerator
+from modules.cnn.training_models.data_generator_resnet import DataGenerator
 
 MAP_DIM = (201, 201, 201)
 
