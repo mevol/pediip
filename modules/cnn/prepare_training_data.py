@@ -61,10 +61,10 @@ def prepare_training_data(
         )
         raise
 
-
-    with open(os.path.join(output_dir, "conv_map_list.csv"), "a") as out_csv:
-      writer = csv.writer(out_csv)
-      writer.writerow(["filename", "ai_lable"])
+    if not os.path.exists(os.path.join(output_dir, "conv_map_list.csv")):
+      with open(os.path.join(output_dir, "conv_map_list.csv"), "w") as out_csv:
+        writer = csv.writer(out_csv)
+        writer.writerow(["filename", "ai_lable"])
       
 
     # Get lists of child directories
@@ -133,10 +133,19 @@ def prepare_training_data(
                          AND pdb_id.pdb_id = "%s"
                          '''%(homo, struct))
             lable = (cur.fetchone())[0]
-            print(lable) 
+            print(lable)
+            if lable == "1a":
+              new_lable = 1
+            if lable == "1b":
+              new_lable = 2
+            if lable == "2a":
+              new_lable = 3
+            if lable == "2b":
+              new_lable = 4
+            print(new_lable) 
             with open(os.path.join(output_dir, "conv_map_list.csv"), "a", newline = "") as out_csv:
               writer = csv.writer(out_csv)
-              writer.writerow([final, lable])
+              writer.writerow([final, new_lable])
           except Exception:
             logging.error(f"Could not write final map {final}")
               
