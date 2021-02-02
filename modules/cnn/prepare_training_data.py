@@ -84,44 +84,102 @@ def prepare_training_data(
           logging.info(
             f"Collecting info for {homo}, {homo_lst.index(homo)+1}/{len(homo_lst)}")
           homo_mtz = Path(os.path.join(homo_dir, mtz_file))
+
           try:
             homo_mtz = Path(os.path.join(homo_dir, mtz_file))
             assert homo_mtz.exists()
           except Exception:
             logging.error(f"Could not find homologue phased MTZ file {homo_mtz}")
             raise
+
           try:
             data = gemmi.read_mtz_file(str(homo_mtz))
             cell = data.cell
             sg = data.spacegroup
           except Exception:
             logging.error(f"Could not read {homo_mtz}")
-            raise
+           # raise
+            pass
+
           temp_out_file = os.path.join(output_dir, "temp_"+struct+"_"+homo+".ccp4")
           try:
             data_to_map = gemmi.Ccp4Map()
+            print("Grid of MTZ file", data_to_map.grid)
+
             data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=4)
+            print("Grid after converting MTZ to MAP", data_to_map.grid)
+
             data_to_map.update_ccp4_header(2, True)
             data_to_map.write_ccp4_map(temp_out_file) 
           except Exception:
             logging.error(f"Could not create map from {homo_mtz}")
             raise         
+
           try: 
+            # opening temporary map file which shouldn't be neccessary to be written out
             map_to_map = gemmi.read_ccp4_map(temp_out_file)
             map_to_map.setup()
+
+            print("Grid after loading temp file", map_to_map.grid)
+
+            #this bit here expands the unit cell to be 200A^3;
+            #Can I expand the unit cell to standard volume and then extract a
+            #grid cube (200, 200, 200)
             xyz_limits = [200, 200, 200]
             upper_limit = gemmi.Position(*xyz_limits)
             box = gemmi.FractionalBox()
             box.minimum = gemmi.Fractional(0, 0, 0)
             box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
+           # box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(200, 200, 200))
+            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(50, 50, 50))
+            box.add_margin(1e-5)
             map_to_map.set_extent(box)
+
+            print("Grid after setting XYZ limits for MAP", map_to_map.grid)
+
+            #create a grid with extend x=0-->200, y=0-->200, z=0-->200
+            #currently problems as the 200 limit not always reached for all axes;
+            #adding a margin maybe that will help
+           # new_map.setup()
+           # box1 = gemmi.FractionalBox()
+           # box1.minimum = gemmi.Fractional(0, 0, 0)
+           # box1.maximum = new_map.grid.point_to_fractional(new_map.grid.get_point(200, 200, 200))
+           # map_to_map.setup()
+           # new_map.set_extent(box1)
+
+           # print("Grid after setting grid dimensions", new_map.grid)
+
           except Exception:
             logging.error(f"Could not expand map {map_to_map}")          
             raise
+#
+#          try:
+#            map_to_map = gemmi.read_ccp4_map(temp_out_file)
+#            map_to_map.setup()
+#            print(map_to_map.grid)
+#            grid = map_to_map.grid
+#            print(grid)
+#            new_grid = grid.set_value(200, 200, 200, 4.0)
+#            print(new_grid.get_value)
+#            xyz_limits = [200, 200, 200]
+#            upper_limit = gemmi.Position(*xyz_limits)
+#            box = gemmi.FractionalBox()
+#            box.minimum = gemmi.Fractional(0, 0, 0)
+#            box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
+#            map_to_map.set_extent(box)
+#          except Exception:
+#            logging.error(f"Could not expand map {map_to_map}")
+#            raise
+
+
+
           mtz_state = str(mtz_file).strip(".mtz")
-          final = os.path.join(output_dir, struct+"_"+homo+"_"+mtz_state+".ccp4")
+          final_name = struct+"_"+homo+"_"+mtz_state+".ccp4"
+          final = os.path.join(output_dir, final_name)
+#          final = os.path.join(output_dir, struct+"_"+homo+"_"+mtz_state+".ccp4")
           try:
             map_to_map.write_ccp4_map(final)
+#            data_to_map.write_ccp4_map(final)
             cur.execute('''
                          SELECT refinement_success_lable, homologue_name_id
                          FROM homologue_stats
@@ -146,6 +204,7 @@ def prepare_training_data(
             with open(os.path.join(output_dir, "conv_map_list.csv"), "a", newline = "") as out_csv:
               writer = csv.writer(out_csv)
               writer.writerow([final, new_lable])
+#              writer.writerow([final_name, new_lable])
           except Exception:
             logging.error(f"Could not write final map {final}")
               

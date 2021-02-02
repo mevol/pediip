@@ -14,36 +14,38 @@ setup(
               "modules.create_mr_set",
               ],
     install_requires=[
-         "procrunner",
+#         "procrunner",
          "pybind11",
          "Gemmi",
          "biopython",
-         "xraydb"
-         
-#        "tensorflow-gpu<=1.13",
-#        "Keras",
-#        "Pillow",
-#        "procrunner",
-#        "PyYaml",
-#        "scikit-learn",
-#        "mrcfile",
-#        "pandas",
-#        "logconfig",
-#        "matplotlib",
-#        "configargparse",
+         "xraydb",
+         "pandas",
+         "numpy",
+         "tensorflow==2.2.0",
+#         "tensorflow<=1.13",
+         "Keras",
+         "Pillow",
+         "PyYaml",
+         "scikit-learn",
+         "mrcfile",
+         "logconfig",
+         "matplotlib",
+         "configargparse",
     ],
     scripts=[
             "bin/create_mr_set",
+            "bin/populate_database",
             ],
     
-#    entry_points={
-#        "console_scripts": [
-#            "topaz3.prepare = topaz3.command_line_preparation:main",
+    entry_points={
+        "console_scripts": [
+#            "pediip.create_mr_set = modules.create_mr_set.create_mr_set:main",#need to fix command line
+            "pediip.prepare = modules.cnn.command_line_preparation:main",
 #            "topaz3.test_split = topaz3.train_test_split:command_line",
 #            "topaz3.predict_from_maps = topaz3.predictions:command_line",
 #            "topaz3.filter = topaz3.filters:filter_command_line",
-#        ]
-#    },
+        ]
+    },
     #    entry_points = {'console_scripts': ['test-python-hello-world = topaz3.topaz3:main']}, # this makes a script
     #    include_package_data = True, # use this to include non python files
     license="BSD3 license",

@@ -13,7 +13,7 @@ from keras.layers.normalization import BatchNormalization  # batch Normalization
 from keras.layers import Activation
 from keras.utils import plot_model
 
-from topaz3.training_models.training_pipeline_3d import pipeline_from_command_line
+from modules.cnn.training_models.training_pipeline_3d import pipeline_from_command_line
 
 def Conv3d_BN(x, nb_filter, kernel_size, strides=1, padding='same', name=None):
     x = Conv3D(nb_filter, kernel_size, padding=padding, data_format='channels_last', strides=strides,

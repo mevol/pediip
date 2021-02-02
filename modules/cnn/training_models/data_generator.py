@@ -1,11 +1,15 @@
 import numpy as np
 import keras
 import mrcfile
+import gemmi
+
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+from keras.utils import np_utils
 
 class DataGenerator(keras.utils.Sequence):
   'Generates data for Keras'
   def __init__(self, list_IDs, labels, batch_size=32, dim=(32,32,32),
-               n_classes=2, n_channels=1, shuffle=True):
+               n_classes=4, n_channels=1, shuffle=True):
     'Initialization'
     self.dim = dim
     self.batch_size = batch_size       
@@ -45,24 +49,57 @@ class DataGenerator(keras.utils.Sequence):
     'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
     # Initialization
     X = np.empty([self.batch_size, *self.dim])
-    y = np.empty([self.batch_size], dtype=int)
+    print("Empty X", X.shape)
+    #below creates an empty np.array; [0 0 0 0]
+    #y = np.empty([1, 4])
+    #print("Empty y", y.shape)
 
+    print(len(list_IDs_temp))
+    print(len(list_labels_temp))
+
+    #this version was used in python3-topaz
+    y = np.empty([self.batch_size], dtype=int)
+    print("Empty y", y.shape)
+    
     # Generate data
     for i, ID in enumerate(list_IDs_temp):
-      print(777, ID)
+      print(777, ID)#is the path to the ccp4 map to open
+      print(i)#is the index within the chosen batch size
+     
       with mrcfile.open(ID) as mrc:
         volume = mrc.data
-        
+        #TO DO: add standardisation or normalisation here for each volume
+        print("Loaded dimensions", volume.shape)
       # Store sample
       X[i,] = volume
 
     for i, ID in enumerate(list_labels_temp):
+      print(888, ID)
+      print(i)
+      print("Stored labels", y)
       # Store class
-      y[i] = ID
-
+      y[i] = ID#this one to use of one-hot encoding within the datagenerator
+      #y = ID#this one to use if y had one-hot encoding set in training_pipeline_3d.py
+    
+   # print("Lable shape", y.shape)  
     X = X.reshape(self.batch_size, *self.dim, self.n_channels)
-    print(X.shape)
-        
-    return X, keras.utils.to_categorical(y, num_classes=self.n_classes)
+    print("Data shape", X.shape)
+   # print(X)
+    print(y)
 
+    #encode class values as integers
+    encoder = LabelEncoder()
+    encoder.fit(y)
+    encoded_y = encoder.transform(y)
+    #convert integers to dummy variables (i.e. one hot encoded)
+    dummy_y = np_utils.to_categorical(encoded_y, num_classes=self.n_classes)
+    print(dummy_y)
 
+    #one-hot encoding on the fly
+    #return X, keras.utils.to_categorical(y, num_classes=self.n_classes) 
+
+    #one-hot encoding within the datagenerator
+    return X, dummy_y
+
+    #one-hot encoding within training_pipeline_3d.py
+    #return X, y

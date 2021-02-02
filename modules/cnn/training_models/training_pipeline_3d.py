@@ -28,12 +28,16 @@ import pandas
 import yaml
 from keras import Model
 from keras.preprocessing.image import ImageDataGenerator
+from sklearn.model_selection import train_test_split
+from keras.utils import np_utils
+from sklearn.preprocessing import LabelEncoder
 
 from modules.cnn.training_models.plot_history import history_to_csv, figure_from_csv
-from modules.cnn.evaluate_model_3d import evaluate
+#from modules.cnn.evaluate_model_3d import evaluate
 from modules.cnn.training_models.data_generator import DataGenerator
 
-MAP_DIM = (201, 201, 201)
+#MAP_DIM = (201, 201, 201)
+MAP_DIM = (51, 51, 51)
 
 logging.basicConfig(level=logging.INFO, filename="training.log", filemode="w")
 
@@ -109,91 +113,96 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     assert len(train_files) > 0, f"Found no files in {training_dir_path}"
     logging.info(f"Found {len(train_files)} files for training")
 
-    # Load test files
-    test_dir_path = Path(parameters_dict["test_dir"])
-    assert (
-        test_dir_path.exists()
-    ), f"Could not find directory at {test_dir_path}"
-    test_files = [str(file) for file in test_dir_path.iterdir()]
-    assert len(test_files) > 0, f"Found no files in {test_dir_path}"
-    logging.info(f"Found {len(test_files)} files for test")
+
+    # Load data CSV file with filenames and labels
+    data = pandas.read_csv(parameters_dict["sample_lable_lst"])
+   # print(data.head)
+
+    X = data['filename']
+   # print("dataframe for X", X.head)
+    print("dataframe for X", X.shape)
+    y = data['ai_lable']
+   # print("dataframe for y", y.head)
+    print("dataframe for y", y.shape)
+    print("Classes and their frequency in the data", data.groupby(y).size())
+
+    #one-hot encoding before creating batches with the datagenerator
+    #encode class values as integers
+    #encoder = LabelEncoder()
+    #encoder.fit(y)
+    #encoded_y = encoder.transform(y)
+    #dummy_y = np_utils.to_categorical(encoded_y, num_classes=4)
+    #print(dummy_y)#a numpy.ndarray
 
 
-    # Initiate connection to the database
-    try:
-        conn = sqlite3.connect(parameters_dict["database_file"])
-    except Exception:
-        logging.error(
-            f"Could not connect to database at {parameters_dict['database_file']}"
-        )
-        raise
+   # X_train, X_test, y_train, y_test = train_test_split(X, dummy_y, test_size = 0.2, random_state = 100, stratify = y)
 
-    # Read table into pandas dataframe
-    data = pandas.read_sql(f"SELECT * FROM ai_labels", conn)
-    data_indexed = data.set_index("Name")
+   # print("X_train", X_train.head)
+   # print("X_train size", X_train.shape)
+   # print("X_test", X_test.head)
+   # print("X_test size", X_test.shape)
+   # print("y_train", y_train.head)
+   # print("y_train size", y_train.shape)
+   # print("y_test", y_test.head)
+   # print("y_test size", y_test.shape)
 
-    # Strip the image number from the filename
-    names = [re.findall("(.*)", Path(file).stem)[0] for file in train_files]
-    train_labels = [data_indexed.at[name, "Label"] for name in names]
 
-    names = [re.findall("(.*)", Path(file).stem)[0] for file in test_files]
-    test_labels = [data_indexed.at[name, "Label"] for name in names]
-
-#    # Prepare data generators to get data out
-
+    # Prepare data generators to get data out
     # Build model
     if parameters_dict["rgb"] is True:
         logging.info("Using 3 channel image input to model")
-        input_shape = (201, 201, 201, 3) #3D
+#        input_shape = (201, 201, 201, 3) #3D
+        input_shape = (51, 51, 51, 3) #3D
         color_mode = "rgb"
     else:
         logging.info("Using single channel image input to model")
-        input_shape = (201, 201, 201, 1) #3D
+#        input_shape = (201, 201, 201, 1) #3D
+        input_shape = (51, 51, 51, 1) #3D
         color_mode = "grayscale"
 
-    # Create training dataframe
-    training_dataframe = pandas.DataFrame(
-        {"Files": train_files, "Labels": [str(label) for label in train_labels]}
-    )
-
-    # Create training dataframe
-    testing_dataframe = pandas.DataFrame(
-        {"Files": test_files, "Labels": [str(label) for label in test_labels]}
-    )
-
-    training_dict = training_dataframe.to_dict()
-    testing_dict = testing_dataframe.to_dict()
 
     # Model run parameters
     epochs = parameters_dict["epochs"]
     batch_size = parameters_dict["batch_size"]
+    print("Number of epochs: ", epochs)
+    print("Batch size:", batch_size)
 
     # New model
+    print("Using the following input parameters: ", input_shape)
     model = create_model(input_shape)
     model_info = model.get_config()
+    model_architecture = model.summary()
+    print(model_architecture)
+    logging.info(f"The model architecture is as follows: {model_architecture}")
 
-    training_generator = DataGenerator(training_dict['Files'],
-                                       training_dict['Labels'],
+    #load the training data in batches using the generator;
+    #use X and y from training CSV
+    training_generator = DataGenerator(X,
+                                       y,
                                        dim=MAP_DIM,
                                        batch_size=batch_size,
-                                       n_classes=2,
+                                       n_classes=4,
                                        shuffle=True)
+    #load the validation data in batches using the generator;
+    #use X and y from validation CSV
+#    testing_generator = DataGenerator(X_test,
+#                                      y_test,
+#                                      dim=MAP_DIM,
+#                                      batch_size=batch_size,
+#                                      n_classes=4,
+#                                      shuffle=True)
 
-    testing_generator = DataGenerator(testing_dict['Files'],
-                                       testing_dict['Labels'],
-                                       dim=MAP_DIM,
-                                       batch_size=batch_size,
-                                       n_classes=2,
-                                       shuffle=True)
 
-    history = model.fit_generator(
+    #TO DO: need to find a way to run k-fold cross-validation during training
+
+
+    history = model.fit(
         training_generator,
-        steps_per_epoch=int((len(training_dict["Files"]) / batch_size)),
+        steps_per_epoch=int((len(X) / batch_size)),
         epochs=epochs,
-        validation_data=testing_generator,
-        validation_steps=(len(testing_dict["Files"]) / batch_size),
         use_multiprocessing=True,
         workers=8)
+
 
     # Send history to csv
     history_to_csv(history, histories_path / f"history.csv")
@@ -210,8 +219,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
             os.mkdir(evaluation_dir_path)
         evaluate(
             str(models_path / f"model.h5"),
-            parameters_dict["test_dir"],
-            parameters_dict["database_file"],
+            parameters_dict["sample_lable_lst"],#need to replace with validation CSV filenames
+           #parameters_dict["database_file"],#need to replace with validation CSV lables
             evaluation_dir_path,
             rgb=parameters_dict["rgb"],
             )
@@ -248,6 +257,7 @@ def pipeline_from_command_line(
 
     # Get from pipeline
     argument_dict = get_pipeline_parameters()
+
 
     # Add rgb parameter
     assert isinstance(
@@ -290,11 +300,13 @@ def get_pipeline_parameters() -> dict:
         required=True,
         help="directory with training images in"
     )
+
     parser.add_argument(
-        "--database_file",
+        "--sample_lable_lst",
         required=True,
-        help="sqlite3 database with labels for training images",
+        help="list of sample files with associated training lables",
     )
+
     parser.add_argument(
         "--output_dir",
         required=True,
@@ -310,10 +322,6 @@ def get_pipeline_parameters() -> dict:
         required=True,
         type=int,
         help="size of batch to load during training and validation. Should be exact factor of the number of images provided",
-    )
-    parser.add_argument(
-        "--test_dir",
-        help="directory with images for testing and producing classification reports. Leave empty if you do not want to perform evaluation",
     )
 
     (known_args, unknown_args) = parser.parse_known_args()
@@ -337,6 +345,7 @@ def get_pipeline_parameters() -> dict:
     ), f"image_augmentation_dict must be provided as a dictionary in YAML, got {image_augmentation_dict}"
 
     argument_dict["image_augmentation_dict"] = image_augmentation_dict
+
 
     return argument_dict
 
