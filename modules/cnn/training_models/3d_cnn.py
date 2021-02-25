@@ -2,8 +2,10 @@
 
 from typing import Tuple
 
-from keras import Sequential, optimizers
-from keras.layers import Conv3D, Dense, Dropout, Flatten, MaxPooling3D
+#from keras import Sequential, optimizers
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.layers import Conv3D, Dense, Dropout, Flatten, MaxPooling3D
 
 from modules.cnn.training_models.training_pipeline_3d import pipeline_from_command_line
 
@@ -36,6 +38,9 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     model.add(Dropout(0.3))
 #    model.add(Dense(2, activation="softmax"))
     model.add(Dense(4, activation="softmax"))
+
+    print(model.output_shape)
+
 
     model.compile(
         loss="categorical_crossentropy",

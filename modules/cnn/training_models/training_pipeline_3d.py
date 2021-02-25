@@ -21,15 +21,19 @@ import os
 import shutil
 from datetime import datetime
 from typing import Callable
+import tensorflow
 
 import mrcfile
 import configargparse
 import pandas
 import yaml
-from keras import Model
-from keras.preprocessing.image import ImageDataGenerator
+#from keras import Model
+from tensorflow.keras import Model
+#from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
-from keras.utils import np_utils
+#from keras.utils import np_utils
+from tensorflow.keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
 
 from modules.cnn.training_models.plot_history import history_to_csv, figure_from_csv
@@ -126,6 +130,10 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     print("dataframe for y", y.shape)
     print("Classes and their frequency in the data", data.groupby(y).size())
 
+    label_dict = y.to_dict()
+    print(label_dict)
+
+
     #one-hot encoding before creating batches with the datagenerator
     #encode class values as integers
     #encoder = LabelEncoder()
@@ -135,7 +143,16 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     #print(dummy_y)#a numpy.ndarray
 
 
-   # X_train, X_test, y_train, y_test = train_test_split(X, dummy_y, test_size = 0.2, random_state = 100, stratify = y)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 100, stratify = y)
+
+    print(X_train)
+    print(y_train)
+    
+    partition = {"train" : X_train,
+                 "validate" : X_test}
+
+    print(partition["train"])
+    print(partition["validate"])
 
    # print("X_train", X_train.head)
    # print("X_train size", X_train.shape)
@@ -177,20 +194,40 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     #load the training data in batches using the generator;
     #use X and y from training CSV
-    training_generator = DataGenerator(X,
-                                       y,
+#    training_generator = DataGenerator(X,#X
+#                                       y,#y
+#                                       dim=MAP_DIM,
+#                                       batch_size=batch_size,
+#                                       n_classes=4,
+#                                       shuffle=True)
+
+
+    training_generator = DataGenerator(partition["train"],#X
+                                       label_dict,#y
                                        dim=MAP_DIM,
                                        batch_size=batch_size,
                                        n_classes=4,
                                        shuffle=True)
+
+
+
+
     #load the validation data in batches using the generator;
     #use X and y from validation CSV
 #    testing_generator = DataGenerator(X_test,
-#                                      y_test,
+#                                      y,
 #                                      dim=MAP_DIM,
 #                                      batch_size=batch_size,
 #                                      n_classes=4,
 #                                      shuffle=True)
+
+
+    testing_generator = DataGenerator(partition["validate"],
+                                      label_dict,
+                                      dim=MAP_DIM,
+                                      batch_size=batch_size,
+                                      n_classes=4,
+                                      shuffle=True)
 
 
     #TO DO: need to find a way to run k-fold cross-validation during training
@@ -198,10 +235,12 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     history = model.fit(
         training_generator,
-        steps_per_epoch=int((len(X) / batch_size)),
+        steps_per_epoch=int((len(X_train) / batch_size)),#len(X) if not using train-test-split
         epochs=epochs,
+        validation_data=testing_generator,
+        validation_steps=(len(X_test) / batch_size),
         use_multiprocessing=True,
-        workers=8)
+        workers=1)#8)
 
 
     # Send history to csv
@@ -211,24 +250,24 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # Save model as h5
     model.save(str(models_path / f"model.h5"))
 
-    # Make evaluation folder
-    if parameters_dict["test_dir"]:
-        logging.info("Performing evaluation of model")
-        evaluation_dir_path = str(evaluations_path / f"evaluation")
-        if not Path(evaluation_dir_path).exists():
-            os.mkdir(evaluation_dir_path)
-        evaluate(
-            str(models_path / f"model.h5"),
-            parameters_dict["sample_lable_lst"],#need to replace with validation CSV filenames
-           #parameters_dict["database_file"],#need to replace with validation CSV lables
-            evaluation_dir_path,
-            rgb=parameters_dict["rgb"],
-            )
-    else:
-        logging.info(
-           "Requires test directory for evaluation. "
-            "No evaluation performed"
-            )
+#    # Make evaluation folder
+#    if parameters_dict["test_dir"]:
+#        logging.info("Performing evaluation of model")
+#        evaluation_dir_path = str(evaluations_path / f"evaluation")
+#        if not Path(evaluation_dir_path).exists():
+#            os.mkdir(evaluation_dir_path)
+#        evaluate(
+#            str(models_path / f"model.h5"),
+#            parameters_dict["sample_lable_lst"],#need to replace with validation CSV filenames
+#           #parameters_dict["database_file"],#need to replace with validation CSV lables
+#            evaluation_dir_path,
+#            rgb=parameters_dict["rgb"],
+#            )
+#    else:
+#        logging.info(
+#           "Requires test directory for evaluation. "
+#            "No evaluation performed"
+#            )
 
     # Load the model config information as a yaml file
     with open(output_dir_path / "model_info.yaml", "w") as f:
