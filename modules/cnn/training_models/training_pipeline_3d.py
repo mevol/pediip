@@ -236,7 +236,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:
       predictions = model.predict(
                           testing_generator,
-                          #steps=int(math.ceil(len(X_test) / batch_size)),
+                          steps=(len(X_test) / batch_size),
                           verbose=1)
                           
       print("Length of predictions: ", len(predictions))                    
