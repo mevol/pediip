@@ -134,12 +134,13 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     class_frequency = data.groupby(y).size()
     logging.info(f"Number of samples per class {class_frequency}")    
 
+    y_cat = np_utils.to_categorical(y, 4)
 
     label_dict = y.to_dict()
  #   print(label_dict)
 
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 100, stratify = y)
+    X_train, X_test, y_train, y_test = train_test_split(X, y_cat, test_size = 0.2, random_state = 100, stratify = y)
 
     print("Number of samples in y_test ", len(y_test[:-2]))
     print("Number of samples in X_test ", len(X_test))

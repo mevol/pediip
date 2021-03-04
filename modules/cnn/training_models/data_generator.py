@@ -132,7 +132,7 @@ class DataGenerator(Sequence):
     #one-hot encoding within the datagenerator
     #print("Final X shape", X.shape)
     #print("Final y shape", dummy_y.shape)
-    return X, dummy_y
+    #return X, dummy_y#20210304
 
     #one-hot encoding within training_pipeline_3d.py
-    #return X, y
+    return X, y
