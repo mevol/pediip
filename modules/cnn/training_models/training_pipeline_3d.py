@@ -271,7 +271,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
 
     try:
-      classification_metrics = metrics.classification_report(y_test, preds_rounded)
+      classification_metrics = metrics.classification_report(y_test, y_pred)
       print(classification_metrics)
     except Exception:
       logging.warning("Could not get multi-class classification report")
