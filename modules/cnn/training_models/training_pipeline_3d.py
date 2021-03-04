@@ -44,6 +44,8 @@ from modules.cnn.training_models.plot_history import history_to_csv, figure_from
 #from modules.cnn.evaluate_model_3d import evaluate
 from modules.cnn.training_models.data_generator import DataGenerator
 
+print(tensorflow.__version__)
+
 #MAP_DIM = (201, 201, 201)
 MAP_DIM = (101, 101, 101)
 #MAP_DIM = (51, 51, 51)
@@ -249,6 +251,11 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:
       preds_rounded = np.round(predictions, 0)
       print(preds_rounded)
+      print(preds_rounded[1])
+      print(y_test[1])
+      print(label_dict[1])
+      
+      preds_labels = np.argmax(label_dict, axis=1)
       print("Length of predictions rounded: ", len(preds_rounded))
     except Exception:
       logging.warning("Could not round predictions")
