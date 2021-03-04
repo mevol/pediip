@@ -233,6 +233,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       predictions = model.predict(
                           testing_generator,
                           steps=int(len(X_test) / batch_size))
+                          
+      print("Length of predictions: ", len(predictions))                    
     except ValueError:
       logging.exception(
               "Ensure the RGB option is set correctly for your model - "
@@ -242,6 +244,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:
       preds_rounded = np.round(predictions, 0)
       print(preds_rounded)
+      print("Length of predictions rounded: ", len(preds_rounded))
     except Exception:
       logging.warning("Could not round predictions")
       raise
