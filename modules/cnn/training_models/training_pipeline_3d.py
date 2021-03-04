@@ -225,7 +225,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.info("Getting predictions")
 
     try:
-      predictions = model.predict_generator(
+      predictions = model.predict(
                           testing_generator,
                           steps=int(len(X_test) / batch_size))
     except ValueError:
