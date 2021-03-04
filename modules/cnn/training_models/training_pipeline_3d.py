@@ -230,7 +230,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     logging.info("Getting predictions")
     
-    print(int(math.ceil(len(X_test) / batch_size))
+    print(int(math.ceil(len(X_test) / batch_size)))
     print(int(np.round(len(X_test) / batch_size)))
 
     try:
