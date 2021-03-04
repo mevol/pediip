@@ -32,6 +32,8 @@ from tensorflow.keras import Model
 #from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
+from sklearn import metrics
+from sklearn.metrics import confusion_matrix
 #from keras.utils import np_utils
 from tensorflow.keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
@@ -41,7 +43,8 @@ from modules.cnn.training_models.plot_history import history_to_csv, figure_from
 from modules.cnn.training_models.data_generator import DataGenerator
 
 #MAP_DIM = (201, 201, 201)
-MAP_DIM = (51, 51, 51)
+MAP_DIM = (101, 101, 101)
+#MAP_DIM = (51, 51, 51)
 
 logging.basicConfig(level=logging.INFO, filename="training.log", filemode="w")
 
@@ -120,61 +123,40 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     # Load data CSV file with filenames and labels
     data = pandas.read_csv(parameters_dict["sample_lable_lst"])
-   # print(data.head)
 
     X = data['filename']
-   # print("dataframe for X", X.head)
-    print("dataframe for X", X.shape)
     y = data['ai_lable']
-   # print("dataframe for y", y.head)
-    print("dataframe for y", y.shape)
     print("Classes and their frequency in the data", data.groupby(y).size())
+    class_frequency = data.groupby(y).size()
+    logging.info(f"Number of samples per class {class_frequency}")    
+
 
     label_dict = y.to_dict()
-    print(label_dict)
-
-
-    #one-hot encoding before creating batches with the datagenerator
-    #encode class values as integers
-    #encoder = LabelEncoder()
-    #encoder.fit(y)
-    #encoded_y = encoder.transform(y)
-    #dummy_y = np_utils.to_categorical(encoded_y, num_classes=4)
-    #print(dummy_y)#a numpy.ndarray
+ #   print(label_dict)
 
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 100, stratify = y)
 
-    print(X_train)
-    print(y_train)
     
     partition = {"train" : X_train,
                  "validate" : X_test}
 
-    print(partition["train"])
-    print(partition["validate"])
-
-   # print("X_train", X_train.head)
-   # print("X_train size", X_train.shape)
-   # print("X_test", X_test.head)
-   # print("X_test size", X_test.shape)
-   # print("y_train", y_train.head)
-   # print("y_train size", y_train.shape)
-   # print("y_test", y_test.head)
-   # print("y_test size", y_test.shape)
-
+#    print(partition["train"])
+#    print(partition["validate"])
 
     # Prepare data generators to get data out
     # Build model
     if parameters_dict["rgb"] is True:
         logging.info("Using 3 channel image input to model")
 #        input_shape = (201, 201, 201, 3) #3D
-        input_shape = (51, 51, 51, 3) #3D
+        input_shape = (101, 101, 101, 3) #3D
+#        input_shape = (51, 51, 51, 3) #3D
         color_mode = "rgb"
     else:
         logging.info("Using single channel image input to model")
 #        input_shape = (201, 201, 201, 1) #3D
-        input_shape = (51, 51, 51, 1) #3D
+        input_shape = (101, 101, 101, 1) #3D
+#        input_shape = (51, 51, 51, 1) #3D
         color_mode = "grayscale"
 
 
@@ -192,15 +174,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     print(model_architecture)
     logging.info(f"The model architecture is as follows: {model_architecture}")
 
-    #load the training data in batches using the generator;
-    #use X and y from training CSV
-#    training_generator = DataGenerator(X,#X
-#                                       y,#y
-#                                       dim=MAP_DIM,
-#                                       batch_size=batch_size,
-#                                       n_classes=4,
-#                                       shuffle=True)
-
 
     training_generator = DataGenerator(partition["train"],#X
                                        label_dict,#y
@@ -208,18 +181,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                        batch_size=batch_size,
                                        n_classes=4,
                                        shuffle=True)
-
-
-
-
-    #load the validation data in batches using the generator;
-    #use X and y from validation CSV
-#    testing_generator = DataGenerator(X_test,
-#                                      y,
-#                                      dim=MAP_DIM,
-#                                      batch_size=batch_size,
-#                                      n_classes=4,
-#                                      shuffle=True)
 
 
     testing_generator = DataGenerator(partition["validate"],
@@ -240,7 +201,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
         validation_data=testing_generator,
         validation_steps=(len(X_test) / batch_size),
         use_multiprocessing=True,
-        workers=1)#8)
+        workers=8)#8)
 
 
     # Send history to csv
@@ -250,24 +211,83 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # Save model as h5
     model.save(str(models_path / f"model.h5"))
 
-#    # Make evaluation folder
-#    if parameters_dict["test_dir"]:
-#        logging.info("Performing evaluation of model")
-#        evaluation_dir_path = str(evaluations_path / f"evaluation")
-#        if not Path(evaluation_dir_path).exists():
-#            os.mkdir(evaluation_dir_path)
-#        evaluate(
-#            str(models_path / f"model.h5"),
-#            parameters_dict["sample_lable_lst"],#need to replace with validation CSV filenames
-#           #parameters_dict["database_file"],#need to replace with validation CSV lables
-#            evaluation_dir_path,
-#            rgb=parameters_dict["rgb"],
-#            )
-#    else:
-#        logging.info(
-#           "Requires test directory for evaluation. "
-#            "No evaluation performed"
-#            )
+
+
+
+    # Make evaluation folder
+
+    logging.info("Performing evaluation of model")
+    evaluation_dir_path = str(evaluations_path / f"evaluation")
+    if not Path(evaluation_dir_path).exists():
+      os.mkdir(evaluation_dir_path)
+
+    logging.info("Getting predictions")
+
+    try:
+      predictions = model.predict_generator(
+                          testing_generator,
+                          steps=int(len(X_test) / batch_size))
+    except ValueError:
+      logging.exception(
+              "Ensure the RGB option is set correctly for your model - "
+              "Some models expect 3 channel data")
+      raise
+
+    try:
+      preds_rounded = np.round(predictions, 0)
+      print(preds_rounded)
+    except Exception:
+      logging.warning("Could not round predictions")
+      raise
+
+    try:
+      classification_metrics = metrics.classification_report(y_test, preds_rounded)
+      print(classification_metrics)
+    except Exception:
+      logging.warning("Could not get multi-class classification report")
+      raise
+
+
+
+
+
+
+#    # Per map analysis
+#    predictions_1 = [x for x in predictions if x[1] > x[0]]
+#    predictions_0 = [x for x in predictions if x[1] < x[0]]
+#    logging.info(f"Predicted good value {len(predictions_1)} times")
+#    logging.info(f"Predicted bad value {len(predictions_0)} times")
+#
+#    predictions_decoded = [int(pred[1] > pred[0]) for pred in predictions]
+#
+#    # Save raw predictions
+#    raw_dataframe = pandas.DataFrame(
+#        {
+#            "File": testing_dataframe["Files"],
+#            "0": predictions[:, 0],
+#            "1": predictions[:, 1],
+#            "True Score": test_labels,
+#        }
+#    )
+#    raw_dataframe.set_index("File", inplace=True)
+#    raw_dataframe.to_csv(output_dir_path / "raw_predictions.csv")
+#
+#    logging.info("Per map analysis:")
+#    per_map_class = classification_report(
+#        predictions_decoded, testing_dataframe["Labels"], output_dict=True
+#    )
+#    per_map_class_frame = pandas.DataFrame(per_map_class).transpose()
+#    per_map_conf = confusion_matrix(predictions_decoded, testing_dataframe["Labels"])
+#    per_map_conff_frame = pandas.DataFrame(per_map_conf)
+#    logging.info(per_map_class)
+#    logging.info(per_map_conf)
+#    # Save reports to csv
+#    per_map_class_frame.to_csv(output_dir_path / "per_map_class.csv")
+#    per_map_conff_frame.to_csv(output_dir_path / "per_map_conf.csv")
+#    logging.info("Per map analysis complete")
+#
+    logging.info("Evaluations complete.")
+
 
     # Load the model config information as a yaml file
     with open(output_dir_path / "model_info.yaml", "w") as f:

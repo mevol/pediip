@@ -14,13 +14,15 @@ from keras.preprocessing.image import ImageDataGenerator
 from sklearn.metrics import classification_report, confusion_matrix
 from modules.cnn.training_models.data_generator_resnet import DataGenerator
 
-MAP_DIM = (201, 201, 201)
-
+#MAP_DIM = (201, 201, 201)
+MAP_DIM = (101, 101, 101)
+#MAP_DIM = (51, 51, 51)
 
 def evaluate(
     model_file: str,
-    test_dir: str,
-    database_file: str,
+#    test_dir: str,
+#    database_file: str,
+    test_set,
     output_dir: str,
     rgb: bool = False,
 ):
@@ -33,31 +35,31 @@ def evaluate(
 
     logging.info(f"Model loaded from {model_file}")
 
-    # Get test files prepared
-    # Load files
-    try:
-        test_files = glob.glob(f"{test_dir}/*")
-        logging.info(f"Found {len(test_files)} files for testing")
-        assert len(test_files) > 0, f"Could not find files at {test_dir}"
-    except AssertionError as e:
-        logging.error(e)
-        raise
-    except Exception as e:
-        logging.error(e)
-        raise
-
-    try:
-        conn = sqlite3.connect(database_file)
-    except Exception:
-        logging.error(f"Could not connect to database at {database_file}")
-        raise
-
-    # Read table into pandas dataframe
-    data = pandas.read_sql(f"SELECT * FROM ai_labels", conn)
-    data_indexed = data.set_index("Name")
-
-    names = [re.findall("(.*)", Path(file).stem)[0] for file in test_files]
-    test_labels = [data_indexed.at[name, "Label"] for name in names]
+#    # Get test files prepared
+#    # Load files
+#    try:
+#        test_files = glob.glob(f"{test_dir}/*")
+#        logging.info(f"Found {len(test_files)} files for testing")
+#        assert len(test_files) > 0, f"Could not find files at {test_dir}"
+#    except AssertionError as e:
+#        logging.error(e)
+#        raise
+#    except Exception as e:
+#        logging.error(e)
+#        raise
+#
+#    try:
+#        conn = sqlite3.connect(database_file)
+#    except Exception:
+#        logging.error(f"Could not connect to database at {database_file}")
+#        raise
+#
+#    # Read table into pandas dataframe
+#    data = pandas.read_sql(f"SELECT * FROM ai_labels", conn)
+#    data_indexed = data.set_index("Name")
+#
+#    names = [re.findall("(.*)", Path(file).stem)[0] for file in test_files]
+#    test_labels = [data_indexed.at[name, "Label"] for name in names]
 
     # Create training dataframe
     testing_dataframe = pandas.DataFrame({"Files": test_files, "Labels": test_labels})

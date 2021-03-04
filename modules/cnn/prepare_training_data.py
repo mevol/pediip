@@ -107,6 +107,8 @@ def prepare_training_data(
             print("Grid of MTZ file", data_to_map.grid)
 
             data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=4)
+#            shape = [round(a/1.2/2)*2 for a in data.cell.parameters[:3]]
+#            data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', exact_size=shape)
             print("Grid after converting MTZ to MAP", data_to_map.grid)
 
             data_to_map.update_ccp4_header(2, True)
@@ -125,12 +127,15 @@ def prepare_training_data(
             #this bit here expands the unit cell to be 200A^3;
             #Can I expand the unit cell to standard volume and then extract a
             #grid cube (200, 200, 200)
-            xyz_limits = [200, 200, 200]
+#            xyz_limits = [200, 200, 200]
+#            xyz_limits = [100, 100, 100]
+            xyz_limits = [50, 50, 50]
             upper_limit = gemmi.Position(*xyz_limits)
             box = gemmi.FractionalBox()
             box.minimum = gemmi.Fractional(0, 0, 0)
             box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
-           # box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(200, 200, 200))
+#            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(200, 200, 200))
+#            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(100, 100, 100))
             box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(50, 50, 50))
             box.add_margin(1e-5)
             map_to_map.set_extent(box)
