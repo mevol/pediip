@@ -139,38 +139,19 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     #print(label_dict)
 
 
-    #y_cat = np_utils.to_categorical(y, 4)
-    #encode class values as integers
-    #encoder = LabelEncoder()
-    #encoder.fit(y)
-    #encoded_y = encoder.transform(y)
-
-    #y_cat = to_categorical(encoded_y, 4)
-    
-    #print("one-hot-encoded")
-    #print(y_cat)
-
-    #label_dict = dict(enumerate(y_cat))
-    #print(label_dict)
-    #print(label_dict.keys)
-
-
-
-
-
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 100, stratify = y)
 
-    print("Number of samples in y_test ", len(y_test[:-2]))
-    print("Number of samples in X_test ", len(X_test))
-    print("Number of samples in X_test ", len(X_test[:-2]))
+    #print("Number of samples in y_test ", len(y_test[:-2]))
+    #print("Number of samples in X_test ", len(X_test))
+    #print("Number of samples in X_test ", len(X_test[:-2]))
     
     partition = {"train" : X_train,
                  "validate" : X_test[:-2]}
 
-    print("Length of partition train", len(partition["train"]))
+    #print("Length of partition train", len(partition["train"]))
     #print(partition["validate"])
 
-    print("Length of partition validate: ", len(partition["validate"]))
+    #print("Length of partition validate: ", len(partition["validate"]))
 
     # Prepare data generators to get data out
     # Build model
@@ -200,7 +181,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     model_info = model.get_config()
     model_architecture = model.summary()
     print(model_architecture)
-    logging.info(f"The model architecture is as follows: {model_architecture}")
+    logging.info(f"The model architecture is as follows:")
+    logging.info(model_architecture)
 
 
     training_generator = DataGenerator(partition["train"],#X
@@ -261,9 +243,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                           verbose=1)
       
       
-      print("Predictions before rounding")
-      print(predictions)                    
-      print("Length of predictions: ", len(predictions))                    
+      #print("Predictions before rounding")
+      #print(predictions)                    
+      #print("Length of predictions: ", len(predictions))                    
     except ValueError:
       logging.exception(
               "Ensure the RGB option is set correctly for your model - "
@@ -272,70 +254,34 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     try:
       preds_rounded = np.round(predictions, 0)
-      print("Predictions after rounding")
-      print(preds_rounded)
+      #print("Predictions after rounding")
+      #print(preds_rounded)
       
       y_pred = np.argmax(preds_rounded, axis=1)
       y_pred1 = preds_rounded.argmax(1)
 
-      print(y_pred)
-      print(y_pred1)
+      #print(y_pred)
+      #print(y_pred1)
 
-      print("Length of predictions rounded: ", len(preds_rounded))
+      #print("Length of predictions rounded: ", len(preds_rounded))
     except Exception:
       logging.warning("Could not round predictions")
       raise
 
     #interim fix to be able to develop further; remove the last two samples in y_test
     #y_test = y_test[:-2]
-    print("Content of y_test")
-    print(y_test[:-2])
+    #print("Content of y_test")
+    #print(y_test[:-2])
     try:
       classification_metrics = metrics.classification_report(y_test[:-2], y_pred)
       print(classification_metrics)
+      logging.info(f"Multi-class classification report")
+      logging.info(classification_metrics)
     except Exception:
       logging.warning("Could not get multi-class classification report")
       raise
 
 
-
-
-
-
-#    # Per map analysis
-#    predictions_1 = [x for x in predictions if x[1] > x[0]]
-#    predictions_0 = [x for x in predictions if x[1] < x[0]]
-#    logging.info(f"Predicted good value {len(predictions_1)} times")
-#    logging.info(f"Predicted bad value {len(predictions_0)} times")
-#
-#    predictions_decoded = [int(pred[1] > pred[0]) for pred in predictions]
-#
-#    # Save raw predictions
-#    raw_dataframe = pandas.DataFrame(
-#        {
-#            "File": testing_dataframe["Files"],
-#            "0": predictions[:, 0],
-#            "1": predictions[:, 1],
-#            "True Score": test_labels,
-#        }
-#    )
-#    raw_dataframe.set_index("File", inplace=True)
-#    raw_dataframe.to_csv(output_dir_path / "raw_predictions.csv")
-#
-#    logging.info("Per map analysis:")
-#    per_map_class = classification_report(
-#        predictions_decoded, testing_dataframe["Labels"], output_dict=True
-#    )
-#    per_map_class_frame = pandas.DataFrame(per_map_class).transpose()
-#    per_map_conf = confusion_matrix(predictions_decoded, testing_dataframe["Labels"])
-#    per_map_conff_frame = pandas.DataFrame(per_map_conf)
-#    logging.info(per_map_class)
-#    logging.info(per_map_conf)
-#    # Save reports to csv
-#    per_map_class_frame.to_csv(output_dir_path / "per_map_class.csv")
-#    per_map_conff_frame.to_csv(output_dir_path / "per_map_conf.csv")
-#    logging.info("Per map analysis complete")
-#
     logging.info("Evaluations complete.")
 
 
