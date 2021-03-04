@@ -240,7 +240,10 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                           testing_generator,
                           steps=math.ceil(len(X_test) / batch_size),
                           verbose=1)
-                          
+      
+      
+      print("Predictions before rounding")
+      print(predictions)                    
       print("Length of predictions: ", len(predictions))                    
     except ValueError:
       logging.exception(
@@ -250,12 +253,14 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     try:
       preds_rounded = np.round(predictions, 0)
+      print("Predictions after rounding")
       print(preds_rounded)
-      print(preds_rounded[1])
-      print(y_test[1])
-      print(label_dict[1])
       
-      preds_labels = np.argmax(label_dict, axis=1)
+      y_pred = np.argmax(preds_rounded, axis=1)
+
+      print(y_pred)
+
+
       print("Length of predictions rounded: ", len(preds_rounded))
     except Exception:
       logging.warning("Could not round predictions")
