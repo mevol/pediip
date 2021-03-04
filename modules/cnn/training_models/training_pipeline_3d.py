@@ -269,9 +269,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     #interim fix to be able to develop further; remove the last two samples in y_test
     #y_test = y_test[:-2]
     print("Content of y_test")
-    print(y_test)
+    print(y_test[:-2])
     try:
-      classification_metrics = metrics.classification_report(y_test, y_pred)
+      classification_metrics = metrics.classification_report(y_test[:-2], y_pred)
       print(classification_metrics)
     except Exception:
       logging.warning("Could not get multi-class classification report")
