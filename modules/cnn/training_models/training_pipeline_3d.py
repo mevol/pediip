@@ -139,7 +139,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 100, stratify = y)
 
-    print("Number of samples in y_test ", len(y_test))
+    print("Number of samples in y_test ", len(y_test[:-2]))
     print("Number of samples in X_test ", len(X_test))
     print("Number of samples in X_test ", len(X_test[:-2]))
     
@@ -230,8 +230,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     logging.info("Getting predictions")
     
-    print(int(math.ceil(len(X_test) / batch_size)))
-    print(int(np.round(len(X_test) / batch_size)))
+#    print(int(math.ceil(len(X_test) / batch_size)))
+#    print(int(np.round(len(X_test) / batch_size)))
 
     try:
       predictions = model.predict(
@@ -253,6 +253,10 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     except Exception:
       logging.warning("Could not round predictions")
       raise
+
+    #interim fix to be able to develop further; remove the last two samples in y_test
+    y_test = y_test[:-2]
+
 
     try:
       classification_metrics = metrics.classification_report(y_test, preds_rounded)
