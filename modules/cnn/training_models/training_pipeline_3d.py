@@ -229,6 +229,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       os.mkdir(evaluation_dir_path)
 
     logging.info("Getting predictions")
+    
+    print(int(math.ceil(len(X_test) / batch_size))
+    print(int(np.round(len(X_test) / batch_size))
 
     try:
       predictions = model.predict(
