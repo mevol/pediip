@@ -28,6 +28,7 @@ import configargparse
 import pandas
 import yaml
 import numpy as np
+import math
 #from keras import Model
 from tensorflow.keras import Model
 #from keras.preprocessing.image import ImageDataGenerator
@@ -194,7 +195,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                       dim=MAP_DIM,
                                       batch_size=batch_size,
                                       n_classes=4,
-                                      shuffle=True)
+                                      shuffle=False)#was True
 
 
     #TO DO: need to find a way to run k-fold cross-validation during training
@@ -232,7 +233,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:
       predictions = model.predict(
                           testing_generator,
-                          steps=int(len(X_test) / batch_size))
+                          steps=int(math.ceil(len(X_test) / batch_size)),
+                          verbose=1)
                           
       print("Length of predictions: ", len(predictions))                    
     except ValueError:
