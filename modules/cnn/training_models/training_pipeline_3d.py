@@ -138,6 +138,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 100, stratify = y)
 
+    print("Number of samples in y_test ", len(y_test))
+    print("Number of samples in X_test ", len(X_test))
+
     
     partition = {"train" : X_train,
                  "validate" : X_test}
