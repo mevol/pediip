@@ -257,9 +257,10 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       print(preds_rounded)
       
       y_pred = np.argmax(preds_rounded, axis=1)
+      y_pred1 = preds_rounded.argmax(1)
 
       print(y_pred)
-
+      print(y_pred1)
 
       print("Length of predictions rounded: ", len(preds_rounded))
     except Exception:
