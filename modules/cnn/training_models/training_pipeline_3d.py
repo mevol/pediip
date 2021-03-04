@@ -282,44 +282,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       raise
 
 
-
-
-
-
-#    # Per map analysis
-#    predictions_1 = [x for x in predictions if x[1] > x[0]]
-#    predictions_0 = [x for x in predictions if x[1] < x[0]]
-#    logging.info(f"Predicted good value {len(predictions_1)} times")
-#    logging.info(f"Predicted bad value {len(predictions_0)} times")
-#
-#    predictions_decoded = [int(pred[1] > pred[0]) for pred in predictions]
-#
-#    # Save raw predictions
-#    raw_dataframe = pandas.DataFrame(
-#        {
-#            "File": testing_dataframe["Files"],
-#            "0": predictions[:, 0],
-#            "1": predictions[:, 1],
-#            "True Score": test_labels,
-#        }
-#    )
-#    raw_dataframe.set_index("File", inplace=True)
-#    raw_dataframe.to_csv(output_dir_path / "raw_predictions.csv")
-#
-#    logging.info("Per map analysis:")
-#    per_map_class = classification_report(
-#        predictions_decoded, testing_dataframe["Labels"], output_dict=True
-#    )
-#    per_map_class_frame = pandas.DataFrame(per_map_class).transpose()
-#    per_map_conf = confusion_matrix(predictions_decoded, testing_dataframe["Labels"])
-#    per_map_conff_frame = pandas.DataFrame(per_map_conf)
-#    logging.info(per_map_class)
-#    logging.info(per_map_conf)
-#    # Save reports to csv
-#    per_map_class_frame.to_csv(output_dir_path / "per_map_class.csv")
-#    per_map_conff_frame.to_csv(output_dir_path / "per_map_conf.csv")
-#    logging.info("Per map analysis complete")
-#
     logging.info("Evaluations complete.")
 
 
