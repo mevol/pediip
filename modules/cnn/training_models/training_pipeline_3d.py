@@ -141,10 +141,10 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     print("Number of samples in y_test ", len(y_test))
     print("Number of samples in X_test ", len(X_test))
-    print("Number of samples in X_test ", len(X_test[:-3]))
+    print("Number of samples in X_test ", len(X_test[:-2]))
     
     partition = {"train" : X_train,
-                 "validate" : X_test[:-3]}
+                 "validate" : X_test[:-2]}
 
 #    print(partition["train"])
 #    print(partition["validate"])
