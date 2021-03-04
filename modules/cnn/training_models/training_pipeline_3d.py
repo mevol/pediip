@@ -148,6 +148,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 #    print(partition["train"])
 #    print(partition["validate"])
 
+    print("Length of partition validate: ", len(partition["validate"]))
+
     # Prepare data generators to get data out
     # Build model
     if parameters_dict["rgb"] is True:
