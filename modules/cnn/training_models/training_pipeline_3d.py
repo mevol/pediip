@@ -134,13 +134,31 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     class_frequency = data.groupby(y).size()
     logging.info(f"Number of samples per class {class_frequency}")    
 
-    y_cat = np_utils.to_categorical(y, 4)
 
     label_dict = y.to_dict()
- #   print(label_dict)
+    #print(label_dict)
 
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y_cat, test_size = 0.2, random_state = 100, stratify = y)
+    #y_cat = np_utils.to_categorical(y, 4)
+    #encode class values as integers
+    #encoder = LabelEncoder()
+    #encoder.fit(y)
+    #encoded_y = encoder.transform(y)
+
+    #y_cat = to_categorical(encoded_y, 4)
+    
+    #print("one-hot-encoded")
+    #print(y_cat)
+
+    #label_dict = dict(enumerate(y_cat))
+    #print(label_dict)
+    #print(label_dict.keys)
+
+
+
+
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 100, stratify = y)
 
     print("Number of samples in y_test ", len(y_test[:-2]))
     print("Number of samples in X_test ", len(X_test))
@@ -149,8 +167,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     partition = {"train" : X_train,
                  "validate" : X_test[:-2]}
 
-#    print(partition["train"])
-#    print(partition["validate"])
+    print("Length of partition train", len(partition["train"]))
+    #print(partition["validate"])
 
     print("Length of partition validate: ", len(partition["validate"]))
 
