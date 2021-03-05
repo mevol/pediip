@@ -38,13 +38,14 @@ class DataGenerator(Sequence):
 
     # Find list of IDs
     #list_IDs_temp = [self.list_IDs[k] for k in indexes]
-
-    list_IDs_temp = []
-    for k in indexes:
+    list_IDs_temp = [self.iterator[k] for k in indexes]
+    
+#    list_IDs_temp = []
+#    for k in indexes:
       #print("Index ", k)
 #      print("List of IDs ", self.list_IDs)
       #print("ID for index k ", self.iterator[k])
-      list_IDs_temp.append(self.iterator[k])
+#      list_IDs_temp.append(self.iterator[k])
     
     #print("List of IDs ", self.iterator)
 
