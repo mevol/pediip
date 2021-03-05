@@ -198,13 +198,13 @@ def prepare_training_data(
             lable = (cur.fetchone())[0]
             print(lable)
             if lable == "1a":
-              new_lable = 1
+              new_lable = 0
             if lable == "1b":
-              new_lable = 2
+              new_lable = 1
             if lable == "2a":
-              new_lable = 3
+              new_lable = 2
             if lable == "2b":
-              new_lable = 4
+              new_lable = 3
             print(new_lable) 
             with open(os.path.join(output_dir, "conv_map_list.csv"), "a", newline = "") as out_csv:
               writer = csv.writer(out_csv)

@@ -22,7 +22,9 @@ import shutil
 from datetime import datetime
 from typing import Callable
 import tensorflow
-
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 import mrcfile
 import configargparse
 import pandas
@@ -182,8 +184,11 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     model_architecture = model.summary()
     print(model_architecture)
     logging.info(f"The model architecture is as follows:")
-    logging.info(model_architecture)
+    model.summary(print_fn=logging.info)
 
+    #Record start time to monitor training time
+    start = datetime.now()
+    logging.info(f"Training start time : {start}")    
 
     training_generator = DataGenerator(partition["train"],#X
                                        label_dict,#y
@@ -222,7 +227,12 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     model.save(str(models_path / f"model.h5"))
 
 
-
+    #Record start time to monitor training time
+    end = datetime.now()
+    logging.info(f"Training end time : {end}")    
+    elapsed = end-start
+    logging.info(f"Training duration : {elapsed}")
+    print("Training duration: ", elapsed)
 
     # Make evaluation folder
 
@@ -242,17 +252,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                           steps=math.ceil(len(X_test) / batch_size),
                           verbose=1)
       
-      
-      #print("Predictions before rounding")
-      #print(predictions)                    
-      #print("Length of predictions: ", len(predictions))                    
-    except ValueError:
-      logging.exception(
-              "Ensure the RGB option is set correctly for your model - "
-              "Some models expect 3 channel data")
-      raise
 
-    try:
       preds_rounded = np.round(predictions, 0)
       #print("Predictions after rounding")
       #print(preds_rounded)
@@ -260,7 +260,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       y_pred = np.argmax(preds_rounded, axis=1)
       y_pred1 = preds_rounded.argmax(1)
 
-      #print(y_pred)
+      print("predicted labels ", y_pred)
+      print("known labels ", y_test[:-2])
       #print(y_pred1)
 
       #print("Length of predictions rounded: ", len(preds_rounded))
@@ -273,7 +274,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     #print("Content of y_test")
     #print(y_test[:-2])
     try:
-      classification_metrics = metrics.classification_report(y_test[:-2], y_pred)
+      classes = ["class 1", "class 2", "class 3", "class 4", "class 5"]
+      labels = np.arange(5)
+      classification_metrics = metrics.classification_report(y_test[:-2], y_pred, labels=labels, target_names=classes)
       print(classification_metrics)
       logging.info(f"Multi-class classification report")
       logging.info(classification_metrics)
@@ -281,7 +284,56 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       logging.warning("Could not get multi-class classification report")
       raise
 
+    logging.info("Drawing confusion matrix.")
+    try:
+#      cat_labels = pd.DataFrame(y_test[:-2].idxmax(axis=1))
+#      cat_preds = pd.DataFrame(y_pred.idxmax(axis=1))
+      cat_labels = pd.DataFrame(y_test[:-2])
+      cat_preds = pd.DataFrame(y_pred)
 
+      confusion_matrix = metrics.confusion_matrix(cat_labels, cat_preds)
+    except Exception:
+      logging.warning("Could not calculate confusion matrix")
+      raise
+#    def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+#      #Add Normalization Option
+#      if normalize:
+#        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+#        print("Normalized confusion matrix")
+#      else:
+#        print("Confusion matrix withou normalization")
+#      #print(cm)
+      
+      
+    try:  
+      def draw_conf_mat(matrix):
+        datestring = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
+        labels = ['0', '1', '2', '3', '4']      
+        ax = plt.subplot()
+        sns.heatmap(matrix, annot=True, ax=ax)
+        plt.title('Confusion matrix')
+        ax.set_xticklabels(labels)
+        ax.set_yticklabels(labels)
+        plt.xlabel('Predicted')
+        plt.ylabel('True')
+        plt.savefig(str(evaluations_path / f"confusion_matrix_{datestring}.png"))
+        plt.close()
+
+      draw_conf_mat(confusion_matrix)
+
+    except Exception:
+      logging.warning("Could not draw confusion matrix")
+      raise
+      
+
+      
+      
+      
+      
+      
+      
+      
+      
     logging.info("Evaluations complete.")
 
 
