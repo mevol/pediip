@@ -305,7 +305,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:  
       def draw_conf_mat(matrix):
         datestring = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
-        labels = ['0', '1', '2', '3', '4']      
+        labels = ['0', '1']
         ax = plt.subplot()
         sns.heatmap(matrix, annot=True, ax=ax)
         plt.title('Confusion matrix')
