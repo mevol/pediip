@@ -1,0 +1,5 @@
+# .gitignore file for peddip
+.DS_Store
+__pycache__/
+*.py[cod]
+*$py.class
