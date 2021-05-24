@@ -21,7 +21,7 @@ setup(
          "xraydb",
          "pandas",
          "numpy",
-         "tensorflow==2.4.0",
+         "tensorflow==2.5.0",
 #         "tensorflow<=1.13",
          "Keras",
          "Pillow",
