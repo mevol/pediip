@@ -21,7 +21,7 @@ setup(
          "xraydb",
          "pandas",
          "numpy",
-         "tensorflow==2.2.0",
+         "tensorflow==2.5.0",
 #         "tensorflow<=1.13",
          "Keras",
          "Pillow",
@@ -43,6 +43,7 @@ setup(
         "console_scripts": [
 #            "pediip.create_mr_set = modules.create_mr_set.create_mr_set:main",#need to fix command line
             "pediip.prepare = modules.cnn.command_line_preparation:main",
+            "pediip.prepare = modules.cnn.command_line_preparation_binary:main",
 #            "topaz3.test_split = topaz3.train_test_split:command_line",
 #            "topaz3.predict_from_maps = topaz3.predictions:command_line",
 #            "topaz3.filter = topaz3.filters:filter_command_line",
