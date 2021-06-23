@@ -78,6 +78,8 @@ def prepare_training_data_binary(
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
 
+    print("Number of slices ", slices_per_axis)
+
     logging.info("Preparing training data")
 
     # Check all directories exist
