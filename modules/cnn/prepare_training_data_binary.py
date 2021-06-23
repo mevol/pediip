@@ -14,6 +14,8 @@ from typing import List
 def slice_map(volume, slices_per_axis):
     """Slice the volume into 2d panes along x, y, z axes and return as an image stack"""
 
+
+
     # Check volume is equal in all directions
     assert (
         volume.shape[0] == volume.shape[1] == volume.shape[2]
@@ -261,7 +263,7 @@ def params_from_cmd(args):
         "maps_list": args.maps_list,
         "xyz_limits": args.xyz_limits,
         "output_dir": args.output_dir,
-        "slices_per_axis": args.slices_per_axis,
+        "slices": args.slices_per_axis,
     }
 
     return params
@@ -296,7 +298,7 @@ if __name__ == "__main__":
         "output_dir", type=str, help="directory to output all map files to"
     )
     cmd_parser.add_argument(
-        "slices_per_axis", type=int, help="number of image slices to produce per axis, default=20",
+        "slices", type=int, help="number of image slices to produce per axis, default=20",
         default=20
     )
     cmd_parser.set_defaults(func=params_from_cmd)
@@ -313,7 +315,7 @@ if __name__ == "__main__":
             parameters["maps_list"],
             parameters["xyz_limits"],
             parameters["output_dir"],
-            parameters["slices_per_axis"]
+            parameters["slices"]
         )
     except KeyError as e:
         logging.error(f"Could not find parameter {e} to prepare training data")

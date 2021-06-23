@@ -14,7 +14,7 @@ xyz_limits:
   - 200
   - 200
 output_dir: /output/image/slices/directory
-slices_per_axis:
+slices:
   - 20
 """
 
@@ -103,7 +103,7 @@ def main():
         parameters["maps_list"],
         parameters["xyz_limits"],
         parameters["output_dir"],
-        parameters["slices_per_axis"]
+        parameters["slices"]
     )
 
 
