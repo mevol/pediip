@@ -87,6 +87,20 @@ def prepare_training_data_binary(
         except Exception:
           logging.error(f"Could not expand map {map_file_path}")          
           raise
+          
+        # Check volume is equal in all directions
+        assert (
+          map_to_map.shape[0] == map_to_map.shape[1] == map_to_map.shape[2]
+        ), f"Please provide a volume which has dimensions of equal length, not {map_to_map.shape[0]}x{volume.shape[1]}x{map_to_map.shape[2]}"
+
+        length = map_to_map.shape[0]
+
+        # Array to return the images
+        image_stack = np.zeros((slices_per_axis * 3, length, length))
+        print(image_stack.shape)
+          
+          
+          
 #          
 # #Trying to account for resolution and make the distance between the grid points equal for
 # #all resolutions; this causes errors with some space groups
