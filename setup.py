@@ -34,7 +34,7 @@ setup(
          "matplotlib",
          "configargparse",
          "scipy==1.4.1",
-         "h5py==2.10.0",
+#         "h5py==2.10.0",
     ],
     scripts=[
             "bin/create_mr_set",
