@@ -75,6 +75,7 @@ def prepare_training_data_binary(
           #xyz_limits = [200, 200, 200]
           #xyz_limits = [100, 100, 100]
           #xyz_limits = [50, 50, 50]
+          print(tuple(xyz_limits))
           upper_limit = gemmi.Position(*xyz_limits)
           box = gemmi.FractionalBox()
           box.minimum = gemmi.Fractional(0, 0, 0)
