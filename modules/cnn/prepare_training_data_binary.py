@@ -41,23 +41,22 @@ def prepare_training_data_binary(
     with open(maps_list, "r") as ls:
       for line in ls:
         print(line)
-        
-        
-#    for struct in mtz_structs:
-#      # Check path to map exists
-#      try:
-#        mtz_dir = Path(mtz_directory)
-#        assert mtz_dir.exists()
-#      except Exception:
-#        logging.error(f"Could not find mtz directory at {mtz_directory}")
-#        raise
-#
-#           try: 
-#             # opening temporary map file which shouldn't be neccessary to be written out
-#             map_to_map = gemmi.read_ccp4_map(temp_out_file)
-#             map_to_map.setup()
-# 
-#             print("Grid after loading temp file", map_to_map.grid)
+
+        # Check path to map exists
+        try:
+          map_file_path = line[0]
+          print(map_file_path)
+          assert Path(map_file_path).exists()
+        except Exception:
+          logging.error(f"Could not find mtz directory at {map_file_path}")
+          raise
+
+        try: 
+          # opening temporary map file which shouldn't be neccessary to be written out
+          map_to_map = gemmi.read_ccp4_map(map_file_path)
+          map_to_map.setup()
+ 
+          print("Grid after loading temp file", map_to_map.grid)
 # 
 #             #this bit here expands the unit cell to be 200A^3;
 #             #Can I expand the unit cell to standard volume and then extract a
