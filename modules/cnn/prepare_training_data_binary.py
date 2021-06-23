@@ -48,7 +48,7 @@ def prepare_training_data_binary(
         
         # Check path to map exists
         try:
-          map_file_path = Path(map_file_path)
+          map_file_path = Path(line_splitted)
           print(map_file_path)
           assert map_file_path.exists()
         except Exception:
