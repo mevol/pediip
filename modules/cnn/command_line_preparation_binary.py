@@ -6,7 +6,7 @@ import os
 import sys
 import yaml
 from pathlib import Path
-from modules.cnn.prepare_training_data import prepare_training_data
+from modules.cnn.prepare_training_data_binary import prepare_training_data_binary
 
 example_config = """maps_list: /path/to/maps/list
 xyz_limits:
@@ -97,9 +97,9 @@ def main():
 
 
     logging.info(f"Converting mtz files to map files")
-    prepare_training_data(
-        parameters["xyz_limits"],
+    prepare_training_data_binary(
         parameters["maps_list"],
+        parameters["xyz_limits"],
         parameters["output_dir"],
     )
 

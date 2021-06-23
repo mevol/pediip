@@ -8,7 +8,7 @@ import csv
 from pathlib import Path
 from typing import List
 
-def prepare_training_data(
+def prepare_training_data_binary(
     maps_list: str,
     xyz_limits: List[int],
     output_directory: str,
@@ -199,9 +199,9 @@ if __name__ == "__main__":
 
     # Execute the command
     try:
-        prepare_training_data(
-            parameters["xyz_limits"],
+        prepare_training_data_binary(
             parameters["maps_list"],
+            parameters["xyz_limits"],
             parameters["output_dir"],
         )
     except KeyError as e:
