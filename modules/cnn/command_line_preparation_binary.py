@@ -14,6 +14,8 @@ xyz_limits:
   - 200
   - 200
 output_dir: /output/image/slices/directory
+slices_per_axis:
+  - 20
 """
 
 def params_from_yaml(args):
@@ -101,6 +103,7 @@ def main():
         parameters["maps_list"],
         parameters["xyz_limits"],
         parameters["output_dir"],
+        parameters["slices_per_axis"]
     )
 
 

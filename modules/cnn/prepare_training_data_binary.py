@@ -12,6 +12,7 @@ def prepare_training_data_binary(
     maps_list: str,
     xyz_limits: List[int],
     output_directory: str,
+    slices_per_axis: int
 ):
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
@@ -71,11 +72,7 @@ def prepare_training_data_binary(
         try:
           #this bit here expands the unit cell to be 200A^3;
           #Can I expand the unit cell to standard volume and then extract a
-          #grid cube (200, 200, 200)
-          #xyz_limits = [200, 200, 200]
-          #xyz_limits = [100, 100, 100]
-          #xyz_limits = [50, 50, 50]
-          #print(int(xyz_limits))
+          #grid cube (200, 200, 200) or whatever value has been passed through YAML file
           upper_limit = gemmi.Position(*xyz_limits)
           box = gemmi.FractionalBox()
           box.minimum = gemmi.Fractional(0, 0, 0)
@@ -84,25 +81,9 @@ def prepare_training_data_binary(
               map_to_map.grid.get_point(int(xyz_limits[0]),
                                         int(xyz_limits[1]),
                                         int(xyz_limits[2])))
-          #box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(100, 100, 100))
-          #box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(50, 50, 50))
           box.add_margin(1e-5)
           map_to_map.set_extent(box)
-
           print("Grid after setting XYZ limits for MAP", map_to_map.grid)
-# 
-#             #create a grid with extend x=0-->200, y=0-->200, z=0-->200
-#             #currently problems as the 200 limit not always reached for all axes;
-#             #adding a margin maybe that will help
-#            # new_map.setup()
-#            # box1 = gemmi.FractionalBox()
-#            # box1.minimum = gemmi.Fractional(0, 0, 0)
-#            # box1.maximum = new_map.grid.point_to_fractional(new_map.grid.get_point(200, 200, 200))
-#            # map_to_map.setup()
-#            # new_map.set_extent(box1)
-# 
-#            # print("Grid after setting grid dimensions", new_map.grid)
-# 
         except Exception:
           logging.error(f"Could not expand map {map_file_path}")          
           raise
@@ -171,6 +152,7 @@ def params_from_cmd(args):
         "maps_list": args.maps_list,
         "xyz_limits": args.xyz_limits,
         "output_dir": args.output_dir,
+        "slices_per_axis": args.slices_per_axis,
     }
 
     return params
@@ -204,6 +186,9 @@ if __name__ == "__main__":
     cmd_parser.add_argument(
         "output_dir", type=str, help="directory to output all map files to"
     )
+    cmd_parser.add_argument(
+        "slices_per_axis", type=str, help="number of image slices to produce per axis"
+    )
     cmd_parser.set_defaults(func=params_from_cmd)
 
     # Extract the parameters based on the yaml/command line argument
@@ -218,6 +203,7 @@ if __name__ == "__main__":
             parameters["maps_list"],
             parameters["xyz_limits"],
             parameters["output_dir"],
+            parameters["slices_per_axis"]
         )
     except KeyError as e:
         logging.error(f"Could not find parameter {e} to prepare training data")
