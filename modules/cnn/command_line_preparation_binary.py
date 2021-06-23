@@ -75,6 +75,8 @@ def main():
 
     logging.info(f"Extracting parameters from {args.config}")
     parameters = params_from_yaml(args)
+    
+    print(parameters)
 
     if args.make_output:
         logging.info("Generating output directories")
@@ -82,14 +84,14 @@ def main():
             os.mkdir(parameters["output_dir"])
         except TypeError:
             logging.error(
-                f"Expected file path for maps_dir, got {parameters['output_dir']}"
+                f"Expected file path for output_dir, got {parameters['output_dir']}"
             )
             raise
         except FileExistsError:
-            logging.error(f"Using existing maps_dir at {parameters['output_dir']}")
+            logging.error(f"Using existing output_dir at {parameters['output_dir']}")
         except PermissionError:
             logging.error(
-                f"Do not have permission to create maps_dir at {parameters['output_dir']}"
+                f"Do not have permission to create output_dir at {parameters['output_dir']}"
             )
             raise
 
