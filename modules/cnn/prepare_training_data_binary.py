@@ -10,6 +10,65 @@ import numpy as np
 from pathlib import Path
 from typing import List
 
+
+def slice_map(volume, slices_per_axis):
+    """Slice the volume into 2d panes along x, y, z axes and return as an image stack"""
+
+    # Check volume is equal in all directions
+    assert (
+        volume.shape[0] == volume.shape[1] == volume.shape[2]
+    ), f"Please provide a volume which has dimensions of equal length, not {volume.shape[0]}x{volume.shape[1]}x{volume.shape[2]}"
+
+    length = volume.shape[0]
+
+    # Array to return the images
+    image_stack = np.zeros((slices_per_axis * 3, length, length))
+    # print(image_stack.shape)
+
+    # Get x slices and put in image_stack
+    for slice in range(slices_per_axis):
+        image_stack[slice, :, :] = volume[
+            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
+        ]
+
+    # Get y slices and put in image_stack
+    for slice in range(slices_per_axis):
+        image_stack[slice + slices_per_axis, :, :] = volume[
+            :, (slice + 1) * int((length) / (slices_per_axis + 1)), :
+        ]
+
+    # Get z slices and put in image_stack
+    for slice in range(slices_per_axis):
+        image_stack[slice + (slices_per_axis * 2), :, :] = volume[
+            :, :, (slice + 1) * int((length) / (slices_per_axis + 1))
+        ]
+
+    return image_stack
+
+
+def sphere(shape, radius, position):
+    """Test function from stack overflow to create a sphere"""
+    # assume shape and position are both a 3-tuple of int or float
+    # the units are pixels / voxels (px for short)
+    # radius is a int or float in px
+    semisizes = (radius,) * 3
+
+    # genereate the grid for the support points
+    # centered at the position indicated by position
+    grid = [slice(-x0, dim - x0) for x0, dim in zip(position, shape)]
+    position = np.ogrid[grid]
+    # calculate the distance of all points from `position` center
+    # scaled by the radius
+    arr = np.zeros(shape, dtype=float)
+    for x_i, semisize in zip(position, semisizes):
+        arr += np.abs(x_i / semisize) ** 2
+    # the inner part of the sphere will have distance below 1
+    return arr <= 1.0
+
+
+
+
+
 def prepare_training_data_binary(
     maps_list: str,
     xyz_limits: List[int],
@@ -85,27 +144,55 @@ def prepare_training_data_binary(
                                         int(xyz_limits[2])))
           box.add_margin(1e-5)
           map.set_extent(box)
+
+
+
+
+
           map_grid = map.grid
           map_array = np.array(map_grid, copy = False)
           print(map_array.shape)
           print("Grid after setting XYZ limits for MAP", map_grid)
+          slice_map(map_array, slices_per_axis)
         except Exception:
           logging.error(f"Could not expand map {map_file_path}")          
           raise
-          
-        # Check volume is equal in all directions
-        
-        assert (
-          map_array.shape[0] == map_array.shape[1] == map_array.shape[2]
-        ), f"Please provide a volume which has dimensions of equal length, not {map_array.shape[0]}x{volume.shape[1]}x{map_array.shape[2]}"
 
-        length = map_array.shape[0]
 
-        # Array to return the images
-        image_stack = np.zeros((slices_per_axis * 3, length, length))
-        print(image_stack.shape)
+
+
           
-          
+#         Check volume is equal in all directions
+#         
+#         assert (
+#           map_array.shape[0] == map_array.shape[1] == map_array.shape[2]
+#         ), f"Please provide a volume which has dimensions of equal length, not {map_array.shape[0]}x{volume.shape[1]}x{map_array.shape[2]}"
+# 
+#         length = map_array.shape[0]
+# 
+#         Array to return the images
+#         image_stack = np.zeros((slices_per_axis * 3, length, length))
+#         print(image_stack.shape)
+#           
+#     Get x slices and put in image_stack
+#     for slice in range(slices_per_axis):
+#         image_stack[slice, :, :] = volume[
+#             (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
+#         ]
+# 
+#     Get y slices and put in image_stack
+#     for slice in range(slices_per_axis):
+#         image_stack[slice + slices_per_axis, :, :] = volume[
+#             :, (slice + 1) * int((length) / (slices_per_axis + 1)), :
+#         ]
+# 
+#     Get z slices and put in image_stack
+#     for slice in range(slices_per_axis):
+#         image_stack[slice + (slices_per_axis * 2), :, :] = volume[
+#             :, :, (slice + 1) * int((length) / (slices_per_axis + 1))
+#         ]
+# 
+#     return image_stack          
           
 #          
 # #Trying to account for resolution and make the distance between the grid points equal for
@@ -207,7 +294,8 @@ if __name__ == "__main__":
         "output_dir", type=str, help="directory to output all map files to"
     )
     cmd_parser.add_argument(
-        "slices_per_axis", type=int, help="number of image slices to produce per axis"
+        "slices_per_axis", type=int, help="number of image slices to produce per axis", default=20",
+        default=20,
     )
     cmd_parser.set_defaults(func=params_from_cmd)
 
