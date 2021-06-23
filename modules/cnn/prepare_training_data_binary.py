@@ -22,7 +22,7 @@ def slice_map(volume, slices_per_axis):
     length = volume.shape[0]
 
     # Array to return the images
-    image_stack = np.zeros((int(slices_per_axis) * 3, length, length))
+    image_stack = np.zeros(slices_per_axis * 3, length, length))
     # print(image_stack.shape)
 
     # Get x slices and put in image_stack
@@ -73,7 +73,7 @@ def prepare_training_data_binary(
     maps_list: str,
     xyz_limits: List[int],
     output_directory: str,
-    slices_per_axis: int
+    slices_per_axis: int,
 ):
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
