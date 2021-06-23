@@ -22,7 +22,7 @@ def slice_map(volume, slices_per_axis):
     length = volume.shape[0]
 
     # Array to return the images
-    image_stack = np.zeros(slices_per_axis * 3, length, length))
+    image_stack = np.zeros((slices_per_axis * 3, length, length))
     # print(image_stack.shape)
 
     # Get x slices and put in image_stack
