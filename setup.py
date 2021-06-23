@@ -22,6 +22,7 @@ setup(
          "pandas",
          "numpy==1.19.2",
          "tensorflow==2.5.0",
+         "h5py==3.1.0",
 #         "tensorflow<=1.13",
          "Keras",
          "Pillow",
