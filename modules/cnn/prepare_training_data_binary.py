@@ -80,7 +80,10 @@ def prepare_training_data_binary(
           box = gemmi.FractionalBox()
           box.minimum = gemmi.Fractional(0, 0, 0)
           box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
-          box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(tuple(xyz_limits)))
+          box.maximum = map_to_map.grid.point_to_fractional(
+              map_to_map.grid.get_point(int(xyz_limits[0]),
+                                        int(xyz_limits[1]),
+                                        int(xyz_limits[2])))
           #box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(100, 100, 100))
           #box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(50, 50, 50))
           box.add_margin(1e-5)
