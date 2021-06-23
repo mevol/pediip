@@ -59,7 +59,7 @@ def prepare_training_data_binary(
           # opening temporary map file which shouldn't be neccessary to be written out
           map_to_map = gemmi.read_ccp4_map(str(map_file_path))
         except Exception:
-          logging.error(f"Could not expand map {map_file_path}")          
+          logging.error(f"Could not open map {map_file_path}")          
           raise
         
         try:
@@ -67,24 +67,25 @@ def prepare_training_data_binary(
           print("Grid after loading temp file", map_to_map.grid)
         except RuntimeError:
           pass  
-# 
-#             #this bit here expands the unit cell to be 200A^3;
-#             #Can I expand the unit cell to standard volume and then extract a
-#             #grid cube (200, 200, 200)
-# #            xyz_limits = [200, 200, 200]
-# #            xyz_limits = [100, 100, 100]
-#             xyz_limits = [50, 50, 50]
-#             upper_limit = gemmi.Position(*xyz_limits)
-#             box = gemmi.FractionalBox()
-#             box.minimum = gemmi.Fractional(0, 0, 0)
-#             box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
-# #            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(200, 200, 200))
-# #            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(100, 100, 100))
-#             box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(50, 50, 50))
-#             box.add_margin(1e-5)
-#             map_to_map.set_extent(box)
-# 
-#             print("Grid after setting XYZ limits for MAP", map_to_map.grid)
+
+        try:
+          #this bit here expands the unit cell to be 200A^3;
+          #Can I expand the unit cell to standard volume and then extract a
+          #grid cube (200, 200, 200)
+          xyz_limits = [200, 200, 200]
+          #xyz_limits = [100, 100, 100]
+          #xyz_limits = [50, 50, 50]
+          upper_limit = gemmi.Position(*xyz_limits)
+          box = gemmi.FractionalBox()
+          box.minimum = gemmi.Fractional(0, 0, 0)
+          box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
+          box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(200, 200, 200))
+          #box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(100, 100, 100))
+          #box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(50, 50, 50))
+          box.add_margin(1e-5)
+          map_to_map.set_extent(box)
+
+          print("Grid after setting XYZ limits for MAP", map_to_map.grid)
 # 
 #             #create a grid with extend x=0-->200, y=0-->200, z=0-->200
 #             #currently problems as the 200 limit not always reached for all axes;
@@ -98,9 +99,9 @@ def prepare_training_data_binary(
 # 
 #            # print("Grid after setting grid dimensions", new_map.grid)
 # 
-#        except Exception:
-#          logging.error(f"Could not expand map {map_file_path}")          
-#          raise
+        except Exception:
+          logging.error(f"Could not expand map {map_file_path}")          
+          raise
 #          
 # #Trying to account for resolution and make the distance between the grid points equal for
 # #all resolutions; this causes errors with some space groups
