@@ -58,9 +58,15 @@ def prepare_training_data_binary(
         try: 
           # opening temporary map file which shouldn't be neccessary to be written out
           map_to_map = gemmi.read_ccp4_map(str(map_file_path))
-          map_to_map.setup()
- 
+        except Exception:
+          logging.error(f"Could not expand map {map_file_path}")          
+          raise
+        
+        try:
+          map_to_map.setup() 
           print("Grid after loading temp file", map_to_map.grid)
+        except RuntimeError:
+          pass  
 # 
 #             #this bit here expands the unit cell to be 200A^3;
 #             #Can I expand the unit cell to standard volume and then extract a
@@ -92,9 +98,10 @@ def prepare_training_data_binary(
 # 
 #            # print("Grid after setting grid dimensions", new_map.grid)
 # 
-        except Exception:
-          logging.error(f"Could not expand map {map_file_path}")          
-          raise
+#        except Exception:
+#          logging.error(f"Could not expand map {map_file_path}")          
+#          raise
+#          
 # #Trying to account for resolution and make the distance between the grid points equal for
 # #all resolutions; this causes errors with some space groups
 # #          try:
