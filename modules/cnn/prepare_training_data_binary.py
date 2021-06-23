@@ -72,7 +72,7 @@ def prepare_training_data_binary(
           #this bit here expands the unit cell to be 200A^3;
           #Can I expand the unit cell to standard volume and then extract a
           #grid cube (200, 200, 200)
-          xyz_limits = [200, 200, 200]
+          #xyz_limits = [200, 200, 200]
           #xyz_limits = [100, 100, 100]
           #xyz_limits = [50, 50, 50]
           upper_limit = gemmi.Position(*xyz_limits)
