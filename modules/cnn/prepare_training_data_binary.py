@@ -96,10 +96,10 @@ def prepare_training_data_binary(
         # Check volume is equal in all directions
         
         assert (
-          map_to_map.shape[0] == map_to_map.shape[1] == map_to_map.shape[2]
-        ), f"Please provide a volume which has dimensions of equal length, not {map_to_map.shape[0]}x{volume.shape[1]}x{map_to_map.shape[2]}"
+          map_array.shape[0] == map_array.shape[1] == map_array.shape[2]
+        ), f"Please provide a volume which has dimensions of equal length, not {map_array.shape[0]}x{volume.shape[1]}x{map_array.shape[2]}"
 
-        length = map_to_map.shape[0]
+        length = map_array.shape[0]
 
         # Array to return the images
         image_stack = np.zeros((slices_per_axis * 3, length, length))
