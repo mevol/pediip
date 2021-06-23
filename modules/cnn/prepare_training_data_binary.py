@@ -39,6 +39,7 @@ def prepare_training_data_binary(
 
 #this below works but runs serial
     with open(maps_list, "r") as ls:
+      next(ls)
       for line in ls:
         print(line)
 
