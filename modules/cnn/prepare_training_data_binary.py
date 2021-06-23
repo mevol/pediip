@@ -294,7 +294,7 @@ if __name__ == "__main__":
         "output_dir", type=str, help="directory to output all map files to"
     )
     cmd_parser.add_argument(
-        "slices_per_axis", type=int, help="number of image slices to produce per axis", default=20",
+        "slices_per_axis", type=int, help="number of image slices to produce per axis, default=20",
         default=20
     )
     cmd_parser.set_defaults(func=params_from_cmd)
