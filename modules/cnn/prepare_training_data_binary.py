@@ -42,12 +42,15 @@ def prepare_training_data_binary(
       next(ls)
       for line in ls:
         print(line)
-
+        line_splitted = line.split(",")[0]
+        print(line_splitted)
+        
+        
         # Check path to map exists
         try:
-          map_file_path = line[0]
+          map_file_path = Path(map_file_path)
           print(map_file_path)
-          assert Path(map_file_path).exists()
+          assert map_file_path.exists()
         except Exception:
           logging.error(f"Could not find mtz directory at {map_file_path}")
           raise
