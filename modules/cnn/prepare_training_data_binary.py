@@ -88,9 +88,9 @@ def prepare_training_data_binary(
 # 
 #            # print("Grid after setting grid dimensions", new_map.grid)
 # 
-           except Exception:
-             logging.error(f"Could not expand map {map_to_map}")          
-             raise
+        except Exception:
+          logging.error(f"Could not expand map {map_to_map}")          
+          raise
 # #Trying to account for resolution and make the distance between the grid points equal for
 # #all resolutions; this causes errors with some space groups
 # #          try:
