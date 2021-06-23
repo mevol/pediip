@@ -5,6 +5,8 @@ import yaml
 import gemmi
 import csv
 
+import numpy as np
+
 from pathlib import Path
 from typing import List
 
@@ -58,14 +60,14 @@ def prepare_training_data_binary(
 
         try: 
           # opening temporary map file which shouldn't be neccessary to be written out
-          map_to_map = gemmi.read_ccp4_map(str(map_file_path))
+          map = gemmi.read_ccp4_map(str(map_file_path))
         except Exception:
           logging.error(f"Could not open map {map_file_path}")          
           raise
         
         try:
-          map_to_map.setup() 
-          print("Grid after loading temp file", map_to_map.grid)
+          map.setup() 
+          print("Grid after loading temp file", map.grid)
         except RuntimeError:
           pass  
 
@@ -76,19 +78,23 @@ def prepare_training_data_binary(
           upper_limit = gemmi.Position(*xyz_limits)
           box = gemmi.FractionalBox()
           box.minimum = gemmi.Fractional(0, 0, 0)
-          box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
-          box.maximum = map_to_map.grid.point_to_fractional(
-              map_to_map.grid.get_point(int(xyz_limits[0]),
+          box.maximum = map.grid.unit_cell.fractionalize(upper_limit)
+          box.maximum = map.grid.point_to_fractional(
+              map.grid.get_point(int(xyz_limits[0]),
                                         int(xyz_limits[1]),
                                         int(xyz_limits[2])))
           box.add_margin(1e-5)
-          map_to_map.set_extent(box)
-          print("Grid after setting XYZ limits for MAP", map_to_map.grid)
+          map.set_extent(box)
+          map_grid = map.grid
+          map_array = np.array(map_grid, copy = False)
+          print(map_array.shape)
+          print("Grid after setting XYZ limits for MAP", map_grid)
         except Exception:
           logging.error(f"Could not expand map {map_file_path}")          
           raise
           
         # Check volume is equal in all directions
+        
         assert (
           map_to_map.shape[0] == map_to_map.shape[1] == map_to_map.shape[2]
         ), f"Please provide a volume which has dimensions of equal length, not {map_to_map.shape[0]}x{volume.shape[1]}x{map_to_map.shape[2]}"
