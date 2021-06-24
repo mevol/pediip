@@ -88,7 +88,6 @@ def prepare_training_data_binary(
         print(input_map_path)
         split_path = line.split("/")
         dir_stem = re.findall(r'\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b-\b[a-z0-9]{4}\b', line)
-        print(dir_stem[0])
 
         # Check path to map exists
         try:
@@ -151,14 +150,14 @@ def prepare_training_data_binary(
               # Round to the nearest integer
               slice_scaled_int = np.rint(slice_scaled)
 
-#              # Save image
-#              try:
-#                  output_file = Path(output_directory) / Path(
-#                      f"{dir_stem[0]}_{slice_num}.png"
-#                  )
-#                  Image.fromarray(slice_scaled_int).convert("L").save(output_file)
-#              except Exception:
-#                logging.error(f"Could not create image file in {output_directory}")
+              # Save image
+              try:
+                  output_file = Path(output_directory) / Path(
+                      f"{dir_stem[0]}_{slice_num}.png"
+                  )
+                  Image.fromarray(slice_scaled_int).convert("L").save(output_file)
+              except Exception:
+                logging.error(f"Could not create image file in {output_directory}")
 
         except Exception:
           logging.info(f"Finished creating images in {output_directory}")          
