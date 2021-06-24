@@ -47,30 +47,6 @@ def slice_map(volume, slices_per_axis):
 
     return image_stack
 
-
-def sphere(shape, radius, position):
-    """Test function from stack overflow to create a sphere"""
-    # assume shape and position are both a 3-tuple of int or float
-    # the units are pixels / voxels (px for short)
-    # radius is a int or float in px
-    semisizes = (radius,) * 3
-
-    # genereate the grid for the support points
-    # centered at the position indicated by position
-    grid = [slice(-x0, dim - x0) for x0, dim in zip(position, shape)]
-    position = np.ogrid[grid]
-    # calculate the distance of all points from `position` center
-    # scaled by the radius
-    arr = np.zeros(shape, dtype=float)
-    for x_i, semisize in zip(position, semisizes):
-        arr += np.abs(x_i / semisize) ** 2
-    # the inner part of the sphere will have distance below 1
-    return arr <= 1.0
-
-
-
-
-
 def prepare_training_data_binary(
     maps_list: str,
     xyz_limits: List[int],
@@ -110,8 +86,9 @@ def prepare_training_data_binary(
         print(line)
         input_map_path = line.split(",")[0]
         print(input_map_path)
-        print(line.split("/"))
-        
+        split_path = line.split("/")
+        result = re.findall(r'(.*?)\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b', split_path)
+        print(result)
         
         # Check path to map exists
         try:
