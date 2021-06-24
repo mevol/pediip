@@ -183,7 +183,7 @@ def prepare_training_data_binary(
 #              except Exception:
 #                logging.error(f"Could not create image file in {output_directory}")
 
-    logging.info(f"Finished creating images in {output_directory}")          
+#    logging.info(f"Finished creating images in {output_directory}")          
 
 
 
