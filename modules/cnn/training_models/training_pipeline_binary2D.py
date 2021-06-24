@@ -126,6 +126,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     train_files = [str(file) for file in training_dir_path.iterdir()]
     assert len(train_files) > 0, f"Found no files in {training_dir_path}"
     print(len(train_files))
+    print(train_files)
     
     logging.info(f"Found {len(train_files)} files for training")
 
@@ -135,18 +136,44 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
     # remove image number from file name
     names = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in train_files]
-    
-    print("filename after stripping ", names)
-    
+
     train_labels = []
     
     for name in names:
-      print("Image name ", name)
       sample = data.loc[data["file_path"].str.contains(name)]
       label = sample["map_class_autobuild"].values[0]
       train_labels.append(label)
 
     print(train_labels)
+    
+    
+    # Prepare data generators to get data out
+    # Always rescale and also expand dictionary provided as parameter
+    train_datagen = ImageDataGenerator(
+        rescale=1.0 / 255, **parameters_dict["image_augmentation_dict"]
+    )
+    # Only rescale validation
+    validation_datagen = ImageDataGenerator(rescale=1.0 / 255)
+
+    # Build model
+    if parameters_dict["rgb"] is True:
+        logging.info("Using 3 channel image input to model")
+        input_shape = (MAP_DIM, 3)
+        color_mode = "rgb"
+    else:
+        logging.info("Using single channel image input to model")
+        input_shape = (MAP_DIM, 1)
+        color_mode = "grayscale"
+        
+    # Create training dataframe
+    training_dataframe = pandas.DataFrame(
+        {"Files": train_files, "Labels": [str(label) for label in train_labels]}
+    )
+    training_dataframe.set_index("Files")
+    training_data_shuffled = training_dataframe.sample(frac=1)    
+        
+        
+    
 
 
 #      print("class label: ", label)
