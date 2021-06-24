@@ -16,6 +16,7 @@ import logging
 import sqlite3
 import re
 from pathlib import Path
+from typing import Tuple
 import os
 import shutil
 from datetime import datetime
@@ -114,7 +115,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     with open(output_dir_path / "parameters.yaml", "w") as f:
         yaml.dump(parameters_dict, f)
 
-    MAP_DIM = parameters_dict["image_dim"]
+    MAP_DIM = Tuple(parameters_dict["image_dim"])
     print("map dimensions ", MAP_DIM)
 
 #    # Load training files
