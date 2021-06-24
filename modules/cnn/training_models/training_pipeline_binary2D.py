@@ -126,11 +126,25 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     train_files = [str(file) for file in training_dir_path.iterdir()]
     assert len(train_files) > 0, f"Found no files in {training_dir_path}"
     print(len(train_files))
+    
     logging.info(f"Found {len(train_files)} files for training")
- 
-#
-#    # Load data CSV file with filenames and labels
-#     data = pandas.read_csv(parameters_dict["sample_lable_lst"])
+
+
+    # Load data CSV file with filenames and labels
+    data = pandas.read_csv(parameters_dict["sample_lable_lst"])
+
+    # remove image number from file name
+    names = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in train_files]
+    
+    print("filename after stripping ", names)
+    
+    for name in names:
+      if name in data:
+        print(data.index)
+        
+#    for image_file in train_files:
+#      print("Filename: ", image_file)
+
 # 
 #     X = data['filename']
 #     y = data['ai_lable']
