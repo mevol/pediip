@@ -116,8 +116,8 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     with open(output_dir_path / "parameters.yaml", "w") as f:
         yaml.dump(parameters_dict, f)
 
-    MAP_DIM = tuple(parameters_dict["image_dim"])
-    print("map dimensions ", MAP_DIM)
+    IMG_DIM = tuple(parameters_dict["image_dim"])
+    print("map dimensions ", IMG_DIM)
 
     # Load training files
     training_dir_path = Path(parameters_dict["training_dir"])
@@ -159,11 +159,11 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     # Build model
     if parameters_dict["rgb"] is True:
         logging.info("Using 3 channel image input to model")
-        input_shape = (MAP_DIM[0], MAP_DIM[1], 3)
+        input_shape = (IMG_DIM[0], IMG_DIM[1], 3)
         color_mode = "rgb"
     else:
         logging.info("Using single channel image input to model")
-        input_shape = (MAP_DIM[0], MAP_DIM[1], 1)
+        input_shape = (IMG_DIM[0], IMG_DIM[1], 1)
         color_mode = "grayscale"
         
     # Create training dataframe
