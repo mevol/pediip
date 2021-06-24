@@ -138,12 +138,19 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     
     print("filename after stripping ", names)
     
+    train_labels = []
+    
     for name in names:
       print("Image name ", name)
       sample = data.loc[data["file_path"].str.contains(name)]
-      label = sample["map_class_autobuild"].values
-      print("class label: ", label)
-      print(sample.values[-1])
+      label = sample["map_class_autobuild"].values[0]
+      train_labels.append(label)
+
+    print(train_labels)
+
+
+#      print("class label: ", label)
+#      print(sample.values[-1])
 #      print(sample.iloc[-1])
 #      print(sample.iloc[-1].values)
 #      if name in data["file_path"]:
