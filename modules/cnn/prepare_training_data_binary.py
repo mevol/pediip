@@ -108,13 +108,14 @@ def prepare_training_data_binary(
       next(ls)
       for line in ls:
         print(line)
-        line_splitted = line.split(",")[0]
-        print(line_splitted)
+        input_map_path = line.split(",")[0]
+        print(input_map_path)
+        print(line.split("/"))
         
         
         # Check path to map exists
         try:
-          map_file_path = Path(line_splitted)
+          map_file_path = Path(input_map_path)
           print(map_file_path)
           assert map_file_path.exists()
         except Exception:
@@ -157,11 +158,32 @@ def prepare_training_data_binary(
           map_array = np.array(map_grid, copy = False)
           print(map_array.shape)
           print("Grid after setting XYZ limits for MAP", map_grid)
-          slice_map(map_array, slices_per_axis)
         except Exception:
           logging.error(f"Could not expand map {map_file_path}")          
           raise
+          
+        try:
+          # Slice the volume into images
+          image_slices = slice_map(map_array, slices_per_axis)
+          # Iterate through images, scale them and save them in output_directory
+          for slice_num in range(image_slices.shape[0]):
+              # Get slice
+              slice = image_slices[slice_num, :, :]
+              # Scale slice
+              slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
+              # Round to the nearest integer
+              slice_scaled_int = np.rint(slice_scaled)
 
+#              # Save image
+#              try:
+#                  output_file = Path(output_directory) / Path(
+#                      f"{map.stem}_{slice_num}.png"
+#                  )
+#                  Image.fromarray(slice_scaled_int).convert("L").save(output_file)
+#              except Exception:
+#                logging.error(f"Could not create image file in {output_directory}")
+
+    logging.info(f"Finished creating images in {output_directory}")          
 
 
 
