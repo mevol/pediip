@@ -88,7 +88,7 @@ def prepare_training_data_binary(
         input_map_path = line.split(",")[0]
         print(input_map_path)
         split_path = line.split("/")
-        result = re.findall(r'(.*?)\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b', split_path)
+        result = re.findall(r'(.*?)\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b', line)
         print(result)
         
         # Check path to map exists
