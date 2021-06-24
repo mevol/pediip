@@ -205,6 +205,10 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
         logging.info(f"Active training set of {len(active_training_set['Files'])}")
         logging.info(f"Active validation set of {len(active_validation_set['Files'])}")
 
+        #Record start time to monitor training time
+        start = datetime.now()
+        logging.info(f"Training start time : {start}")    
+
         # Create generators
         train_generator = train_datagen.flow_from_dataframe(
             active_training_set,
@@ -239,160 +243,59 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
         )
 
 
-#      print("class label: ", label)
-#      print(sample.values[-1])
-#      print(sample.iloc[-1])
-#      print(sample.iloc[-1].values)
-#      if name in data["file_path"]:
-#        print(data.index)
-        
-#    for image_file in train_files:
-#      print("Filename: ", image_file)
+        # Send history to csv
+        history_to_csv(history, histories_path / f"history.csv")
+        figure_from_csv(os.path.join(histories_path, "history.csv"),
+                      histories_path / f"history.png")
+        # Save model as h5
+        model.save(str(models_path / f"model.h5"))
 
-# 
-#     X = data['filename']
-#     y = data['ai_lable']
-#     print("Classes and their frequency in the data", data.groupby(y).size())
-#     class_frequency = data.groupby(y).size()
-#     logging.info(f"Number of samples per class {class_frequency}")    
-# 
-# 
-#     label_dict = y.to_dict()
-#    #print(label_dict)
-# 
-# 
-#     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 100, stratify = y)
-# 
-#    #print("Number of samples in y_test ", len(y_test[:-2]))
-#    #print("Number of samples in X_test ", len(X_test))
-#    #print("Number of samples in X_test ", len(X_test[:-2]))
-#     
-#     partition = {"train" : X_train,
-#                  "validate" : X_test[:-2]}
-# 
-#    #print("Length of partition train", len(partition["train"]))
-#    #print(partition["validate"])
-#
-#    #print("Length of partition validate: ", len(partition["validate"]))
-#
-#    # Prepare data generators to get data out
-#    # Build model
-#    if parameters_dict["rgb"] is True:
-#        logging.info("Using 3 channel image input to model")
-##        input_shape = (201, 201, 201, 3) #3D
-#        input_shape = (101, 101, 101, 3) #3D
-##        input_shape = (51, 51, 51, 3) #3D
-#        color_mode = "rgb"
-#    else:
-#        logging.info("Using single channel image input to model")
-##        input_shape = (201, 201, 201, 1) #3D
-#        input_shape = (101, 101, 101, 1) #3D
-##        input_shape = (51, 51, 51, 1) #3D
-#        color_mode = "grayscale"
-#
-#
-#    # Model run parameters
-#     epochs = parameters_dict["epochs"]
-#     batch_size = parameters_dict["batch_size"]
-#     print("Number of epochs: ", epochs)
-#     print("Batch size:", batch_size)
-# 
-#    # New model
-#     print("Using the following input parameters: ", input_shape)
-#     model = create_model(input_shape)
-#     model_info = model.get_config()
-#     model_architecture = model.summary()
-#     print(model_architecture)
-#     logging.info(f"The model architecture is as follows:")
-#     model.summary(print_fn=logging.info)
-# 
-#    #Record start time to monitor training time
-#     start = datetime.now()
-#     logging.info(f"Training start time : {start}")    
-# 
-#     training_generator = DataGenerator(partition["train"],#X
-#                                        label_dict,#y
-#                                        dim=MAP_DIM,
-#                                        batch_size=batch_size,
-#                                        n_classes=4,
-#                                        shuffle=True)
-# 
-# 
-#     testing_generator = DataGenerator(partition["validate"],
-#                                       label_dict,
-#                                       dim=MAP_DIM,
-#                                       batch_size=batch_size,
-#                                       n_classes=4,
-#                                       shuffle=False)#was True
-# 
-# 
-#    #TO DO: need to find a way to run k-fold cross-validation during training
-# 
-# 
-#     history = model.fit(
-#         training_generator,
-#         steps_per_epoch=int((len(X_train) / batch_size)),#len(X) if not using train-test-split
-#         epochs=epochs,
-#         validation_data=testing_generator,
-#         validation_steps=(len(X_test) / batch_size),
-#         use_multiprocessing=True,
-#         workers=8)#8)
-# 
-# 
-#    # Send history to csv
-#     history_to_csv(history, histories_path / f"history.csv")
-#     figure_from_csv(os.path.join(histories_path, "history.csv"),
-#                     histories_path / f"history.png")
-#    # Save model as h5
-#    model.save(str(models_path / f"model.h5"))
-#
-#
-#    #Record start time to monitor training time
-#     end = datetime.now()
-#     logging.info(f"Training end time : {end}")    
-#     elapsed = end-start
-#     logging.info(f"Training duration : {elapsed}")
-#     print("Training duration: ", elapsed)
-# 
-#    # Make evaluation folder
-# 
-#     logging.info("Performing evaluation of model")
-#     evaluation_dir_path = str(evaluations_path / f"evaluation")
-#     if not Path(evaluation_dir_path).exists():
-#       os.mkdir(evaluation_dir_path)
-# 
-#     logging.info("Getting predictions")
-#     
-##    print(int(math.ceil(len(X_test) / batch_size)))
-##    print(int(np.round(len(X_test) / batch_size)))
-# 
-#     try:
-#       predictions = model.predict(
-#                           testing_generator,
-#                           steps=math.ceil(len(X_test) / batch_size),
-#                           verbose=1)
-#       
-# 
-#       preds_rounded = np.round(predictions, 0)
-#      #print("Predictions after rounding")
-#      #print(preds_rounded)
-#       
-#       y_pred = np.argmax(preds_rounded, axis=1)
-#       y_pred1 = preds_rounded.argmax(1)
-# 
-#       print("predicted labels ", y_pred)
-#       print("known labels ", y_test[:-2])
-#      #print(y_pred1)
-#
-#      #print("Length of predictions rounded: ", len(preds_rounded))
-#     except Exception:
-#       logging.warning("Could not round predictions")
-#       raise
-# 
-#    #interim fix to be able to develop further; remove the last two samples in y_test
-#    #y_test = y_test[:-2]
-#    #print("Content of y_test")
-#    #print(y_test[:-2])
+
+        #Record end time to monitor training time
+        end = datetime.now()
+        logging.info(f"Training end time : {end}")    
+        elapsed = end-start
+        logging.info(f"Training duration : {elapsed}")
+        print("Training duration: ", elapsed)
+
+        # Make evaluation folder to use the test data
+
+        logging.info("Performing evaluation of model")
+        evaluation_dir_path = str(evaluations_path / f"evaluation")
+        if not Path(evaluation_dir_path).exists():
+          os.mkdir(evaluation_dir_path)
+
+        logging.info("Getting predictions")
+
+#        print(int(math.ceil(len(X_test) / batch_size)))
+#        print(int(np.round(len(X_test) / batch_size)))
+
+        try:
+          predictions = model.predict(
+                           testing_generator,
+                           steps=math.ceil(len(X_test) / batch_size),
+                           verbose=1)
+
+          preds_rounded = np.round(predictions, 0)
+         #print("Predictions after rounding")
+         #print(preds_rounded)
+
+          y_pred = np.argmax(preds_rounded, axis=1)
+          y_pred1 = preds_rounded.argmax(1)
+
+          print("predicted labels ", y_pred)
+          print("known labels ", y_test[:-2])
+         #print(y_pred1)
+
+         #print("Length of predictions rounded: ", len(preds_rounded))
+        except Exception:
+          logging.warning("Could not round predictions")
+          raise
+
+    #interim fix to be able to develop further; remove the last two samples in y_test
+    #y_test = y_test[:-2]
+    #print("Content of y_test")
+    #print(y_test[:-2])
 #     try:
 #       classes = ["class 1", "class 2", "class 3", "class 4", "class 5"]
 #       labels = np.arange(5)
