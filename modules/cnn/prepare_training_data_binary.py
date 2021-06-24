@@ -87,9 +87,9 @@ def prepare_training_data_binary(
         input_map_path = line.split(",")[0]
         print(input_map_path)
         split_path = line.split("/")
-        result = re.findall(r'\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b-\b[a-z0-9]{4}\b', line)
-        print("RE search ", result)
-        
+        dir_stem = re.findall(r'\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b-\b[a-z0-9]{4}\b', line)
+        print(dir_stem[0])
+
         # Check path to map exists
         try:
           map_file_path = Path(input_map_path)
@@ -154,7 +154,7 @@ def prepare_training_data_binary(
 #              # Save image
 #              try:
 #                  output_file = Path(output_directory) / Path(
-#                      f"{map.stem}_{slice_num}.png"
+#                      f"{dir_stem[0]}_{slice_num}.png"
 #                  )
 #                  Image.fromarray(slice_scaled_int).convert("L").save(output_file)
 #              except Exception:
