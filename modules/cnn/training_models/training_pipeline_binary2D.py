@@ -270,6 +270,13 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 #        print(int(math.ceil(len(X_test) / batch_size)))
 #        print(int(np.round(len(X_test) / batch_size)))
 
+# TO DO: put evaluation function here and make a test generator to use the test data
+#        need to look at the old way by Tim to make sure things are correct
+#        code below should update "evaluate_model.py" and then "evaluate section" of
+#        code needs to be run
+
+
+
         try:
           predictions = model.predict(
                            testing_generator,
