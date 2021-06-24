@@ -457,10 +457,10 @@ def get_pipeline_parameters() -> dict:
 
     (known_args, unknown_args) = parser.parse_known_args()
 
-    assert known_args.k_folds >= known_args.runs, (
-        f"Number of runs must be less than or equal to k_folds, "
-        f"got {known_args.runs} runs and {known_args.k_folds} folds"
-    )
+#    assert known_args.k_folds >= known_args.runs, (
+#        f"Number of runs must be less than or equal to k_folds, "
+#        f"got {known_args.runs} runs and {known_args.k_folds} folds"
+#    )
     argument_dict = vars(known_args)
 
     # Try to extract image_augmentation_dict
