@@ -119,13 +119,13 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     print("map dimensions ", MAP_DIM)
 
     # Load training files
-     training_dir_path = Path(parameters_dict["training_dir"])
-     assert (
-         training_dir_path.exists()
-     ), f"Could not find directory at {training_dir_path}"
-     train_files = [str(file) for file in training_dir_path.iterdir()]
-     assert len(train_files) > 0, f"Found no files in {training_dir_path}"
-     logging.info(f"Found {len(train_files)} files for training")
+    training_dir_path = Path(parameters_dict["training_dir"])
+    assert (
+        training_dir_path.exists()
+    ), f"Could not find directory at {training_dir_path}"
+    train_files = [str(file) for file in training_dir_path.iterdir()]
+    assert len(train_files) > 0, f"Found no files in {training_dir_path}"
+    logging.info(f"Found {len(train_files)} files for training")
  
 #
 #    # Load data CSV file with filenames and labels
