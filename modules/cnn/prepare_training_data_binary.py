@@ -10,6 +10,7 @@ import numpy as np
 
 from pathlib import Path
 from typing import List
+from PIL import Image
 
 
 def slice_map(volume, slices_per_axis):
