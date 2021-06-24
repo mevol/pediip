@@ -182,7 +182,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     epochs = parameters_dict["epochs"]
     batch_size = parameters_dict["batch_size"]
 
-#    fold_boundaries = k_fold_boundaries(train_files, k_folds)
+    fold_boundaries = k_fold_boundaries(train_files, k_folds)
     for k in range(runs):
         logging.info(f"Running cross validation set {k + 1}")
 
