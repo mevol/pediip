@@ -125,6 +125,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     ), f"Could not find directory at {training_dir_path}"
     train_files = [str(file) for file in training_dir_path.iterdir()]
     assert len(train_files) > 0, f"Found no files in {training_dir_path}"
+    print(len(train_files))
     logging.info(f"Found {len(train_files)} files for training")
  
 #
