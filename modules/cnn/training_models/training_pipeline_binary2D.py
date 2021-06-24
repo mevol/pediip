@@ -139,8 +139,11 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     print("filename after stripping ", names)
     
     for name in names:
-      if name in data:
-        print(data.index)
+      print("Image name ", name)
+      sample = data.loc[data.["file_path"].str.contains(name)]
+      print(sample)
+#      if name in data["file_path"]:
+#        print(data.index)
         
 #    for image_file in train_files:
 #      print("Filename: ", image_file)
