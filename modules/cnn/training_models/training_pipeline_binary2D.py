@@ -158,11 +158,11 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     # Build model
     if parameters_dict["rgb"] is True:
         logging.info("Using 3 channel image input to model")
-        input_shape = (MAP_DIM, 3)
+        input_shape = (MAP_DIM[0], MAP_DIM[1], 3)
         color_mode = "rgb"
     else:
         logging.info("Using single channel image input to model")
-        input_shape = (MAP_DIM, 1)
+        input_shape = (MAP_DIM[0], MAP_DIM[1], 1)
         color_mode = "grayscale"
         
     # Create training dataframe
