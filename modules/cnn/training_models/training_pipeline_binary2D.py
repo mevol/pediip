@@ -175,6 +175,67 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
         
         
     
+    # Train the model k-fold number of times on different folds and record the output
+    # Model run parameters
+    k_folds = parameters_dict["k_folds"]
+    runs = parameters_dict["runs"]
+    epochs = parameters_dict["epochs"]
+    batch_size = parameters_dict["batch_size"]
+
+#    fold_boundaries = k_fold_boundaries(train_files, k_folds)
+    for k in range(runs):
+        logging.info(f"Running cross validation set {k + 1}")
+
+        # New model
+        model = create_model(input_shape)
+        model_info = model.get_config()
+
+        # Separate the active training and validations set based on the fold boundaries
+        active_training_set = pandas.concat(
+            [
+                training_data_shuffled[: fold_boundaries[k][0]],
+                training_data_shuffled[fold_boundaries[k][1] :],
+            ]
+        )
+        active_validation_set = training_data_shuffled[
+            fold_boundaries[k][0] : fold_boundaries[k][1]
+        ]
+
+        logging.info(f"Active training set of {len(active_training_set['Files'])}")
+        logging.info(f"Active validation set of {len(active_validation_set['Files'])}")
+
+        # Create generators
+        train_generator = train_datagen.flow_from_dataframe(
+            active_training_set,
+            x_col="Files",
+            y_col="Labels",
+            target_size=IMG_DIM,
+            color_mode=color_mode,
+            shuffle=True,
+            batch_size=batch_size,
+            class_mode="categorical",
+        )
+
+        val_generator = validation_datagen.flow_from_dataframe(
+            active_validation_set,
+            x_col="Files",
+            y_col="Labels",
+            target_size=IMG_DIM,
+            color_mode=color_mode,
+            shuffle=True,
+            batch_size=batch_size,
+            class_mode="categorical",
+        )
+
+        history = model.fit_generator(
+            train_generator,
+            steps_per_epoch=int((len(active_training_set["Files"]) / batch_size)),
+            epochs=epochs,
+            validation_data=val_generator,
+            validation_steps=(len(active_validation_set["Files"]) / batch_size),
+            use_multiprocessing=True,
+            workers=8,
+        )
 
 
 #      print("class label: ", label)
@@ -487,6 +548,12 @@ def get_pipeline_parameters() -> dict:
         help="X and Y dimensions of the map image slices"
     )
     parser.add_argument(
+        "--k_folds",
+        required=True,
+        type=int,
+        help="number of folds to create for k-fold cross-validation",
+    )
+    parser.add_argument(
         "--runs",
         required=True,
         type=int,
@@ -515,10 +582,10 @@ def get_pipeline_parameters() -> dict:
 
     (known_args, unknown_args) = parser.parse_known_args()
 
-#    assert known_args.k_folds >= known_args.runs, (
-#        f"Number of runs must be less than or equal to k_folds, "
-#        f"got {known_args.runs} runs and {known_args.k_folds} folds"
-#    )
+    assert known_args.k_folds >= known_args.runs, (
+        f"Number of runs must be less than or equal to k_folds, "
+        f"got {known_args.runs} runs and {known_args.k_folds} folds"
+    )
     argument_dict = vars(known_args)
 
     # Try to extract image_augmentation_dict
