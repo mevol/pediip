@@ -84,11 +84,10 @@ def prepare_training_data_binary(
     with open(maps_list, "r") as ls:
       next(ls)
       for line in ls:
-        print(line)
         input_map_path = line.split(",")[0]
         print(input_map_path)
         split_path = line.split("/")
-        result = re.findall(r'(.*?)\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b', line)
+        result = re.findall(r'(.?)\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b', line)
         print(result)
         
         # Check path to map exists
