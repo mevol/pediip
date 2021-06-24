@@ -4,6 +4,7 @@ import os
 import yaml
 import gemmi
 import csv
+import re
 
 import numpy as np
 
