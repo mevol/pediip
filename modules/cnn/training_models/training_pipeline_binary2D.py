@@ -141,9 +141,9 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     for name in names:
       print("Image name ", name)
       sample = data.loc[data["file_path"].str.contains(name)]
-      print(sample)
-      print(sample.iloc[-1])
-      print(sample.iloc[-1].values)
+      print(sample.values)
+#      print(sample.iloc[-1])
+#      print(sample.iloc[-1].values)
 #      if name in data["file_path"]:
 #        print(data.index)
         
