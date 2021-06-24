@@ -169,6 +169,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     training_dataframe = pandas.DataFrame(
         {"Files": train_files, "Labels": [str(label) for label in train_labels]}
     )
+    print(training_dataframe.head())
     training_dataframe.set_index("Files")
     training_data_shuffled = training_dataframe.sample(frac=1)    
         
