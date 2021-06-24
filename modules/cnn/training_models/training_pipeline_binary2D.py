@@ -141,7 +141,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     for name in names:
       print("Image name ", name)
       sample = data.loc[data["file_path"].str.contains(name)]
-      label = sample["map_class_autobuild"]
+      label = sample["map_class_autobuild"].value
       print("class label: ", label)
       print(sample.values[-1])
 #      print(sample.iloc[-1])
