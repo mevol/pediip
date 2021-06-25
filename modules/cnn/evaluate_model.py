@@ -51,7 +51,7 @@ def evaluate(
 
     # Read table into pandas dataframe
     # Load data CSV file with filenames and labels
-    data = pandas.read_csv(sample_lable_lst])
+    data = pandas.read_csv(sample_lable_lst)
 
     # remove image number from file name
     names = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in train_files]
