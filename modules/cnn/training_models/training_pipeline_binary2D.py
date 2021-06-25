@@ -42,7 +42,7 @@ from sklearn.preprocessing import LabelEncoder
 
 from modules.cnn.training_models.plot_history import history_to_csv, figure_from_csv
 from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
-#from modules.cnn.evaluate_model_3d import evaluate
+from modules.cnn.evaluate_model import evaluate
 from modules.cnn.training_models.data_generator_binary import DataGenerator
 
 print(tensorflow.__version__)
@@ -275,7 +275,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
             evaluate(
                 str(models_path / f"model_{k}.h5"),
                 parameters_dict["test_dir"],
-                parameters_dict["database_file"],
+                parameters_dict["sample_lable_lst"],
                 evaluation_dir_path,
                 rgb=parameters_dict["rgb"],
             )
