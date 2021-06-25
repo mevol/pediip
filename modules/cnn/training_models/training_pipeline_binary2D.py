@@ -244,11 +244,11 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
 
         # Send history to csv
-        history_to_csv(history, histories_path / f"history.csv")
-        figure_from_csv(os.path.join(histories_path, "history.csv"),
-                      histories_path / f"history.png")
+        history_to_csv(history, histories_path / f"history_{k}.csv")
+        figure_from_csv(os.path.join(histories_path, "history_{k}.csv"),
+                      histories_path / f"history_{k}.png")
         # Save model as h5
-        model.save(str(models_path / f"model.h5"))
+        model.save(str(models_path / f"model_{k}.h5"))
 
 
         #Record end time to monitor training time
