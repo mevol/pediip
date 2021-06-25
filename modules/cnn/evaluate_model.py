@@ -55,7 +55,7 @@ def evaluate(
     data = pandas.read_csv(sample_lable_lst)
 
     # remove image number from file name
-    names = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in train_files]
+    names = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in test_files]
 
     test_labels = []
     
