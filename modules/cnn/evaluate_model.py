@@ -347,8 +347,8 @@ if __name__ == "__main__":
     evaluate(
         args.model_file,
         args.test_dir,
-        args.sample_lable_lst,
         args.output_dir,
+        args.sample_lable_lst,
         args.slices_per_structure,
         args.rgb,
     )

@@ -275,8 +275,9 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
             evaluate(
                 str(models_path / f"model_{k}.h5"),
                 parameters_dict["test_dir"],
-                parameters_dict["sample_lable_lst"],
                 evaluation_dir_path,
+                parameters_dict["sample_lable_lst"],
+                parameters_dict["slices_per_structure"],
                 rgb=parameters_dict["rgb"],
             )
         else:
