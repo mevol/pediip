@@ -100,7 +100,7 @@ def evaluate(
     logging.info("Getting predictions")
 
     try:
-        predictions = model.predict_generator(
+        predictions = model.predict(
             test_generator, steps=int(len(testing_dataframe["Files"]) / test_batch_size)
         )
     except ValueError:
