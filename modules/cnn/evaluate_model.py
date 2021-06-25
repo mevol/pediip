@@ -139,7 +139,7 @@ def evaluate(
             "File": testing_dataframe["Files"],
             "0": predictions[:, 0],
             "1": predictions[:, 1],
-            "True Score": train_labels,
+            "True Score": test_labels,
         }
     )
     raw_dataframe.set_index("File", inplace=True)
