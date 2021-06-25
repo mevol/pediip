@@ -51,6 +51,7 @@ def evaluate(
 
     # Read table into pandas dataframe
     # Load data CSV file with filenames and labels
+    print(sample_lable_lst)
     data = pandas.read_csv(sample_lable_lst)
 
     # remove image number from file name
