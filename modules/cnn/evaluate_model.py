@@ -72,8 +72,8 @@ def evaluate(
     testing_dataframe = pandas.DataFrame(
         {"Files": test_files, "Labels": [str(label) for label in test_labels]}
     )
-    print(training_dataframe.head())
-    training_dataframe.set_index("Files")
+    print(testing_dataframe.head())
+    testing_dataframe.set_index("Files")
 
 
     test_datagen = ImageDataGenerator(rescale=1.0 / 255)
