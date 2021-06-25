@@ -260,10 +260,45 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
         # Make evaluation folder to use the test data
 
-        logging.info("Performing evaluation of model")
-        evaluation_dir_path = str(evaluations_path / f"evaluation")
-        if not Path(evaluation_dir_path).exists():
-          os.mkdir(evaluation_dir_path)
+#        logging.info("Performing evaluation of model")
+#        evaluation_dir_path = str(evaluations_path / f"evaluation")
+#        if not Path(evaluation_dir_path).exists():
+#          os.mkdir(evaluation_dir_path)
+
+
+        # Make evaluation folder
+        if parameters_dict["test_dir"] and parameters_dict["slices_per_structure"]:
+            logging.info("Performing evaluation of model")
+            evaluation_dir_path = str(evaluations_path / f"evaluation_{k}")
+            if not Path(evaluation_dir_path).exists():
+                os.mkdir(evaluation_dir_path)
+            evaluate(
+                str(models_path / f"model_{k}.h5"),
+                parameters_dict["test_dir"],
+                parameters_dict["database_file"],
+                evaluation_dir_path,
+                rgb=parameters_dict["rgb"],
+            )
+        else:
+            logging.info(
+                "Requires test directory and slices_per_structure for evaluation. "
+                "No evaluation performed"
+            )
+
+    # Load the model config information as a yaml file
+    with open(output_dir_path / "model_info.yaml", "w") as f:
+        yaml.dump(model_info, f)
+
+    # Try to copy log file if it was created in training.log
+    try:
+        shutil.copy("training.log", output_dir_path)
+    except FileExistsError:
+        logging.warning("Could not find training.log to copy")
+    except Exception:
+        logging.warning("Could not copy training.log to output directory")
+
+
+
 
         logging.info("Getting predictions")
 
@@ -274,6 +309,9 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 #        need to look at the old way by Tim to make sure things are correct
 #        code below should update "evaluate_model.py" and then "evaluate section" of
 #        code needs to be run
+
+
+
 
 
 
