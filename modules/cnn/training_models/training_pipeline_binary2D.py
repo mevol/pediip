@@ -245,7 +245,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
         # Send history to csv
         history_to_csv(history, histories_path / f"history_{k}.csv")
-        figure_from_csv(histories_path / f"history_{k}.csv"),
+        figure_from_csv(histories_path / f"history_{k}.csv",
                       histories_path / f"history_{k}.png")
         # Save model as h5
         model.save(str(models_path / f"model_{k}.h5"))
