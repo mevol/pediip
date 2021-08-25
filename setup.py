@@ -22,7 +22,7 @@ setup(
          "pandas",
          "six==1.15.0",
          "numpy==1.19.2",
-         "tensorflow==2.4.2",
+         "tensorflow==2.5.1",
 #         "h5py==3.1.0",
 #         "tensorflow<=1.13",
          "Keras",
