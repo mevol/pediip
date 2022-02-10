@@ -21,7 +21,7 @@ setup(
          "xraydb",
          "pandas",
          "six==1.15.0",
-         "numpy==1.19.2",
+         "numpy==1.21.0",
          "tensorflow==2.5.3",
 #         "h5py==3.1.0",
 #         "tensorflow<=1.13",
