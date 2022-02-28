@@ -2,6 +2,7 @@
 
 import os
 import json
+import re
 import pandas as pd
 from modules.create_mr_set.utils.utils import ProgressBar
 from itertools import islice
@@ -65,6 +66,8 @@ class MRSSMParser(object):
     h_dir = os.path.join(main_dir, str(homologue_name))   
     h_meta_json = os.path.join(h_dir, "metadata.json")
     phaser_log = os.path.join(h_dir, "phaser.log")
+    prosmart_dir = os.path.join(h_dir, "prosmart")
+    prosmart_log = os.path.join(prosmart_dir, "prosmart_align_logfile.txt")
 
 
     gesamt_length = 0
@@ -121,6 +124,9 @@ class MRSSMParser(object):
     f_map_correlation_afterMR = 0
     mr_success_lable = 3
     refinement_success_lable = 3
+    procrustes = 0
+    flexible = 0
+
 
 
     if os.path.exists(h_meta_json):
@@ -293,6 +299,27 @@ class MRSSMParser(object):
             phaser_ellg = list(islice(p_log, 2))[1].split()[0]
     else:
       phaser_ellg = 0        
+
+    if os.path.exists(prosmart_log):
+      print(prosmart_log)
+      with open(prosmart_log, "r") as pro_log:
+        print("Opened PROSMART log")
+        for line in pro_log:
+          #print(line)
+          match = re.match(line, "Average residue scores:", 1)
+          print(match)
+#          if line"Average residue scores:":
+#            print(line)
+#            procrustes = list(islice(pro_log, 2))#[1].split()[0]
+#            print(6666666666666666666, procrustes)
+
+          if line == "Final clustering results:":
+            clusters = list(islice(pro_log, 2))#[1].split()[0]
+            print(clusters)
+            
+    else:
+      procrustes = 0        
+
 
     homologue_dict = {
         "gesamt_length"                  : gesamt_length,
