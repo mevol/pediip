@@ -309,19 +309,17 @@ class MRSSMParser(object):
         print("Opened PROSMART log")
         for line in pro_log:
           if line.strip().startswith("Average residue scores:"):
-            print(line)
             result1 = list(islice(pro_log, 2))
             procrustes = result1[0].split()[-1]
             flexible = result1[1].split()[-1]
           if line.strip().startswith("Final clustering results:"):
-            print(line)
             result2 = list(islice(pro_log, 2))[1].split()
             print(result2)
-#            print(result2)
-#            cluster = 
-#            fragments = 
-#            mean_cos_theta = 
-#            sd_cos_theta = 
+            cluster = result2[0]
+            fragments = result2[1]
+            mean_cos_theta = result2[2]
+            sd_cos_theta = result2[3]
+            print(cluster, fragments, mean_cos_theta, sd_cos_theta)
             
     else:
       procrustes = 0
