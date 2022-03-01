@@ -315,7 +315,7 @@ class MRSSMParser(object):
           if line.strip().startswith("Final clustering results:"):
             print(list(islice(pro_log, 2)))
             print(list(islice(pro_log, 2))[1])
-            result2 = list(islice(pro_log, 2)[1])
+            result2 = list(islice(pro_log, 2))[1]
             print(result2)
 #            print(result2[1])
 #            print(result2[1].split())
