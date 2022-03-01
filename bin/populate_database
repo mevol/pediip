@@ -10,11 +10,19 @@ from modules.create_mr_set.db.database import DB
 
 def add_required_arguments(parser):
   required = parser.add_argument_group("Required arguments")
-  required.add_argument("--mr-results", metavar="DIR", required=True, help="Directory containing MR and SSM results")
+  required.add_argument("--mr-results",
+                        metavar="DIR",
+                        required=True,
+                        help="Directory containing MR and SSM results")
+
+  required.add_argument("--local_pdb",
+                        metavar="DIR",
+                        required=True,
+                        help="Local PDB copy of mmcif files")
 
 
 def parse_args():
-  description = "Creates a new molecular replacement test set."
+  description = "Entering MR and SSM results into a project database."
   parser = argparse.ArgumentParser(description=description, add_help=False)
   add_required_arguments(parser)
   args = parser.parse_args()
