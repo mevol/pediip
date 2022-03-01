@@ -315,6 +315,7 @@ class MRSSMParser(object):
           if line.strip().startswith("Final clustering results:"):
             print(list(islice(pro_log, 2)))
             result2 = list(islice(pro_log, 2))[1].split()
+            print(result2)
             cluster = result2[0]
             fragments = result2[1]
             mean_cos_theta = result2[2]
