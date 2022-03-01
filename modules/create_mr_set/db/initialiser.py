@@ -79,6 +79,8 @@ class Initialiser(object):
           prosmart_length_number INTEGER,
           prosmart_rmsd FLOAT,
           prosmart_seqid FLOAT,
+          prosmart_procrustes FLOAT,
+          prosmart_flexible FLOAT,
           initial_rfree_afterSSM0 FLOAT,
           final_rfree_afterSSM0 FLOAT,
           initial_rwork_afterSSM0 FLOAT,
