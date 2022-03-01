@@ -310,10 +310,12 @@ class MRSSMParser(object):
           #print(match)
           if line.strip().startswith("Average residue scores:"):
             print(line)
-            procrustes = list(islice(pro_log, 2))[0].split()#[0]
-            print(6666666666666666666, procrustes)
-            clusters = list(islice(pro_log, 2))[1].split()#[0]
-            print(clusters)
+            result = list(islice(pro_log, 2))[1]
+            print("First element ", result[0])
+            print("Second element ", result[1])
+            #print(6666666666666666666, procrustes)
+            #clusters = list(islice(pro_log, 2))[1].split()#[0]
+            #print(clusters)
             
     else:
       procrustes = 0        
