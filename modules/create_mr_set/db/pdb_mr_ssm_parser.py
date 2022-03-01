@@ -323,7 +323,7 @@ class MRSSMParser(object):
             cluster0 = split0[0]#check for new line and eremove if necessary
             print(cluster0)
             fragments0 = split0[1]
-            print(fragment0)
+            print(fragments0)
             mean_cos_theta0 = split0[2]
             print(mean_cos_theta0)
             sd_cos_theta0 = split0[3]
