@@ -2,7 +2,6 @@
 
 import os
 import json
-import re
 import pandas as pd
 from modules.create_mr_set.utils.utils import ProgressBar
 from itertools import islice
@@ -298,28 +297,26 @@ class MRSSMParser(object):
           if line.rstrip() == "   eLLG: eLLG of chain alone":
             phaser_ellg = list(islice(p_log, 2))[1].split()[0]
     else:
-      phaser_ellg = 0        
+      phaser_ellg = 0
 
     if os.path.exists(prosmart_log):
       print(prosmart_log)
       with open(prosmart_log, "r") as pro_log:
         print("Opened PROSMART log")
         for line in pro_log:
-          #print(line)
-          #match = re.match(line, "Average residue scores:", 1)
-          #print(match)
           if line.strip().startswith("Average residue scores:"):
             print(line)
-            result = list(islice(pro_log, 2))#[1]
-            print(result)
-            print("First element ", result[0].split()[-1])
-            print("Second element ", result[1].split()[-1])
-            #print(6666666666666666666, procrustes)
-            #clusters = list(islice(pro_log, 2))[1].split()#[0]
-            #print(clusters)
+            result1 = list(islice(pro_log, 2))
+            procrustes = result1[0].split()[-1]
+            flexible = result1[1].split()[-1]
+          if line.strip().startswith("Final clustering results:"):
+            print(line)
+            result2 = list(islice(pro_log, 2))
+            print(result2)
             
     else:
-      procrustes = 0        
+      procrustes = 0
+      flexible = 0
 
 
     homologue_dict = {
@@ -330,6 +327,8 @@ class MRSSMParser(object):
         "prosmart_length_number"         : prosmart_length_number,
         "prosmart_rmsd"                  : prosmart_rmsd,
         "prosmart_seqid"                 : prosmart_seqid,
+        "prosmart_procrustes"            : procrustes,
+        "prosmart_flexible"              : flexible,
         "initial_rfree_afterSSM0"        : initial_rfree_afterSSM0,
         "final_rfree_afterSSM0"          : final_rfree_afterSSM0, 
         "initial_rwork_afterSSM0"        : initial_rwork_afterSSM0, 
