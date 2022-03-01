@@ -11,14 +11,14 @@ from modules.create_mr_set.db.database import DB
 def add_required_arguments(parser):
   required = parser.add_argument_group("Required arguments")
   required.add_argument("--mr_results",
-                        #type = str,
+                        type = str,
                         dest = "mr_results",
                         metavar = "DIR",
                         required = True,
                         help = "Directory containing MR and SSM results")
 
   required.add_argument("--local_pdb",
-                        #type = str,
+                        type = str,
                         dest = "local_pdb",
                         metavar = "DIR",
                         required = True,
@@ -58,11 +58,10 @@ if __name__ == "__main__":
 
   # Expand MR results directory by looking for a structures directory
   structures_dir = os.path.join(args.mr_results, "structures")
-  structures_lst = os.listdir("structures")
-  #print("Structures directory", structures_dir)
-  
   results_dir = os.chdir(args.mr_results)
   print("I AM HERE", results_dir)
+  structures_lst = os.listdir("structures")
+  
   
   # Check if the local PDB copy for mmcif files is accessible
   if not os.path.exists(args.local_pdb):
