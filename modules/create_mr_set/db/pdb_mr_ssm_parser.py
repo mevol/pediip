@@ -126,10 +126,10 @@ class MRSSMParser(object):
     refinement_success_lable = 3
     procrustes = 0
     flexible = 0
-    cluster = 0
-    fragments = 0
-    mean_cos_theta = 0
-    sd_cos_theta = 0
+    cluster0 = 0
+    fragments0 = 0
+    mean_cos_theta0 = 0
+    sd_cos_theta0 = 0
 
 
 
@@ -314,23 +314,24 @@ class MRSSMParser(object):
             procrustes = result1[0].split()[-1]
             flexible = result1[1].split()[-1]
           if line.strip().startswith("Final clustering results:"):
-            dummy = list(islice(pro_log, 2))
+            dummy0 = list(islice(pro_log, 2))
 #            print(dummy)
-            split = dummy[1].split()
+            split0 = dummy0[1].split()
 #            print(split)
-            cluster = split[0]
-            fragments = split[1]
-            mean_cos_theta = split[2]
-            sd_cos_theta = split[3]
-#            testme = list(islice(pro_log, 2))
-            print(getline(pro_log.name, ind + 5))
+            cluster0 = split0[0]
+            fragments0 = split0[1]
+            mean_cos_theta0 = split0[2]
+            sd_cos_theta0 = split0[3]
+            dummy1 = getline(pro_log.name, ind + 5)
+            print(dummy1)
+            
     else:
       procrustes = 0
       flexible = 0
-      cluster = 0
-      fragments = 0
-      mean_cos_theta = 0
-      sd_cos_theta = 0
+      cluster0 = 0
+      fragments0 = 0
+      mean_cos_theta0 = 0
+      sd_cos_theta0 = 0
 
 
     homologue_dict = {
