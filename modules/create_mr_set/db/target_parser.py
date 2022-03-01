@@ -16,7 +16,7 @@ class TargetParser(object):
     '''
     self.handle = handle
 
-  def add_entry(self, structure, results_dir):
+  def add_entry(self, structure, results_dir, local_pdb):
     '''
     Add the pdb entry to the database
     '''
