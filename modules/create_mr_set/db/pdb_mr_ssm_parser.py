@@ -130,8 +130,10 @@ class MRSSMParser(object):
     fragments0 = 0
     mean_cos_theta0 = 0
     sd_cos_theta0 = 0
-
-
+    cluster1 = 0
+    fragments1 = 0
+    mean_cos_theta1 = 0
+    sd_cos_theta1 = 0
 
     if os.path.exists(h_meta_json):
       with open(h_meta_json, "r") as h_json:
@@ -349,6 +351,10 @@ class MRSSMParser(object):
       fragments0 = 0
       mean_cos_theta0 = 0
       sd_cos_theta0 = 0
+#      cluster1 = 0
+#      fragments1 = 0
+#      mean_cos_theta1 = 0
+#      sd_cos_theta1 = 0
 
 
     homologue_dict = {
