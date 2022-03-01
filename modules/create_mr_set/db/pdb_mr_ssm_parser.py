@@ -312,8 +312,8 @@ class MRSSMParser(object):
             print(line)
             result = list(islice(pro_log, 2))#[1]
             print(result)
-            print("First element ", result[0])
-            print("Second element ", result[1])
+            print("First element ", result[0].split())
+            print("Second element ", result[1].split())
             #print(6666666666666666666, procrustes)
             #clusters = list(islice(pro_log, 2))[1].split()#[0]
             #print(clusters)
