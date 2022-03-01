@@ -330,7 +330,7 @@ class MRSSMParser(object):
               cluster1 = split1[0]
               fragments1 = split1[1]
               mean_cos_theta1 = split1[2]
-              sd_cos_theta1 = split1[3]
+              sd_cos_theta1 = split1[3].strip("\n")
               print(sd_cos_theta1)
             except:
               cluster1 = 0
