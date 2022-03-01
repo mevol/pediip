@@ -315,6 +315,8 @@ class MRSSMParser(object):
           if line.strip().startswith("Final clustering results:"):
             print(list(islice(pro_log, 2)))
             result2 = list(islice(pro_log, 2))
+            print(result2)
+            print(result2[1])
             print(result2[1].split())
             cluster = result2[0]
             fragments = result2[1]
