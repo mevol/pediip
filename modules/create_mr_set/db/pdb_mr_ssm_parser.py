@@ -322,8 +322,8 @@ class MRSSMParser(object):
             fragments0 = split0[1]
             mean_cos_theta0 = split0[2]
             sd_cos_theta0 = split0[3]
-            dummy1 = getline(pro_log.name, ind + 5).split('\t')
-            print(dummy1)
+            dummy1 = getline(pro_log.name, ind + 5).split('\t')#add 1 to 5 to go to 6th line
+            print(filter(None, dummy1))
             
     else:
       procrustes = 0
