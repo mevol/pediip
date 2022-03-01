@@ -5,6 +5,7 @@ import json
 import pandas as pd
 from modules.create_mr_set.utils.utils import ProgressBar
 from itertools import islice
+from linecache import getline
 
 class MRSSMParser(object):
   '''
@@ -307,27 +308,22 @@ class MRSSMParser(object):
       print(prosmart_log)
       with open(prosmart_log, "r") as pro_log:
         print("Opened PROSMART log")
-        for line in pro_log:
+        for ind, line in enumerate(pro_log, 1):
           if line.strip().startswith("Average residue scores:"):
             result1 = list(islice(pro_log, 2))
             procrustes = result1[0].split()[-1]
             flexible = result1[1].split()[-1]
           if line.strip().startswith("Final clustering results:"):
             dummy = list(islice(pro_log, 2))
-            print(dummy)
+#            print(dummy)
             split = dummy[1].split()
-            print(split)
-#            result2 = list(islice(pro_log, 2))
-#            print(result2)
-#            print(list(islice(pro_log, 2))[1])
-#            result2 = list(islice(pro_log, 2))[1]
-#            print(result2)
-#            print(result2[1])
-#            print(result2[1].split())
+#            print(split)
             cluster = split[0]
             fragments = split[1]
             mean_cos_theta = split[2]
             sd_cos_theta = split[3]
+#            testme = list(islice(pro_log, 2))
+            print(getline(pro_log.name, ind + 4))
     else:
       procrustes = 0
       flexible = 0
