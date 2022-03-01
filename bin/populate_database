@@ -11,14 +11,14 @@ from modules.create_mr_set.db.database import DB
 def add_required_arguments(parser):
   required = parser.add_argument_group("Required arguments")
   required.add_argument("--mr_results",
-                        type = str,
+                        #type = str,
                         dest = "mr_results",
                         metavar = "DIR",
                         required = True,
                         help = "Directory containing MR and SSM results")
 
   required.add_argument("--local_pdb",
-                        type = str,
+                        #type = str,
                         dest = "local_pdb",
                         metavar = "DIR",
                         required = True,
