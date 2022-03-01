@@ -316,8 +316,9 @@ class MRSSMParser(object):
 #            print(list(islice(pro_log, 2)))
             dummy = list(islice(pro_log, 2))
             print(dummy)
-            result2 = list(islice(pro_log, 2))
-            print(result2)
+            print(dummy[1])
+#            result2 = list(islice(pro_log, 2))
+#            print(result2)
 #            print(list(islice(pro_log, 2))[1])
 #            result2 = list(islice(pro_log, 2))[1]
 #            print(result2)
