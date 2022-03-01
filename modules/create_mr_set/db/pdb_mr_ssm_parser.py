@@ -311,6 +311,7 @@ class MRSSMParser(object):
           if line.strip().startswith("Average residue scores:"):
             print(line)
             result = list(islice(pro_log, 2))[1]
+            print(result)
             print("First element ", result[0])
             print("Second element ", result[1])
             #print(6666666666666666666, procrustes)
