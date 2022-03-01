@@ -323,7 +323,7 @@ class MRSSMParser(object):
             mean_cos_theta0 = split0[2]
             sd_cos_theta0 = split0[3]
             dummy1 = getline(pro_log.name, ind + 5).split('\t')#add 1 to 5 to go to 6th line
-            print(filter(None, dummy1))
+            print(list(filter(None, dummy1)))
             
     else:
       procrustes = 0
