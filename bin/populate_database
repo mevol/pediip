@@ -10,15 +10,19 @@ from modules.create_mr_set.db.database import DB
 
 def add_required_arguments(parser):
   required = parser.add_argument_group("Required arguments")
-  required.add_argument("--mr-results",
-                        metavar="DIR",
-                        required=True,
-                        help="Directory containing MR and SSM results")
+  required.add_argument("--mr_results",
+                        type = str,
+                        dest = "mr_results",
+                        metavar = "DIR",
+                        required = True,
+                        help = "Directory containing MR and SSM results")
 
   required.add_argument("--local_pdb",
-                        metavar="DIR",
-                        required=True,
-                        help="Local PDB copy of mmcif files")
+                        type = str,
+                        dest = "local_pdb",
+                        metavar = "DIR",
+                        required = True,
+                        help = "Local PDB copy of mmcif files")
 
 
 def parse_args():
@@ -48,16 +52,22 @@ if __name__ == "__main__":
 
   # Check it exists
   if not os.path.exists("results.sqlite"):
-    raise RuntimeError("Failed to initialise")
+    raise RuntimeError("Failed to initialise database")
   print("Database has been initialised")
 
+  # Expand MR results directory by looking for a structures directory
   structures_dir = os.path.join(args.mr_results, "structures")
+  structures_lst = os.listdir("structures")
   #print("Structures directory", structures_dir)
   
   results_dir = os.chdir(args.mr_results)
   print("I AM HERE", results_dir)
   
-  structures_lst = os.listdir("structures")
+  # Check if the local PDB copy for mmcif files is accessible
+  if not os.path.exists(args.local_pdb):
+    raise RuntimeError("Couldn't find local PDB copy")
+
+  
   
   for structure in structures_lst:
     structure_location = os.path.join(structures_dir, structure)
@@ -65,7 +75,8 @@ if __name__ == "__main__":
     chain_name = os.listdir(chain_location)
     chain_details = os.path.join(chain_location, chain_name[0])
 
-    db.add_pdb_targets(structure, args.mr_results)
+    # adding details about target PDB structure
+    db.add_pdb_targets(structure, args.mr_results, args.local_pdb)
 
     homologue_dir = os.path.join(chain_details, "homologues")
     if os.path.exists(homologue_dir):
@@ -76,6 +87,7 @@ if __name__ == "__main__":
         h_split_sel = os.path.join(*h_split[-6:])
         h_split_sel_replace = h_split_sel.replace("/", "_")
 
+        # adding MR and SSM stats for each homologue of a given target PDB structure
         db.add_mr_ssm_stats(h_split_sel_replace)
 
 
