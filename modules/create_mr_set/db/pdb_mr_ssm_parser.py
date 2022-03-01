@@ -318,10 +318,14 @@ class MRSSMParser(object):
 #            print(dummy)
             split0 = dummy0[1].split()
 #            print(split)
-            cluster0 = split0[0]
+            cluster0 = split0[0]#check for new line and eremove if necessary
+            print(cluster0)
             fragments0 = split0[1]
+            print(fragment0)
             mean_cos_theta0 = split0[2]
+            print(mean_cos_theta0)
             sd_cos_theta0 = split0[3]
+            print(sd_cos_theta0)
             dummy1 = getline(pro_log.name, ind + 5).split('\t')#add 1 to 5 to go to 6th line
             try:
               print(list(filter(None, dummy1)))
@@ -331,7 +335,6 @@ class MRSSMParser(object):
               fragments1 = split1[1]
               mean_cos_theta1 = split1[2]
               sd_cos_theta1 = split1[3].strip("\n")
-              print(sd_cos_theta1)
             except:
               cluster1 = 0
               fragments1 = 0
@@ -349,63 +352,69 @@ class MRSSMParser(object):
 
 
     homologue_dict = {
-        "gesamt_length"                  : gesamt_length,
-        "gesamt_qscore"                  : gesamt_qscore,
-        "gesamt_seqid"                   : gesamt_seqid,
-        "gesamt_rmsd"                    : gesamt_rmsd,
-        "prosmart_length_number"         : prosmart_length_number,
-        "prosmart_rmsd"                  : prosmart_rmsd,
-        "prosmart_seqid"                 : prosmart_seqid,
-        "prosmart_procrustes"            : procrustes,
-        "prosmart_flexible"              : flexible,
-        "initial_rfree_afterSSM0"        : initial_rfree_afterSSM0,
-        "final_rfree_afterSSM0"          : final_rfree_afterSSM0, 
-        "initial_rwork_afterSSM0"        : initial_rwork_afterSSM0, 
-        "final_rwork_afterSSM0"          : final_rwork_afterSSM0,
-        "mean_phase_error_afterSSM0"     : mean_phase_error_afterSSM0,
-        "f_map_correlation_afterSSM0"    : f_map_correlation_afterSSM0,
-        "initial_rfree_afterSSM"         : initial_rfree_afterSSM,
-        "final_rfree_afterSSM"           : final_rfree_afterSSM,
-        "initial_rwork_afterSSM"         : initial_rwork_afterSSM,
-        "final_rwork_afterSSM"           : final_rwork_afterSSM,
-        "mean_phase_error_afterSSM"      : mean_phase_error_afterSSM,
-        "f_map_correlation_afterSSM"     : f_map_correlation_afterSSM,
-        "molrep_TF_sig"                  : molrep_TF_sig,
-        "molrep_contrast"                : molrep_contrast,
-        "molrep_corrD"                   : molrep_corrD,
-        "molrep_corrF"                   : molrep_corrF,
-        "molrep_final_cc"                : molrep_final_cc,
-        "molrep_packing_coeff"           : molrep_packing_coeff,
-        "initial_rfree_afterMolrep0"     : initial_rfree_afterMolrep0,
-        "final_rfree_afterMolrep0"       : final_rfree_afterMolrep0,
-        "initial_rwork_afterMolrep0"     : initial_rwork_afterMolrep0,
-        "final_rwork_afterMolrep0"       : final_rwork_afterMolrep0,
-        "mean_phase_error_afterMolrep0"  : mean_phase_error_afterMolrep0,
-        "f_map_correlation_afterMolrep0" : f_map_correlation_afterMolrep0,
-        "initial_rfree_afterMolrep"      : initial_rfree_afterMolrep,
-        "final_rfree_afterMolrep"        : final_rfree_afterMolrep,
-        "initial_rwork_afterMolrep"      : initial_rwork_afterMolrep,
-        "final_rwork_afterMolrep"        : final_rwork_afterMolrep,
-        "mean_phase_error_afterMolrep"   : mean_phase_error_afterMolrep,
-        "f_map_correlation_afterMolrep"  : f_map_correlation_afterMolrep,
-        "phaser_ellg"                    : phaser_ellg,
-        "phaser_llg"                     : phaser_llg,
-        "phaser_rmsd"                    : phaser_rmsd,
-        "initial_rfree_afterMR0"         : initial_rfree_afterMR0,
-        "final_rfree_afterMR0"           : final_rfree_afterMR0,     
-        "initial_rwork_afterMR0"         : initial_rwork_afterMR0,
-        "final_rwork_afterMR0"           : final_rwork_afterMR0,
-        "mean_phase_error_afterMR0"      : mean_phase_error_afterMR0,
-        "f_map_correlation_afterMR0"     : f_map_correlation_afterMR0,  
-        "initial_rfree_afterMR"          : initial_rfree_afterMR,
-        "final_rfree_afterMR"            : final_rfree_afterMR,
-        "initial_rwork_afterMR"          : initial_rwork_afterMR,
-        "final_rwork_afterMR"            : final_rwork_afterMR,
-        "mean_phase_error_afterMR"       : mean_phase_error_afterMR,
-        "f_map_correlation_afterMR"      : f_map_correlation_afterMR,
-        "mr_success_lable"               : mr_success_lable,
-        "refinement_success_lable"       : refinement_success_lable
-                 }             
+        "gesamt_length"                    : gesamt_length,
+        "gesamt_qscore"                    : gesamt_qscore,
+        "gesamt_seqid"                     : gesamt_seqid,
+        "gesamt_rmsd"                      : gesamt_rmsd,
+        "prosmart_length_number"           : prosmart_length_number,
+        "prosmart_rmsd"                    : prosmart_rmsd,
+        "prosmart_seqid"                   : prosmart_seqid,
+        "prosmart_procrustes"              : procrustes,
+        "prosmart_flexible"                : flexible,
+        "prosmart_cluster0_fragments"      : fragments0,
+        "prosmart_cluster0_mean_cos_theta" : mean_cos_theta0,
+        "prosmart_cluster0_sd_cos_theta"   : sd_cos_theta0,
+        "prosmart_cluster1_fragments"      : fragments1,
+        "prosmart_cluster1_mean_cos_theta" : mean_cos_theta1,
+        "prosmart_cluster1_sd_cos_theta"   : sd_cos_theta1,
+        "initial_rfree_afterSSM0"          : initial_rfree_afterSSM0,
+        "final_rfree_afterSSM0"            : final_rfree_afterSSM0, 
+        "initial_rwork_afterSSM0"          : initial_rwork_afterSSM0, 
+        "final_rwork_afterSSM0"            : final_rwork_afterSSM0,
+        "mean_phase_error_afterSSM0"       : mean_phase_error_afterSSM0,
+        "f_map_correlation_afterSSM0"      : f_map_correlation_afterSSM0,
+        "initial_rfree_afterSSM"           : initial_rfree_afterSSM,
+        "final_rfree_afterSSM"             : final_rfree_afterSSM,
+        "initial_rwork_afterSSM"           : initial_rwork_afterSSM,
+        "final_rwork_afterSSM"             : final_rwork_afterSSM,
+        "mean_phase_error_afterSSM"        : mean_phase_error_afterSSM,
+        "f_map_correlation_afterSSM"       : f_map_correlation_afterSSM,
+        "molrep_TF_sig"                    : molrep_TF_sig,
+        "molrep_contrast"                  : molrep_contrast,
+        "molrep_corrD"                     : molrep_corrD,
+        "molrep_corrF"                     : molrep_corrF,
+        "molrep_final_cc"                  : molrep_final_cc,
+        "molrep_packing_coeff"             : molrep_packing_coeff,
+        "initial_rfree_afterMolrep0"       : initial_rfree_afterMolrep0,
+        "final_rfree_afterMolrep0"         : final_rfree_afterMolrep0,
+        "initial_rwork_afterMolrep0"       : initial_rwork_afterMolrep0,
+        "final_rwork_afterMolrep0"         : final_rwork_afterMolrep0,
+        "mean_phase_error_afterMolrep0"    : mean_phase_error_afterMolrep0,
+        "f_map_correlation_afterMolrep0"   : f_map_correlation_afterMolrep0,
+        "initial_rfree_afterMolrep"        : initial_rfree_afterMolrep,
+        "final_rfree_afterMolrep"          : final_rfree_afterMolrep,
+        "initial_rwork_afterMolrep"        : initial_rwork_afterMolrep,
+        "final_rwork_afterMolrep"          : final_rwork_afterMolrep,
+        "mean_phase_error_afterMolrep"     : mean_phase_error_afterMolrep,
+        "f_map_correlation_afterMolrep"    : f_map_correlation_afterMolrep,
+        "phaser_ellg"                      : phaser_ellg,
+        "phaser_llg"                       : phaser_llg,
+        "phaser_rmsd"                      : phaser_rmsd,
+        "initial_rfree_afterMR0"           : initial_rfree_afterMR0,
+        "final_rfree_afterMR0"             : final_rfree_afterMR0,     
+        "initial_rwork_afterMR0"           : initial_rwork_afterMR0,
+        "final_rwork_afterMR0"             : final_rwork_afterMR0,
+        "mean_phase_error_afterMR0"        : mean_phase_error_afterMR0,
+        "f_map_correlation_afterMR0"       : f_map_correlation_afterMR0,  
+        "initial_rfree_afterMR"            : initial_rfree_afterMR,
+        "final_rfree_afterMR"              : final_rfree_afterMR,
+        "initial_rwork_afterMR"            : initial_rwork_afterMR,
+        "final_rwork_afterMR"              : final_rwork_afterMR,
+        "mean_phase_error_afterMR"         : mean_phase_error_afterMR,
+        "f_map_correlation_afterMR"        : f_map_correlation_afterMR,
+        "mr_success_lable"                 : mr_success_lable,
+        "refinement_success_lable"         : refinement_success_lable
+        }
 
     for entry in homologue_dict:
       cur.execute('''
