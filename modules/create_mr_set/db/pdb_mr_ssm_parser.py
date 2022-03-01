@@ -323,7 +323,7 @@ class MRSSMParser(object):
             mean_cos_theta = split[2]
             sd_cos_theta = split[3]
 #            testme = list(islice(pro_log, 2))
-            print(getline(pro_log.name, ind + 2))
+            print(getline(pro_log.name, ind + 3))
     else:
       procrustes = 0
       flexible = 0
