@@ -30,6 +30,7 @@ def parse_args():
   parser = argparse.ArgumentParser(description=description, add_help=False)
   add_required_arguments(parser)
   args = parser.parse_args()
+  print(args)
   for arg in sorted(vars(args)):
     user_arg = "--%s" % arg.replace("_", "-")
     print("%-31s  %s" % (user_arg, getattr(args, arg)))
