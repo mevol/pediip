@@ -313,10 +313,10 @@ class MRSSMParser(object):
             procrustes = result1[0].split()[-1]
             flexible = result1[1].split()[-1]
           if line.strip().startswith("Final clustering results:"):
-#            print(list(islice(pro_log, 2)))
             dummy = list(islice(pro_log, 2))
             print(dummy)
-            print(dummy[1])
+            split = dummy[1].split()
+            print(split)
 #            result2 = list(islice(pro_log, 2))
 #            print(result2)
 #            print(list(islice(pro_log, 2))[1])
@@ -324,10 +324,10 @@ class MRSSMParser(object):
 #            print(result2)
 #            print(result2[1])
 #            print(result2[1].split())
-            cluster = result2[0]
-            fragments = result2[1]
-            mean_cos_theta = result2[2]
-            sd_cos_theta = result2[3]
+            cluster = split[0]
+            fragments = split[1]
+            mean_cos_theta = split[2]
+            sd_cos_theta = split[3]
     else:
       procrustes = 0
       flexible = 0
