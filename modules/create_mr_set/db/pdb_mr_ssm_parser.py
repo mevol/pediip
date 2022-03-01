@@ -314,6 +314,8 @@ class MRSSMParser(object):
             flexible = result1[1].split()[-1]
           if line.strip().startswith("Final clustering results:"):
             print(list(islice(pro_log, 2)))
+            dummy = list(islice(pro_log, 2))
+            print(dummy)
             result2 = list(islice(pro_log, 2))
             print(result2)
 #            print(list(islice(pro_log, 2))[1])
