@@ -28,13 +28,13 @@ class DB(object):
     parser.add_entry(filename)
 
 
-  def add_pdb_targets(self, structure, results_dir):
+  def add_pdb_targets(self, structure, results_dir, local_pdb):
     '''
     Add PDB targets to the database
     '''    
     print("Adding target structure", structure)
     parser = TargetParser(self.handle)
-    parser.add_entry(structure, results_dir)
+    parser.add_entry(structure, results_dir, local_pdb)
 
 
   def add_mr_ssm_stats(self, homologue):
