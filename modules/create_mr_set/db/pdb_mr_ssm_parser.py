@@ -125,6 +125,10 @@ class MRSSMParser(object):
     refinement_success_lable = 3
     procrustes = 0
     flexible = 0
+    cluster = 0
+    fragments = 0
+    mean_cos_theta = 0
+    sd_cos_theta = 0
 
 
 
@@ -313,10 +317,19 @@ class MRSSMParser(object):
             print(line)
             result2 = list(islice(pro_log, 2))
             print(result2)
+            print(result2[1].split())
+#            cluster = 
+#            fragments = 
+#            mean_cos_theta = 
+#            sd_cos_theta = 
             
     else:
       procrustes = 0
       flexible = 0
+      cluster = 0
+      fragments = 0
+      mean_cos_theta = 0
+      sd_cos_theta = 0
 
 
     homologue_dict = {
