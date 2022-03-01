@@ -324,6 +324,14 @@ class MRSSMParser(object):
             sd_cos_theta0 = split0[3]
             dummy1 = getline(pro_log.name, ind + 5).split('\t')#add 1 to 5 to go to 6th line
             print(list(filter(None, dummy1)))
+            split1 = list(filter(None, dummy1))
+            print(split1)
+            cluster1 = split1[0]
+            fragments1 = split1[1]
+            mean_cos_theta1 = split1[2]
+            sd_cos_theta1 = split1[3]
+            print(sd_cos_theta1)
+            
             
     else:
       procrustes = 0
@@ -332,6 +340,10 @@ class MRSSMParser(object):
       fragments0 = 0
       mean_cos_theta0 = 0
       sd_cos_theta0 = 0
+      cluster1 = 0
+      fragments1 = 0
+      mean_cos_theta1 = 0
+      sd_cos_theta1 = 0
 
 
     homologue_dict = {
