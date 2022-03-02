@@ -68,6 +68,10 @@ class Initialiser(object):
           sequence_length INTEGER,
           sequence TEXT,
           number_of_homologues INTEGER,
+          resolution FLOAT,
+          multiplicity FLOAT,
+          Isigma FLOAT,
+          completeness FLOAT,
           FOREIGN KEY (pdb_id_id) REFERENCES pdb_id(id)
       );
       CREATE TABLE homologue_stats (
