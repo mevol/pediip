@@ -1,5 +1,6 @@
 #!/bin/env python3
-from modules.create_mr_set.utils.utils import ProgressBar
+
+import os
 import pandas as pd
 
 class PDBRedo(object):
@@ -12,26 +13,36 @@ class PDBRedo(object):
     '''
     self.handle = handle
 
-  def add_entry(self, filename):
+  def add_entry(self, homologue, local_pdb_redo):
     '''
     Add the pdb entry to the database
     '''
     cur = self.handle.cursor()
     
+    try:
+      os.path.exists(os.path.join(local_pdb_redo, "others/alldata.txt"))
+    except:
+      print("No data file found for PDB-redo")
+    pass
+    
+    filename = os.path.join(local_pdb_redo, "others/alldata.txt")
+    # open the data file if it exists
     with open(filename, "r") as data_file:
       data = data_file.read().split("\n")
-      #progress_bar = ProgressBar("Adding PDB_redo stats", len(data))
       print(len(data))
-      #progress_bar.increment()
-      for sample in data:
-        structure_id = sample.split()[0].upper()
-        rwork_deposited = sample.split()[2]
-        rfree_deposited = sample.split()[3]
-        rwork_tls = sample.split()[9]
-        rfree_tls = sample.split()[10]
-        rwork_final = sample.split()[14]
-        rfree_final = sample.split()[15]
-        completeness = sample.split()[-21]
+      for line in data:
+        if not line.strip().startswith("#") or line.strip().startswith("PDBID"):
+          print(line)
+          split = line.split()
+          print(split)
+          #structure_id = sample.split()[0].upper()
+          #rwork_deposited = sample.split()[2]
+          #rfree_deposited = sample.split()[3]
+          #rwork_tls = sample.split()[9]
+          #rfree_tls = sample.split()[10]
+          #rwork_final = sample.split()[14]
+          #rfree_final = sample.split()[15]
+          #completeness = sample.split()[-21]
     
         cur.executescript( '''
           INSERT OR IGNORE INTO pdb_id
@@ -67,5 +78,4 @@ class PDBRedo(object):
             WHERE pdb_id_id = "%s";
             ''' % (data, pdb_redo_dict[data], pdb_id))
         self.handle.commit()
-      #progress_bar.finish()
 

@@ -3,7 +3,6 @@
 import os
 import json
 import pandas as pd
-from modules.create_mr_set.utils.utils import ProgressBar
 from itertools import islice
 from linecache import getline
 
@@ -21,20 +20,23 @@ class MRSSMParser(object):
     '''
     Add the pdb entry to the database
     '''
+    # connect to the database
     cur = self.handle.cursor()
 
-    target_pdb = homologue.split("_")[1]
-    
+    # get the target PDB ID from the file path
+    target_pdb = homologue.split("/")[8]
+
+    # find PDB ID in database and retrieve key
     cur.execute('''
       SELECT id FROM pdb_id
       WHERE pdb_id="%s"
       ''' % (target_pdb))
     pdb_id = cur.fetchone()[0]
     
-    homologue_pdb = homologue.split("_")[-2]
-    homologue_chain = homologue.split("_")[-1]
-    homologue_name = homologue_pdb+"_"+homologue_chain
-    
+    # get PDB ID for homologue from file path
+    homologue_name = homologue.split("/")[-1]
+
+    # add homologue PDB name for given target structure to database
     cur.execute('''
       INSERT OR IGNORE INTO homologue_name (homologue_name)
       VALUES ("%s")
@@ -46,30 +48,46 @@ class MRSSMParser(object):
       ''' % (homologue_name))
     homologue_pk = cur.fetchall()[-1][0]
 
+    # link the homologues to a given PDB target
     cur.execute('''
       UPDATE homologue_name
       SET pdb_id_id = "%s"
       WHERE id = "%s"
       ''' % (pdb_id, homologue_pk))    
 
+    # add the homologue to the homologue_stats table
     cur.executescript( '''
       INSERT OR IGNORE INTO homologue_stats (homologue_name_id)
       VALUES (%s);
       ''' % (homologue_pk))
 
+    # find the metadata.json file containing analysis stats from MR, SSM and refinement for a given homologue
+    h_meta_json = os.path.join(homologue, "metadata.json")
+    try:
+      os.path.exists(h_meta_json)
+    except:
+      print("Failed to find metadata.json")
+    pass
 
-#    h_main = homologue.replace("_", "/")
-#    print("Main directory", h_main)
-    
-    main_dir = "structures/%s/chains/%s/homologues/" % (target_pdb, homologue_chain)
-    
-    h_dir = os.path.join(main_dir, str(homologue_name))   
-    h_meta_json = os.path.join(h_dir, "metadata.json")
-    phaser_log = os.path.join(h_dir, "phaser.log")
-    prosmart_dir = os.path.join(h_dir, "prosmart")
+    # find the phaser.log file containing analysis stats from MR, SSM and refinement for a given homologue
+    phaser_log = os.path.join(homologue, "phaser.log")
+    try:
+      os.path.exists(phaser_log)
+    except:
+      print("Failed to find phaser.log")
+    pass  
+
+    # find the prosmart_align_logfile.txt file containing analysis stats from MR, SSM and refinement for a given homologue
+    prosmart_dir = os.path.join(homologue, "prosmart")
     prosmart_log = os.path.join(prosmart_dir, "prosmart_align_logfile.txt")
+    try:
+      os.path.exists(prosmart_log)
+    except:
+      print("Failed to find prosmart_align_logfile.txt")
+    pass
 
 
+    # set all to be extracted metrics to 0 to start with
     gesamt_length = 0
     gesamt_qscore = 0
     gesamt_seqid = 0
@@ -135,29 +153,20 @@ class MRSSMParser(object):
     mean_cos_theta1 = 0
     sd_cos_theta1 = 0
 
+    # transfer details from metadata.json into a dict for entering into database
     if os.path.exists(h_meta_json):
       with open(h_meta_json, "r") as h_json:
         h_reader = json.load(h_json)          
         if "gesamt_length" in h_reader:
           gesamt_length = h_reader["gesamt_length"]
-#            else:
-#              gesamt_length = 0
         if "gesamt_qscore" in h_reader:
           gesamt_qscore = h_reader["gesamt_qscore"]
-#            else:
-#              gesamt_qscore = 0
         if "gesamt_seqid" in h_reader:
           gesamt_seqid = h_reader["gesamt_seqid"]
-#            else:
-#              gesamt_seqid = 0
         if "gesamt_rmsd" in h_reader:
           gesamt_rmsd = h_reader["gesamt_rmsd"]
-#            else:
-#              gesamt_rmsd = 0            
         if "initial_rfree" in h_reader:
           initial_rfree = h_reader["initial_rfree"]
-#            else:
-#              initial_rfree = 0
         if  "prosmart_length_number" in h_reader:
           prosmart_length_number = h_reader["prosmart_length_number"]
         if  "prosmart_rmsd" in h_reader:
@@ -232,8 +241,6 @@ class MRSSMParser(object):
           phaser_llg = 0.0  
         if "phaser_rmsd" in h_reader:
           phaser_rmsd = h_reader["phaser_rmsd"]
-#            else:
-#              phaser_rmsd = 0
         if phaser_rmsd is None:
           phaser_rmsd = 0
         if "initial_rfree_afterMR0" in h_reader:
@@ -261,28 +268,29 @@ class MRSSMParser(object):
         if "f_map_correlation_afterMR" in h_reader:
           f_map_correlation_afterMR = h_reader["f_map_correlation_afterMR"]
 
-        if prosmart_rmsd > 0 or molrep_contrast > 0:
-          mr_success_lable = 2
-          if final_rfree_afterSSM <= 0.5 or final_rfree_afterMolrep <= 0.5:
-            refinement_success_lable = "2a"
-          if final_rfree_afterSSM > 0.5 or final_rfree_afterSSM == 0 or final_rfree_afterMolrep > 0.5 or final_rfree_afterMolrep == 0:
-            refinement_success_lable = "2b"
-
-        #if final_rfree <= initial_rfree and phaser_llg >= 60.0:
-        if phaser_llg >= 60.0:  
-          #mr_success_lable = 1
-          mr_success_lable = 1
-          if final_rfree_afterMR <= 0.5:
-            refinement_success_lable = "1a"
-          if final_rfree_afterMR > 0.5 or final_rfree_afterMR == 0:
-            refinement_success_lable = "1b"          
-          
-          
+        # assigning labels regarding the MR out come using an Rfree cut-off of 0.5
+        # this is for now left as TO DO; I will assign the labels when working with the data downstream;
+        # I may have to break it down into smaller sub-dataframes
 
 
 
-
-
+# this is the original way for assigning the labels based on what Garib had in mind; this will be ignored for now;
+########################################################################################################################
+#        
+#        if prosmart_rmsd > 0 or molrep_contrast > 0:
+#          mr_success_lable = 2
+#          if final_rfree_afterSSM <= 0.5 or final_rfree_afterMolrep <= 0.5:
+#            refinement_success_lable = "2a"
+#          if final_rfree_afterSSM > 0.5 or final_rfree_afterSSM == 0 or final_rfree_afterMolrep > 0.5 or final_rfree_afterMolrep == 0:
+#            refinement_success_lable = "2b"
+#        #if final_rfree <= initial_rfree and phaser_llg >= 60.0:
+#        if phaser_llg >= 60.0:  
+#          #mr_success_lable = 1
+#          mr_success_lable = 1
+#          if final_rfree_afterMR <= 0.5:
+#            refinement_success_lable = "1a"
+#          if final_rfree_afterMR > 0.5 or final_rfree_afterMR == 0:
+#            refinement_success_lable = "1b"          
 #        #mr_success_lable = 0
 #        mr_success_lable = "no"
 #        if phaser_llg > 0.0:  
@@ -295,9 +303,9 @@ class MRSSMParser(object):
 #        if phaser_llg >= 120.0:  
 #          #mr_success_lable = 2
 #          mr_success_lable = "yes"
-          
+#########################################################################################################################          
 
-
+    # transfer details from phaser.log into a dict for entering into database
     if os.path.exists(phaser_log):
       with open(phaser_log, "r") as p_log:
         for line in p_log:
@@ -306,10 +314,9 @@ class MRSSMParser(object):
     else:
       phaser_ellg = 0
 
+    # transfer details from prosmart_align_logfile.txt into a dict for entering into database
     if os.path.exists(prosmart_log):
-      print(prosmart_log)
       with open(prosmart_log, "r") as pro_log:
-        print("Opened PROSMART log")
         for ind, line in enumerate(pro_log, 1):
           if line.strip().startswith("Average residue scores:"):
             result1 = list(islice(pro_log, 2))
@@ -334,15 +341,6 @@ class MRSSMParser(object):
               fragments1 = 0
               mean_cos_theta1 = 0
               sd_cos_theta1 = 0
-              pass
-            
-    else:
-      procrustes = 0
-      flexible = 0
-      cluster0 = 0
-      fragments0 = 0
-      mean_cos_theta0 = 0
-      sd_cos_theta0 = 0
 
 
     homologue_dict = {
@@ -409,7 +407,8 @@ class MRSSMParser(object):
         "mr_success_lable"                 : mr_success_lable,
         "refinement_success_lable"         : refinement_success_lable
         }
-
+    
+    # writing stats in the homologue dict to the database
     for entry in homologue_dict:
       cur.execute('''
         UPDATE homologue_stats

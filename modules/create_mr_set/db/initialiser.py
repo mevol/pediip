@@ -1,6 +1,7 @@
 #!/bin/env python3
+
 import sqlite3
-from os.path import exists
+import os
 
 class Initialiser(object):
   '''
@@ -13,7 +14,7 @@ class Initialiser(object):
     '''
 
     # Check if we need to init
-    if not exists('results.sqlite') or overwrite:
+    if not os.path.exists('results.sqlite') or overwrite:
       init = True
     else:
       init = False

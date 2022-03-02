@@ -1,4 +1,5 @@
 #!/bin/env python3
+
 import sqlite3
 import os
 
@@ -20,12 +21,12 @@ class DB(object):
     self.handle = initialiser.handle
 
 
-  def add_pdb_redo(self, filename):
+  def add_pdb_redo(self, homologue, local_pdb_redo):
     '''
     Add a pdb redo stats to the database
     '''
     parser = PDBRedo(self.handle)
-    parser.add_entry(filename)
+    parser.add_entry(homologue, local_pdb_redo)
 
 
   def add_pdb_targets(self, structure, results_dir, local_pdb):
