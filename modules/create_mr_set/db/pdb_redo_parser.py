@@ -41,13 +41,13 @@ class PDBRedo(object):
       print(line)
       split = line.split()
       print(split)
-      rwork_deposited = sample.split()[2]
-      rfree_deposited = sample.split()[3]
-      rwork_tls = sample.split()[9]
-      rfree_tls = sample.split()[10]
-      rwork_final = sample.split()[14]
-      rfree_final = sample.split()[15]
-      completeness = sample.split()[-21]
+      rwork_deposited = split[2]
+      rfree_deposited = split[3]
+      rwork_tls = split[9]
+      rfree_tls = split[10]
+      rwork_final = split[14]
+      rfree_final = split[15]
+      completeness = split[-21]
       
       print(rwork_deposited, rfree_deposited, rwork_tls, rfree_tls, rwork_final,
             rfree_final, completeness)
