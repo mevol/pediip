@@ -31,7 +31,9 @@ class PDBRedo(object):
       data = data_file.read().split("\n")
       print(len(data))
       for line in data:
-        if not line.strip().startswith("#") or line.strip().startswith("PDBID"):
+#        if not line.strip().startswith("#") or line.strip().startswith("PDBID"):
+        if not line.strip().startswith("#"):
+
           print(line)
           split = line.split()
           print(split)
