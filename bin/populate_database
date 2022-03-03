@@ -65,12 +65,11 @@ if __name__ == "__main__":
   structures_dir = os.path.join(args.mr_results, "structures")
   results_dir = os.chdir(args.mr_results)
   structures_lst = os.listdir("structures")
-  
+
   # Check if the local PDB copy for mmcif files is accessible
   if not os.path.exists(args.local_pdb):
     raise RuntimeError("Couldn't find local PDB copy")
 
-  
   # iterate over all the target structures investigated
   for structure in structures_lst:
     # get location of target structure
@@ -99,12 +98,3 @@ if __name__ == "__main__":
         db.add_mr_ssm_stats(homologue_path)
         db.add_pdb_redo(structure, args.local_pdb_redo)
 
-
-  
-  
-#  redo_stats_in = os.path.join(args.pdb_coords, "alldata_noHeader.txt")
-#  
-#  for homologue in homologues:
-#    db.add_mr_ssm_stats(homologue)
-#    
-#  #db.add_pdb_redo(redo_stats_in)

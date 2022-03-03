@@ -1,8 +1,5 @@
 #!/bin/env python3
 
-import sqlite3
-import os
-
 from modules.create_mr_set.db.initialiser import Initialiser
 from modules.create_mr_set.db.pdb_redo_parser import PDBRedo
 from modules.create_mr_set.db.pdb_mr_ssm_parser import MRSSMParser

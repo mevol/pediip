@@ -32,7 +32,7 @@ class MRSSMParser(object):
       WHERE pdb_id="%s"
       ''' % (target_pdb))
     pdb_id = cur.fetchone()[0]
-    
+
     # get PDB ID for homologue from file path
     homologue_name = homologue.split("/")[-1]
 
@@ -41,7 +41,7 @@ class MRSSMParser(object):
       INSERT OR IGNORE INTO homologue_name (homologue_name)
       VALUES ("%s")
       ''' % (homologue_name))
-    
+
     cur.execute('''
       SELECT id FROM homologue_name
       WHERE homologue_name.homologue_name="%s"
@@ -85,7 +85,6 @@ class MRSSMParser(object):
     except:
       print("Failed to find prosmart_align_logfile.txt")
     pass
-
 
     # set all to be extracted metrics to 0 to start with
     gesamt_length = 0
@@ -140,8 +139,8 @@ class MRSSMParser(object):
     final_rwork_afterMR = 0
     mean_phase_error_afterMR = 0
     f_map_correlation_afterMR = 0
-    mr_success_lable = 3
-    refinement_success_lable = 3
+    #mr_success_lable = 3
+    #refinement_success_lable = 3
     procrustes = 0
     flexible = 0
     cluster0 = 0
@@ -236,9 +235,9 @@ class MRSSMParser(object):
         if "phaser_llg" in h_reader:
           phaser_llg = h_reader["phaser_llg"]
         else:
-          phaser_llg = 0.0            
+          phaser_llg = 0.0
         if phaser_llg is None:
-          phaser_llg = 0.0  
+          phaser_llg = 0.0
         if "phaser_rmsd" in h_reader:
           phaser_rmsd = h_reader["phaser_rmsd"]
         if phaser_rmsd is None:
@@ -342,7 +341,6 @@ class MRSSMParser(object):
               mean_cos_theta1 = 0
               sd_cos_theta1 = 0
 
-
     homologue_dict = {
         "gesamt_length"                    : gesamt_length,
         "gesamt_qscore"                    : gesamt_qscore,
@@ -407,7 +405,7 @@ class MRSSMParser(object):
         "mr_success_lable"                 : mr_success_lable,
         "refinement_success_lable"         : refinement_success_lable
         }
-    
+
     # writing stats in the homologue dict to the database
     for entry in homologue_dict:
       cur.execute('''
@@ -415,5 +413,5 @@ class MRSSMParser(object):
         SET "%s" = "%s"
         WHERE homologue_name_id = "%s";
         ''' % (entry, homologue_dict[entry], homologue_pk))
-  
+
     self.handle.commit()

@@ -18,8 +18,10 @@ class PDBRedo(object):
     '''
     Add the pdb entry to the database
     '''
+    # connect to the database
     cur = self.handle.cursor()
-    
+
+    # check whether the given PDB-redo summary stats file exists
     try:
       os.path.exists(os.path.join(local_pdb_redo, "others/alldata.txt"))
       filename = os.path.join(local_pdb_redo, "others/alldata.txt")
@@ -27,6 +29,7 @@ class PDBRedo(object):
       print("No data file found for PDB-redo")
     pass
 
+    # set default value for the different stats
     rwork_deposited = 0
     rfree_deposited = 0
     rwork_tls = 0
@@ -37,10 +40,11 @@ class PDBRedo(object):
 
     # open the data file if it exists
     with open(filename, "r") as data_file:
+      # find the line staring with lower case structure PDB ID
       line = next((l for l in data_file if structure.lower() in l), None)
-      print(line)
+      # split the line and pick the corresponding values based on column names declared
+      # in the file header which is being ignored here
       split = line.split()
-      print(split)
       rwork_deposited = split[2]
       rfree_deposited = split[3]
       rwork_tls = split[9]
@@ -48,41 +52,21 @@ class PDBRedo(object):
       rwork_final = split[14]
       rfree_final = split[15]
       completeness = split[-21]
-      
-      print(rwork_deposited, rfree_deposited, rwork_tls, rfree_tls, rwork_final,
-            rfree_final, completeness)
-      
-#      data = data_file.readlines()
-#      print(len(data))
-#      for line in data:
-#        line = line.rstrip()
-#        find = str(structure.lower())
-#        #print(find)
-#        if re.search(find, line):
-#          print(line)
-#        result = re.search(find, line)
-#        print(result)
-#        if line.startswith(str(structure.lower())):
-#          print(line)
-#        except:
-#        if not line.startswith("#") or line.startswith("PDBID"):
-#          print(55555555555555)
-#          print(line)
-#        if not line.strip().startswith("#"):
 
-#          print(line)
-    
+      # find the relevant structure entry in the database
       cur.executescript( '''
           INSERT OR IGNORE INTO pdb_id
           (pdb_id) VALUES ("%s");
           '''% (structure))
-    
+
+      # link the structure entry to the pdb-redo table
       cur.executescript( '''
           INSERT OR IGNORE INTO pdb_redo_stats (pdb_id_id)
           SELECT id FROM pdb_id
           WHERE pdb_id.pdb_id="%s";
           ''' % (structure))
-    
+
+      # dictionary with PDV-redo stats
       pdb_redo_dict = {
             "rWork_depo"         : rwork_deposited,
             "rFree_depo"         : rfree_deposited,
@@ -92,7 +76,8 @@ class PDBRedo(object):
             "rFree_final"        : rfree_final,
             "completeness"       : completeness
                     }
-    
+
+      # entering the PDB-redo stats into the corresponding table in the database
       cur.execute('''
           SELECT id FROM pdb_id
           WHERE pdb_id="%s"
