@@ -35,17 +35,15 @@ class PDBRedo(object):
     rfree_final = 0
     completeness = 0
 
-
     # open the data file if it exists
     with open(filename, "r") as data_file:
       data = data_file.readlines()
-#      data = data_file.read().split("\n")
       print(len(data))
       for line in data:
         line = line.rstrip()
         find = str(structure.lower())
-        print(find)
-        if re.search('^From:', line):
+        #print(find)
+        if re.search(find, line):
           print(line)
 
 
