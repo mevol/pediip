@@ -37,7 +37,7 @@ class PDBRedo(object):
 
     # open the data file if it exists
     with open(filename, "r") as data_file:
-      line = next((l for l in f if structure.lower() in l), None)
+      line = next((l for l in data_file if structure.lower() in l), None)
       print(line)
 #      data = data_file.readlines()
 #      print(len(data))
