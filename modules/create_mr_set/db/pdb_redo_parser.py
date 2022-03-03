@@ -28,10 +28,14 @@ class PDBRedo(object):
 
     # open the data file if it exists
     with open(filename, "r") as data_file:
-      data = data_file.read().split("\n")
+      data = data_file.readlines()
+#      data = data_file.read().split("\n")
       print(len(data))
       for line in data:
-        if not line.startswith("#") or line.startswith("PDBID"):
+#        try:
+        if not line.startswith("#") or line.startswith("PDBID")
+          print(55555555555555)
+          print(line)
 #        if not line.strip().startswith("#"):
 
           print(line)
