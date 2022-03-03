@@ -47,10 +47,6 @@ class PDBRedo(object):
 #        #print(find)
 #        if re.search(find, line):
 #          print(line)
-
-
-
-
 #        result = re.search(find, line)
 #        print(result)
 #        if line.startswith(str(structure.lower())):
@@ -73,18 +69,18 @@ class PDBRedo(object):
           #rfree_final = sample.split()[15]
           #completeness = sample.split()[-21]
     
-        cur.executescript( '''
+      cur.executescript( '''
           INSERT OR IGNORE INTO pdb_id
           (pdb_id) VALUES ("%s");
           '''% (structure))
     
-        cur.executescript( '''
+      cur.executescript( '''
           INSERT OR IGNORE INTO pdb_redo_stats (pdb_id_id)
           SELECT id FROM pdb_id
           WHERE pdb_id.pdb_id="%s";
           ''' % (structure))
     
-        pdb_redo_dict = {
+      pdb_redo_dict = {
             "rWork_depo"         : rwork_deposited,
             "rFree_depo"         : rfree_deposited,
             "rWork_tls"          : rwork_tls,
@@ -94,17 +90,17 @@ class PDBRedo(object):
             "completeness"       : completeness
                     }
     
-        cur.execute('''
+      cur.execute('''
           SELECT id FROM pdb_id
           WHERE pdb_id="%s"
           ''' % (structure))
-        pdb_id = cur.fetchone()[0]
+      pdb_id = cur.fetchone()[0]
         
-        for data in pdb_redo_dict:
-          cur.execute('''
+      for data in pdb_redo_dict:
+        cur.execute('''
             UPDATE pdb_redo_stats
             SET "%s" = "%s"
             WHERE pdb_id_id = "%s";
             ''' % (data, pdb_redo_dict[data], pdb_id))
-        self.handle.commit()
+      self.handle.commit()
 
