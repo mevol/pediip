@@ -42,7 +42,8 @@ class PDBRedo(object):
       print(len(data))
       for line in data:
         try:
-          line.startswith("#") or line.startswith("PDBID")
+          line.startswith(structure.lower())
+          print(line)
         except:
 #        if not line.startswith("#") or line.startswith("PDBID"):
           print(55555555555555)
