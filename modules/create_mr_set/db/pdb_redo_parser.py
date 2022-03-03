@@ -39,6 +39,9 @@ class PDBRedo(object):
     with open(filename, "r") as data_file:
       line = next((l for l in data_file if structure.lower() in l), None)
       print(line)
+      
+      
+      
 #      data = data_file.readlines()
 #      print(len(data))
 #      for line in data:
@@ -58,16 +61,16 @@ class PDBRedo(object):
 #        if not line.strip().startswith("#"):
 
 #          print(line)
-#          split = line.split()
-#          print(split)
-          #structure_id = sample.split()[0].upper()
-          #rwork_deposited = sample.split()[2]
-          #rfree_deposited = sample.split()[3]
-          #rwork_tls = sample.split()[9]
-          #rfree_tls = sample.split()[10]
-          #rwork_final = sample.split()[14]
-          #rfree_final = sample.split()[15]
-          #completeness = sample.split()[-21]
+        split = line.split()
+        print(split)
+        structure_id = sample.split()[0].upper()
+        rwork_deposited = sample.split()[2]
+        rfree_deposited = sample.split()[3]
+        rwork_tls = sample.split()[9]
+        rfree_tls = sample.split()[10]
+        rwork_final = sample.split()[14]
+        rfree_final = sample.split()[15]
+        completeness = sample.split()[-21]
     
       cur.executescript( '''
           INSERT OR IGNORE INTO pdb_id
