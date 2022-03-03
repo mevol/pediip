@@ -42,18 +42,18 @@ class PDBRedo(object):
       print(len(data))
       for line in data:
         result = re.search(structure.lower(), line)
-        print(results)
+        print(result)
 #        if line.startswith(str(structure.lower())):
-          print(line)
+#          print(line)
 #        except:
 #        if not line.startswith("#") or line.startswith("PDBID"):
-          print(55555555555555)
-          print(line)
+#          print(55555555555555)
+#          print(line)
 #        if not line.strip().startswith("#"):
 
-          print(line)
-          split = line.split()
-          print(split)
+#          print(line)
+#          split = line.split()
+#          print(split)
           #structure_id = sample.split()[0].upper()
           #rwork_deposited = sample.split()[2]
           #rfree_deposited = sample.split()[3]
