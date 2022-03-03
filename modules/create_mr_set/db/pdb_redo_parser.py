@@ -26,6 +26,15 @@ class PDBRedo(object):
       print("No data file found for PDB-redo")
     pass
 
+    rwork_deposited = 0
+    rfree_deposited = 0
+    rwork_tls = 0
+    rfree_tls = 0
+    rwork_final = 0
+    rfree_final = 0
+    completeness = 0
+
+
     # open the data file if it exists
     with open(filename, "r") as data_file:
       data = data_file.readlines()
@@ -33,7 +42,8 @@ class PDBRedo(object):
       print(len(data))
       for line in data:
         try:
-          line.startswith("#") or line.startswith("PDBID")
+          line.startswith("#") or line.startswith("PDBID") == False
+          print(line)
         except:
 #        if not line.startswith("#") or line.startswith("PDBID"):
           print(55555555555555)
