@@ -42,9 +42,17 @@ class PDBRedo(object):
 #      data = data_file.read().split("\n")
       print(len(data))
       for line in data:
+        line = line.rstrip()
         find = str(structure.lower())
-        result = re.search(find, line)
-        print(result)
+        print(find)
+        if re.search('^From:', line):
+          print(line)
+
+
+
+
+#        result = re.search(find, line)
+#        print(result)
 #        if line.startswith(str(structure.lower())):
 #          print(line)
 #        except:
