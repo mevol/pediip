@@ -43,7 +43,7 @@ class PDBRedo(object):
       for line in data:
         if line.startswith(str(structure.lower())):
           print(line)
-        except:
+#        except:
 #        if not line.startswith("#") or line.startswith("PDBID"):
           print(55555555555555)
           print(line)
