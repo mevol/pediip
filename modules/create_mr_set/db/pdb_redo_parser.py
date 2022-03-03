@@ -21,13 +21,11 @@ class PDBRedo(object):
     
     try:
       os.path.exists(os.path.join(local_pdb_redo, "others/alldata.txt"))
+      filename = os.path.join(local_pdb_redo, "others/alldata.txt")
     except:
       print("No data file found for PDB-redo")
     pass
-    
-    print(11111111, structure)
-    
-    filename = os.path.join(local_pdb_redo, "others/alldata.txt")
+
     # open the data file if it exists
     with open(filename, "r") as data_file:
       data = data_file.read().split("\n")
@@ -52,13 +50,13 @@ class PDBRedo(object):
         cur.executescript( '''
           INSERT OR IGNORE INTO pdb_id
           (pdb_id) VALUES ("%s");
-          '''% (structure_id))
+          '''% (structure))
     
         cur.executescript( '''
           INSERT OR IGNORE INTO pdb_redo_stats (pdb_id_id)
           SELECT id FROM pdb_id
           WHERE pdb_id.pdb_id="%s";
-          ''' % (structure_id))
+          ''' % (structure))
     
         pdb_redo_dict = {
             "rWork_depo"         : rwork_deposited,
@@ -73,7 +71,7 @@ class PDBRedo(object):
         cur.execute('''
           SELECT id FROM pdb_id
           WHERE pdb_id="%s"
-          ''' % (structure_id))
+          ''' % (structure))
         pdb_id = cur.fetchone()[0]
         
         for data in pdb_redo_dict:
