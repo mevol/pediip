@@ -24,17 +24,18 @@ def add_required_arguments(parser):
                         required = True,
                         help = "Local PDB copy of mmcif files")
 
+  required.add_argument("--local_pdb_redo",
+                        type = str,
+                        dest = "local_pdb_redo",
+                        metavar = "DIR",
+                        required = True,
+                        help = "Local PDB-redo copy holding unified, optimised, refined PDB structures")
 
 def parse_args():
   description = "Entering MR and SSM results into a project database."
   parser = argparse.ArgumentParser(description=description, add_help=False)
   add_required_arguments(parser)
   args = parser.parse_args()
-  print(args)
-  for arg in sorted(vars(args)):
-    user_arg = "--%s" % arg.replace("_", "-")
-    print("%-31s  %s" % (user_arg, getattr(args, arg)))
-  print("")
   return args
 
 ## MAIN
@@ -48,6 +49,10 @@ if __name__ == "__main__":
 
   args = parse_args()
 
+  print("Arguments again: ", args)
+  print(args.mr_results)
+  print(args.local_pdb)
+
   # Create the database
   db = DB(overwrite=True)
 
@@ -59,36 +64,40 @@ if __name__ == "__main__":
   # Expand MR results directory by looking for a structures directory
   structures_dir = os.path.join(args.mr_results, "structures")
   results_dir = os.chdir(args.mr_results)
-  print("I AM HERE", results_dir)
   structures_lst = os.listdir("structures")
-  
   
   # Check if the local PDB copy for mmcif files is accessible
   if not os.path.exists(args.local_pdb):
     raise RuntimeError("Couldn't find local PDB copy")
 
   
-  
+  # iterate over all the target structures investigated
   for structure in structures_lst:
+    # get location of target structure
     structure_location = os.path.join(structures_dir, structure)
-    chain_location = os.path.join(structure_location, "chains")
-    chain_name = os.listdir(chain_location)
-    chain_details = os.path.join(chain_location, chain_name[0])
+    if not os.path.exists(structure_location):
+      raise RuntimeError("Could not find structure directory")
 
     # adding details about target PDB structure
     db.add_pdb_targets(structure, args.mr_results, args.local_pdb)
 
+    # get chain name of target structure used in alignment and MR
+    chain_location = os.path.join(structure_location, "chains")
+    chain_name = os.listdir(chain_location)
+    chain_details = os.path.join(chain_location, chain_name[0])
+
+    # join the path to get to the homologues directory
     homologue_dir = os.path.join(chain_details, "homologues")
+    # get a list of available homologues
     if os.path.exists(homologue_dir):
       homologue_lst = os.listdir(homologue_dir)
       for homologue in homologue_lst:
+        # get the full length homologue path
         homologue_path = os.path.join(homologue_dir, homologue)
-        h_split = homologue_path.split("/")
-        h_split_sel = os.path.join(*h_split[-6:])
-        h_split_sel_replace = h_split_sel.replace("/", "_")
 
         # adding MR and SSM stats for each homologue of a given target PDB structure
-        db.add_mr_ssm_stats(h_split_sel_replace)
+        db.add_mr_ssm_stats(homologue_path)
+        db.add_pdb_redo(homologue, args.local_pdb_redo)
 
 
   
