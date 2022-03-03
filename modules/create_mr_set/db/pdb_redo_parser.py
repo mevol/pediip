@@ -37,14 +37,16 @@ class PDBRedo(object):
 
     # open the data file if it exists
     with open(filename, "r") as data_file:
-      data = data_file.readlines()
-      print(len(data))
-      for line in data:
-        line = line.rstrip()
-        find = str(structure.lower())
-        #print(find)
-        if re.search(find, line):
-          print(line)
+      line = next((l for l in f if structure.lower() in l), None)
+      print(line)
+#      data = data_file.readlines()
+#      print(len(data))
+#      for line in data:
+#        line = line.rstrip()
+#        find = str(structure.lower())
+#        #print(find)
+#        if re.search(find, line):
+#          print(line)
 
 
 
