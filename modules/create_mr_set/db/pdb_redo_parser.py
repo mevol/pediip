@@ -13,7 +13,7 @@ class PDBRedo(object):
     '''
     self.handle = handle
 
-  def add_entry(self, homologue, local_pdb_redo):
+  def add_entry(self, structure, local_pdb_redo):
     '''
     Add the pdb entry to the database
     '''
@@ -25,7 +25,7 @@ class PDBRedo(object):
       print("No data file found for PDB-redo")
     pass
     
-    print(11111111, homologue)
+    print(11111111, structure)
     
     filename = os.path.join(local_pdb_redo, "others/alldata.txt")
     # open the data file if it exists
