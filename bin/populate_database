@@ -80,6 +80,9 @@ if __name__ == "__main__":
     # adding details about target PDB structure
     db.add_pdb_targets(structure, args.mr_results, args.local_pdb)
 
+    # adding PDB-redo details about target PDB structure
+    db.add_pdb_redo(structure, args.local_pdb_redo)
+
     # get chain name of target structure used in alignment and MR
     chain_location = os.path.join(structure_location, "chains")
     chain_name = os.listdir(chain_location)
@@ -96,5 +99,4 @@ if __name__ == "__main__":
 
         # adding MR and SSM stats for each homologue of a given target PDB structure
         db.add_mr_ssm_stats(homologue_path)
-        db.add_pdb_redo(structure, args.local_pdb_redo)
 
