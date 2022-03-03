@@ -25,6 +25,8 @@ class PDBRedo(object):
       print("No data file found for PDB-redo")
     pass
     
+    print(11111111, homologue)
+    
     filename = os.path.join(local_pdb_redo, "others/alldata.txt")
     # open the data file if it exists
     with open(filename, "r") as data_file:
