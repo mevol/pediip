@@ -97,7 +97,7 @@ if __name__ == "__main__":
 
         # adding MR and SSM stats for each homologue of a given target PDB structure
         db.add_mr_ssm_stats(homologue_path)
-        db.add_pdb_redo(homologue, args.local_pdb_redo)
+        db.add_pdb_redo(structure, args.local_pdb_redo)
 
 
   
