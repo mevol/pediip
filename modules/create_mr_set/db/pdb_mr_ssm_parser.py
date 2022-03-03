@@ -402,8 +402,8 @@ class MRSSMParser(object):
         "final_rwork_afterMR"              : final_rwork_afterMR,
         "mean_phase_error_afterMR"         : mean_phase_error_afterMR,
         "f_map_correlation_afterMR"        : f_map_correlation_afterMR,
-        "mr_success_lable"                 : mr_success_lable,
-        "refinement_success_lable"         : refinement_success_lable
+#        "mr_success_lable"                 : mr_success_lable,
+#        "refinement_success_lable"         : refinement_success_lable
         }
 
     # writing stats in the homologue dict to the database
