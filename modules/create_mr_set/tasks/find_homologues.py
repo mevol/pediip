@@ -97,6 +97,7 @@ def choose_hits(key, chain, args):
     for hid in os.listdir(chain.path("homologues")):
       split = hid.split("_")
       models.Homologue(split[0], split[1], chain)
+      print("Homologues for chain: ", split)
   else:
     chosen_hits = []
     for hit in filtered_gesamt_hits(chain, args):

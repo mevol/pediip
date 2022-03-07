@@ -486,3 +486,27 @@ def trim_model(model, chain, alignment, prefix):
   if not pdbtools.has_atoms(result["xyzout"]):
     return { "error": "SCULPTOR: No atoms in trimmed coordinates" }
   return result
+
+
+def buccaneer(hklin, xyzin, fo, wrk_hl, prefix):
+  """Compare two sets of phases with cphasematch"""
+  result = {
+    "xyzout": "%s.pdb" % prefix,
+    "stdout": "%s.log" % prefix,
+    "stderr": "%s.err" % prefix,
+  }
+  utils.run("buccaneer", [
+    "-mtzin", hklin,
+    "-pdbin", xyzin,
+    "-colin-fo", fo,
+    "-colin-phifom", wrk_hl,
+  ], stdout=result["stdout"], stderr=result["stderr"])
+  with open(result["stdout"]) as f:
+    for line in f:
+      print(line)
+#      if "Overall statistics:" in line:
+#        headers = next(f).split()
+#        values = next(f).split()
+#        result["mean_phase_error"] = float(values[headers.index("w1<dphi>")])
+#        result["f_map_correlation"] = float(values[headers.index("wFcorr")])
+  return result
