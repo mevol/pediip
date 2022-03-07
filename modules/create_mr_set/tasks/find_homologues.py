@@ -93,11 +93,16 @@ def should_choose(hit, chosen_hits, args):
   return True
 
 def choose_hits(key, chain, args):
+  print("Key for hits: ", key)
+  print("Chain for hits: ", chain)
+  #print("Arguments for hits: ", args)
   if os.path.exists(chain.path("homologues")):
     for hid in os.listdir(chain.path("homologues")):
       split = hid.split("_")
       models.Homologue(split[0], split[1], chain)
-      print("Homologues for chain: ", split)
+      print("Homologue: ", split[0])
+      print("Chain of homologue: ", split[1])
+      print("Chain of target: ", chain)
   else:
     chosen_hits = []
     for hit in filtered_gesamt_hits(chain, args):
@@ -107,6 +112,8 @@ def choose_hits(key, chain, args):
           break
     for hit in chosen_hits:
       models.Homologue(hit.pdb, hit.chain, chain)
+    print(111111111, chosen_hits)
+  print(222222222222, key, chain)
   return key, chain
 
 def find_homologues(chains, args):

@@ -394,13 +394,14 @@ def compare_phases_afterMolrep_zero(key, homologue, args):
   return key, homologue
 
 #build MR solution after 0-cycles jelly body
-def buccaneer_after_refmac_zero(key, homologue, args):
-  hklin = homologue.chain.structure.path("refmac_afterMR0.mtz")
+def buccaneer_mr_after_refmac_zero(key, homologue, args):
+  hklin = homologue.path("refmac_afterMR0.mtz")
   xyzin = homologue.path("refmac_afterMR0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
+  #seqin = structure.path("deposited.fasta") #NEED TO PASS A SEQUENCE PATH
   prefix = homologue.path("buccaneer_afterMR0")
-  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
   if "final_rfree" in result:
     homologue.add_metadata("final_rfree_buccaneer_afterMR0", result["final_rfree"])
@@ -410,19 +411,54 @@ def buccaneer_after_refmac_zero(key, homologue, args):
   return key, homologue
 
 #build MR solution after 100-cycles jelly body
-def buccaneer_after_refmac_jelly(key, homologue, args):
-  hklin = homologue.chain.structure.path("refmac_afterMR.mtz")
+def buccaneer_mr_after_refmac_jelly(key, homologue, args):
+  hklin = homologue.path("refmac_afterMR.mtz")
   xyzin = homologue.path("refmac_afterMR.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
+  #seqin = structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMR")
-  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
   if "final_rfree" in result:
     homologue.add_metadata("final_rfree_buccaneer_afterMR", result["final_rfree"])
     homologue.add_metadata("final_rwork_buccaneer_afterMR", result["final_rwork"])
     homologue.add_metadata("initial_rfree_buccaneer_afterMR", result["initial_rfree"])
     homologue.add_metadata("initial_rwork_buccaneer_afterMR", result["initial_rwork"])
+  return key, homologue
+
+#build Molrep solution after 0-cycles jelly body
+def buccaneer_molrep_after_refmac_zero(key, homologue, args):
+  hklin = homologue.path("refmac_afterMolrep0.mtz")
+  xyzin = homologue.path("refmac_afterMolrep0.pdb")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT,FOM"
+  #seqin = structure.path("deposited.fasta")
+  prefix = homologue.path("buccaneer_afterMolrep0")
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  homologue.jobs["buccaneer"] = result
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_buccaneer_afterMolrep0", result["final_rfree"])
+    homologue.add_metadata("final_rwork_buccaneer_afterMolrep0", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_buccaneer_afterMolrep0", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_buccaneer_afterMolrep0", result["initial_rwork"])
+  return key, homologue
+
+#build Molrep solution after 100-cycles jelly body
+def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
+  hklin = homologue.path("refmac_afterMolrep.mtz")
+  xyzin = homologue.path("refmac_afterMolrep.pdb")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT,FOM"
+  #seqin = structure.path("deposited.fasta")
+  prefix = homologue.path("buccaneer_afterMolrep")
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  homologue.jobs["buccaneer"] = result
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_buccaneer_afterMolrep", result["final_rfree"])
+    homologue.add_metadata("final_rwork_buccaneer_afterMolrep", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_buccaneer_afterMolrep", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_buccaneer_afterMolrep", result["initial_rwork"])
   return key, homologue
 
 #####################################################################
@@ -464,7 +500,7 @@ def buccaneer_after_refmac_jelly(key, homologue, args):
 #  utils.remove_errors(homologues)
 #  print("")
 
-def run_mr_pipelines(key, homologue, args):
+def run_mr_pipelines(key, homologue, structure, args):
   if not os.path.exists(homologue.path("JOB_IS_DONE.txt")):
        
     superpose_homologue(key, homologue, args)
@@ -504,8 +540,10 @@ def run_mr_pipelines(key, homologue, args):
 
   if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")):
     print("Starting Buccaneer")
-    buccaneer_after_refmac_zero(key, homologue, args)
-    buccaneer_after_refmac_jelly(key, homologue, args)
+    buccaneer_mr_after_refmac_zero(key, homologue, args)
+    buccaneer_mr_after_refmac_jelly(key, homologue, args)
+    buccaneer_molrep_after_refmac_zero(key, homologue, args)
+    buccaneer_molrep_after_refmac_jelly(key, homologue, args)
     with open(homologue.path("BUILD_WITH_BUCCANEER.txt"), "w") as out_file:
       line = "job is done"
       out_file.writelines(line)
