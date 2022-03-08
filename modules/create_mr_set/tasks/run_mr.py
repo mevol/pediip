@@ -446,6 +446,7 @@ def buccaneer_molrep_after_refmac_zero(key, homologue, args):
 
 #build Molrep solution after 100-cycles jelly body
 def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
+  print(2222222, homologue)
   hklin = homologue.path("refmac_afterMolrep.mtz")
   xyzin = homologue.path("refmac_afterMolrep.pdb")
   fo = "FP,SIGFP"
