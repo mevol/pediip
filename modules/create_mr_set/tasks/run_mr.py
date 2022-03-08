@@ -393,23 +393,20 @@ def compare_phases_afterMolrep_zero(key, homologue, args):
     homologue.add_metadata("f_map_correlation_afterMolrep0", result["f_map_correlation"])
   return key, homologue
 
+##########################################################################################
+# Build with Buccaneer after MR and first refinement
+##########################################################################################
 #build MR solution after 0-cycles jelly body
 def buccaneer_mr_after_refmac_zero(key, homologue, args):
   hklin = homologue.path("refmac_afterMR0.mtz")
   xyzin = homologue.path("refmac_afterMR0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  metafile = homologue.path("metadata.json")
-  meta_split = metafile.split("/")
-  path_stem = meta_split[0] + "/" + meta_split[1]
-  print(path_stem)
-  print(meta_split)
-  print(metafile)
-  
-  #"deposited.fasta"
-  seqin = os.path.join(path_stem, "deposited.fasta")
-  #seqin = glob.glob(homologue.path(os.path.join(
-  #                                 "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
+#  metafile = homologue.path("metadata.json")
+#  meta_split = metafile.split("/")
+#  path_stem = meta_split[0] + "/" + meta_split[1]
+#  seqin = os.path.join(path_stem, "deposited.fasta")
+  seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMR0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
@@ -429,8 +426,10 @@ def buccaneer_mr_after_refmac_jelly(key, homologue, args):
   xyzin = homologue.path("refmac_afterMR.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  seqin = glob.glob(homologue.path(os.path.join(
-                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
+  metafile = homologue.path("metadata.json")
+  meta_split = metafile.split("/")
+  path_stem = meta_split[0] + "/" + meta_split[1]
+  seqin = os.path.join(path_stem, "deposited.fasta")
   prefix = homologue.path("buccaneer_afterMR")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
@@ -444,14 +443,19 @@ def buccaneer_mr_after_refmac_jelly(key, homologue, args):
     homologue.add_metadata("percent_chain_complete_afterMR", result["percent_chain_complete"])
   return key, homologue
 
+##########################################################################################
+# Build with Buccaneer after Molrep and first refinement
+##########################################################################################
 #build Molrep solution after 0-cycles jelly body
 def buccaneer_molrep_after_refmac_zero(key, homologue, args):
   hklin = homologue.path("refmac_afterMolrep0.mtz")
   xyzin = homologue.path("refmac_afterMolrep0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  seqin = glob.glob(homologue.path(os.path.join(
-                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
+  metafile = homologue.path("metadata.json")
+  meta_split = metafile.split("/")
+  path_stem = meta_split[0] + "/" + meta_split[1]
+  seqin = os.path.join(path_stem, "deposited.fasta")
   prefix = homologue.path("buccaneer_afterMolrep0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
@@ -471,8 +475,10 @@ def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
   xyzin = homologue.path("refmac_afterMolrep.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  seqin = glob.glob(homologue.path(os.path.join(
-                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
+  metafile = homologue.path("metadata.json")
+  meta_split = metafile.split("/")
+  path_stem = meta_split[0] + "/" + meta_split[1]
+  seqin = os.path.join(path_stem, "deposited.fasta")
   prefix = homologue.path("buccaneer_afterMolrep")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
@@ -486,14 +492,19 @@ def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
     homologue.add_metadata("percent_chain_complete_afterMolrep", result["percent_chain_complete"])
   return key, homologue
 
+##########################################################################################
+# Build with Buccaneer after Prosmart and first refinement
+##########################################################################################
 #build Prosmart solution after 0-cycles jelly body
 def buccaneer_ssm_after_refmac_zero(key, homologue, args):
   hklin = homologue.path("refmac_afterSSM0.mtz")
   xyzin = homologue.path("refmac_afterSSM0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  seqin = glob.glob(homologue.path(os.path.join(
-                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
+  metafile = homologue.path("metadata.json")
+  meta_split = metafile.split("/")
+  path_stem = meta_split[0] + "/" + meta_split[1]
+  seqin = os.path.join(path_stem, "deposited.fasta")
   prefix = homologue.path("buccaneer_afterSSM0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
@@ -513,8 +524,10 @@ def buccaneer_ssm_after_refmac_jelly(key, homologue, args):
   xyzin = homologue.path("refmac_afterSSM.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  seqin = glob.glob(homologue.path(os.path.join(
-                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
+  metafile = homologue.path("metadata.json")
+  meta_split = metafile.split("/")
+  path_stem = meta_split[0] + "/" + meta_split[1]
+  seqin = os.path.join(path_stem, "deposited.fasta")
   prefix = homologue.path("buccaneer_afterSSM")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
@@ -526,6 +539,353 @@ def buccaneer_ssm_after_refmac_jelly(key, homologue, args):
     homologue.add_metadata("num_res_unique_afterSSM", result["num_res_unique"])
     homologue.add_metadata("percent_res_complete_afterSSM", result["percent_res_complete"])
     homologue.add_metadata("percent_chain_complete_afterSSM", result["percent_chain_complete"])
+  return key, homologue
+
+##########################################################################################
+# Refinement after Buccaneer after MR and first refinement
+##########################################################################################
+#refine MR-Buccaneer solution using 100 cycles jelly body; first refinement 0-cycles
+def refine_placed_model_zero_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterMR0.pdb")
+  prefix = homologue.path("refmac_afterMR_Buccaneer")
+  result = tasks.refine_jelly(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac_afterMR0_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac_afterMR0_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac_afterMR0_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac_afterMR0_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+#refine MR-Buccaneer solution using 0 cycles; first refinement 0-cycles
+def refine_placed_model_zero_buccaneer_zero(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterMR0.pdb")
+  prefix = homologue.path("refmac0_afterMR0_Buccaneer")
+  result = tasks.refine_zero(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result 
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac0_afterMR0_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac0_afterMR0_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac0_afterMR0_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac0_afterMR0_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+#refine MR-Buccaneer solution using 100 cycles jelly body; first refinement 100 jelly body
+def refine_placed_model_jelly_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterMR.pdb")
+  prefix = homologue.path("refmac_afterMR_Buccaneer")
+  result = tasks.refine_jelly(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac_afterMR_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac_afterMR_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac_afterMR_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac_afterMR_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+#refine MR-Buccaneer solution using 0 cycles; first refinement 100 jelly body
+def refine_placed_model_jelly_buccaneer_zero(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterMR.pdb")
+  prefix = homologue.path("refmac0_afterMR_Buccaneer")
+  result = tasks.refine_zero(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result 
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac0_afterMR_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac0_afterMR_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac0_afterMR_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac0_afterMR_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+##########################################################################################
+# Refinement after Buccaneer after Molrep and first refinement
+##########################################################################################
+#refine Molrep-Buccaneer solution using 100 cycles jelly body; first refinement 0-cycles
+def refine_molrep_model_zero_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterMolrep0.pdb")
+  prefix = homologue.path("refmac_afterMolrep_Buccaneer")
+  result = tasks.refine_jelly(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac_afterMolrep0_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac_afterMolrep0_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac_afterMolrep0_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac_afterMolrep0_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+#refine Molrep-Buccaneer solution using 0 cycles; first refinement 0-cycles
+def refine_molrep_model_zero_buccaneer_zero(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterMolrep0.pdb")
+  prefix = homologue.path("refmac0_afterMolrep0_Buccaneer")
+  result = tasks.refine_zero(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result 
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac0_afterMolrep0_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac0_afterMolrep0_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac0_afterMolrep0_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac0_afterMolrep0_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+#refine Molrep-Buccaneer solution using 100 cycles jelly body; first refinement 100 jelly body
+def refine_molrep_model_jelly_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterMolrep.pdb")
+  prefix = homologue.path("refmac_afterMolrep_Buccaneer")
+  result = tasks.refine_jelly(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac_afterMolrep_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac_afterMolrep_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac_afterMolrep_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac_afterMolrep_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+#refine Molrep-Buccaneer solution using 0 cycles; first refinement 100 jelly body
+def refine_molrep_model_jelly_buccaneer_zero(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterMolrep.pdb")
+  prefix = homologue.path("refmac0_afterMolrep_Buccaneer")
+  result = tasks.refine_zero(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result 
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac0_afterMolrep_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac0_afterMolrep_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac0_afterMolrep_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac0_afterMolrep_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+##########################################################################################
+# Refinement after Buccaneer after Prosmart and first refinement
+##########################################################################################
+#refine Prosmart-Buccaneer solution using 100 cycles jelly body; first refinement 0-cycles
+def refine_prosmart_model_zero_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterSSM0.pdb")
+  prefix = homologue.path("refmac_afterSSM0_Buccaneer")
+  result = tasks.refine_jelly(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac_afterSSM0_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac_afterSSM0_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac_afterSSM0_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac_afterSSM0_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+#refine Prosmart-Buccaneer solution using 0 cycles; first refinement 0-cycles
+def refine_prosmart_model_zero_buccaneer_zero(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterSSM0.pdb")
+  prefix = homologue.path("refmac0_afterSSM0_Buccaneer")
+  result = tasks.refine_zero(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result 
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac0_afterSSM0_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac0_afterSSM0_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac0_afterSSM0_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac0_afterSSM0_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+#refine Prosmart-Buccaneer solution using 100 cycles jelly body; first refinement 100 jelly body
+def refine_prosmart_model_jelly_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterSSM.pdb")
+  prefix = homologue.path("refmac_afterSSM_Buccaneer")
+  result = tasks.refine_jelly(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac_afterSSM_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac_afterSSM_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac_afterSSM_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac_afterSSM_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+#refine Prosmart-Buccaneer solution using 0 cycles; first refinement 100 jelly body
+def refine_prosmart_model_jelly_buccaneer_zero(key, homologue, args):
+  hklin = homologue.chain.structure.path("refmac.mtz")
+  xyzin = homologue.path("buccaneer_afterSSM.pdb")
+  prefix = homologue.path("refmac0_afterSSM_Buccaneer")
+  result = tasks.refine_zero(hklin, xyzin, prefix)
+  homologue.jobs["refmac"] = result 
+  if "final_rfree" in result:
+    homologue.add_metadata("final_rfree_refmac0_afterSSM_Buccaneer", result["final_rfree"])
+    homologue.add_metadata("final_rwork_refmac0_afterSSM_Buccaneer", result["final_rwork"])
+    homologue.add_metadata("initial_rfree_refmac0_afterSSM_Buccaneer", result["initial_rfree"])
+    homologue.add_metadata("initial_rwork_refmac0_afterSSM_Buccaneer", result["initial_rwork"])
+  return key, homologue
+
+##########################################################################################
+# Combine phases after refinement and Buccaneer after MR and refine
+##########################################################################################
+#combine phases PDB-redo target Buccaneer_afterMR_jelly_body
+def write_combined_mtz_afterMR_buccaneer_jelly(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac_afterMR_Buccaneer")
+  if not os.path.exists(homologue.path("refmac_afterMR_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac_afterMR_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+#combine phases PDB-redo target Buccaneer_afterMR_zero
+def write_combined_mtz_afterMR_buccaneer_zero(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac0_afterMR_Buccaneer")
+  if not os.path.exists(homologue.path("refmac0_afterMR_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac0_afterMR_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+#combine phases PDB-redo target Buccaneer_afterMR0_jelly_body
+def write_combined_mtz_afterMR0_buccaneer_jelly(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac_afterMR0_Buccaneer")
+  if not os.path.exists(homologue.path("refmac_afterMR0_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac_afterMR0_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+#combine phases PDB-redo target Buccaneer_afterMR0_zero
+def write_combined_mtz_afterMR0_buccaneer_zero(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac0_afterMR0_Buccaneer")
+  if not os.path.exists(homologue.path("refmac0_afterMR0_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac0_afterMR0_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+##########################################################################################
+# Combine phases after refinement and Buccaneer after Molrep and refine
+##########################################################################################
+#combine phases PDB-redo target Buccaneer_Molrep_jelly_body
+def write_combined_mtz_afterMolrep_buccaneer_jelly(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac_afterMolrep_Buccaneer")
+  if not os.path.exists(homologue.path("refmac_afterMolrep_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac_afterMolrep_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+#combine phases PDB-redo target Buccaneer_Molrep_zero
+def write_combined_mtz_afterMolrep_buccaneer_zero(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac0_afterMolrep_Buccaneer")
+  if not os.path.exists(homologue.path("refmac0_afterMolrep_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac0_afterMolrep_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+#combine phases PDB-redo target Buccaneer_Molrep0_jelly_body
+def write_combined_mtz_afterMolrep0_buccaneer_jelly(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac_afterMolrep0_Buccaneer")
+  if not os.path.exists(homologue.path("refmac_afterMolrep0_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac_afterMolrep0_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+#combine phases PDB-redo target Buccaneer_Molrep0_zero
+def write_combined_mtz_afterMolrep0_buccaneer_zero(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac0_afterMolrep0_Buccaneer")
+  if not os.path.exists(homologue.path("refmac0_afterMolrep0_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac0_afterMolrep0_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+##########################################################################################
+# Combine phases after refinement and Buccaneer after Prosmart and refine
+##########################################################################################
+#combine phases PDB-redo target Buccaneer_SSM_jelly_body
+def write_combined_mtz_afterSSM0_buccaneer_jelly(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac_afterSSM0_Buccaneer")
+  if not os.path.exists(homologue.path("refmac_afterSSM0_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac_afterSSM0_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+#combine phases PDB-redo target Buccaneer_SSM_zero
+def write_combined_mtz_afterSSM0_buccaneer_zero(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac0_afterSSM0_Buccaneer")
+  if not os.path.exists(homologue.path("refmac0_afterSSM0_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac0_afterSSM0_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+#combine phases PDB-redo target Buccaneer_SSM_jelly_body
+def write_combined_mtz_afterSSM_buccaneer_jelly(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac_afterSSM_Buccaneer")
+  if not os.path.exists(homologue.path("refmac_afterSSM_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac_afterSSM_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+#combine phases PDB-redo target Buccaneer_SSM_zero
+def write_combined_mtz_afterSSM_buccaneer_zero(key, homologue, args):
+  prefix = homologue.path("gemmijoin_refmac0_afterSSM_Buccaneer")
+  if not os.path.exists(homologue.path("refmac0_afterSSM_Buccaneer.mtz")):
+    pass
+  else:    
+    result = tasks.combine_mtz(prefix, [
+      (homologue.chain.structure.path("refmac.mtz")),
+      (homologue.path("refmac0_afterSSM_Buccaneer.mtz"))])
+    homologue.jobs["gemmijoin"] = result
+  return key, homologue
+
+##########################################################################################
+# Compare phases after refinement and Buccaneer after MR and refine
+##########################################################################################
+#compare phases PDB-redo target MR_jelly_body
+def compare_phases_afterMR_jelly(key, homologue, args):
+  hklin = homologue.path("gemmijoin_afterMR_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_afterMR_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterMR_", result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterMR", result["f_map_correlation"])
   return key, homologue
 
 #####################################################################
@@ -569,11 +929,18 @@ def buccaneer_ssm_after_refmac_jelly(key, homologue, args):
 
 def run_mr_pipelines(key, homologue, args):
   if not os.path.exists(homologue.path("JOB_IS_DONE.txt")):
-       
+    # superpose homologue on to PDB-redo target (ground truth); use sculptor to trim model
+    # to use in MR
     superpose_homologue(key, homologue, args)
     prepare_sculptor_alignment(key, homologue, args)
     trim_model(key, homologue, args)
-    
+
+    # superpose homologue on to PDB-redo target using Prosmart; refine placed model with 0-cycles and
+    # 100 cycles jelly body in Refmac against PDB-redo ground truth MTZ;
+    #combine the refinement phases (from 0-cycles as well
+    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+    # and PDB-redo ground truth
     superpose_prosmart(key, homologue, args)
     refine_ssm_model_zero(key, homologue, args)
     write_combined_mtz_afterSSM_zero(key, homologue, args)
@@ -581,7 +948,13 @@ def run_mr_pipelines(key, homologue, args):
     refine_ssm_model_jelly(key, homologue, args)
     write_combined_mtz_afterSSM_jelly(key, homologue, args)
     compare_phases_afterSSM_jelly(key, homologue, args)
-    
+
+    # superpose homologue on to PDB-redo target using Molrep; refine placed model with 0-cycles and
+    # 100 cycles jelly body in Refmac against PDB-redo ground truth MTZ;
+    #combine the refinement phases (from 0-cycles as well
+    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+    # and PDB-redo ground truth
     superpose_molrep(key, homologue, args)
     refine_molrep_model_zero(key, homologue, args)
     write_combined_mtz_afterMolrep_zero(key, homologue, args)
@@ -589,7 +962,13 @@ def run_mr_pipelines(key, homologue, args):
     refine_molrep_model_jelly(key, homologue, args)
     write_combined_mtz_afterMolrep_jelly(key, homologue, args)
     compare_phases_afterMolrep_jelly(key, homologue, args)
-    
+
+    # MR of homologue on to PDB-redo target using Phaser; refine placed model with 0-cycles and
+    # 100 cycles jelly body in Refmac against PDB-redo ground truth MTZ;
+    # combine the refinement phases (from 0-cycles as well
+    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+    # and PDB-redo ground truth
     mr(key, homologue, args)
     refine_placed_model_zero(key, homologue, args)
     write_combined_mtz_afterMR_zero(key, homologue, args)
@@ -608,12 +987,84 @@ def run_mr_pipelines(key, homologue, args):
 
   if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")):
     print("Starting Buccaneer")
+    # Phaser-placed model after 0-cycle Refmac refinement; built with Buccaneer;
+    # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
+    # MTZ;
+    # combine the refinement phases (from 0-cycles as well
+    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+    # and PDB-redo ground truth
     buccaneer_mr_after_refmac_zero(key, homologue, args)
+    refine_placed_model_zero_buccaneer_zero(key, homologue, args)
+    write_combined_mtz_afterMR0_buccaneer_zero(key, homologue, args)
+    refine_placed_model_zero_buccaneer_jelly(key, homologue, args)
+    write_combined_mtz_afterMR0_buccaneer_jelly(key, homologue, args)
+    
+    # Phaser-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
+    # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
+    # MTZ;
+    # combine the refinement phases (from 0-cycles as well
+    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+    # and PDB-redo ground truth
     buccaneer_mr_after_refmac_jelly(key, homologue, args)
+    refine_placed_model_jelly_buccaneer_zero(key, homologue, args)
+    write_combined_mtz_afterMR_buccaneer_zero(key, homologue, args)
+    refine_placed_model_jelly_buccaneer_jelly(key, homologue, args)
+    write_combined_mtz_afterMR_buccaneer_jelly(key, homologue, args)
+
+    # Molrep-placed model after 0-cycle Refmac refinement; built with Buccaneer;
+    # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
+    # MTZ;
+    # combine the refinement phases (from 0-cycles as well
+    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+    # and PDB-redo ground truth
     buccaneer_molrep_after_refmac_zero(key, homologue, args)
+    refine_molrep_model_zero_buccaneer_zero(key, homologue, args)
+    write_combined_mtz_afterMolrep0_buccaneer_zero(key, homologue, args)
+    refine_molrep_model_zero_buccaneer_jelly(key, homologue, args)
+    write_combined_mtz_afterMolrep0_buccaneer_jelly(key, homologue, args)
+
+    # Molrep-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
+    # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
+    # MTZ;
+    # combine the refinement phases (from 0-cycles as well
+    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+    # and PDB-redo ground truth
     buccaneer_molrep_after_refmac_jelly(key, homologue, args)
+    refine_molrep_model_jelly_buccaneer_zero(key, homologue, args)
+    write_combined_mtz_afterMolrep_buccaneer_zero(key, homologue, args)
+    refine_molrep_model_jelly_buccaneer_jelly(key, homologue, args)
+    write_combined_mtz_afterMolrep_buccaneer_jelly(key, homologue, args)
+
+    # Prosmart-placed model after 0-cycle Refmac refinement; built with Buccaneer;
+    # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
+    # MTZ;
+    # combine the refinement phases (from 0-cycles as well
+    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+    # and PDB-redo ground truth
     buccaneer_ssm_after_refmac_zero(key, homologue, args)
+    refine_prosmart_model_zero_buccaneer_zero(key, homologue, args)
+    write_combined_mtz_afterSSM0_buccaneer_zero(key, homologue, args)
+    refine_prosmart_model_zero_buccaneer_jelly(key, homologue, args)
+    write_combined_mtz_afterSSM0_buccaneer_jelly(key, homologue, args)
+
+    # Prosmart-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
+    # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
+    # MTZ;
+    # combine the refinement phases (from 0-cycles as well
+    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+    # and PDB-redo ground truth
     buccaneer_ssm_after_refmac_jelly(key, homologue, args)
+    refine_prosmart_model_jelly_buccaneer_zero(key, homologue, args)
+    write_combined_mtz_afterSSM_buccaneer_zero(key, homologue, args)
+    refine_prosmart_model_jelly_buccaneer_jelly(key, homologue, args)
+    write_combined_mtz_afterSSM_buccaneer_jelly(key, homologue, args)
+    
     with open(homologue.path("BUILD_WITH_BUCCANEER.txt"), "w") as out_file:
       line = "job is done"
       out_file.writelines(line)
