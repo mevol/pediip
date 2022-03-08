@@ -401,6 +401,7 @@ def buccaneer_mr_after_refmac_zero(key, homologue, args):
   wrk_hl = "PHWT,FOM"
   metafile = homologue.path("metadata.json")
   meta_split = metafile.split("/")
+  print(meta_split)
   print(metafile)
   #"deposited.fasta"
   seqin = glob.glob(homologue.path(os.path.join(
