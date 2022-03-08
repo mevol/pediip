@@ -515,7 +515,7 @@ def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
       if line.strip().startswith("$TEXT:Result: $$ $$"):
         print(line)
         result1 = list(islice(f, 2))
-        print(results1)
+        print(result1)
 #          lastmatch = line
 #      if lastmatch is not None:
 #        print(lastmatch)
