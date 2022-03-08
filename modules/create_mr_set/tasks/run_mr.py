@@ -401,7 +401,9 @@ def buccaneer_mr_after_refmac_zero(key, homologue, args):
   wrk_hl = "PHWT,FOM"
   #seqin = structure.path("deposited.fasta") #NEED TO PASS A SEQUENCE PATH
   prefix = homologue.path("buccaneer_afterMR0")
-  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
+
   homologue.jobs["buccaneer"] = result
   if "final_rfree" in result:
     homologue.add_metadata("final_rfree_buccaneer_afterMR0", result["final_rfree"])
@@ -418,7 +420,9 @@ def buccaneer_mr_after_refmac_jelly(key, homologue, args):
   wrk_hl = "PHWT,FOM"
   #seqin = structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMR")
-  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+#  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
+
   homologue.jobs["buccaneer"] = result
   if "final_rfree" in result:
     homologue.add_metadata("final_rfree_buccaneer_afterMR", result["final_rfree"])
@@ -435,7 +439,9 @@ def buccaneer_molrep_after_refmac_zero(key, homologue, args):
   wrk_hl = "PHWT,FOM"
   #seqin = structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMolrep0")
-  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+#  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
+
   homologue.jobs["buccaneer"] = result
   if "final_rfree" in result:
     homologue.add_metadata("final_rfree_buccaneer_afterMolrep0", result["final_rfree"])
@@ -453,7 +459,9 @@ def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
   wrk_hl = "PHWT,FOM"
   #seqin = structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMolrep")
-  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+#  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
+
   homologue.jobs["buccaneer"] = result
   if "final_rfree" in result:
     homologue.add_metadata("final_rfree_buccaneer_afterMolrep", result["final_rfree"])
