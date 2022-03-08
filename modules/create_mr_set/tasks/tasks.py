@@ -488,8 +488,8 @@ def trim_model(model, chain, alignment, prefix):
   return result
 
 
-#def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
-def buccaneer(hklin, xyzin, fo, wrk_hl, prefix):
+def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
+#def buccaneer(hklin, xyzin, fo, wrk_hl, prefix):
 
   """Running automated model building with Buccaneer"""
   result = {
@@ -502,7 +502,7 @@ def buccaneer(hklin, xyzin, fo, wrk_hl, prefix):
     "-pdbin", xyzin,
     "-colin-fo", fo,
     "-colin-phifom", wrk_hl,
-#    "-seqin", seqin,
+    "-seqin", seqin,
   ], stdout=result["stdout"], stderr=result["stderr"])
   with open(result["stdout"]) as f:
     for line in f:

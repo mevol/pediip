@@ -399,10 +399,10 @@ def buccaneer_mr_after_refmac_zero(key, homologue, args):
   xyzin = homologue.path("refmac_afterMR0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  #seqin = structure.path("deposited.fasta") #NEED TO PASS A SEQUENCE PATH
+  seqin = homologue.path(os.path.join("prosmart/Output_Files/Sequence", "refmac*.txt"))
   prefix = homologue.path("buccaneer_afterMR0")
-  #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
-  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
 
   homologue.jobs["buccaneer"] = result
   if "final_rfree" in result:
@@ -418,10 +418,10 @@ def buccaneer_mr_after_refmac_jelly(key, homologue, args):
   xyzin = homologue.path("refmac_afterMR.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  #seqin = structure.path("deposited.fasta")
+  seqin = homologue.path(os.path.join("prosmart/Output_Files/Sequence", "refmac*.txt"))
   prefix = homologue.path("buccaneer_afterMR")
-#  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
-  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
 
   homologue.jobs["buccaneer"] = result
   if "final_rfree" in result:
@@ -437,10 +437,10 @@ def buccaneer_molrep_after_refmac_zero(key, homologue, args):
   xyzin = homologue.path("refmac_afterMolrep0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  #seqin = structure.path("deposited.fasta")
+  seqin = homologue.path(os.path.join("prosmart/Output_Files/Sequence", "refmac*.txt"))
   prefix = homologue.path("buccaneer_afterMolrep0")
-#  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
-  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
 
   homologue.jobs["buccaneer"] = result
   if "final_rfree" in result:
@@ -452,15 +452,15 @@ def buccaneer_molrep_after_refmac_zero(key, homologue, args):
 
 #build Molrep solution after 100-cycles jelly body
 def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
-  print(2222222, homologue.path(os.path.join("prosmart/Output_Files/Sequence", "refmac*.txt")))
+  print(2222222)
   hklin = homologue.path("refmac_afterMolrep.mtz")
   xyzin = homologue.path("refmac_afterMolrep.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  #seqin = structure.path("deposited.fasta")
+  seqin = homologue.path(os.path.join("prosmart/Output_Files/Sequence", "refmac*.txt"))
   prefix = homologue.path("buccaneer_afterMolrep")
-#  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
-  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
 
   homologue.jobs["buccaneer"] = result
   if "final_rfree" in result:
