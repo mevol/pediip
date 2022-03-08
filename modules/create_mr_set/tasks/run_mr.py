@@ -426,10 +426,11 @@ def buccaneer_mr_after_refmac_jelly(key, homologue, args):
   xyzin = homologue.path("refmac_afterMR.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  metafile = homologue.path("metadata.json")
-  meta_split = metafile.split("/")
-  path_stem = meta_split[0] + "/" + meta_split[1]
-  seqin = os.path.join(path_stem, "deposited.fasta")
+#  metafile = homologue.path("metadata.json")
+#  meta_split = metafile.split("/")
+#  path_stem = meta_split[0] + "/" + meta_split[1]
+#  seqin = os.path.join(path_stem, "deposited.fasta")
+  seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMR")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
@@ -452,10 +453,11 @@ def buccaneer_molrep_after_refmac_zero(key, homologue, args):
   xyzin = homologue.path("refmac_afterMolrep0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  metafile = homologue.path("metadata.json")
-  meta_split = metafile.split("/")
-  path_stem = meta_split[0] + "/" + meta_split[1]
-  seqin = os.path.join(path_stem, "deposited.fasta")
+#  metafile = homologue.path("metadata.json")
+#  meta_split = metafile.split("/")
+#  path_stem = meta_split[0] + "/" + meta_split[1]
+#  seqin = os.path.join(path_stem, "deposited.fasta")
+  seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMolrep0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
@@ -475,10 +477,11 @@ def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
   xyzin = homologue.path("refmac_afterMolrep.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  metafile = homologue.path("metadata.json")
-  meta_split = metafile.split("/")
-  path_stem = meta_split[0] + "/" + meta_split[1]
-  seqin = os.path.join(path_stem, "deposited.fasta")
+#  metafile = homologue.path("metadata.json")
+#  meta_split = metafile.split("/")
+#  path_stem = meta_split[0] + "/" + meta_split[1]
+#  seqin = os.path.join(path_stem, "deposited.fasta")
+  seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMolrep")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
@@ -501,10 +504,11 @@ def buccaneer_ssm_after_refmac_zero(key, homologue, args):
   xyzin = homologue.path("refmac_afterSSM0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  metafile = homologue.path("metadata.json")
-  meta_split = metafile.split("/")
-  path_stem = meta_split[0] + "/" + meta_split[1]
-  seqin = os.path.join(path_stem, "deposited.fasta")
+#  metafile = homologue.path("metadata.json")
+#  meta_split = metafile.split("/")
+#  path_stem = meta_split[0] + "/" + meta_split[1]
+#  seqin = os.path.join(path_stem, "deposited.fasta")
+  seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterSSM0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
@@ -524,10 +528,11 @@ def buccaneer_ssm_after_refmac_jelly(key, homologue, args):
   xyzin = homologue.path("refmac_afterSSM.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-  metafile = homologue.path("metadata.json")
-  meta_split = metafile.split("/")
-  path_stem = meta_split[0] + "/" + meta_split[1]
-  seqin = os.path.join(path_stem, "deposited.fasta")
+#  metafile = homologue.path("metadata.json")
+#  meta_split = metafile.split("/")
+#  path_stem = meta_split[0] + "/" + meta_split[1]
+#  seqin = os.path.join(path_stem, "deposited.fasta")
+  seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterSSM")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
@@ -987,6 +992,7 @@ def run_mr_pipelines(key, homologue, args):
 
   if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")):
     print("Starting Buccaneer")
+    print(key, homologue)
     # Phaser-placed model after 0-cycle Refmac refinement; built with Buccaneer;
     # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
     # MTZ;

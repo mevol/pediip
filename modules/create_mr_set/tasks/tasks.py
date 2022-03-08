@@ -524,7 +524,7 @@ def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
         unique = split3[0]
         residue_completeness = split4[-1].strip("%")
         chain_completeness = split5[-2].strip("%")
-        print(chain_completeness)
+#        print(chain_completeness)
         result["num_res_built"] = int(built)
         result["num_fragments"] = int(fragments)
         result["longest_fragments"] = int(longest)
