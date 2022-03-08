@@ -400,7 +400,7 @@ def buccaneer_mr_after_refmac_zero(key, homologue, args):
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
   seqin = glob.glob(homologue.path(os.path.join(
-                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))
+                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
   prefix = homologue.path("buccaneer_afterMR0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
@@ -420,7 +420,7 @@ def buccaneer_mr_after_refmac_jelly(key, homologue, args):
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
   seqin = glob.glob(homologue.path(os.path.join(
-                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))
+                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
   prefix = homologue.path("buccaneer_afterMR")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
@@ -440,7 +440,7 @@ def buccaneer_molrep_after_refmac_zero(key, homologue, args):
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
   seqin = glob.glob(homologue.path(os.path.join(
-                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))
+                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
   prefix = homologue.path("buccaneer_afterMolrep0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
@@ -461,7 +461,7 @@ def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
   seqin = glob.glob(homologue.path(os.path.join(
-                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))
+                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
   prefix = homologue.path("buccaneer_afterMolrep")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
