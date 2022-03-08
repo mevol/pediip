@@ -10,6 +10,9 @@ import shutil
 import modules.create_mr_set.utils.utils as utils
 import uuid
 import xml.etree.ElementTree as ET
+from itertools import islice
+from linecache import getline
+
 
 def add_freer_flag(hklin, prefix):
   result = {
@@ -493,7 +496,7 @@ def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
 
   """Running automated model building with Buccaneer"""
   result = {
-    "xyzout": "%s.pdb" % prefix,
+#    "xyzout": "%s.pdb" % prefix,
     "stdout": "%s.log" % prefix,
     "stderr": "%s.err" % prefix,
   }
@@ -503,11 +506,19 @@ def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
     "-colin-fo", fo,
     "-colin-phifom", wrk_hl,
     "-seqin", seqin,
+    "-pdbout", "%s.pdb" % prefix,
   ], stdout=result["stdout"], stderr=result["stderr"])
+#  lastmatch = None
   with open(result["stdout"]) as f:
-    for line in f:
+    for ind, line in enumerate(f, 1):
       print(line)
-#      if "Overall statistics:" in line:
+        if line.strip().startswith("$TEXT:Result: $$ $$"):
+          print(line)
+          result1 = list(islice(f, 2))
+          print(results1)
+#          lastmatch = line
+#      if lastmatch is not None:
+#        print(lastmatch)
 #        headers = next(f).split()
 #        values = next(f).split()
 #        result["mean_phase_error"] = float(values[headers.index("w1<dphi>")])
