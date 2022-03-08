@@ -399,6 +399,8 @@ def buccaneer_mr_after_refmac_zero(key, homologue, args):
   xyzin = homologue.path("refmac_afterMR0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
+  metafile = homologue.path("metadata.json")
+  print(metafile)
   seqin = glob.glob(homologue.path(os.path.join(
                                    "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
   prefix = homologue.path("buccaneer_afterMR0")
@@ -593,6 +595,7 @@ def run_mr_pipelines(key, homologue, args):
       line = "job is done"
       out_file.writelines(line)
   else:
+    print("\n")
     print("MR and SSM already done.")
     pass
 
