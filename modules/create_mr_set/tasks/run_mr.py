@@ -407,8 +407,9 @@ def buccaneer_mr_after_refmac_zero(key, homologue, args):
   print(metafile)
   
   #"deposited.fasta"
-  seqin = glob.glob(homologue.path(os.path.join(
-                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
+  seqin = os.path.join(path_stem, "deposited.fasta")
+  #seqin = glob.glob(homologue.path(os.path.join(
+  #                                 "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
   prefix = homologue.path("buccaneer_afterMR0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
   homologue.jobs["buccaneer"] = result
