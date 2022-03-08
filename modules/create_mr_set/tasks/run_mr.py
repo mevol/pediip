@@ -403,14 +403,15 @@ def buccaneer_mr_after_refmac_zero(key, homologue, args):
                                    "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
   prefix = homologue.path("buccaneer_afterMR0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
-  #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
-
   homologue.jobs["buccaneer"] = result
-  if "final_rfree" in result:
-    homologue.add_metadata("final_rfree_buccaneer_afterMR0", result["final_rfree"])
-    homologue.add_metadata("final_rwork_buccaneer_afterMR0", result["final_rwork"])
-    homologue.add_metadata("initial_rfree_buccaneer_afterMR0", result["initial_rfree"])
-    homologue.add_metadata("initial_rwork_buccaneer_afterMR0", result["initial_rwork"])
+  if "num_res_built" in result:
+    homologue.add_metadata("num_res_built_afterMR0", result["num_res_built"])
+    homologue.add_metadata("num_fragments_afterMR0", result["num_fragments"])
+    homologue.add_metadata("longest_fragments_afterMR0", result["longest_fragments"])
+    homologue.add_metadata("num_res_sequenced_afterMR0", result["num_res_sequenced"])
+    homologue.add_metadata("num_res_unique_afterMR0", result["num_res_unique"])
+    homologue.add_metadata("percent_res_complete_afterMR0", result["percent_res_complete"])
+    homologue.add_metadata("percent_chain_complete_afterMR0", result["percent_chain_complete"])
   return key, homologue
 
 #build MR solution after 100-cycles jelly body
@@ -423,14 +424,15 @@ def buccaneer_mr_after_refmac_jelly(key, homologue, args):
                                    "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
   prefix = homologue.path("buccaneer_afterMR")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
-  #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
-
   homologue.jobs["buccaneer"] = result
-  if "final_rfree" in result:
-    homologue.add_metadata("final_rfree_buccaneer_afterMR", result["final_rfree"])
-    homologue.add_metadata("final_rwork_buccaneer_afterMR", result["final_rwork"])
-    homologue.add_metadata("initial_rfree_buccaneer_afterMR", result["initial_rfree"])
-    homologue.add_metadata("initial_rwork_buccaneer_afterMR", result["initial_rwork"])
+  if "num_res_built" in result:
+    homologue.add_metadata("num_res_built_afterMR", result["num_res_built"])
+    homologue.add_metadata("num_fragments_afterMR", result["num_fragments"])
+    homologue.add_metadata("longest_fragments_afterMR", result["longest_fragments"])
+    homologue.add_metadata("num_res_sequenced_afterMR", result["num_res_sequenced"])
+    homologue.add_metadata("num_res_unique_afterMR", result["num_res_unique"])
+    homologue.add_metadata("percent_res_complete_afterMR", result["percent_res_complete"])
+    homologue.add_metadata("percent_chain_complete_afterMR", result["percent_chain_complete"])
   return key, homologue
 
 #build Molrep solution after 0-cycles jelly body
@@ -443,19 +445,19 @@ def buccaneer_molrep_after_refmac_zero(key, homologue, args):
                                    "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
   prefix = homologue.path("buccaneer_afterMolrep0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
-  #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
-
   homologue.jobs["buccaneer"] = result
-  if "final_rfree" in result:
-    homologue.add_metadata("final_rfree_buccaneer_afterMolrep0", result["final_rfree"])
-    homologue.add_metadata("final_rwork_buccaneer_afterMolrep0", result["final_rwork"])
-    homologue.add_metadata("initial_rfree_buccaneer_afterMolrep0", result["initial_rfree"])
-    homologue.add_metadata("initial_rwork_buccaneer_afterMolrep0", result["initial_rwork"])
+  if "num_res_built" in result:
+    homologue.add_metadata("num_res_built_afterMolrep0", result["num_res_built"])
+    homologue.add_metadata("num_fragments_afterMolrep0", result["num_fragments"])
+    homologue.add_metadata("longest_fragments_afterMolrep0", result["longest_fragments"])
+    homologue.add_metadata("num_res_sequenced_afterMolrep0", result["num_res_sequenced"])
+    homologue.add_metadata("num_res_unique_afterMolrep0", result["num_res_unique"])
+    homologue.add_metadata("percent_res_complete_afterMolrep0", result["percent_res_complete"])
+    homologue.add_metadata("percent_chain_complete_afterMolrep0", result["percent_chain_complete"])
   return key, homologue
 
 #build Molrep solution after 100-cycles jelly body
 def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
-  print(2222222)
   hklin = homologue.path("refmac_afterMolrep.mtz")
   xyzin = homologue.path("refmac_afterMolrep.pdb")
   fo = "FP,SIGFP"
@@ -464,14 +466,57 @@ def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
                                    "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
   prefix = homologue.path("buccaneer_afterMolrep")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
-  #result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, prefix)
-
   homologue.jobs["buccaneer"] = result
-  if "final_rfree" in result:
-    homologue.add_metadata("final_rfree_buccaneer_afterMolrep", result["final_rfree"])
-    homologue.add_metadata("final_rwork_buccaneer_afterMolrep", result["final_rwork"])
-    homologue.add_metadata("initial_rfree_buccaneer_afterMolrep", result["initial_rfree"])
-    homologue.add_metadata("initial_rwork_buccaneer_afterMolrep", result["initial_rwork"])
+  if "num_res_built" in result:
+    homologue.add_metadata("num_res_built_afterMolrep", result["num_res_built"])
+    homologue.add_metadata("num_fragments_afterMolrep", result["num_fragments"])
+    homologue.add_metadata("longest_fragments_afterMolrep", result["longest_fragments"])
+    homologue.add_metadata("num_res_sequenced_afterMolrep", result["num_res_sequenced"])
+    homologue.add_metadata("num_res_unique_afterMolrep", result["num_res_unique"])
+    homologue.add_metadata("percent_res_complete_afterMolrep", result["percent_res_complete"])
+    homologue.add_metadata("percent_chain_complete_afterMolrep", result["percent_chain_complete"])
+  return key, homologue
+
+#build Prosmart solution after 0-cycles jelly body
+def buccaneer_ssm_after_refmac_zero(key, homologue, args):
+  hklin = homologue.path("refmac_afterSSM0.mtz")
+  xyzin = homologue.path("refmac_afterSSM0.pdb")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT,FOM"
+  seqin = glob.glob(homologue.path(os.path.join(
+                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
+  prefix = homologue.path("buccaneer_afterSSM0")
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  homologue.jobs["buccaneer"] = result
+  if "num_res_built" in result:
+    homologue.add_metadata("num_res_built_afterSSM0", result["num_res_built"])
+    homologue.add_metadata("num_fragments_afterSSM0", result["num_fragments"])
+    homologue.add_metadata("longest_fragments_afterSSM0", result["longest_fragments"])
+    homologue.add_metadata("num_res_sequenced_afterSSM0", result["num_res_sequenced"])
+    homologue.add_metadata("num_res_unique_afterSSM0", result["num_res_unique"])
+    homologue.add_metadata("percent_res_complete_afterSSM0", result["percent_res_complete"])
+    homologue.add_metadata("percent_chain_complete_afterSSM0", result["percent_chain_complete"])
+  return key, homologue
+
+#build Prosmart solution after 100-cycles jelly body
+def buccaneer_ssm_after_refmac_jelly(key, homologue, args):
+  hklin = homologue.path("refmac_afterSSM.mtz")
+  xyzin = homologue.path("refmac_afterSSM.pdb")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT,FOM"
+  seqin = glob.glob(homologue.path(os.path.join(
+                                   "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
+  prefix = homologue.path("buccaneer_afterSSM")
+  result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
+  homologue.jobs["buccaneer"] = result
+  if "num_res_built" in result:
+    homologue.add_metadata("num_res_built_afterSSM", result["num_res_built"])
+    homologue.add_metadata("num_fragments_afterSSM", result["num_fragments"])
+    homologue.add_metadata("longest_fragments_afterSSM", result["longest_fragments"])
+    homologue.add_metadata("num_res_sequenced_afterSSM", result["num_res_sequenced"])
+    homologue.add_metadata("num_res_unique_afterSSM", result["num_res_unique"])
+    homologue.add_metadata("percent_res_complete_afterSSM", result["percent_res_complete"])
+    homologue.add_metadata("percent_chain_complete_afterSSM", result["percent_chain_complete"])
   return key, homologue
 
 #####################################################################
@@ -557,6 +602,8 @@ def run_mr_pipelines(key, homologue, args):
     buccaneer_mr_after_refmac_jelly(key, homologue, args)
     buccaneer_molrep_after_refmac_zero(key, homologue, args)
     buccaneer_molrep_after_refmac_jelly(key, homologue, args)
+    buccaneer_ssm_after_refmac_zero(key, homologue, args)
+    buccaneer_ssm_after_refmac_jelly(key, homologue, args)
     with open(homologue.path("BUILD_WITH_BUCCANEER.txt"), "w") as out_file:
       line = "job is done"
       out_file.writelines(line)
