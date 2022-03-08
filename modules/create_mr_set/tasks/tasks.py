@@ -511,20 +511,30 @@ def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
 #  lastmatch = None
   with open(result["stdout"]) as f:
     for ind, line in enumerate(f, 1):
-      print(line)
+#      print(line)
       if line.strip().startswith("$TEXT:Result: $$ $$"):
-        print(line)
+#        print(line)
         result = list(islice(f, 5))
+        print(result)
         split1 = result[0].split()
         split2 = result[1].split()
         split3 = result[2].split()
         split4 = result[3].split()
         split5 = result[4].split()
-        print(split1)
-        print(split2)
-        print(split3)
-        print(split4)
-        print(split5)
+        built = split1[0]
+        fragments = split1[5]
+        longest = split1[-2]
+        sequenced = split2[0]
+        unique = split3[0]
+        residue_completeness = split4[-1].strip("%")
+        chain_completeness = split5[-1].strip("%")
+        print(built)
+        print(fragments)
+        print(longest)
+        print(sequenced)
+        print(unique)
+        print(residue_completeness)
+        print(chain_completeness)
 #          lastmatch = line
 #      if lastmatch is not None:
 #        print(lastmatch)
