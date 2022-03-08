@@ -496,7 +496,6 @@ def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
 
   """Running automated model building with Buccaneer"""
   result = {
-#    "xyzout": "%s.pdb" % prefix,
     "stdout": "%s.log" % prefix,
     "stderr": "%s.err" % prefix,
   }
@@ -508,38 +507,29 @@ def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
     "-seqin", seqin,
     "-pdbout", "%s.pdb" % prefix,
   ], stdout=result["stdout"], stderr=result["stderr"])
-#  lastmatch = None
   with open(result["stdout"]) as f:
     for ind, line in enumerate(f, 1):
-#      print(line)
       if line.strip().startswith("$TEXT:Result: $$ $$"):
-#        print(line)
-        result = list(islice(f, 5))
-        print(result)
-        split1 = result[0].split()
-        split2 = result[1].split()
-        split3 = result[2].split()
-        split4 = result[3].split()
-        split5 = result[4].split()
+        stats = list(islice(f, 5))
+        print(stats)
+        split1 = stats[0].split()
+        split2 = stats[1].split()
+        split3 = stats[2].split()
+        split4 = stats[3].split()
+        split5 = stats[4].split()
         built = split1[0]
         fragments = split1[5]
         longest = split1[-2]
         sequenced = split2[0]
         unique = split3[0]
         residue_completeness = split4[-1].strip("%")
-        chain_completeness = split5[-1].strip("%")
-        print(built)
-        print(fragments)
-        print(longest)
-        print(sequenced)
-        print(unique)
-        print(residue_completeness)
+        chain_completeness = split5[-2].strip("%")
         print(chain_completeness)
-#          lastmatch = line
-#      if lastmatch is not None:
-#        print(lastmatch)
-#        headers = next(f).split()
-#        values = next(f).split()
-#        result["mean_phase_error"] = float(values[headers.index("w1<dphi>")])
-#        result["f_map_correlation"] = float(values[headers.index("wFcorr")])
+        result["num_res_built"] = int(built)
+        result["num_fragments"] = int(fragments)
+        result["longest_fragments"] = int(longest)
+        result["num_res_sequenced"] = int(sequenced)
+        result["num_res_unique"] = int(unique)
+        result["percent_res_complete"] = float(residue_completeness)
+        result["percent_chain_complete"] = float(chain_completeness)
   return result
