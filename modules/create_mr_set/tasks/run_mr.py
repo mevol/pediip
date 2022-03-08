@@ -400,7 +400,9 @@ def buccaneer_mr_after_refmac_zero(key, homologue, args):
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
   metafile = homologue.path("metadata.json")
+  meta_split = metafile.split("/")
   print(metafile)
+  #"deposited.fasta"
   seqin = glob.glob(homologue.path(os.path.join(
                                    "prosmart/Output_Files/Sequence", "refmac*.txt")))[0]
   prefix = homologue.path("buccaneer_afterMR0")
