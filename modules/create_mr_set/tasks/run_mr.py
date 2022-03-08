@@ -501,7 +501,7 @@ def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
 #  utils.remove_errors(homologues)
 #  print("")
 
-def run_mr_pipelines(key, homologue, structure, args):
+def run_mr_pipelines(key, homologue, args):
   if not os.path.exists(homologue.path("JOB_IS_DONE.txt")):
        
     superpose_homologue(key, homologue, args)
