@@ -105,12 +105,12 @@ if __name__ == "__main__":
   print("Number of chains to search for", len(chains))
   find_homologues.find_homologues(chains, args)
   
-
-  for c in chains.values():
-    print(6666666666666666, c)
-    for h in c.homologues.values():
-      print(7777777777777777, h)
-
+#
+#  for c in chains.values():
+#    print(6666666666666666, c)
+#    for h in c.homologues.values():
+#      print(7777777777777777, h)
+#
 #  if os.path.exists("homologues"):
 #  homologues = {h.global_id: h for c in chains.values() for h in c.homologues.values() if h.todo}
 #  if len(homologues) > 0:
