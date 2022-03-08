@@ -512,10 +512,10 @@ def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
   with open(result["stdout"]) as f:
     for ind, line in enumerate(f, 1):
       print(line)
-        if line.strip().startswith("$TEXT:Result: $$ $$"):
-          print(line)
-          result1 = list(islice(f, 2))
-          print(results1)
+      if line.strip().startswith("$TEXT:Result: $$ $$"):
+        print(line)
+        result1 = list(islice(f, 2))
+        print(results1)
 #          lastmatch = line
 #      if lastmatch is not None:
 #        print(lastmatch)
