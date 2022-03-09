@@ -880,17 +880,201 @@ def write_combined_mtz_afterSSM_buccaneer_zero(key, homologue, args):
 # Compare phases after refinement and Buccaneer after MR and refine
 ##########################################################################################
 #compare phases PDB-redo target MR_jelly_body
-def compare_phases_afterMR_jelly(key, homologue, args):
-  hklin = homologue.path("gemmijoin_afterMR_Buccaneer.mtz")
+def compare_phases_afterMR_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac_afterMR_Buccaneer.mtz")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT_model,FOM_model"
   ref_hl = "PHWT_ref,FOM_ref"
-  prefix = homologue.path("cphasematch_afterMR_Buccaneer")
+  prefix = homologue.path("cphasematch_refmac_afterMR_Buccaneer")
   result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
   homologue.jobs["cphasematch"] = result
   if "mean_phase_error" in result:
-    homologue.add_metadata("mean_phase_error_afterMR_", result["mean_phase_error"])
-    homologue.add_metadata("f_map_correlation_afterMR", result["f_map_correlation"])
+    homologue.add_metadata("mean_phase_error_afterMR_Buccaneer_refmac",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterMR_Buccaneer_refmac",
+                           result["f_map_correlation"])
+  return key, homologue
+
+#compare phases PDB-redo target MR 0-cycle
+def compare_phases_afterMR0_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac_afterMR0_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_refmac_afterMR0_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterMR0_Buccaneer_refmac",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterMR0_Buccaneer_refmac",
+                           result["f_map_correlation"])
+  return key, homologue
+
+#compare phases PDB-redo target MR_jelly_body
+def compare_phases_afterMR_buccaneer_zero(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac0_afterMR_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_refmac0_afterMR_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterMR_Buccaneer_refmac0",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterMR_Buccaneer_refmac0",
+                           result["f_map_correlation"])
+  return key, homologue
+
+#compare phases PDB-redo target MR 0-cycle
+def compare_phases_afterMR0_buccaneer_zero(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac0_afterMR0_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_refmac0_afterMR0_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterMR0_Buccaneer_refmac0",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterMR0_Buccaneer_refmac0",
+                           result["f_map_correlation"])
+  return key, homologue
+
+##########################################################################################
+# Compare phases after refinement and Buccaneer after Molrep and refine
+##########################################################################################
+#compare phases PDB-redo target Molrep_jelly_body
+def compare_phases_afterMolrep_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac_afterMolrep_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_refmac_afterMolrep_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterMolrep_Buccaneer_refmac",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterMolrep_Buccaneer_refmac",
+                           result["f_map_correlation"])
+  return key, homologue
+
+#compare phases PDB-redo target Molrep 0-cycle
+def compare_phases_afterMolrep0_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac_afterMolrep0_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_refmac_afterMolrep0_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterMolrep0_Buccaneer_refmac",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterMolrep0_Buccaneer_refmac",
+                           result["f_map_correlation"])
+  return key, homologue
+
+#compare phases PDB-redo target Molrep_jelly_body
+def compare_phases_afterMolrep_buccaneer_zero(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac0_afterMolrep_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_refmac0_afterMolrep_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterMolrep_Buccaneer_refmac0",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterMolrep_Buccaneer_refmac0",
+                           result["f_map_correlation"])
+  return key, homologue
+
+#compare phases PDB-redo target Molrep 0-cycle
+def compare_phases_afterMolrep0_buccaneer_zero(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac0_afterMolrep0_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_refmac0_afterMolrep0_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterMolrep0_Buccaneer_refmac0",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterMolrep0_Buccaneer_refmac0",
+                           result["f_map_correlation"])
+  return key, homologue
+
+##########################################################################################
+# Compare phases after refinement and Buccaneer after Prosmart and refine
+##########################################################################################
+#compare phases PDB-redo target SSM_jelly_body
+def compare_phases_afterSSM_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac_afterMolrep_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_refmac_afterSSM_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterSSM_Buccaneer_refmac",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterSSM_Buccaneer_refmac",
+                           result["f_map_correlation"])
+  return key, homologue
+
+#compare phases PDB-redo target SSM 0-cycle
+def compare_phases_afterSSM0_buccaneer_jelly(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac_afterSSM0_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_refmac_afterSSM0_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterSSM0_Buccaneer_refmac",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterSSM0_Buccaneer_refmac",
+                           result["f_map_correlation"])
+  return key, homologue
+
+#compare phases PDB-redo target SSM_jelly_body
+def compare_phases_afterSSM_buccaneer_zero(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac0_afterSSM_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_refmac0_afterSSM_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterSSM_Buccaneer_refmac0",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterSSM_Buccaneer_refmac0",
+                           result["f_map_correlation"])
+  return key, homologue
+
+#compare phases PDB-redo target SSM 0-cycle
+def compare_phases_afterSSM0_buccaneer_zero(key, homologue, args):
+  hklin = homologue.path("gemmijoin_refmac0_afterSSM0_Buccaneer.mtz")
+  fo = "FP,SIGFP"
+  wrk_hl = "PHWT_model,FOM_model"
+  ref_hl = "PHWT_ref,FOM_ref"
+  prefix = homologue.path("cphasematch_refmac0_afterSSM0_Buccaneer")
+  result = tasks.compare_phases(hklin, fo, wrk_hl, ref_hl, prefix)
+  homologue.jobs["cphasematch"] = result
+  if "mean_phase_error" in result:
+    homologue.add_metadata("mean_phase_error_afterSSM0_Buccaneer_refmac0",
+                           result["mean_phase_error"])
+    homologue.add_metadata("f_map_correlation_afterSSM0_Buccaneer_refmac0",
+                           result["f_map_correlation"])
   return key, homologue
 
 #####################################################################
@@ -1003,8 +1187,10 @@ def run_mr_pipelines(key, homologue, args):
     buccaneer_mr_after_refmac_zero(key, homologue, args)
     refine_placed_model_zero_buccaneer_zero(key, homologue, args)
     write_combined_mtz_afterMR0_buccaneer_zero(key, homologue, args)
+    compare_phases_afterMR0_buccaneer_zero(key, homologue, args)
     refine_placed_model_zero_buccaneer_jelly(key, homologue, args)
     write_combined_mtz_afterMR0_buccaneer_jelly(key, homologue, args)
+    compare_phases_afterMR0_buccaneer_jelly(key, homologue, args)
     
     # Phaser-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
     # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
@@ -1016,8 +1202,10 @@ def run_mr_pipelines(key, homologue, args):
     buccaneer_mr_after_refmac_jelly(key, homologue, args)
     refine_placed_model_jelly_buccaneer_zero(key, homologue, args)
     write_combined_mtz_afterMR_buccaneer_zero(key, homologue, args)
+    compare_phases_afterMR_buccaneer_zero(key, homologue, args)
     refine_placed_model_jelly_buccaneer_jelly(key, homologue, args)
     write_combined_mtz_afterMR_buccaneer_jelly(key, homologue, args)
+    compare_phases_afterMR_buccaneer_jelly(key, homologue, args)
 
     # Molrep-placed model after 0-cycle Refmac refinement; built with Buccaneer;
     # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
@@ -1029,8 +1217,10 @@ def run_mr_pipelines(key, homologue, args):
     buccaneer_molrep_after_refmac_zero(key, homologue, args)
     refine_molrep_model_zero_buccaneer_zero(key, homologue, args)
     write_combined_mtz_afterMolrep0_buccaneer_zero(key, homologue, args)
+    compare_phases_afterMolrep0_buccaneer_zero(key, homologue, args)
     refine_molrep_model_zero_buccaneer_jelly(key, homologue, args)
     write_combined_mtz_afterMolrep0_buccaneer_jelly(key, homologue, args)
+    compare_phases_afterMolrep0_buccaneer_jelly(key, homologue, args)
 
     # Molrep-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
     # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
@@ -1042,8 +1232,10 @@ def run_mr_pipelines(key, homologue, args):
     buccaneer_molrep_after_refmac_jelly(key, homologue, args)
     refine_molrep_model_jelly_buccaneer_zero(key, homologue, args)
     write_combined_mtz_afterMolrep_buccaneer_zero(key, homologue, args)
+    compare_phases_afterMolrep_buccaneer_zero(key, homologue, args)
     refine_molrep_model_jelly_buccaneer_jelly(key, homologue, args)
     write_combined_mtz_afterMolrep_buccaneer_jelly(key, homologue, args)
+    compare_phases_afterMolrep_buccaneer_jelly(key, homologue, args)
 
     # Prosmart-placed model after 0-cycle Refmac refinement; built with Buccaneer;
     # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
@@ -1055,8 +1247,10 @@ def run_mr_pipelines(key, homologue, args):
     buccaneer_ssm_after_refmac_zero(key, homologue, args)
     refine_prosmart_model_zero_buccaneer_zero(key, homologue, args)
     write_combined_mtz_afterSSM0_buccaneer_zero(key, homologue, args)
+    compare_phases_afterSSM0_buccaneer_zero(key, homologue, args)
     refine_prosmart_model_zero_buccaneer_jelly(key, homologue, args)
     write_combined_mtz_afterSSM0_buccaneer_jelly(key, homologue, args)
+    compare_phases_afterSSM0_buccaneer_jelly(key, homologue, args)
 
     # Prosmart-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
     # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
@@ -1068,8 +1262,10 @@ def run_mr_pipelines(key, homologue, args):
     buccaneer_ssm_after_refmac_jelly(key, homologue, args)
     refine_prosmart_model_jelly_buccaneer_zero(key, homologue, args)
     write_combined_mtz_afterSSM_buccaneer_zero(key, homologue, args)
+    compare_phases_afterSSM_buccaneer_zero(key, homologue, args)
     refine_prosmart_model_jelly_buccaneer_jelly(key, homologue, args)
     write_combined_mtz_afterSSM_buccaneer_jelly(key, homologue, args)
+    compare_phases_afterSSM_buccaneer_jelly(key, homologue, args)
     
     with open(homologue.path("BUILD_WITH_BUCCANEER.txt"), "w") as out_file:
       line = "job is done"
