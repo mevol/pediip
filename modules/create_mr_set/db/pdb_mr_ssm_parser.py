@@ -593,6 +593,8 @@ class MRSSMParser(object):
           f_map_correlation_afterMR0 = h_reader["f_map_correlation_afterMR0"]
         if "num_fragments_afterMolrep0" in h_reader:
           num_fragments_afterMR0 = h_reader["num_fragments_afterMR0"]
+        else:
+          num_fragments_afterMR0 = 0
         if "num_res_built_afterMR0" in h_reader:
           num_res_built_afterMR0 = h_reader["num_res_built_afterMR0"]
         if "num_res_sequenced_afterMR0" in h_reader:
