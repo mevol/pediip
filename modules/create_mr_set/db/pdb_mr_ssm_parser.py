@@ -87,60 +87,17 @@ class MRSSMParser(object):
     pass
 
     # set all to be extracted metrics to 0 to start with
+    # GESAMT related variables
     gesamt_length = 0
     gesamt_qscore = 0
     gesamt_seqid = 0
     gesamt_rmsd = 0
+
+##########################################################################################
+    # Prosmart related variables
     prosmart_length_number = 0
     prosmart_rmsd = 0
     prosmart_seqid = 0
-    initial_rfree_afterSSM0 = 0
-    final_rfree_afterSSM0 = 0 
-    initial_rwork_afterSSM0 = 0 
-    final_rwork_afterSSM0 = 0
-    mean_phase_error_afterSSM0 = 0
-    f_map_correlation_afterSSM0 = 0
-    initial_rfree_afterSSM = 0
-    final_rfree_afterSSM = 0
-    initial_rwork_afterSSM = 0
-    final_rwork_afterSSM = 0
-    mean_phase_error_afterSSM = 0
-    f_map_correlation_afterSSM = 0
-    molrep_TF_sig = 0
-    molrep_contrast = 0
-    molrep_corrD = 0
-    molrep_corrF = 0
-    molrep_final_cc = 0
-    molrep_packing_coeff = 0
-    initial_rfree_afterMolrep0 = 0
-    final_rfree_afterMolrep0 = 0
-    initial_rwork_afterMolrep0 = 0
-    final_rwork_afterMolrep0 = 0
-    mean_phase_error_afterMolrep0 = 0
-    f_map_correlation_afterMolrep0 = 0
-    initial_rfree_afterMolrep = 0
-    final_rfree_afterMolrep = 0
-    initial_rwork_afterMolrep = 0
-    final_rwork_afterMolrep = 0
-    mean_phase_error_afterMolrep = 0
-    f_map_correlation_afterMolrep = 0
-    phaser_ellg = 0
-    phaser_llg = 0
-    phaser_rmsd = 0
-    initial_rfree_afterMR0 = 0
-    final_rfree_afterMR0 = 0     
-    initial_rwork_afterMR0 = 0
-    final_rwork_afterMR0 = 0
-    mean_phase_error_afterMR0 = 0
-    f_map_correlation_afterMR0 = 0  
-    initial_rfree_afterMR = 0
-    final_rfree_afterMR = 0     
-    initial_rwork_afterMR = 0
-    final_rwork_afterMR = 0
-    mean_phase_error_afterMR = 0
-    f_map_correlation_afterMR = 0
-    #mr_success_lable = 3
-    #refinement_success_lable = 3
     procrustes = 0
     flexible = 0
     cluster0 = 0
@@ -151,6 +108,219 @@ class MRSSMParser(object):
     fragments1 = 0
     mean_cos_theta1 = 0
     sd_cos_theta1 = 0
+    # Refmac0-Prosmart
+    initial_rfree_afterSSM0 = 0
+    final_rfree_afterSSM0 = 0 
+    initial_rwork_afterSSM0 = 0 
+    final_rwork_afterSSM0 = 0
+    # PhaseError-Refmac0-Prosmart
+    mean_phase_error_afterSSM0 = 0
+    f_map_correlation_afterSSM0 = 0
+    # Buccaneer-Refmac0-Prosmart
+    num_fragments_afterSSM0 = 0
+    num_res_built_afterSSM0 = 0
+    num_res_sequenced_afterSSM0 = 0
+    num_res_unique_afterSSM0 = 0
+    longest_fragments_afterSSM0 = 0
+    percent_chain_complete_afterSSM0 = 0
+    percent_res_complete_afterSSM0 = 0
+    # Refmac0-Buccaneer-Refmac0-Prosmart
+    initial_rfree_refmac0_afterSSM0_Buccaneer = 0
+    final_rfree_refmac0_afterSSM0_Buccaneer = 0
+    initial_rwork_refmac0_afterSSM0_Buccaneer = 0
+    final_rwork_refmac0_afterSSM0_Buccaneer = 0
+    # PhaseError-Refmac0-Buccaneer-Refmac0-Prosmart
+    mean_phase_error_afterSSM0_Buccaneer_refmac0 = 0
+    f_map_correlation_afterSSM0_Buccaneer_refmac0 = 0
+    # RefmacJellyBody-Buccaneer-Refmac0-Prosmart
+    initial_rfree_refmac_afterSSM0_Buccaneer = 0
+    final_rfree_refmac_afterSSM0_Buccaneer = 0
+    initial_rwork_refmac_afterSSM0_Buccaneer = 0
+    final_rwork_refmac_afterSSM0_Buccaneer = 0
+    # PhaseError-RefmacJellyBody-Buccaneer-Refmac0-Prosmart
+    mean_phase_error_afterSSM0_Buccaneer_refmac = 0
+    f_map_correlation_afterSSM0_Buccaneer_refmac = 0
+
+    # RefmacJellyBody-Prosmart
+    initial_rfree_afterSSM = 0
+    final_rfree_afterSSM = 0
+    initial_rwork_afterSSM = 0
+    final_rwork_afterSSM = 0
+    # PhaseError-RefmacJellyBody-Prosmart
+    mean_phase_error_afterSSM = 0
+    f_map_correlation_afterSSM = 0
+    # Buccaneer-RefmacJellyBody-Prosmart
+    num_fragments_afterSSM = 0
+    num_res_built_afterSSM = 0
+    num_res_sequenced_afterSSM = 0
+    num_res_unique_afterSSM = 0
+    longest_fragments_afterSSM = 0
+    percent_chain_complete_afterSSM = 0
+    percent_res_complete_afterSSM = 0
+    # Refmac0-Buccaneer-RefmacJellyBody-Prosmart
+    initial_rfree_refmac0_afterSSM_Buccaneer = 0
+    final_rfree_refmac0_afterSSM_Buccaneer = 0
+    initial_rwork_refmac0_afterSSM_Buccaneer = 0
+    final_rwork_refmac0_afterSSM_Buccaneer = 0
+    # PhaseError-Refmac0-Buccaneer-RefmacJellyBody-Prosmart
+    mean_phase_error_afterSSM_Buccaneer_refmac0 = 0
+    f_map_correlation_afterSSM_Buccaneer_refmac0 = 0
+    # RefmacJellyBody-Buccaneer-RefmacJellyBody-Prosmart
+    initial_rfree_refmac_afterSSM_Buccaneer = 0
+    final_rfree_refmac_afterSSM_Buccaneer = 0
+    initial_rwork_refmac_afterSSM_Buccaneer = 0
+    final_rwork_refmac_afterSSM_Buccaneer = 0
+    # PhaseError-RefmacJellyBody-Buccaneer-RefmacJellyBody-Prosmart
+    mean_phase_error_afterSSM_Buccaneer_refmac = 0
+    f_map_correlation_afterSSM_Buccaneer_refmac = 0
+
+##########################################################################################
+    # Molrep related variables
+    molrep_TF_sig = 0
+    molrep_contrast = 0
+    molrep_corrD = 0
+    molrep_corrF = 0
+    molrep_final_cc = 0
+    molrep_packing_coeff = 0
+    # Refmac0-Molrep
+    initial_rfree_afterMolrep0 = 0
+    final_rfree_afterMolrep0 = 0
+    initial_rwork_afterMolrep0 = 0
+    final_rwork_afterMolrep0 = 0
+    # PhaseError-Refmac0-Molrep
+    mean_phase_error_afterMolrep0 = 0
+    f_map_correlation_afterMolrep0 = 0
+    # Buccaneer-Refmac0-Molrep
+    num_fragments_afterMolrep0 = 0
+    num_res_built_afterMolrep0 = 0
+    num_res_sequenced_afterMolrep0 = 0
+    num_res_unique_afterMolrep0 = 0
+    longest_fragments_afterMolrep0 = 0
+    percent_chain_complete_afterMolrep0 = 0
+    percent_res_complete_afterMolrep0 = 0
+    # Refmac0-Buccaneer-Refmac0-Molrep
+    initial_rfree_refmac0_afterMolrep0_Buccaneer = 0
+    final_rfree_refmac0_afterMolrep0_Buccaneer = 0
+    initial_rwork_refmac0_afterMolrep0_Buccaneer = 0
+    final_rwork_refmac0_afterMolrep0_Buccaneer = 0
+    # PhaseError-Refmac0-Buccaneer-Refmac0-Molrep
+    mean_phase_error_afterMolrep0_Buccaneer_refmac0 = 0
+    f_map_correlation_afterMolrep0_Buccaneer_refmac0 = 0
+    # RefmacJellyBody-Buccaneer-Refmac0-Molrep
+    initial_rfree_refmac_afterMolrep0_Buccaneer = 0
+    final_rfree_refmac_afterMolrep0_Buccaneer = 0
+    initial_rwork_refmac_afterMolrep0_Buccaneer = 0
+    final_rwork_refmac_afterMolrep0_Buccaneer = 0
+    # PhaseError-RefmacJellyBody-Buccaneer-Refmac0-Molrep
+    mean_phase_error_afterMolrep0_Buccaneer_refmac = 0
+    f_map_correlation_afterMolrep0_Buccaneer_refmac = 0
+        
+    # RefmacJellyBody-Molrep
+    initial_rfree_afterMolrep = 0
+    final_rfree_afterMolrep = 0
+    initial_rwork_afterMolrep = 0
+    final_rwork_afterMolrep = 0
+    # PhaseError-RefmacJellyBody-Molrep
+    mean_phase_error_afterMolrep = 0
+    f_map_correlation_afterMolrep = 0
+    # Buccaneer-RefmacJellyBody-Molrep
+    num_fragments_afterMolrep = 0
+    num_res_built_afterMolrep = 0
+    num_res_sequenced_afterMolrep = 0
+    num_res_unique_afterMolrep = 0
+    longest_fragments_afterMolrep = 0
+    percent_chain_complete_afterMolrep = 0
+    percent_res_complete_afterMolrep = 0
+    # Refmac0-Buccaneer-RefmacJellyBody-Molrep
+    initial_rfree_refmac0_afterMolrep_Buccaneer = 0
+    final_rfree_refmac0_afterMolrep_Buccaneer = 0
+    initial_rwork_refmac0_afterMolrep_Buccaneer = 0
+    final_rwork_refmac0_afterMolrep_Buccaneer = 0
+    # PhaseError-Refmac0-Buccaneer-RefmacJellyBody-Molrep
+    mean_phase_error_afterMolrep_Buccaneer_refmac0 = 0
+    f_map_correlation_afterMolrep_Buccaneer_refmac0 = 0
+    # RefmacJellyBody-Buccaneer-RefmacJellyBody-Molrep
+    initial_rfree_refmac_afterMolrep_Buccaneer = 0
+    final_rfree_refmac_afterMolrep_Buccaneer = 0
+    initial_rwork_refmac_afterMolrep_Buccaneer = 0
+    final_rwork_refmac_afterMolrep_Buccaneer = 0
+    # PhaseError-RefmacJellyBody-Buccaneer-RefmacJellyBody-Molrep
+    mean_phase_error_afterMolrep_Buccaneer_refmac = 0
+    f_map_correlation_afterMolrep_Buccaneer_refmac = 0
+
+##########################################################################################
+    # Phaser related variables
+    phaser_ellg = 0
+    phaser_llg = 0
+    phaser_rmsd = 0
+    # Refmac0-MR
+    initial_rfree_afterMR0 = 0
+    final_rfree_afterMR0 = 0
+    initial_rwork_afterMR0 = 0
+    final_rwork_afterMR0 = 0
+    # PhaseError-Refmac0-MR
+    mean_phase_error_afterMR0 = 0
+    f_map_correlation_afterMR0 = 0
+    # Buccaneer-Refmac0-MR
+    num_fragments_afterMR0 = 0
+    num_res_built_afterMR0 = 0
+    num_res_sequenced_afterMR0 = 0
+    num_res_unique_afterMR0 = 0
+    longest_fragments_afterMR0 = 0
+    percent_chain_complete_afterMR0 = 0
+    percent_res_complete_afterMR0 = 0
+    # Refmac0-Buccaneer-Refmac0-MR
+    initial_rfree_refmac0_afterMR0_Buccaneer = 0
+    final_rfree_refmac0_afterMR0_Buccaneer = 0
+    initial_rwork_refmac0_afterMR0_Buccaneer = 0
+    final_rwork_refmac0_afterMR0_Buccaneer = 0
+    # PhaseError-Refmac0-Buccaneer-Refmac0-MR
+    mean_phase_error_afterMR0_Buccaneer_refmac0 = 0
+    f_map_correlation_afterMF0_Buccaneer_refmac0 = 0
+    # RefmacJellyBody-Buccaneer-Refmac0-MR
+    initial_rfree_refmac_afterMR0_Buccaneer = 0
+    final_rfree_refmac_afterMR0_Buccaneer = 0
+    initial_rwork_refmac_afterMR0_Buccaneer = 0
+    final_rwork_refmac_afterMR0_Buccaneer = 0
+    # PhaseError-RefmacJellyBody-Buccaneer-Refmac0-MR
+    mean_phase_error_afterMR0_Buccaneer_refmac = 0
+    f_map_correlation_afterMR0_Buccaneer_refmac = 0
+
+    # RefmacJellyBody-MR
+    initial_rfree_afterMR = 0
+    final_rfree_afterMR = 0     
+    initial_rwork_afterMR = 0
+    final_rwork_afterMR = 0
+    # PhaseError-RefmacJellyBody-MR
+    mean_phase_error_afterMR = 0
+    f_map_correlation_afterMR = 0
+    # Buccaneer-RefmacJellyBody-MR
+    num_fragments_afterMR = 0
+    num_res_built_afterMR = 0
+    num_res_sequenced_afterMR = 0
+    num_res_unique_afterMR = 0
+    longest_fragments_afterMR = 0
+    percent_chain_complete_afterMR = 0
+    percent_res_complete_afterMR = 0
+    # Refmac0-Buccaneer-RefmacJellyBody-MR
+    initial_rfree_refmac0_afterMR_Buccaneer = 0
+    final_rfree_refmac0_afterMR_Buccaneer = 0
+    initial_rwork_refmac0_afterMR_Buccaneer = 0
+    final_rwork_refmac0_afterMR_Buccaneer = 0
+    # PhaseError-Refmac0-Buccaneer-RefmacJellyBody-MR
+    mean_phase_error_afterMR_Buccaneer_refmac0 = 0
+    f_map_correlation_afterMR_Buccaneer_refmac0 = 0
+    # RefmacJellyBody-Buccaneer-RefmacJellyBody-MR
+    initial_rfree_refmac_afterMR_Buccaneer = 0
+    final_rfree_refmac_afterMR_Buccaneer = 0
+    initial_rwork_refmac_afterMR_Buccaneer = 0
+    final_rwork_refmac_afterMR_Buccaneer = 0
+    # PhaseError-RefmacJellyBody-Buccaneer-RefmacJellyBody-MR
+    mean_phase_error_afterMR_Buccaneer_refmac = 0
+    f_map_correlation_afterMR_Buccaneer_refmac = 0
+    
+    #mr_success_lable = 3
+    #refinement_success_lable = 3
 
     # transfer details from metadata.json into a dict for entering into database
     if os.path.exists(h_meta_json):
@@ -164,6 +334,10 @@ class MRSSMParser(object):
           gesamt_seqid = h_reader["gesamt_seqid"]
         if "gesamt_rmsd" in h_reader:
           gesamt_rmsd = h_reader["gesamt_rmsd"]
+
+##########################################################################################
+    # Prosmart related variables
+
         if "initial_rfree" in h_reader:
           initial_rfree = h_reader["initial_rfree"]
         if  "prosmart_length_number" in h_reader:
@@ -184,6 +358,45 @@ class MRSSMParser(object):
           mean_phase_error_afterSSM0 = h_reader["mean_phase_error_afterSSM0"]
         if  "f_map_correlation_afterSSM0" in h_reader:
           f_map_correlation_afterSSM0 = h_reader["f_map_correlation_afterSSM0"]
+        if "num_fragments_afterSSM0" in h_reader:
+          num_fragments_afterSSM0 = h_reader["num_fragments_afterSSM0"]
+        if "num_res_built_afterSSM0" in h_reader:
+          num_res_built_afterSSM0 = h_reader["num_res_built_afterSSM0"]
+        if "num_res_sequenced_afterSSM0" in h_reader:
+          num_res_sequenced_afterSSM0 = h_reader["num_res_sequenced_afterSSM0"]
+        if "num_res_unique_afterSSM0" in h_reader:
+          num_res_unique_afterSSM0 = h_reader["num_res_unique_afterSSM0"]
+        if "longest_fragments_afterSSM0" in h_reader:
+          longest_fragments_afterSSM0 = h_reader["longest_fragments_afterSSM0"]
+        if "percent_chain_complete_afterSSM0" in h_reader:
+          percent_chain_complete_afterSSM0 = h_reader["percent_chain_complete_afterSSM0"]
+        if "percent_res_complete_afterSSM0" in h_reader:
+          percent_res_complete_afterSSM0 = h_reader["percent_res_complete_afterSSM0"]
+        if "initial_rfree_refmac0_afterSSM0_Buccaneer" in h_reader:
+          initial_rfree_refmac0_afterSSM0_Buccaneer = h_reader["initial_rfree_refmac0_afterSSM0_Buccaneer"]
+        if "final_rfree_refmac0_afterSSM0_Buccaneer" in h_reader:
+          final_rfree_refmac0_afterSSM0_Buccaneer = h_reader["final_rfree_refmac0_afterSSM0_Buccaneer"]
+        if "initial_rwork_refmac0_afterSSM0_Buccaneer" in h_reader:
+          initial_rwork_refmac0_afterSSM0_Buccaneer = h_reader["initial_rwork_refmac0_afterSSM0_Buccaneer"]
+        if "final_rwork_refmac0_afterSSM0_Buccaneer" in h_reader:
+          final_rwork_refmac0_afterSSM0_Buccaneer = h_reader["final_rwork_refmac0_afterSSM0_Buccaneer"]
+        if "mean_phase_error_afterSSM0_Buccaneer_refmac0" in h_reader:
+          mean_phase_error_afterSSM0_Buccaneer_refmac0 = h_reader["mean_phase_error_afterSSM0_Buccaneer_refmac0"]
+        if "f_map_correlation_afterSSM0_Buccaneer_refmac0" in h_reader:
+          f_map_correlation_afterSSM0_Buccaneer_refmac0 = h_reader["f_map_correlation_afterSSM0_Buccaneer_refmac0"]
+        if "initial_rfree_refmac_afterSSM0_Buccaneer" in h_reader:
+          initial_rfree_refmac_afterSSM0_Buccaneer = h_reader["initial_rfree_refmac_afterSSM0_Buccaneer"]
+        if "final_rfree_refmac_afterSSM0_Buccaneer" in h_reader:
+          final_rfree_refmac_afterSSM0_Buccaneer = h_reader["final_rfree_refmac_afterSSM0_Buccaneer"]
+        if "initial_rwork_refmac_afterSSM0_Buccaneer" in h_reader:
+          initial_rwork_refmac_afterSSM0_Buccaneer = h_reader["initial_rwork_refmac_afterSSM0_Buccaneer"]
+        if "final_rwork_refmac_afterSSM0_Buccaneer" in h_reader:
+          final_rwork_refmac_afterSSM0_Buccaneer = h_reader["final_rwork_refmac_afterSSM0_Buccaneer"]
+        if "mean_phase_error_afterSSM0_Buccaneer_refmac" in h_reader:
+          mean_phase_error_afterSSM0_Buccaneer_refmac = h_reader["mean_phase_error_afterSSM0_Buccaneer_refmac"]
+        if "f_map_correlation_afterSSM0_Buccaneer_refmac" in h_reader:
+          f_map_correlation_afterSSM0_Buccaneer_refmac = h_reader["f_map_correlation_afterSSM0_Buccaneer_refmac"]
+
         if  "initial_rfree_afterSSM" in h_reader:
           initial_rfree_afterSSM = h_reader["initial_rfree_afterSSM"]
         if  "final_rfree_afterSSM" in h_reader:
@@ -196,6 +409,49 @@ class MRSSMParser(object):
           mean_phase_error_afterSSM = h_reader["mean_phase_error_afterSSM"]
         if  "f_map_correlation_afterSSM" in h_reader:
           f_map_correlation_afterSSM = h_reader["f_map_correlation_afterSSM"]
+        if "num_fragments_afterSSM" in h_reader:
+          num_fragments_afterSSM = h_reader["num_fragments_afterSSM"]
+        if "num_res_built_afterSSM" in h_reader:
+          num_res_built_afterSSM = h_reader["num_res_built_afterSSM"]
+        if "num_res_sequenced_afterSSM" in h_reader:
+          num_res_sequenced_afterSSM = h_reader["num_res_sequenced_afterSSM"]
+        if "num_res_unique_afterSSM" in h_reader:
+          num_res_unique_afterSSM = h_reader["num_res_unique_afterSSM"]
+        if "longest_fragments_afterSSM" in h_reader:
+          longest_fragments_afterSSM = h_reader["longest_fragments_afterSSM"]
+        if "percent_chain_complete_afterSSM" in h_reader:
+          percent_chain_complete_afterSSM = h_reader["percent_chain_complete_afterSSM"]
+        if "percent_res_complete_afterSSM" in h_reader:
+          percent_res_complete_afterSSM = h_reader["percent_res_complete_afterSSM"]
+        if "initial_rfree_refmac0_afterSSM_Buccaneer" in h_reader:
+          initial_rfree_refmac0_afterSSM_Buccaneer = h_reader["initial_rfree_refmac0_afterSSM_Buccaneer"]
+        if "final_rfree_refmac0_afterSSM_Buccaneer" in h_reader:
+          final_rfree_refmac0_afterSSM_Buccaneer = h_reader["final_rfree_refmac0_afterSSM_Buccaneer"]
+        if "initial_rwork_refmac0_afterSSM_Buccaneer" in h_reader:
+          initial_rwork_refmac0_afterSSM_Buccaneer = h_reader["initial_rwork_refmac0_afterSSM_Buccaneer"]
+        if "final_rwork_refmac0_afterSSM_Buccaneer" in h_reader:
+          final_rwork_refmac0_afterSSM_Buccaneer = h_reader["final_rwork_refmac0_afterSSM_Buccaneer"]
+        if "mean_phase_error_afterSSM_Buccaneer_refmac0" in h_reader:
+          mean_phase_error_afterSSM_Buccaneer_refmac0 = h_reader["mean_phase_error_afterSSM_Buccaneer_refmac0"]
+        if "f_map_correlation_afterSSM_Buccaneer_refmac0" in h_reader:
+          f_map_correlation_afterSSM_Buccaneer_refmac0 = h_reader["f_map_correlation_afterSSM_Buccaneer_refmac0"]
+        if "initial_rfree_refmac_afterSSM_Buccaneer" in h_reader:
+          initial_rfree_refmac_afterSSM_Buccaneer = h_reader["initial_rfree_refmac_afterSSM_Buccaneer"]
+        if "final_rfree_refmac_afterSSM_Buccaneer" in h_reader:
+          final_rfree_refmac_afterSSM_Buccaneer = h_reader["final_rfree_refmac_afterSSM_Buccaneer"]
+        if "initial_rwork_refmac_afterSSM_Buccaneer" in h_reader:
+          initial_rwork_refmac_afterSSM_Buccaneer = h_reader["initial_rwork_refmac_afterSSM_Buccaneer"]
+        if "final_rwork_refmac_afterSSM_Buccaneer" in h_reader:
+          final_rwork_refmac_afterSSM_Buccaneer = h_reader["final_rwork_refmac_afterSSM_Buccaneer"]
+        if "mean_phase_error_afterSSM_Buccaneer_refmac" in h_reader:
+          mean_phase_error_afterSSM_Buccaneer_refmac = h_reader["mean_phase_error_afterSSM_Buccaneer_refmac"]
+        if "f_map_correlation_afterSSM_Buccaneer_refmac" in h_reader:
+          f_map_correlation_afterSSM_Buccaneer_refmac = h_reader["f_map_correlation_afterSSM_Buccaneer_refmac"]
+
+
+##########################################################################################
+    # Molrep related variables
+
         if "molrep_TF_sig" in h_reader:
           molrep_TF_sig = h_reader["molrep_TF_sig"]
         if "molrep_contrast" in h_reader:
@@ -220,6 +476,45 @@ class MRSSMParser(object):
           mean_phase_error_afterMolrep0 = h_reader["mean_phase_error_afterMolrep0"]
         if "f_map_correlation_afterMolrep0" in h_reader:
           f_map_correlation_afterMolrep0 = h_reader["f_map_correlation_afterMolrep0"]
+        if "num_fragments_afterMolrep0" in h_reader:
+          num_fragments_afterMolrep0 = h_reader["num_fragments_afterMolrep0"]
+        if "num_res_built_afterMolrep0" in h_reader:
+          num_res_built_afterMolrep0 = h_reader["num_res_built_afterMolrep0"]
+        if "num_res_sequenced_afterMolrep0" in h_reader:
+          num_res_sequenced_afterMolrep0 = h_reader["num_res_sequenced_afterMolrep0"]
+        if "num_res_unique_afterMolrep0" in h_reader:
+          num_res_unique_afterMolrep0 = h_reader["num_res_unique_afterMolrep0"]
+        if "longest_fragments_afterMolrep0" in h_reader:
+          longest_fragments_afterMolrep0 = h_reader["longest_fragments_afterMolrep0"]
+        if "percent_chain_complete_afterMolrep0" in h_reader:
+          percent_chain_complete_afterMolrep0 = h_reader["percent_chain_complete_afterMolrep0"]
+        if "percent_res_complete_afterMolrep0" in h_reader:
+          percent_res_complete_afterMolrep0 = h_reader["percent_res_complete_afterMolrep0"]
+        if "initial_rfree_refmac0_afterMolrep0_Buccaneer" in h_reader:
+          initial_rfree_refmac0_afterMolrep0_Buccaneer = h_reader["initial_rfree_refmac0_afterMolrep0_Buccaneer"]
+        if "final_rfree_refmac0_afterMolrep0_Buccaneer" in h_reader:
+          final_rfree_refmac0_afterMolrep_Buccaneer = h_reader["final_rfree_refmac0_afterMolrep0_Buccaneer"]
+        if "initial_rwork_refmac0_afterMolrep0_Buccaneer" in h_reader:
+          initial_rwork_refmac0_afterMolrep0_Buccaneer = h_reader["initial_rwork_refmac0_afterMolrep0_Buccaneer"]
+        if "final_rwork_refmac0_afterMolrep0_Buccaneer" in h_reader:
+          final_rwork_refmac0_afterMolrep0_Buccaneer = h_reader["final_rwork_refmac0_afterMolrep0_Buccaneer"]
+        if "mean_phase_error_afterMolrep0_Buccaneer_refmac0" in h_reader:
+          mean_phase_error_afterMolrep0_Buccaneer_refmac0 = h_reader["mean_phase_error_afterMolrep0_Buccaneer_refmac0"]
+        if "f_map_correlation_afterMolrep0_Buccaneer_refmac0" in h_reader:
+          f_map_correlation_afterMolrep0_Buccaneer_refmac0 = h_reader["f_map_correlation_afterMolrep0_Buccaneer_refmac0"]
+        if "initial_rfree_refmac_afterMolrep0_Buccaneer" in h_reader:
+          initial_rfree_refmac_afterMolrep0_Buccaneer = h_reader["initial_rfree_refmac_afterMolrep0_Buccaneer"]
+        if "final_rfree_refmac_afterMolrep0_Buccaneer" in h_reader:
+          final_rfree_refmac_afterMolrep0_Buccaneer = h_reader["final_rfree_refmac_afterMolrep0_Buccaneer"]
+        if "initial_rwork_refmac_afterMolrep0_Buccaneer" in h_reader:
+          initial_rwork_refmac_afterMolrep0_Buccaneer = h_reader["initial_rwork_refmac_afterMolrep0_Buccaneer"]
+        if "final_rwork_refmac_afterMolrep0_Buccaneer" in h_reader:
+          final_rwork_refmac_afterMolrep0_Buccaneer = h_reader["final_rwork_refmac_afterMolrep0_Buccaneer"]
+        if "mean_phase_error_afterMolrep0_Buccaneer_refmac" in h_reader:
+          mean_phase_error_afterMolrep0_Buccaneer_refmac = h_reader["mean_phase_error_afterMolrep0_Buccaneer_refmac"]
+        if "f_map_correlation_afterMolrep0_Buccaneer_refmac" in h_reader:
+          f_map_correlation_afterMolrep0_Buccaneer_refmac = h_reader["f_map_correlation_afterMolrep0_Buccaneer_refmac"]
+
         if "initial_rfree_afterMolrep" in h_reader:
           initial_rfree_afterMolrep = h_reader["initial_rfree_afterMolrep"]
         if "final_rfree_afterMolrep" in h_reader:
@@ -232,6 +527,48 @@ class MRSSMParser(object):
           mean_phase_error_afterMolrep = h_reader["mean_phase_error_afterMolrep"]
         if "f_map_correlation_afterMolrep" in h_reader:
           f_map_correlation_afterMolrep = h_reader["f_map_correlation_afterMolrep"]
+        if "num_fragments_afterMolrep" in h_reader:
+          num_fragments_afterMolrep = h_reader["num_fragments_afterMolrep"]
+        if "num_res_built_afterMolrep" in h_reader:
+          num_res_built_afterMolrep = h_reader["num_res_built_afterMolrep"]
+        if "num_res_sequenced_afterMolrep" in h_reader:
+          num_res_sequenced_afterMolrep = h_reader["num_res_sequenced_afterMolrep"]
+        if "num_res_unique_afterMolrep" in h_reader:
+          num_res_unique_afterMolrep = h_reader["num_res_unique_afterMolrep"]
+        if "longest_fragments_afterMolrep" in h_reader:
+          longest_fragments_afterMolrep = h_reader["longest_fragments_afterMolrep"]
+        if "percent_chain_complete_afterMolrep" in h_reader:
+          percent_chain_complete_afterMolrep = h_reader["percent_chain_complete_afterMolrep"]
+        if "percent_res_complete_afterMolrep" in h_reader:
+          percent_res_complete_afterMolrep = h_reader["percent_res_complete_afterMolrep"]
+        if "initial_rfree_refmac0_afterMolrep_Buccaneer" in h_reader:
+          initial_rfree_refmac0_afterMolrep_Buccaneer = h_reader["initial_rfree_refmac0_afterMolrep_Buccaneer"]
+        if "final_rfree_refmac0_afterMolrep_Buccaneer" in h_reader:
+          final_rfree_refmac0_afterMolrep_Buccaneer = h_reader["final_rfree_refmac0_afterMolrep_Buccaneer"]
+        if "initial_rwork_refmac0_afterMolrep_Buccaneer" in h_reader:
+          initial_rwork_refmac0_afterMolrep_Buccaneer = h_reader["initial_rwork_refmac0_afterMolrep_Buccaneer"]
+        if "final_rwork_refmac0_afterMolrep_Buccaneer" in h_reader:
+          final_rwork_refmac0_afterMolrep_Buccaneer = h_reader["final_rwork_refmac0_afterMolrep_Buccaneer"]
+        if "mean_phase_error_afterMolrep_Buccaneer_refmac0" in h_reader:
+          mean_phase_error_afterMolrep_Buccaneer_refmac0 = h_reader["mean_phase_error_afterMolrep_Buccaneer_refmac0"]
+        if "f_map_correlation_afterMolrep_Buccaneer_refmac0" in h_reader:
+          f_map_correlation_afterMolrep_Buccaneer_refmac0 = h_reader["f_map_correlation_afterMolrep_Buccaneer_refmac0"]
+        if "initial_rfree_refmac_afterMolrep_Buccaneer" in h_reader:
+          initial_rfree_refmac_afterMolrep_Buccaneer = h_reader["initial_rfree_refmac_afterMolrep_Buccaneer"]
+        if "final_rfree_refmac_afterMolrep_Buccaneer" in h_reader:
+          final_rfree_refmac_afterMolrep_Buccaneer = h_reader["final_rfree_refmac_afterMolrep_Buccaneer"]
+        if "initial_rwork_refmac_afterMolrep_Buccaneer" in h_reader:
+          initial_rwork_refmac_afterMolrep_Buccaneer = h_reader["initial_rwork_refmac_afterMolrep_Buccaneer"]
+        if "final_rwork_refmac_afterMolrep_Buccaneer" in h_reader:
+          final_rwork_refmac_afterMolrep_Buccaneer = h_reader["final_rwork_refmac_afterMolrep_Buccaneer"]
+        if "mean_phase_error_afterMolrep_Buccaneer_refmac" in h_reader:
+          mean_phase_error_afterMolrep_Buccaneer_refmac = h_reader["mean_phase_error_afterMolrep_Buccaneer_refmac"]
+        if "f_map_correlation_afterMolrep_Buccaneer_refmac" in h_reader:
+          f_map_correlation_afterMolrep_Buccaneer_refmac = h_reader["f_map_correlation_afterMolrep_Buccaneer_refmac"]
+
+##########################################################################################
+    # Phaser related variables
+
         if "phaser_llg" in h_reader:
           phaser_llg = h_reader["phaser_llg"]
         else:
@@ -254,6 +591,45 @@ class MRSSMParser(object):
           mean_phase_error_afterMR0 = h_reader["mean_phase_error_afterMR0"]
         if "f_map_correlation_afterMR0" in h_reader:
           f_map_correlation_afterMR0 = h_reader["f_map_correlation_afterMR0"]
+        if "num_fragments_afterMolrep0" in h_reader:
+          num_fragments_afterMR0 = h_reader["num_fragments_afterMR0"]
+        if "num_res_built_afterMR0" in h_reader:
+          num_res_built_afterMR0 = h_reader["num_res_built_afterMR0"]
+        if "num_res_sequenced_afterMR0" in h_reader:
+          num_res_sequenced_afterMR0 = h_reader["num_res_sequenced_afterMR0"]
+        if "num_res_unique_afterMR0" in h_reader:
+          num_res_unique_afterMR0 = h_reader["num_res_unique_afterMR0"]
+        if "longest_fragments_afterMR0" in h_reader:
+          longest_fragments_afterMR0 = h_reader["longest_fragments_afterMR0"]
+        if "percent_chain_complete_afterMR0" in h_reader:
+          percent_chain_complete_afterMR0 = h_reader["percent_chain_complete_afterMR0"]
+        if "percent_res_complete_afterMR0" in h_reader:
+          percent_res_complete_afterMR0 = h_reader["percent_res_complete_afterMR0"]
+        if "initial_rfree_refmac0_afterMR0_Buccaneer" in h_reader:
+          initial_rfree_refmac0_afterMR0_Buccaneer = h_reader["initial_rfree_refmac0_afterMR0_Buccaneer"]
+        if "final_rfree_refmac0_afterMR0_Buccaneer" in h_reader:
+          final_rfree_refmac0_afterMR_Buccaneer = h_reader["final_rfree_refmac0_afterMR0_Buccaneer"]
+        if "initial_rwork_refmac0_afterMR0_Buccaneer" in h_reader:
+          initial_rwork_refmac0_afterMR0_Buccaneer = h_reader["initial_rwork_refmac0_afterMR0_Buccaneer"]
+        if "final_rwork_refmac0_afterMR0_Buccaneer" in h_reader:
+          final_rwork_refmac0_afterMR0_Buccaneer = h_reader["final_rwork_refmac0_afterMR0_Buccaneer"]
+        if "mean_phase_error_afterMR0_Buccaneer_refmac0" in h_reader:
+          mean_phase_error_afterMR0_Buccaneer_refmac0 = h_reader["mean_phase_error_afterMR0_Buccaneer_refmac0"]
+        if "f_map_correlation_afterMR0_Buccaneer_refmac0" in h_reader:
+          f_map_correlation_afterMR0_Buccaneer_refmac0 = h_reader["f_map_correlation_afterMR0_Buccaneer_refmac0"]
+        if "initial_rfree_refmac_afterMR0_Buccaneer" in h_reader:
+          initial_rfree_refmac_afterMR0_Buccaneer = h_reader["initial_rfree_refmac_afterMR0_Buccaneer"]
+        if "final_rfree_refmac_afterMR0_Buccaneer" in h_reader:
+          final_rfree_refmac_afterMR0_Buccaneer = h_reader["final_rfree_refmac_afterMR0_Buccaneer"]
+        if "initial_rwork_refmac_afterMR0_Buccaneer" in h_reader:
+          initial_rwork_refmac_afterMR0_Buccaneer = h_reader["initial_rwork_refmac_afterMR0_Buccaneer"]
+        if "final_rwork_refmac_afterMR0_Buccaneer" in h_reader:
+          final_rwork_refmac_afterMR0_Buccaneer = h_reader["final_rwork_refmac_afterMR0_Buccaneer"]
+        if "mean_phase_error_afterMR0_Buccaneer_refmac" in h_reader:
+          mean_phase_error_afterMR0_Buccaneer_refmac = h_reader["mean_phase_error_afterMR0_Buccaneer_refmac"]
+        if "f_map_correlation_afterMR0_Buccaneer_refmac" in h_reader:
+          f_map_correlation_afterMR0_Buccaneer_refmac = h_reader["f_map_correlation_afterMR0_Buccaneer_refmac"]
+
         if "initial_rfree_afterMR" in h_reader:
           initial_rfree_afterMR = h_reader["initial_rfree_afterMR"]
         if "final_rfree_afterMR" in h_reader:
@@ -266,7 +642,46 @@ class MRSSMParser(object):
           mean_phase_error_afterMR = h_reader["mean_phase_error_afterMR"]
         if "f_map_correlation_afterMR" in h_reader:
           f_map_correlation_afterMR = h_reader["f_map_correlation_afterMR"]
-
+        if "num_fragments_afterMR" in h_reader:
+          num_fragments_afterMR = h_reader["num_fragments_afterMR"]
+        if "num_res_built_afterMR" in h_reader:
+          num_res_built_afterMR = h_reader["num_res_built_afterMR"]
+        if "num_res_sequenced_afterMR" in h_reader:
+          num_res_sequenced_afterMR = h_reader["num_res_sequenced_afterMR"]
+        if "num_res_unique_afterMR" in h_reader:
+          num_res_unique_afterMR = h_reader["num_res_unique_afterMR"]
+        if "longest_fragments_afterMR" in h_reader:
+          longest_fragments_afterMR = h_reader["longest_fragments_afterMR"]
+        if "percent_chain_complete_afterMR" in h_reader:
+          percent_chain_complete_afterMR = h_reader["percent_chain_complete_afterMR"]
+        if "percent_res_complete_afterMR" in h_reader:
+          percent_res_complete_afterMR = h_reader["percent_res_complete_afterMR"]
+        if "initial_rfree_refmac0_afterMR_Buccaneer" in h_reader:
+          initial_rfree_refmac0_afterMR_Buccaneer = h_reader["initial_rfree_refmac0_afterMR_Buccaneer"]
+        if "final_rfree_refmac0_afterMR_Buccaneer" in h_reader:
+          final_rfree_refmac0_afterMR_Buccaneer = h_reader["final_rfree_refmac0_afterMR_Buccaneer"]
+        if "initial_rwork_refmac0_afterMR_Buccaneer" in h_reader:
+          initial_rwork_refmac0_afterMR_Buccaneer = h_reader["initial_rwork_refmac0_afterMR_Buccaneer"]
+        if "final_rwork_refmac0_afterMR_Buccaneer" in h_reader:
+          final_rwork_refmac0_afterMR_Buccaneer = h_reader["final_rwork_refmac0_afterMR_Buccaneer"]
+        if "mean_phase_error_afterMR_Buccaneer_refmac0" in h_reader:
+          mean_phase_error_afterMR_Buccaneer_refmac0 = h_reader["mean_phase_error_afterMR_Buccaneer_refmac0"]
+        if "f_map_correlation_afterMR_Buccaneer_refmac0" in h_reader:
+          f_map_correlation_afterMR_Buccaneer_refmac0 = h_reader["f_map_correlation_afterMR_Buccaneer_refmac0"]
+        if "initial_rfree_refmac_afterMR_Buccaneer" in h_reader:
+          initial_rfree_refmac_afterMR_Buccaneer = h_reader["initial_rfree_refmac_afterMR_Buccaneer"]
+        if "final_rfree_refmac_afterMR_Buccaneer" in h_reader:
+          final_rfree_refmac_afterMR_Buccaneer = h_reader["final_rfree_refmac_afterMR_Buccaneer"]
+        if "initial_rwork_refmac_afterMR_Buccaneer" in h_reader:
+          initial_rwork_refmac_afterMR_Buccaneer = h_reader["initial_rwork_refmac_afterMR_Buccaneer"]
+        if "final_rwork_refmac_afterMR_Buccaneer" in h_reader:
+          final_rwork_refmac_afterMR_Buccaneer = h_reader["final_rwork_refmac_afterMR_Buccaneer"]
+        if "mean_phase_error_afterMR_Buccaneer_refmac" in h_reader:
+          mean_phase_error_afterMR_Buccaneer_refmac = h_reader["mean_phase_error_afterMR_Buccaneer_refmac"]
+        if "f_map_correlation_afterMR_Buccaneer_refmac" in h_reader:
+          f_map_correlation_afterMR_Buccaneer_refmac = h_reader["f_map_correlation_afterMR_Buccaneer_refmac"]
+          
+          
         # assigning labels regarding the MR out come using an Rfree cut-off of 0.5
         # this is for now left as TO DO; I will assign the labels when working with the data downstream;
         # I may have to break it down into smaller sub-dataframes
@@ -342,10 +757,12 @@ class MRSSMParser(object):
               sd_cos_theta1 = 0
 
     homologue_dict = {
+        # GESAMT related variables
         "gesamt_length"                    : gesamt_length,
         "gesamt_qscore"                    : gesamt_qscore,
         "gesamt_seqid"                     : gesamt_seqid,
         "gesamt_rmsd"                      : gesamt_rmsd,
+        # Prosmart related variables
         "prosmart_length_number"           : prosmart_length_number,
         "prosmart_rmsd"                    : prosmart_rmsd,
         "prosmart_seqid"                   : prosmart_seqid,
@@ -363,12 +780,51 @@ class MRSSMParser(object):
         "final_rwork_afterSSM0"            : final_rwork_afterSSM0,
         "mean_phase_error_afterSSM0"       : mean_phase_error_afterSSM0,
         "f_map_correlation_afterSSM0"      : f_map_correlation_afterSSM0,
+        "num_fragments_afterSSM0"          : num_fragments_afterSSM0,
+        "num_res_built_afterSSM0"          : num_res_built_afterSSM0,
+        "num_res_sequenced_afterSSM0"      : num_res_sequenced_afterSSM0,
+        "num_res_unique_afterSSM0"         : num_res_unique_afterSSM0,
+        "longest_fragments_afterSSM0"      : longest_fragments_afterSSM0,
+        "percent_chain_complete_afterSSM0" : percent_chain_complete_afterSSM0,
+        "percent_res_complete_afterSSM0" : percent_res_complete_afterSSM0,
+        "initial_rfree_refmac0_afterSSM0_Buccaneer" : initial_rfree_refmac0_afterSSM0_Buccaneer,
+        "final_rfree_refmac0_afterSSM0_Buccaneer" : final_rfree_refmac0_afterSSM0_Buccaneer,
+        "initial_rwork_refmac0_afterSSM0_Buccaneer" : initial_rwork_refmac0_afterSSM0_Buccaneer,
+        "final_rwork_refmac0_afterSSM0_Buccaneer" : final_rwork_refmac0_afterSSM0_Buccaneer,
+        "mean_phase_error_afterSSM0_Buccaneer_refmac0" : mean_phase_error_afterSSM0_Buccaneer_refmac0,
+        "f_map_correlation_afterSSM0_Buccaneer_refmac0" : f_map_correlation_afterSSM0_Buccaneer_refmac0,
+        "initial_rfree_refmac_afterSSM0_Buccaneer" : initial_rfree_refmac_afterSSM0_Buccaneer,
+        "final_rfree_refmac_afterSSM0_Buccaneer" : final_rfree_refmac_afterSSM0_Buccaneer,
+        "initial_rwork_refmac_afterSSM0_Buccaneer" : initial_rwork_refmac_afterSSM0_Buccaneer,
+        "final_rwork_refmac_afterSSM0_Buccaneer" : final_rwork_refmac_afterSSM0_Buccaneer,
+        "mean_phase_error_afterSSM0_Buccaneer_refmac" : mean_phase_error_afterSSM0_Buccaneer_refmac,
+        "f_map_correlation_afterSSM0_Buccaneer_refmac" : f_map_correlation_afterSSM0_Buccaneer_refmac,
         "initial_rfree_afterSSM"           : initial_rfree_afterSSM,
         "final_rfree_afterSSM"             : final_rfree_afterSSM,
         "initial_rwork_afterSSM"           : initial_rwork_afterSSM,
         "final_rwork_afterSSM"             : final_rwork_afterSSM,
         "mean_phase_error_afterSSM"        : mean_phase_error_afterSSM,
         "f_map_correlation_afterSSM"       : f_map_correlation_afterSSM,
+        "num_fragments_afterSSM"           : num_fragments_afterSSM,
+        "num_res_built_afterSSM"           : num_res_built_afterSSM,
+        "num_res_sequenced_afterSSM"       : num_res_sequenced_afterSSM,
+        "num_res_unique_afterSSM"          : num_res_unique_afterSSM,
+        "longest_fragments_afterSSM"       : longest_fragments_afterSSM,
+        "percent_chain_complete_afterSSM" : percent_chain_complete_afterSSM,
+        "percent_res_complete_afterSSM" : percent_res_complete_afterSSM,
+        "initial_rfree_refmac0_afterSSM_Buccaneer" : initial_rfree_refmac0_afterSSM_Buccaneer,
+        "final_rfree_refmac0_afterSSM_Buccaneer" : final_rfree_refmac0_afterSSM_Buccaneer,
+        "initial_rwork_refmac0_afterSSM_Buccaneer" : initial_rwork_refmac0_afterSSM_Buccaneer,
+        "final_rwork_refmac0_afterSSM_Buccaneer" : final_rwork_refmac0_afterSSM_Buccaneer,
+        "mean_phase_error_afterSSM_Buccaneer_refmac0" : mean_phase_error_afterSSM_Buccaneer_refmac0,
+        "f_map_correlation_afterSSM_Buccaneer_refmac0" : f_map_correlation_afterSSM_Buccaneer_refmac0,
+        "initial_rfree_refmac_afterSSM_Buccaneer" : initial_rfree_refmac_afterSSM_Buccaneer,
+        "final_rfree_refmac_afterSSM_Buccaneer" : final_rfree_refmac_afterSSM_Buccaneer,
+        "initial_rwork_refmac_afterSSM_Buccaneer" : initial_rwork_refmac_afterSSM_Buccaneer,
+        "final_rwork_refmac_afterSSM_Buccaneer" : final_rwork_refmac_afterSSM_Buccaneer,
+        "mean_phase_error_afterSSM_Buccaneer_refmac" : mean_phase_error_afterSSM_Buccaneer_refmac,
+        "f_map_correlation_afterSSM_Buccaneer_refmac" : f_map_correlation_afterSSM_Buccaneer_refmac,
+        # Molrep related variables
         "molrep_TF_sig"                    : molrep_TF_sig,
         "molrep_contrast"                  : molrep_contrast,
         "molrep_corrD"                     : molrep_corrD,
@@ -381,12 +837,51 @@ class MRSSMParser(object):
         "final_rwork_afterMolrep0"         : final_rwork_afterMolrep0,
         "mean_phase_error_afterMolrep0"    : mean_phase_error_afterMolrep0,
         "f_map_correlation_afterMolrep0"   : f_map_correlation_afterMolrep0,
-        "initial_rfree_afterMolrep"        : initial_rfree_afterMolrep,
-        "final_rfree_afterMolrep"          : final_rfree_afterMolrep,
-        "initial_rwork_afterMolrep"        : initial_rwork_afterMolrep,
-        "final_rwork_afterMolrep"          : final_rwork_afterMolrep,
-        "mean_phase_error_afterMolrep"     : mean_phase_error_afterMolrep,
-        "f_map_correlation_afterMolrep"    : f_map_correlation_afterMolrep,
+        "num_fragments_afterMolrep0"          : num_fragments_afterMolrep0,
+        "num_res_built_afterMolrep0"          : num_res_built_afterMolrep0,
+        "num_res_sequenced_afterMolrep0"      : num_res_sequenced_afterMolrep0,
+        "num_res_unique_afterMolrep0"         : num_res_unique_afterMolrep0,
+        "longest_fragments_afterMolrep0"      : longest_fragments_afterMolrep0,
+        "percent_chain_complete_afterMolrep0" : percent_chain_complete_afterMolrep0,
+        "percent_res_complete_afterMolrep0" : percent_res_complete_afterMolrep0,
+        "initial_rfree_refmac0_afterMolrep0_Buccaneer" : initial_rfree_refmac0_afterMolrep0_Buccaneer,
+        "final_rfree_refmac0_afterMolrep0_Buccaneer" : final_rfree_refmac0_afterMolrep0_Buccaneer,
+        "initial_rwork_refmac0_afterMolrep0_Buccaneer" : initial_rwork_refmac0_afterMolrep0_Buccaneer,
+        "final_rwork_refmac0_afterMolrep0_Buccaneer" : final_rwork_refmac0_afterMolrep0_Buccaneer,
+        "mean_phase_error_afterMolrep0_Buccaneer_refmac0" : mean_phase_error_afterMolrep0_Buccaneer_refmac0,
+        "f_map_correlation_afterMolrep0_Buccaneer_refmac0" : f_map_correlation_afterMolrep0_Buccaneer_refmac0,
+        "initial_rfree_refmac_afterMolrep0_Buccaneer" : initial_rfree_refmac_afterMolrep0_Buccaneer,
+        "final_rfree_refmac_afterMolrep0_Buccaneer" : final_rfree_refmac_afterMolrep0_Buccaneer,
+        "initial_rwork_refmac_afterMolrep0_Buccaneer" : initial_rwork_refmac_afterMolrep0_Buccaneer,
+        "final_rwork_refmac_afterMolrep0_Buccaneer" : final_rwork_refmac_afterMolrep0_Buccaneer,
+        "mean_phase_error_afterMolrep0_Buccaneer_refmac" : mean_phase_error_afterMolrep0_Buccaneer_refmac,
+        "f_map_correlation_afterMolrep0_Buccaneer_refmac" : f_map_correlation_afterMolrep0_Buccaneer_refmac,
+        "initial_rfree_afterMolrep"           : initial_rfree_afterMolrep,
+        "final_rfree_afterMolrep"             : final_rfree_afterMolrep,
+        "initial_rwork_afterMolrep"           : initial_rwork_afterMolrep,
+        "final_rwork_afterMolrep"             : final_rwork_afterMolrep,
+        "mean_phase_error_afterMolrep"        : mean_phase_error_afterMolrep,
+        "f_map_correlation_afterMolrep"       : f_map_correlation_afterMolrep,
+        "num_fragments_afterMolrep"           : num_fragments_afterMolrep,
+        "num_res_built_afterMolrep"           : num_res_built_afterMolrep,
+        "num_res_sequenced_afterMolrep"       : num_res_sequenced_afterMolrep,
+        "num_res_unique_afterMolrep"          : num_res_unique_afterMolrep,
+        "longest_fragments_afterMolrep"       : longest_fragments_afterMolrep,
+        "percent_chain_complete_afterMolrep" : percent_chain_complete_afterMolrep,
+        "percent_res_complete_afterMolrep" : percent_res_complete_afterMolrep,
+        "initial_rfree_refmac0_afterMolrep_Buccaneer" : initial_rfree_refmac0_afterMolrep_Buccaneer,
+        "final_rfree_refmac0_afterMolrep_Buccaneer" : final_rfree_refmac0_afterMolrep_Buccaneer,
+        "initial_rwork_refmac0_afterMolrep_Buccaneer" : initial_rwork_refmac0_afterMolrep_Buccaneer,
+        "final_rwork_refmac0_afterMolrep_Buccaneer" : final_rwork_refmac0_afterMolrep_Buccaneer,
+        "mean_phase_error_afterMolrep_Buccaneer_refmac0" : mean_phase_error_afterMolrep_Buccaneer_refmac0,
+        "f_map_correlation_afterMolrep_Buccaneer_refmac0" : f_map_correlation_afterMolrep_Buccaneer_refmac0,
+        "initial_rfree_refmac_afterMolrep_Buccaneer" : initial_rfree_refmac_afterMolrep_Buccaneer,
+        "final_rfree_refmac_afterMolrep_Buccaneer" : final_rfree_refmac_afterMolrep_Buccaneer,
+        "initial_rwork_refmac_afterMolrep_Buccaneer" : initial_rwork_refmac_afterMolrep_Buccaneer,
+        "final_rwork_refmac_afterMolrep_Buccaneer" : final_rwork_refmac_afterMolrep_Buccaneer,
+        "mean_phase_error_afterMolrep_Buccaneer_refmac" : mean_phase_error_afterMolrep_Buccaneer_refmac,
+        "f_map_correlation_afterMolrep_Buccaneer_refmac" : f_map_correlation_afterMolrep_Buccaneer_refmac,
+        # Phaser related variables
         "phaser_ellg"                      : phaser_ellg,
         "phaser_llg"                       : phaser_llg,
         "phaser_rmsd"                      : phaser_rmsd,
@@ -396,12 +891,50 @@ class MRSSMParser(object):
         "final_rwork_afterMR0"             : final_rwork_afterMR0,
         "mean_phase_error_afterMR0"        : mean_phase_error_afterMR0,
         "f_map_correlation_afterMR0"       : f_map_correlation_afterMR0,  
-        "initial_rfree_afterMR"            : initial_rfree_afterMR,
-        "final_rfree_afterMR"              : final_rfree_afterMR,
-        "initial_rwork_afterMR"            : initial_rwork_afterMR,
-        "final_rwork_afterMR"              : final_rwork_afterMR,
-        "mean_phase_error_afterMR"         : mean_phase_error_afterMR,
-        "f_map_correlation_afterMR"        : f_map_correlation_afterMR,
+        "num_fragments_afterMR0"          : num_fragments_afterMR0,
+        "num_res_built_afterMR0"          : num_res_built_afterMR0,
+        "num_res_sequenced_afterMR0"      : num_res_sequenced_afterMR0,
+        "num_res_unique_afterMR0"         : num_res_unique_afterMR0,
+        "longest_fragments_afterMR0"      : longest_fragments_afterMR0,
+        "percent_chain_complete_afterMR0" : percent_chain_complete_afterMR0,
+        "percent_res_complete_afterMR0" : percent_res_complete_afterMR0,
+        "initial_rfree_refmac0_afterMR0_Buccaneer" : initial_rfree_refmac0_afterMR0_Buccaneer,
+        "final_rfree_refmac0_afterMR0_Buccaneer" : final_rfree_refmac0_afterMR0_Buccaneer,
+        "initial_rwork_refmac0_afterMR0_Buccaneer" : initial_rwork_refmac0_afterMR0_Buccaneer,
+        "final_rwork_refmac0_afterMR0_Buccaneer" : final_rwork_refmac0_afterMR0_Buccaneer,
+        "mean_phase_error_afterMR0_Buccaneer_refmac0" : mean_phase_error_afterMR0_Buccaneer_refmac0,
+        "f_map_correlation_afterMR0_Buccaneer_refmac0" : f_map_correlation_afterMR0_Buccaneer_refmac0,
+        "initial_rfree_refmac_afterMR0_Buccaneer" : initial_rfree_refmac_afterMR0_Buccaneer,
+        "final_rfree_refmac_afterMR0_Buccaneer" : final_rfree_refmac_afterMR0_Buccaneer,
+        "initial_rwork_refmac_afterMR0_Buccaneer" : initial_rwork_refmac_afterMR0_Buccaneer,
+        "final_rwork_refmac_afterMR0_Buccaneer" : final_rwork_refmac_afterMR0_Buccaneer,
+        "mean_phase_error_afterMR0_Buccaneer_refmac" : mean_phase_error_afterMR0_Buccaneer_refmac,
+        "f_map_correlation_afterMR0_Buccaneer_refmac" : f_map_correlation_afterMR0_Buccaneer_refmac,
+        "initial_rfree_afterMR"           : initial_rfree_afterMR,
+        "final_rfree_afterMR"             : final_rfree_afterMR,
+        "initial_rwork_afterMR"           : initial_rwork_afterMR,
+        "final_rwork_afterMR"             : final_rwork_afterMR,
+        "mean_phase_error_afterMR"        : mean_phase_error_afterMR,
+        "f_map_correlation_afterMR"       : f_map_correlation_afterMR,
+        "num_fragments_afterMR"           : num_fragments_afterMR,
+        "num_res_built_afterMR"           : num_res_built_afterMR,
+        "num_res_sequenced_afterMR"       : num_res_sequenced_afterMR,
+        "num_res_unique_afterMR"          : num_res_unique_afterMR,
+        "longest_fragments_afterMR"       : longest_fragments_afterMR,
+        "percent_chain_complete_afterMR" : percent_chain_complete_afterMR,
+        "percent_res_complete_afterMR" : percent_res_complete_afterMR,
+        "initial_rfree_refmac0_afterMR_Buccaneer" : initial_rfree_refmac0_afterMR_Buccaneer,
+        "final_rfree_refmac0_afterMR_Buccaneer" : final_rfree_refmac0_afterMR_Buccaneer,
+        "initial_rwork_refmac0_afterMR_Buccaneer" : initial_rwork_refmac0_afterMR_Buccaneer,
+        "final_rwork_refmac0_afterMR_Buccaneer" : final_rwork_refmac0_afterMR_Buccaneer,
+        "mean_phase_error_afterMR_Buccaneer_refmac0" : mean_phase_error_afterMR_Buccaneer_refmac0,
+        "f_map_correlation_afterMR_Buccaneer_refmac0" : f_map_correlation_afterMR_Buccaneer_refmac0,
+        "initial_rfree_refmac_afterMR_Buccaneer" : initial_rfree_refmac_afterMR_Buccaneer,
+        "final_rfree_refmac_afterMR_Buccaneer" : final_rfree_refmac_afterMR_Buccaneer,
+        "initial_rwork_refmac_afterMR_Buccaneer" : initial_rwork_refmac_afterMR_Buccaneer,
+        "final_rwork_refmac_afterMR_Buccaneer" : final_rwork_refmac_afterMR_Buccaneer,
+        "mean_phase_error_afterMR_Buccaneer_refmac" : mean_phase_error_afterMR_Buccaneer_refmac,
+        "f_map_correlation_afterMR_Buccaneer_refmac" : f_map_correlation_afterMR_Buccaneer_refmac,
 #        "mr_success_lable"                 : mr_success_lable,
 #        "refinement_success_lable"         : refinement_success_lable
         }

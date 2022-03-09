@@ -8,10 +8,8 @@ import modules.create_mr_set.utils.pdbtools as pdbtools
 import re
 import shutil
 import modules.create_mr_set.utils.utils as utils
-import uuid
 import xml.etree.ElementTree as ET
 from itertools import islice
-from linecache import getline
 
 
 def add_freer_flag(hklin, prefix):
@@ -492,8 +490,6 @@ def trim_model(model, chain, alignment, prefix):
 
 
 def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
-#def buccaneer(hklin, xyzin, fo, wrk_hl, prefix):
-
   """Running automated model building with Buccaneer"""
   result = {
     "stdout": "%s.log" % prefix,
@@ -511,7 +507,6 @@ def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
     for ind, line in enumerate(f, 1):
       if line.strip().startswith("$TEXT:Result: $$ $$"):
         stats = list(islice(f, 5))
-        print(stats)
         split1 = stats[0].split()
         split2 = stats[1].split()
         split3 = stats[2].split()
@@ -524,7 +519,6 @@ def buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix):
         unique = split3[0]
         residue_completeness = split4[-1].strip("%")
         chain_completeness = split5[-2].strip("%")
-#        print(chain_completeness)
         result["num_res_built"] = int(built)
         result["num_fragments"] = int(fragments)
         result["longest_fragments"] = int(longest)

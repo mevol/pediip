@@ -1,26 +1,14 @@
 #!/usr/bin/env python3
 
-import argparse
 import Bio.Seq
 import Bio.SeqIO
-import Bio.SeqRecord
-import datetime
-import gemmi
 import glob
-import gzip
 import modules.create_mr_set.utils.models as models
 import os
 import modules.create_mr_set.utils.pdbtools as pdbtools
-import random
 import modules.create_mr_set.utils.rcsb as rcsb
-import sys
 import modules.create_mr_set.tasks.tasks as tasks
-import urllib.request
 import modules.create_mr_set.utils.utils as utils
-import uuid
-import xml.etree.ElementTree as ET
-import shutil
-import re
 
 ## MR
 
@@ -96,7 +84,7 @@ def superpose_molrep(key, homologue, args):
     homologue.add_metadata("molrep_packing_coeff", result["packing_coeff"])
     homologue.add_metadata("molrep_contrast", result["contrast"])
   if os.path.exists(homologue.path("molrep.pdb")):
-    molrep_file = homologue.path("molrep.pdb")        
+    molrep_file = homologue.path("molrep.pdb")
     with open(xyzin2) as target_pdb:
       for line in target_pdb:
         if "CRYST1" in line:
@@ -104,10 +92,10 @@ def superpose_molrep(key, homologue, args):
     with open(molrep_file, "r") as m1_file:
       for line in m1_file:
         if "CRYST1" in line:
-          m_cryst_card = line          
+          m_cryst_card = line
     with open(molrep_file, "r") as m2_file:
       content = m2_file.read()
-      content = content.replace(str(m_cryst_card), str(cryst_card))      
+      content = content.replace(str(m_cryst_card), str(cryst_card))
     new_molrep_file = homologue.path("molrep_CRYST1_replace.pdb")
     with open(new_molrep_file, "w") as out_file:
       out_file.write(content)
@@ -140,7 +128,7 @@ def mr(key, homologue, args):
     os.path.exists(glob.glob(homologue.path("sculptor*.pdb"))[0])
   except IndexError:
     pass
-  else:  
+  else:
     xyzin = glob.glob(homologue.path("sculptor*.pdb"))[0]
     identity = homologue.metadata["gesamt_seqid"]
     prefix = homologue.path("phaser")
@@ -402,10 +390,6 @@ def buccaneer_mr_after_refmac_zero(key, homologue, args):
   xyzin = homologue.path("refmac_afterMR0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-#  metafile = homologue.path("metadata.json")
-#  meta_split = metafile.split("/")
-#  path_stem = meta_split[0] + "/" + meta_split[1]
-#  seqin = os.path.join(path_stem, "deposited.fasta")
   seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMR0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
@@ -426,10 +410,6 @@ def buccaneer_mr_after_refmac_jelly(key, homologue, args):
   xyzin = homologue.path("refmac_afterMR.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-#  metafile = homologue.path("metadata.json")
-#  meta_split = metafile.split("/")
-#  path_stem = meta_split[0] + "/" + meta_split[1]
-#  seqin = os.path.join(path_stem, "deposited.fasta")
   seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMR")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
@@ -453,10 +433,6 @@ def buccaneer_molrep_after_refmac_zero(key, homologue, args):
   xyzin = homologue.path("refmac_afterMolrep0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-#  metafile = homologue.path("metadata.json")
-#  meta_split = metafile.split("/")
-#  path_stem = meta_split[0] + "/" + meta_split[1]
-#  seqin = os.path.join(path_stem, "deposited.fasta")
   seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMolrep0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
@@ -477,10 +453,6 @@ def buccaneer_molrep_after_refmac_jelly(key, homologue, args):
   xyzin = homologue.path("refmac_afterMolrep.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-#  metafile = homologue.path("metadata.json")
-#  meta_split = metafile.split("/")
-#  path_stem = meta_split[0] + "/" + meta_split[1]
-#  seqin = os.path.join(path_stem, "deposited.fasta")
   seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterMolrep")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
@@ -504,10 +476,6 @@ def buccaneer_ssm_after_refmac_zero(key, homologue, args):
   xyzin = homologue.path("refmac_afterSSM0.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-#  metafile = homologue.path("metadata.json")
-#  meta_split = metafile.split("/")
-#  path_stem = meta_split[0] + "/" + meta_split[1]
-#  seqin = os.path.join(path_stem, "deposited.fasta")
   seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterSSM0")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
@@ -528,10 +496,6 @@ def buccaneer_ssm_after_refmac_jelly(key, homologue, args):
   xyzin = homologue.path("refmac_afterSSM.pdb")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT,FOM"
-#  metafile = homologue.path("metadata.json")
-#  meta_split = metafile.split("/")
-#  path_stem = meta_split[0] + "/" + meta_split[1]
-#  seqin = os.path.join(path_stem, "deposited.fasta")
   seqin = homologue.chain.structure.path("deposited.fasta")
   prefix = homologue.path("buccaneer_afterSSM")
   result = tasks.buccaneer(hklin, xyzin, fo, wrk_hl, seqin, prefix)
@@ -1266,13 +1230,13 @@ def run_mr_pipelines(key, homologue, args):
     refine_prosmart_model_jelly_buccaneer_jelly(key, homologue, args)
     write_combined_mtz_afterSSM_buccaneer_jelly(key, homologue, args)
     compare_phases_afterSSM_buccaneer_jelly(key, homologue, args)
-    
+
     with open(homologue.path("BUILD_WITH_BUCCANEER.txt"), "w") as out_file:
       line = "job is done"
       out_file.writelines(line)
 
   return key, homologue
-  
+
 
 def prepare_and_do_mr(homologues, args):
   utils.print_section_title("Running set of MR pipelines")
