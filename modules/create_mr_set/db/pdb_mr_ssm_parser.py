@@ -276,7 +276,7 @@ class MRSSMParser(object):
     final_rwork_refmac0_afterMR0_Buccaneer = 0
     # PhaseError-Refmac0-Buccaneer-Refmac0-MR
     mean_phase_error_afterMR0_Buccaneer_refmac0 = 0
-    f_map_correlation_afterMF0_Buccaneer_refmac0 = 0
+    f_map_correlation_afterMR0_Buccaneer_refmac0 = 0
     # RefmacJellyBody-Buccaneer-Refmac0-MR
     initial_rfree_refmac_afterMR0_Buccaneer = 0
     final_rfree_refmac_afterMR0_Buccaneer = 0
