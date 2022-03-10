@@ -466,9 +466,9 @@ class MRSSMParser(object):
         except:
           initial_rfree_refmac0_afterMolrep0_Buccaneer = 0
         try:
-          final_rfree_refmac0_afterMolrep_Buccaneer = h_reader["final_rfree_refmac0_afterMolrep0_Buccaneer"]
+          final_rfree_refmac0_afterMolrep0_Buccaneer = h_reader["final_rfree_refmac0_afterMolrep0_Buccaneer"]
         except:
-          final_rfree_refmac0_afterMolrep_Buccaneer = 0
+          final_rfree_refmac0_afterMolrep0_Buccaneer = 0
         try:
           initial_rwork_refmac0_afterMolrep0_Buccaneer = h_reader["initial_rwork_refmac0_afterMolrep0_Buccaneer"]
         except:
