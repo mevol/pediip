@@ -373,6 +373,10 @@ class MRSSMParser(object):
         except:
           cluster0 = 0
         try:
+          fragments0 = h_reader["fragments0"]
+        except:
+          fragments0 = 0
+        try:
           mean_cos_theta0 = h_reader["mean_cos_theta0"]
         except:
           mean_cos_theta0 = 0
