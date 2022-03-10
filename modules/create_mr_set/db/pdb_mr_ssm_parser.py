@@ -361,6 +361,42 @@ class MRSSMParser(object):
         except:
           prosmart_seqid = 0
         try:
+          procrustes = h_reader["procrustes"]
+        except:
+          procrustes = 0
+        try:
+          flexible = h_reader["flexible"]
+        except:
+          flexible = 0
+        try:
+          cluster0 = h_reader["cluster0"]
+        except:
+          cluster0 = 0
+        try:
+          mean_cos_theta0 = h_reader["mean_cos_theta0"]
+        except:
+          mean_cos_theta0 = 0
+        try:
+          sd_cos_theta0 = h_reader["sd_cos_theta0"]
+        except:
+          sd_cos_theta0 = 0
+        try:
+          cluster1 = h_reader["cluster1"]
+        except:
+          cluster1 = 0
+        try:
+          fragments1 = h_reader["fragments1"]
+        except:
+          fragments1 = 0
+        try:
+          mean_cos_theta1 = h_reader["mean_cos_theta1"]
+        except:
+          mean_cos_theta1 = 0
+        try:
+          sd_cos_theta1 = h_reader["sd_cos_theta1"]
+        except:
+          sd_cos_theta1 = 0
+        try:
           initial_rfree_afterSSM0 = h_reader["initial_rfree_afterSSM0"]
         except:
           initial_rfree_afterSSM0 = 0
