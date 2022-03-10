@@ -98,5 +98,5 @@ if __name__ == "__main__":
         homologue_path = os.path.join(homologue_dir, homologue)
 
         # adding MR and SSM stats for each homologue of a given target PDB structure
-        db.add_mr_ssm_stats(homologue_path)
+        db.add_mr_ssm_stats(homologue_path, args.local_pdb_redo)
 
