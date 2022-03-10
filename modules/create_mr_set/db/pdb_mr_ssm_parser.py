@@ -81,7 +81,7 @@ class MRSSMParser(object):
         # split the line and pick the corresponding values based on column names declared
         # in the file header which is being ignored here
         split = line.split()
-        homologue_resolution = split[62]
+        homologue_resolution = float(split[62])
       except:
         homologue_resolution = 0
 
