@@ -88,91 +88,91 @@ class MRSSMParser(object):
 
     # set all to be extracted metrics to 0 to start with
     # GESAMT related variables
-    gesamt_length = 0
-    gesamt_qscore = 0
-    gesamt_seqid = 0
-    gesamt_rmsd = 0
+#    gesamt_length = 0
+#    gesamt_qscore = 0
+#    gesamt_seqid = 0
+#    gesamt_rmsd = 0
 
 ##########################################################################################
     # Prosmart related variables
-    prosmart_length_number = 0
-    prosmart_rmsd = 0
-    prosmart_seqid = 0
-    procrustes = 0
-    flexible = 0
-    cluster0 = 0
-    fragments0 = 0
-    mean_cos_theta0 = 0
-    sd_cos_theta0 = 0
-    cluster1 = 0
-    fragments1 = 0
-    mean_cos_theta1 = 0
-    sd_cos_theta1 = 0
-    # Refmac0-Prosmart
-    initial_rfree_afterSSM0 = 0
-    final_rfree_afterSSM0 = 0 
-    initial_rwork_afterSSM0 = 0 
-    final_rwork_afterSSM0 = 0
-    # PhaseError-Refmac0-Prosmart
-    mean_phase_error_afterSSM0 = 0
-    f_map_correlation_afterSSM0 = 0
-    # Buccaneer-Refmac0-Prosmart
-    num_fragments_afterSSM0 = 0
-    num_res_built_afterSSM0 = 0
-    num_res_sequenced_afterSSM0 = 0
-    num_res_unique_afterSSM0 = 0
-    longest_fragments_afterSSM0 = 0
-    percent_chain_complete_afterSSM0 = 0
-    percent_res_complete_afterSSM0 = 0
-    # Refmac0-Buccaneer-Refmac0-Prosmart
-    initial_rfree_refmac0_afterSSM0_Buccaneer = 0
-    final_rfree_refmac0_afterSSM0_Buccaneer = 0
-    initial_rwork_refmac0_afterSSM0_Buccaneer = 0
-    final_rwork_refmac0_afterSSM0_Buccaneer = 0
-    # PhaseError-Refmac0-Buccaneer-Refmac0-Prosmart
-    mean_phase_error_afterSSM0_Buccaneer_refmac0 = 0
-    f_map_correlation_afterSSM0_Buccaneer_refmac0 = 0
-    # RefmacJellyBody-Buccaneer-Refmac0-Prosmart
-    initial_rfree_refmac_afterSSM0_Buccaneer = 0
-    final_rfree_refmac_afterSSM0_Buccaneer = 0
-    initial_rwork_refmac_afterSSM0_Buccaneer = 0
-    final_rwork_refmac_afterSSM0_Buccaneer = 0
-    # PhaseError-RefmacJellyBody-Buccaneer-Refmac0-Prosmart
-    mean_phase_error_afterSSM0_Buccaneer_refmac = 0
-    f_map_correlation_afterSSM0_Buccaneer_refmac = 0
-
-    # RefmacJellyBody-Prosmart
-    initial_rfree_afterSSM = 0
-    final_rfree_afterSSM = 0
-    initial_rwork_afterSSM = 0
-    final_rwork_afterSSM = 0
-    # PhaseError-RefmacJellyBody-Prosmart
-    mean_phase_error_afterSSM = 0
-    f_map_correlation_afterSSM = 0
-    # Buccaneer-RefmacJellyBody-Prosmart
-    num_fragments_afterSSM = 0
-    num_res_built_afterSSM = 0
-    num_res_sequenced_afterSSM = 0
-    num_res_unique_afterSSM = 0
-    longest_fragments_afterSSM = 0
-    percent_chain_complete_afterSSM = 0
-    percent_res_complete_afterSSM = 0
-    # Refmac0-Buccaneer-RefmacJellyBody-Prosmart
-    initial_rfree_refmac0_afterSSM_Buccaneer = 0
-    final_rfree_refmac0_afterSSM_Buccaneer = 0
-    initial_rwork_refmac0_afterSSM_Buccaneer = 0
-    final_rwork_refmac0_afterSSM_Buccaneer = 0
-    # PhaseError-Refmac0-Buccaneer-RefmacJellyBody-Prosmart
-    mean_phase_error_afterSSM_Buccaneer_refmac0 = 0
-    f_map_correlation_afterSSM_Buccaneer_refmac0 = 0
-    # RefmacJellyBody-Buccaneer-RefmacJellyBody-Prosmart
-    initial_rfree_refmac_afterSSM_Buccaneer = 0
-    final_rfree_refmac_afterSSM_Buccaneer = 0
-    initial_rwork_refmac_afterSSM_Buccaneer = 0
-    final_rwork_refmac_afterSSM_Buccaneer = 0
-    # PhaseError-RefmacJellyBody-Buccaneer-RefmacJellyBody-Prosmart
-    mean_phase_error_afterSSM_Buccaneer_refmac = 0
-    f_map_correlation_afterSSM_Buccaneer_refmac = 0
+#    prosmart_length_number = 0
+#    prosmart_rmsd = 0
+#    prosmart_seqid = 0
+#    procrustes = 0
+#    flexible = 0
+#    cluster0 = 0
+#    fragments0 = 0
+#    mean_cos_theta0 = 0
+#    sd_cos_theta0 = 0
+#    cluster1 = 0
+#    fragments1 = 0
+#    mean_cos_theta1 = 0
+#    sd_cos_theta1 = 0
+#    # Refmac0-Prosmart
+#    initial_rfree_afterSSM0 = 0
+#    final_rfree_afterSSM0 = 0 
+#    initial_rwork_afterSSM0 = 0 
+#    final_rwork_afterSSM0 = 0
+#    # PhaseError-Refmac0-Prosmart
+#    mean_phase_error_afterSSM0 = 0
+#    f_map_correlation_afterSSM0 = 0
+#    # Buccaneer-Refmac0-Prosmart
+#    num_fragments_afterSSM0 = 0
+#    num_res_built_afterSSM0 = 0
+#    num_res_sequenced_afterSSM0 = 0
+#    num_res_unique_afterSSM0 = 0
+#    longest_fragments_afterSSM0 = 0
+#    percent_chain_complete_afterSSM0 = 0
+#    percent_res_complete_afterSSM0 = 0
+#    # Refmac0-Buccaneer-Refmac0-Prosmart
+#    initial_rfree_refmac0_afterSSM0_Buccaneer = 0
+#    final_rfree_refmac0_afterSSM0_Buccaneer = 0
+#    initial_rwork_refmac0_afterSSM0_Buccaneer = 0
+#    final_rwork_refmac0_afterSSM0_Buccaneer = 0
+#    # PhaseError-Refmac0-Buccaneer-Refmac0-Prosmart
+#    mean_phase_error_afterSSM0_Buccaneer_refmac0 = 0
+#    f_map_correlation_afterSSM0_Buccaneer_refmac0 = 0
+#    # RefmacJellyBody-Buccaneer-Refmac0-Prosmart
+#    initial_rfree_refmac_afterSSM0_Buccaneer = 0
+#    final_rfree_refmac_afterSSM0_Buccaneer = 0
+#    initial_rwork_refmac_afterSSM0_Buccaneer = 0
+#    final_rwork_refmac_afterSSM0_Buccaneer = 0
+#    # PhaseError-RefmacJellyBody-Buccaneer-Refmac0-Prosmart
+#    mean_phase_error_afterSSM0_Buccaneer_refmac = 0
+#    f_map_correlation_afterSSM0_Buccaneer_refmac = 0
+#
+#    # RefmacJellyBody-Prosmart
+#    initial_rfree_afterSSM = 0
+#    final_rfree_afterSSM = 0
+#    initial_rwork_afterSSM = 0
+#    final_rwork_afterSSM = 0
+#    # PhaseError-RefmacJellyBody-Prosmart
+#    mean_phase_error_afterSSM = 0
+#    f_map_correlation_afterSSM = 0
+#    # Buccaneer-RefmacJellyBody-Prosmart
+#    num_fragments_afterSSM = 0
+#    num_res_built_afterSSM = 0
+#    num_res_sequenced_afterSSM = 0
+#    num_res_unique_afterSSM = 0
+#    longest_fragments_afterSSM = 0
+#    percent_chain_complete_afterSSM = 0
+#    percent_res_complete_afterSSM = 0
+#    # Refmac0-Buccaneer-RefmacJellyBody-Prosmart
+#    initial_rfree_refmac0_afterSSM_Buccaneer = 0
+#    final_rfree_refmac0_afterSSM_Buccaneer = 0
+#    initial_rwork_refmac0_afterSSM_Buccaneer = 0
+#    final_rwork_refmac0_afterSSM_Buccaneer = 0
+#    # PhaseError-Refmac0-Buccaneer-RefmacJellyBody-Prosmart
+#    mean_phase_error_afterSSM_Buccaneer_refmac0 = 0
+#    f_map_correlation_afterSSM_Buccaneer_refmac0 = 0
+#    # RefmacJellyBody-Buccaneer-RefmacJellyBody-Prosmart
+#    initial_rfree_refmac_afterSSM_Buccaneer = 0
+#    final_rfree_refmac_afterSSM_Buccaneer = 0
+#    initial_rwork_refmac_afterSSM_Buccaneer = 0
+#    final_rwork_refmac_afterSSM_Buccaneer = 0
+#    # PhaseError-RefmacJellyBody-Buccaneer-RefmacJellyBody-Prosmart
+#    mean_phase_error_afterSSM_Buccaneer_refmac = 0
+#    f_map_correlation_afterSSM_Buccaneer_refmac = 0
 
 ##########################################################################################
     # Molrep related variables
@@ -326,135 +326,240 @@ class MRSSMParser(object):
     if os.path.exists(h_meta_json):
       with open(h_meta_json, "r") as h_json:
         h_reader = json.load(h_json)          
-        if "gesamt_length" in h_reader:
+        try:
           gesamt_length = h_reader["gesamt_length"]
-        if "gesamt_qscore" in h_reader:
+        except:
+          gesamt_length = 0
+        try:
           gesamt_qscore = h_reader["gesamt_qscore"]
-        if "gesamt_seqid" in h_reader:
+        except:
+          gesamt_qscore = 0
+        try:
           gesamt_seqid = h_reader["gesamt_seqid"]
-        if "gesamt_rmsd" in h_reader:
+        except:
+          gesamt_seqid = 0
+        try:
           gesamt_rmsd = h_reader["gesamt_rmsd"]
+        except:
+          gesamt_rmsd = 0
 
 ##########################################################################################
     # Prosmart related variables
 
 #        if "initial_rfree" in h_reader:
 #          initial_rfree = h_reader["initial_rfree"]
-#        if  "prosmart_length_number" in h_reader:
-#          prosmart_length_number = h_reader["prosmart_length_number"]
         try:
           prosmart_length_number = h_reader["prosmart_length_number"]
         except:
           prosmart_length_number = 0
-#        if  "prosmart_rmsd" in h_reader:
-#          prosmart_rmsd = h_reader["prosmart_rmsd"]
         try:
           prosmart_rmsd = h_reader["prosmart_rmsd"]
         except:
           prosmart_rmsd = 0
-        if  "prosmart_seqid" in h_reader:
+        try:
           prosmart_seqid = h_reader["prosmart_seqid"]
-        if  "initial_rfree_afterSSM0" in h_reader:
+        except:
+          prosmart_seqid = 0
+        try:
           initial_rfree_afterSSM0 = h_reader["initial_rfree_afterSSM0"]
-        if  "final_rfree_afterSSM0" in h_reader:
+        except:
+          initial_rfree_afterSSM0 = 0
+        try:
           final_rfree_afterSSM0 = h_reader["final_rfree_afterSSM0"]
-        if  "initial_rwork_afterSSM0" in h_reader:
+        except:
+          final_rfree_afterSSM0 = 0
+        try:
           initial_rwork_afterSSM0 = h_reader["initial_rwork_afterSSM0"]
-        if  "final_rwork_afterSSM0" in h_reader:
+        except:
+          initial_rwork_afterSSM0 = 0
+        try:
           final_rwork_afterSSM0 = h_reader["final_rwork_afterSSM0"]
-        if  "mean_phase_error_afterSSM0" in h_reader:
+        except:
+          final_rwork_afterSSM0 = 0
+        try:
           mean_phase_error_afterSSM0 = h_reader["mean_phase_error_afterSSM0"]
-        if  "f_map_correlation_afterSSM0" in h_reader:
+        except:
+          mean_phase_error_afterSSM0 = 0
+        try:
           f_map_correlation_afterSSM0 = h_reader["f_map_correlation_afterSSM0"]
-        if "num_fragments_afterSSM0" in h_reader:
+        except:
+          f_map_correlation_afterSSM0 = 0
+        try:
           num_fragments_afterSSM0 = h_reader["num_fragments_afterSSM0"]
-        if "num_res_built_afterSSM0" in h_reader:
+        except:
+          num_fragments_afterSSM0 = 0
+        try:
           num_res_built_afterSSM0 = h_reader["num_res_built_afterSSM0"]
-        if "num_res_sequenced_afterSSM0" in h_reader:
+        except:
+          num_res_built_afterSSM0 = 0
+        try:
           num_res_sequenced_afterSSM0 = h_reader["num_res_sequenced_afterSSM0"]
-        if "num_res_unique_afterSSM0" in h_reader:
+        except:
+          num_res_sequenced_afterSSM0 = 0
+        try:
           num_res_unique_afterSSM0 = h_reader["num_res_unique_afterSSM0"]
-        if "longest_fragments_afterSSM0" in h_reader:
+        except:
+          num_res_unique_afterSSM0 = 0
+        try:
           longest_fragments_afterSSM0 = h_reader["longest_fragments_afterSSM0"]
-        if "percent_chain_complete_afterSSM0" in h_reader:
+        except:
+          longest_fragments_afterSSM0 = 0
+        try:
           percent_chain_complete_afterSSM0 = h_reader["percent_chain_complete_afterSSM0"]
-        if "percent_res_complete_afterSSM0" in h_reader:
+        except:
+          percent_chain_complete_afterSSM0 = 0
+        try:
           percent_res_complete_afterSSM0 = h_reader["percent_res_complete_afterSSM0"]
-        if "initial_rfree_refmac0_afterSSM0_Buccaneer" in h_reader:
+        except:
+          percent_res_complete_afterSSM0 = 0
+        try:
           initial_rfree_refmac0_afterSSM0_Buccaneer = h_reader["initial_rfree_refmac0_afterSSM0_Buccaneer"]
-        if "final_rfree_refmac0_afterSSM0_Buccaneer" in h_reader:
+        except:
+          initial_rfree_refmac0_afterSSM0_Buccaneer = 0
+        try:
           final_rfree_refmac0_afterSSM0_Buccaneer = h_reader["final_rfree_refmac0_afterSSM0_Buccaneer"]
-        if "initial_rwork_refmac0_afterSSM0_Buccaneer" in h_reader:
+        except:
+          final_rfree_refmac0_afterSSM0_Buccaneer = 0
+        try:
           initial_rwork_refmac0_afterSSM0_Buccaneer = h_reader["initial_rwork_refmac0_afterSSM0_Buccaneer"]
-        if "final_rwork_refmac0_afterSSM0_Buccaneer" in h_reader:
+        except:
+          initial_rwork_refmac0_afterSSM0_Buccaneer = 0
+        try:
           final_rwork_refmac0_afterSSM0_Buccaneer = h_reader["final_rwork_refmac0_afterSSM0_Buccaneer"]
-        if "mean_phase_error_afterSSM0_Buccaneer_refmac0" in h_reader:
+        except:
+          final_rwork_refmac0_afterSSM0_Buccaneer = 0
+        try:
           mean_phase_error_afterSSM0_Buccaneer_refmac0 = h_reader["mean_phase_error_afterSSM0_Buccaneer_refmac0"]
-        if "f_map_correlation_afterSSM0_Buccaneer_refmac0" in h_reader:
+        except:
+          mean_phase_error_afterSSM0_Buccaneer_refmac0 = 0
+        try:
           f_map_correlation_afterSSM0_Buccaneer_refmac0 = h_reader["f_map_correlation_afterSSM0_Buccaneer_refmac0"]
-        if "initial_rfree_refmac_afterSSM0_Buccaneer" in h_reader:
+        except:
+          f_map_correlation_afterSSM0_Buccaneer_refmac0 = 0
+        try:
           initial_rfree_refmac_afterSSM0_Buccaneer = h_reader["initial_rfree_refmac_afterSSM0_Buccaneer"]
-        if "final_rfree_refmac_afterSSM0_Buccaneer" in h_reader:
+        except:
+          initial_rfree_refmac_afterSSM0_Buccaneer = 0
+        try:
           final_rfree_refmac_afterSSM0_Buccaneer = h_reader["final_rfree_refmac_afterSSM0_Buccaneer"]
-        if "initial_rwork_refmac_afterSSM0_Buccaneer" in h_reader:
+        except:
+          final_rfree_refmac_afterSSM0_Buccaneer = 0
+        try:
           initial_rwork_refmac_afterSSM0_Buccaneer = h_reader["initial_rwork_refmac_afterSSM0_Buccaneer"]
-        if "final_rwork_refmac_afterSSM0_Buccaneer" in h_reader:
+        except:
+          initial_rwork_refmac_afterSSM0_Buccaneer = 0
+        try:
           final_rwork_refmac_afterSSM0_Buccaneer = h_reader["final_rwork_refmac_afterSSM0_Buccaneer"]
-        if "mean_phase_error_afterSSM0_Buccaneer_refmac" in h_reader:
+        except:
+          final_rwork_refmac_afterSSM0_Buccaneer = 0
+        try:
           mean_phase_error_afterSSM0_Buccaneer_refmac = h_reader["mean_phase_error_afterSSM0_Buccaneer_refmac"]
-        if "f_map_correlation_afterSSM0_Buccaneer_refmac" in h_reader:
+        except:
+          mean_phase_error_afterSSM0_Buccaneer_refmac = 0
+        try:
           f_map_correlation_afterSSM0_Buccaneer_refmac = h_reader["f_map_correlation_afterSSM0_Buccaneer_refmac"]
-
-        if  "initial_rfree_afterSSM" in h_reader:
+        except:
+          f_map_correlation_afterSSM0_Buccaneer_refmac = 0
+        try:
           initial_rfree_afterSSM = h_reader["initial_rfree_afterSSM"]
-        if  "final_rfree_afterSSM" in h_reader:
+        except:
+          initial_rfree_afterSSM = 0
+        try:
           final_rfree_afterSSM = h_reader["final_rfree_afterSSM"]
-        if  "initial_rwork_afterSSM" in h_reader:
+        except:
+          final_rfree_afterSSM = 0
+        try:
           initial_rwork_afterSSM = h_reader["initial_rwork_afterSSM"]
-        if  "final_rwork_afterSSM" in h_reader:
+        except:
+          initial_rwork_afterSSM = 0
+        try:
           final_rwork_afterSSM = h_reader["final_rwork_afterSSM"]
-        if  "mean_phase_error_afterSSM" in h_reader:
+        except:
+          final_rwork_afterSSM = 0
+        try:
           mean_phase_error_afterSSM = h_reader["mean_phase_error_afterSSM"]
-        if  "f_map_correlation_afterSSM" in h_reader:
+        except:
+          mean_phase_error_afterSSM = 0
+        try:
           f_map_correlation_afterSSM = h_reader["f_map_correlation_afterSSM"]
-        if "num_fragments_afterSSM" in h_reader:
+        except:
+          f_map_correlation_afterSSM = 0
+        try:
           num_fragments_afterSSM = h_reader["num_fragments_afterSSM"]
-        if "num_res_built_afterSSM" in h_reader:
+        except:
+          num_fragments_afterSSM = 0
+        try:
           num_res_built_afterSSM = h_reader["num_res_built_afterSSM"]
-        if "num_res_sequenced_afterSSM" in h_reader:
+        except:
+          num_res_built_afterSSM = 0
+        try:
           num_res_sequenced_afterSSM = h_reader["num_res_sequenced_afterSSM"]
-        if "num_res_unique_afterSSM" in h_reader:
+        except:
+          num_res_sequenced_afterSSM = 0
+        try:
           num_res_unique_afterSSM = h_reader["num_res_unique_afterSSM"]
-        if "longest_fragments_afterSSM" in h_reader:
+        except:
+          num_res_unique_afterSSM = 0
+        try:
           longest_fragments_afterSSM = h_reader["longest_fragments_afterSSM"]
-        if "percent_chain_complete_afterSSM" in h_reader:
+        except:
+          longest_fragments_afterSSM = 0
+        try:
           percent_chain_complete_afterSSM = h_reader["percent_chain_complete_afterSSM"]
-        if "percent_res_complete_afterSSM" in h_reader:
+        except:
+          percent_chain_complete_afterSSM = 0
+        try:
           percent_res_complete_afterSSM = h_reader["percent_res_complete_afterSSM"]
-        if "initial_rfree_refmac0_afterSSM_Buccaneer" in h_reader:
+        except:
+          percent_res_complete_afterSSM = 0
+        try:
           initial_rfree_refmac0_afterSSM_Buccaneer = h_reader["initial_rfree_refmac0_afterSSM_Buccaneer"]
-        if "final_rfree_refmac0_afterSSM_Buccaneer" in h_reader:
+        except:
+          initial_rfree_refmac0_afterSSM_Buccaneer = 0
+        try:
           final_rfree_refmac0_afterSSM_Buccaneer = h_reader["final_rfree_refmac0_afterSSM_Buccaneer"]
-        if "initial_rwork_refmac0_afterSSM_Buccaneer" in h_reader:
+        except:
+          final_rfree_refmac0_afterSSM_Buccaneer = 0
+        try:
           initial_rwork_refmac0_afterSSM_Buccaneer = h_reader["initial_rwork_refmac0_afterSSM_Buccaneer"]
-        if "final_rwork_refmac0_afterSSM_Buccaneer" in h_reader:
+        except:
+          initial_rwork_refmac0_afterSSM_Buccaneer = 0
+        try:
           final_rwork_refmac0_afterSSM_Buccaneer = h_reader["final_rwork_refmac0_afterSSM_Buccaneer"]
-        if "mean_phase_error_afterSSM_Buccaneer_refmac0" in h_reader:
+        except:
+          final_rwork_refmac0_afterSSM_Buccaneer = 0
+        try:
           mean_phase_error_afterSSM_Buccaneer_refmac0 = h_reader["mean_phase_error_afterSSM_Buccaneer_refmac0"]
-        if "f_map_correlation_afterSSM_Buccaneer_refmac0" in h_reader:
+        except:
+          mean_phase_error_afterSSM_Buccaneer_refmac0 = 0
+        try:
           f_map_correlation_afterSSM_Buccaneer_refmac0 = h_reader["f_map_correlation_afterSSM_Buccaneer_refmac0"]
-        if "initial_rfree_refmac_afterSSM_Buccaneer" in h_reader:
+        except:
+          f_map_correlation_afterSSM_Buccaneer_refmac0 = 0
+        try:
           initial_rfree_refmac_afterSSM_Buccaneer = h_reader["initial_rfree_refmac_afterSSM_Buccaneer"]
-        if "final_rfree_refmac_afterSSM_Buccaneer" in h_reader:
+        except:
+          initial_rfree_refmac_afterSSM_Buccaneer = 0
+        try:
           final_rfree_refmac_afterSSM_Buccaneer = h_reader["final_rfree_refmac_afterSSM_Buccaneer"]
-        if "initial_rwork_refmac_afterSSM_Buccaneer" in h_reader:
+        except:
+          final_rfree_refmac_afterSSM_Buccaneer = 0
+        try:
           initial_rwork_refmac_afterSSM_Buccaneer = h_reader["initial_rwork_refmac_afterSSM_Buccaneer"]
-        if "final_rwork_refmac_afterSSM_Buccaneer" in h_reader:
+        except:
+          initial_rwork_refmac_afterSSM_Buccaneer = 0
+        try:
           final_rwork_refmac_afterSSM_Buccaneer = h_reader["final_rwork_refmac_afterSSM_Buccaneer"]
-        if "mean_phase_error_afterSSM_Buccaneer_refmac" in h_reader:
+        except:
+          final_rwork_refmac_afterSSM_Buccaneer = 0
+        try:
           mean_phase_error_afterSSM_Buccaneer_refmac = h_reader["mean_phase_error_afterSSM_Buccaneer_refmac"]
-        if "f_map_correlation_afterSSM_Buccaneer_refmac" in h_reader:
+        except:
+          mean_phase_error_afterSSM_Buccaneer_refmac = 0
+        try:
           f_map_correlation_afterSSM_Buccaneer_refmac = h_reader["f_map_correlation_afterSSM_Buccaneer_refmac"]
+        except:
+          f_map_correlation_afterSSM_Buccaneer_refmac = 0
 
 
 ##########################################################################################
