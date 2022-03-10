@@ -73,11 +73,12 @@ class MRSSMParser(object):
     # set default value for the different stats
     homologue_resolution = 0
     
-    print(homologue_name.split("_"))
+    homologue_short = homologue_name.split("_")[0].lower()
+    print(homologue_short)
     # open the data file if it exists
     with open(filename, "r") as data_file:
       # find the line staring with lower case structure PDB ID
-      line = next((l for l in data_file if homologue_name.lower() in l), None)
+      line = next((l for l in data_file if homologue_short in l), None)
       print(line)
       # split the line and pick the corresponding values based on column names declared
       # in the file header which is being ignored here
