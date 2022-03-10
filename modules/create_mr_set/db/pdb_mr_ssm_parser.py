@@ -70,22 +70,22 @@ class MRSSMParser(object):
       print("No data file found for PDB-redo")
     pass
 
-    # set default value for the different stats
-    homologue_resolution = 0
-    
+    # get shorter homologue nam ein lower case
     homologue_short = homologue_name.split("_")[0].lower()
     print(homologue_short)
+
     # open the data file if it exists
     with open(filename, "r") as data_file:
       # find the line staring with lower case structure PDB ID
-      line = next((l for l in data_file if homologue_short in l), None)
-      print(line)
-      # split the line and pick the corresponding values based on column names declared
-      # in the file header which is being ignored here
-      split = line.split()
-      print(split)
-      homologue_resolution = split[62]
-      print(homologue_resolution)
+      try:
+        line = next((l for l in data_file if homologue_short in l), None)
+        # split the line and pick the corresponding values based on column names declared
+        # in the file header which is being ignored here
+        split = line.split()
+        homologue_resolution = split[62]
+        print(homologue_resolution)
+      except:
+        homologue_resolution = 0
 
     # find the metadata.json file containing analysis stats from MR, SSM and refinement for a given homologue
     h_meta_json = os.path.join(homologue, "metadata.json")
