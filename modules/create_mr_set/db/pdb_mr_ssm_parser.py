@@ -338,12 +338,20 @@ class MRSSMParser(object):
 ##########################################################################################
     # Prosmart related variables
 
-        if "initial_rfree" in h_reader:
-          initial_rfree = h_reader["initial_rfree"]
-        if  "prosmart_length_number" in h_reader:
+#        if "initial_rfree" in h_reader:
+#          initial_rfree = h_reader["initial_rfree"]
+#        if  "prosmart_length_number" in h_reader:
+#          prosmart_length_number = h_reader["prosmart_length_number"]
+        try:
           prosmart_length_number = h_reader["prosmart_length_number"]
-        if  "prosmart_rmsd" in h_reader:
+        except:
+          prosmart_length_number = 0
+#        if  "prosmart_rmsd" in h_reader:
+#          prosmart_rmsd = h_reader["prosmart_rmsd"]
+        try:
           prosmart_rmsd = h_reader["prosmart_rmsd"]
+        except:
+          prosmart_rmsd = 0
         if  "prosmart_seqid" in h_reader:
           prosmart_seqid = h_reader["prosmart_seqid"]
         if  "initial_rfree_afterSSM0" in h_reader:
