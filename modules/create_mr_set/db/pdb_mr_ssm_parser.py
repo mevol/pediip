@@ -812,7 +812,7 @@ class MRSSMParser(object):
 ######### PhaseError-Refmac0-Buccaneer-RefmacJellyBody-MR
         try:
           mean_phase_error_afterMR_Buccaneer_refmac0 = h_reader["mean_phase_error_afterMR_Buccaneer_refmac0"]
-        except;
+        except:
           mean_phase_error_afterMR_Buccaneer_refmac0 = 0
         try:
           f_map_correlation_afterMR_Buccaneer_refmac0 = h_reader["f_map_correlation_afterMR_Buccaneer_refmac0"]
