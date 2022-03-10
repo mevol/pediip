@@ -1139,8 +1139,6 @@ def run_mr_pipelines(key, homologue, args):
     pass
 
   if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")):
-    print("Starting Buccaneer")
-    print(key, homologue)
     # Phaser-placed model after 0-cycle Refmac refinement; built with Buccaneer;
     # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
     # MTZ;

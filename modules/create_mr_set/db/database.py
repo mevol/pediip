@@ -36,11 +36,11 @@ class DB(object):
     parser.add_entry(structure, results_dir, local_pdb)
 
 
-  def add_mr_ssm_stats(self, homologue):
+  def add_mr_ssm_stats(self, homologue, local_pdb_redo):
     '''
     Add homologue details to the database
     '''    
     print("Adding MR and SSM stats for homologue: ", homologue)
     parser = MRSSMParser(self.handle)
-    parser.add_entry(homologue)
+    parser.add_entry(homologue, local_pdb_redo)
 

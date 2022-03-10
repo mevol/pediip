@@ -77,6 +77,7 @@ class Initialiser(object):
       );
       CREATE TABLE homologue_stats (
           homologue_name_id INTEGER,
+          homologue_resolution FLOAT,
           gesamt_length INTEGER,
           gesamt_qscore FLOAT,
           gesamt_rmsd FLOAT,

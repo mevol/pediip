@@ -14,7 +14,6 @@ import modules.create_mr_set.tasks.find_homologues as find_homologues
 import modules.create_mr_set.tasks.run_mr as prepare_and_do_mr
 import modules.create_mr_set.tasks.tasks as tasks
 import modules.create_mr_set.utils.utils as utils
-#from modules.create_mr_set.db.database import DB
 
 ## ARGUMENTS
 
@@ -99,45 +98,14 @@ if __name__ == "__main__":
     prepare_structure_data.prepare_structure_data(structures, args)
 
   chains = {c.global_id: c for s in structures.values() for c in s.chains.values()}
-#  print("Chains found: ", chains)
-#  print("Chain keys: ", chains.keys())
-#  print("Chain values: ", chains.values())
   print("Number of chains to search for", len(chains))
   find_homologues.find_homologues(chains, args)
   
-#
-#  for c in chains.values():
-#    print(6666666666666666, c)
-#    for h in c.homologues.values():
-#      print(7777777777777777, h)
-#
-#  if os.path.exists("homologues"):
-#  homologues = {h.global_id: h for c in chains.values() for h in c.homologues.values() if h.todo}
-#  if len(homologues) > 0:
-#    prepare_and_do_mr.prepare_and_do_mr(homologues, args)
   homologues = {h.global_id: h for c in chains.values() for h in c.homologues.values()} #if h.todo}# ignoring the if statement to add the Buccaneer run
-#  print("Found homologues: ", homologues)
   print("Number of homologues found", len(homologues))
   if len(homologues) > 0:
     "Running MR and SSM"
     prepare_and_do_mr.prepare_and_do_mr(homologues, args)
-    
-# Taken database function out for now; plan is to have a separate set of scripts to do the job.
-#  # Create the database
-#  db = DB(overwrite=True)
-#
-#  # Check it exists
-#  if not os.path.exists("results.sqlite"):
-#    raise RuntimeError("Failed to initialise")
-#  print("Database has been initialised")
-#  redo_stats_in = os.path.join(args.pdb_coords, "alldata_noHeader.txt")
-#  
-#  for homologue in homologues:
-#    db.add_mr_ssm_stats(homologue)
-#    
-#  #db.add_pdb_redo(redo_stats_in)
-
-
 
   print("------------------")
   print("Normal termination")

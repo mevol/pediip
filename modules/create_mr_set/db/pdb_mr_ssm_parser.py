@@ -16,7 +16,7 @@ class MRSSMParser(object):
     '''
     self.handle = handle
 
-  def add_entry(self, homologue):
+  def add_entry(self, homologue, local_pdb_redo):
     '''
     Add the pdb entry to the database
     '''
@@ -60,6 +60,29 @@ class MRSSMParser(object):
       INSERT OR IGNORE INTO homologue_stats (homologue_name_id)
       VALUES (%s);
       ''' % (homologue_pk))
+
+    # get homologue resolution
+    # check whether the given PDB-redo summary stats file exists
+    try:
+      os.path.exists(os.path.join(local_pdb_redo, "others/alldata.txt"))
+      filename = os.path.join(local_pdb_redo, "others/alldata.txt")
+    except:
+      print("No data file found for PDB-redo")
+    pass
+
+    # set default value for the different stats
+    homologue_resolution = 0
+    
+    # open the data file if it exists
+    with open(filename, "r") as data_file:
+      # find the line staring with lower case structure PDB ID
+      line = next((l for l in data_file if homologue_name.lower() in l), None)
+      # split the line and pick the corresponding values based on column names declared
+      # in the file header which is being ignored here
+      split = line.split()
+      print(split)
+      homologue_resolution = split[62]
+      print(homologue_resolution)
 
     # find the metadata.json file containing analysis stats from MR, SSM and refinement for a given homologue
     h_meta_json = os.path.join(homologue, "metadata.json")
@@ -921,6 +944,7 @@ class MRSSMParser(object):
               sd_cos_theta1 = 0
 
     homologue_dict = {
+        "homologue_resolution"             : homologue_resolution,
         # GESAMT related variables
         "gesamt_length"                    : gesamt_length,
         "gesamt_qscore"                    : gesamt_qscore,

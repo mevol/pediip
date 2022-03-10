@@ -51,7 +51,7 @@ class PDBRedo(object):
       rfree_tls = split[10]
       rwork_final = split[14]
       rfree_final = split[15]
-      completeness = split[-21]
+      completeness = split[110]#-21
 
       # find the relevant structure entry in the database
       cur.executescript( '''
