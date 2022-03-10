@@ -41,7 +41,7 @@ class Initialiser(object):
       DROP TABLE IF EXISTS pdb_redo_stats;
       DROP TABLE IF EXISTS target_stats;
       DROP TABLE IF EXISTS homologue_stats;
-      
+
       CREATE TABLE pdb_id (
           id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
           pdb_id  TEXT UNIQUE
@@ -60,7 +60,7 @@ class Initialiser(object):
           rFree_tls TEXT,
           rWork_final TEXT,
           rFree_final TEXT,
-          completeness TEXT,          
+          completeness TEXT,
           FOREIGN KEY (pdb_id_id) REFERENCES pdb_id(id)
       );
       CREATE TABLE target_stats (
@@ -251,9 +251,9 @@ class Initialiser(object):
           final_rwork_refmac_afterMR_Buccaneer FLOAT,
           mean_phase_error_afterMR_Buccaneer_refmac FLOAT,
           f_map_correlation_afterMR_Buccaneer_refmac FLOAT,
-          homologue_resolution FLOAT,
           mr_success_lable FLOAT,
           refinement_success_lable FLOAT,
+          homologue_resolution FLOAT,
           FOREIGN KEY (homologue_name_id) REFERENCES homologue_name(id)
       );
       ''')
