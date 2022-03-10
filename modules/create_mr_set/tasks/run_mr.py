@@ -517,7 +517,7 @@ def buccaneer_ssm_after_refmac_jelly(key, homologue, args):
 def refine_placed_model_zero_buccaneer_jelly(key, homologue, args):
   hklin = homologue.chain.structure.path("refmac.mtz")
   xyzin = homologue.path("buccaneer_afterMR0.pdb")
-  prefix = homologue.path("refmac_afterMR_Buccaneer")
+  prefix = homologue.path("refmac_afterMR0_Buccaneer")
   result = tasks.refine_jelly(hklin, xyzin, prefix)
   homologue.jobs["refmac"] = result
   if "final_rfree" in result:
@@ -576,7 +576,7 @@ def refine_placed_model_jelly_buccaneer_zero(key, homologue, args):
 def refine_molrep_model_zero_buccaneer_jelly(key, homologue, args):
   hklin = homologue.chain.structure.path("refmac.mtz")
   xyzin = homologue.path("buccaneer_afterMolrep0.pdb")
-  prefix = homologue.path("refmac_afterMolrep_Buccaneer")
+  prefix = homologue.path("refmac_afterMolrep0_Buccaneer")
   result = tasks.refine_jelly(hklin, xyzin, prefix)
   homologue.jobs["refmac"] = result
   if "final_rfree" in result:
@@ -979,7 +979,7 @@ def compare_phases_afterMolrep0_buccaneer_zero(key, homologue, args):
 ##########################################################################################
 #compare phases PDB-redo target SSM_jelly_body
 def compare_phases_afterSSM_buccaneer_jelly(key, homologue, args):
-  hklin = homologue.path("gemmijoin_refmac_afterMolrep_Buccaneer.mtz")
+  hklin = homologue.path("gemmijoin_refmac_afterSSM_Buccaneer.mtz")
   fo = "FP,SIGFP"
   wrk_hl = "PHWT_model,FOM_model"
   ref_hl = "PHWT_ref,FOM_ref"
