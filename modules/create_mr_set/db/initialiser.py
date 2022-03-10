@@ -77,6 +77,7 @@ class Initialiser(object):
       );
       CREATE TABLE homologue_stats (
           homologue_name_id INTEGER,
+          homologue_resolution FLOAT,
           gesamt_length INTEGER,
           gesamt_qscore FLOAT,
           gesamt_rmsd FLOAT,
@@ -253,7 +254,6 @@ class Initialiser(object):
           f_map_correlation_afterMR_Buccaneer_refmac FLOAT,
           mr_success_lable FLOAT,
           refinement_success_lable FLOAT,
-          homologue_resolution FLOAT,
           FOREIGN KEY (homologue_name_id) REFERENCES homologue_name(id)
       );
       ''')
