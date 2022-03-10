@@ -72,7 +72,6 @@ class MRSSMParser(object):
 
     # get shorter homologue nam ein lower case
     homologue_short = homologue_name.split("_")[0].lower()
-    print(homologue_short)
 
     # open the data file if it exists
     with open(filename, "r") as data_file:
@@ -83,7 +82,6 @@ class MRSSMParser(object):
         # in the file header which is being ignored here
         split = line.split()
         homologue_resolution = split[62]
-        print(homologue_resolution)
       except:
         homologue_resolution = 0
 
