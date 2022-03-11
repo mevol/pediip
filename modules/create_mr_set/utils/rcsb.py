@@ -34,8 +34,8 @@ class _Chain:
 
 def _get_structures(args):
   global _structures
-  global add_pdb_redo_info
-  db = "/dls/science/users/ghp45345/pediip/modules/db_files/pdb_redo_db.sqlite"
+  #global add_pdb_redo_info
+  #db = "/dls/science/users/ghp45345/pediip/modules/db_files/pdb_redo_db.sqlite"
   
   download_columns = ["entityMacromoleculeType",
                       "experimentalTechnique",
@@ -66,12 +66,12 @@ def _get_structures(args):
              "clusterNumber70",
              "clusterNumber50",
              "clusterNumber40",
-             "clusterNumber30",
-             "rWork_tls",
-             "rFree_tls",
-             "rWork_final",
-             "rFree_final",
-             "completeness_final"]
+             "clusterNumber30"]
+  #           "rWork_tls",
+  #           "rFree_tls",
+  #           "rWork_final",
+  #           "rFree_final",
+  #           "completeness_final"]
 
   xray_poly_lst = []
 
@@ -114,74 +114,75 @@ def _get_structures(args):
 
   print("remove duplicate PDB entries", len(final_lst))
 
-  added_pdb_info_lst = []  
-
-  manager = multiprocessing.Manager()
-  added_pdb_info_lst = manager.list()
-
-  def add_pdb_redo_info(entry):
-    structure_id = entry[0]
-    
-    pdb_id = None
-    
-    handle = sqlite3.connect(db)
-
-    cur = handle.cursor()
-
-    cur.execute('''
-      SELECT id
-      FROM pdb_id
-      WHERE pdb_id="%s"
-      ''' % (structure_id))
-    get_id = cur.fetchone()
-    if get_id is not None:
-      pdb_id = get_id[0]
-      cur.execute('''
-        SELECT rWork_tls, rFree_tls, rWork_final, rFree_final, completeness
-        FROM pdb_redo_stats
-        WHERE pdb_id_id="%s"
-        ''' % (pdb_id))
-      stats = cur.fetchall()
-    
-      tls_rWork = stats[0][0]
-      tls_rFree = stats[0][1]
-      final_rWork = stats[0][2]
-      final_rFree = stats[0][3]
-      final_completeness = stats[0][4]
-    
-      entry.append(tls_rWork)
-      entry.append(tls_rFree)
-      entry.append(final_rWork)
-      entry.append(final_rFree)
-      entry.append(final_completeness)
-      
-      added_pdb_info_lst.append(entry)
-
-  pool = multiprocessing.Pool()
-  pool.map(add_pdb_redo_info, final_lst)
-  pool.close()
-  pool.join()
-  
-  rm_low_completeness = []
-  
-  for row in added_pdb_info_lst:
-    if float(row[17]) >= 90.0:
-      rm_low_completeness.append(row)
-
-  print("remove low completeness", len(rm_low_completeness))
-
-  no_rfree_increase = []
-
-  for row in rm_low_completeness:
-    if row[6] >= row[14]:
-      no_rfree_increase.append(row)
-      
-  print("remove increased Rfree", len(no_rfree_increase))
+#  added_pdb_info_lst = []  
+#
+#  manager = multiprocessing.Manager()
+#  added_pdb_info_lst = manager.list()
+#
+#  def add_pdb_redo_info(entry):
+#    structure_id = entry[0]
+#    
+#    pdb_id = None
+#    
+#    handle = sqlite3.connect(db)
+#
+#    cur = handle.cursor()
+#
+#    cur.execute('''
+#      SELECT id
+#      FROM pdb_id
+#      WHERE pdb_id="%s"
+#      ''' % (structure_id))
+#    get_id = cur.fetchone()
+#    if get_id is not None:
+#      pdb_id = get_id[0]
+#      cur.execute('''
+#        SELECT rWork_tls, rFree_tls, rWork_final, rFree_final, completeness
+#        FROM pdb_redo_stats
+#        WHERE pdb_id_id="%s"
+#        ''' % (pdb_id))
+#      stats = cur.fetchall()
+#    
+#      tls_rWork = stats[0][0]
+#      tls_rFree = stats[0][1]
+#      final_rWork = stats[0][2]
+#      final_rFree = stats[0][3]
+#      final_completeness = stats[0][4]
+#    
+#      entry.append(tls_rWork)
+#      entry.append(tls_rFree)
+#      entry.append(final_rWork)
+#      entry.append(final_rFree)
+#      entry.append(final_completeness)
+#      
+#      added_pdb_info_lst.append(entry)
+#
+#  pool = multiprocessing.Pool()
+#  pool.map(add_pdb_redo_info, final_lst)
+#  pool.close()
+#  pool.join()
+#  
+#  rm_low_completeness = []
+#  
+#  for row in added_pdb_info_lst:
+#    if float(row[17]) >= 90.0:
+#      rm_low_completeness.append(row)
+#
+#  print("remove low completeness", len(rm_low_completeness))
+#
+#  no_rfree_increase = []
+#
+#  for row in rm_low_completeness:
+#    if row[6] >= row[14]:
+#      no_rfree_increase.append(row)
+#      
+#  print("remove increased Rfree", len(no_rfree_increase))
       
   with open("pdb-chains-short.csv", "w", newline = "") as out_2:
     writer_2 = csv.writer(out_2)
     writer_2.writerow(headers)
-    for row in no_rfree_increase:
+    #for row in no_rfree_increase:
+    for row in final_lst:
       writer_2.writerow(row)
                      
   with open("pdb-chains-short.csv") as f_2:   
