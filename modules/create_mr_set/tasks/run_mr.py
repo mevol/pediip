@@ -612,6 +612,8 @@ def compare_phases_afterSSM_buccaneer_jelly(key, homologue, args):
 
 
 def run_mr_pipelines(key, homologue, args):
+  print("Working on homologue: ", homologue)
+  print("\n")
   if not os.path.exists(homologue.path("JOB_IS_DONE.txt")):
     # superpose homologue on to PDB-redo target (ground truth); use sculptor to trim model
     # to use in MR
@@ -667,10 +669,13 @@ def run_mr_pipelines(key, homologue, args):
   else:
     print("\n")
     print("MR and SSM already done.")
+    print("\n")
     pass
 
   if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")):
     if os.path.exists(homologue.path("refmac_afterMR.mtz")):
+      print("Building MR result")
+      print("\n")
       # Phaser-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
       # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
       # MTZ;
@@ -683,6 +688,8 @@ def run_mr_pipelines(key, homologue, args):
       write_combined_mtz_afterMR_buccaneer_jelly(key, homologue, args)
       compare_phases_afterMR_buccaneer_jelly(key, homologue, args)
     else:
+      print("Building Molrep result")
+      print("\n")
       #os.path.exists(homologue.path("refmac_afterMolrep.mtz"))
       # Molrep-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
       # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
@@ -696,6 +703,8 @@ def run_mr_pipelines(key, homologue, args):
       write_combined_mtz_afterMolrep_buccaneer_jelly(key, homologue, args)
       compare_phases_afterMolrep_buccaneer_jelly(key, homologue, args)
     if not os.path.exists(homologue.path("refmac_afterMR.mtz")) and not os.path.exists(homologue.path("refmac_afterMolrep.mtz")):
+      print("Building Prosmart result")
+      print("\n")
       # Prosmart-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
       # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
       # MTZ;
