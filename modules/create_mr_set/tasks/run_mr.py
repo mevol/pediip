@@ -685,8 +685,8 @@ def run_mr_pipelines(key, homologue, args):
       refine_placed_model_jelly_buccaneer_restraint(key, homologue, args)
       write_combined_mtz_afterMR_buccaneer_jelly(key, homologue, args)
       compare_phases_afterMR_buccaneer_jelly(key, homologue, args)
-    break
-    if os.path.exists(homologue.path("refmac_afterMolrep.mtz")):
+    else:
+      #os.path.exists(homologue.path("refmac_afterMolrep.mtz"))
       # Molrep-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
       # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
       # MTZ;
@@ -701,8 +701,8 @@ def run_mr_pipelines(key, homologue, args):
       refine_molrep_model_jelly_buccaneer_restraint(key, homologue, args)
       write_combined_mtz_afterMolrep_buccaneer_jelly(key, homologue, args)
       compare_phases_afterMolrep_buccaneer_jelly(key, homologue, args)
-    break
-    if os.path.exists(homologue.path("refmac_afterSSM.mtz")):
+    if not os.path.exists(homologue.path("refmac_afterMR.mtz"))
+                         and not os.path.exists(homologue.path("refmac_afterMolrep.mtz")):
       # Prosmart-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
       # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
       # MTZ;
