@@ -717,7 +717,7 @@ def run_mr_pipelines(key, homologue, args):
       write_combined_mtz_afterSSM_buccaneer_jelly(key, homologue, args)
       compare_phases_afterSSM_buccaneer_jelly(key, homologue, args)
     else:
-      print("No MR or SSM found to build)
+      print("No MR or SSM found to build")
     with open(homologue.path("BUILD_WITH_BUCCANEER.txt"), "w") as out_file:
       line = "job is done"
       out_file.writelines(line)
