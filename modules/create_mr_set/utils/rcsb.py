@@ -31,13 +31,9 @@ class _Chain:
 
 def _get_structures(args):
   global _structures
-<<<<<<< HEAD
-  #global add_pdb_redo_info
-  #db = "/dls/science/users/ghp45345/pediip/modules/db_files/pdb_redo_db.sqlite"
-=======
+  
 #  global add_pdb_redo_info
 #  db = "/dls/science/users/ghp45345/pediip/modules/db_files/pdb_redo_db.sqlite"
->>>>>>> 67681f19faee64fe4f6858c5611da45ae778b856
   
   download_columns = ["entityMacromoleculeType",
                       "experimentalTechnique",
@@ -116,10 +112,6 @@ def _get_structures(args):
 
   print("remove duplicate PDB entries", len(final_lst))
 
-<<<<<<< HEAD
-#  added_pdb_info_lst = []  
-=======
-
 ##########################################################################################
 # TO DO
 # this bit here needs some work; I don't want to have to access the database; need to get
@@ -128,7 +120,6 @@ def _get_structures(args):
 #
 #
 #  added_pdb_info_lst = []
->>>>>>> 67681f19faee64fe4f6858c5611da45ae778b856
 #
 #  manager = multiprocessing.Manager()
 #  added_pdb_info_lst = manager.list()
@@ -175,7 +166,6 @@ def _get_structures(args):
 #  pool.map(add_pdb_redo_info, final_lst)
 #  pool.close()
 #  pool.join()
-<<<<<<< HEAD
 #  
 #  rm_low_completeness = []
 #  
@@ -192,7 +182,6 @@ def _get_structures(args):
 #      no_rfree_increase.append(row)
 #      
 #  print("remove increased Rfree", len(no_rfree_increase))
-=======
   
   rm_low_completeness = []
   
@@ -209,7 +198,6 @@ def _get_structures(args):
       no_rfree_increase.append(row)
       
   print("remove increased Rfree", len(no_rfree_increase))
->>>>>>> 67681f19faee64fe4f6858c5611da45ae778b856
       
   with open("pdb-chains-short.csv", "w", newline = "") as out_2:
     writer_2 = csv.writer(out_2)
