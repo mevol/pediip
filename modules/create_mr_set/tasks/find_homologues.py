@@ -1,29 +1,15 @@
 #!/usr/bin/env python3
 
-import argparse
-import Bio.Seq
-import Bio.SeqIO
-import Bio.SeqRecord
-import datetime
-import gemmi
-import glob
-import gzip
 import modules.create_mr_set.utils.models as models
 import os
 import modules.create_mr_set.utils.pdbtools as pdbtools
-import random
 import modules.create_mr_set.utils.rcsb as rcsb
 import modules.create_mr_set.tasks.choose_structures as choose_structures
 import modules.create_mr_set.tasks.prepare_structure_data as prepare_structure_data
 import modules.create_mr_set.tasks.get_sequences as get_sequences
-import sys
 import modules.create_mr_set.tasks.tasks as tasks
-import urllib.request
 import modules.create_mr_set.utils.utils as utils
 import uuid
-import xml.etree.ElementTree as ET
-import multiprocessing
-from functools import partial
 
 ## FIND HOMOLOGUES
 
