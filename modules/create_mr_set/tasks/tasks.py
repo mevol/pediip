@@ -254,6 +254,47 @@ def refine_jelly(hklin, xyzin, prefix, cycles=100):
   result["initial_rwork"] = float(rworks[0].text)
   return result
 
+def refine_default(hklin, xyzin, prefix, cycles=20):
+  """Refine a structure with REFMAC"""
+  result = {
+    "hklout": "%s.mtz" % prefix,
+    "xyzout": "%s.pdb" % prefix,
+    "xmlout": "%s.xml" % prefix,
+    "stdout": "%s.log" % prefix,
+    "stderr": "%s.err" % prefix,
+  }
+  utils.run("refmac5", [
+    "HKLIN", hklin,
+    "XYZIN", xyzin,
+    "HKLOUT", result["hklout"],
+    "XYZOUT", result["xyzout"],
+    "XMLOUT", result["xmlout"],
+  ], [
+    "NCYCLES %d" % cycles,
+    "MAKE HYDRogens Alll",
+    "MAKE HOUT No",
+    "REFI TYPE REST",
+    "PHOUT",
+    "END"
+  ], stdout=result["stdout"], stderr=result["stderr"])
+  with open(result["stderr"]) as f:
+    for line in f:
+      line = line.strip()
+      if line[:7] == "Refmac:":
+        return { "error": line[7:].strip() }
+  for output in ("hklout", "xyzout", "xmlout"):
+    if not os.path.exists(result[output]):
+      return { "error": "Output file missing: %s" % result[output] }
+  root = ET.parse(result["xmlout"]).getroot()
+  rworks = list(root.iter("r_factor"))
+  rfrees = list(root.iter("r_free"))
+  result["data_completeness"] = float(list(root.iter("data_completeness"))[0].text)
+  result["final_rfree"] = float(rfrees[-1].text)
+  result["final_rwork"] = float(rworks[-1].text)
+  result["initial_rfree"] = float(rfrees[0].text)
+  result["initial_rwork"] = float(rworks[0].text)
+  return result
+
 def refine_zero(hklin, xyzin, prefix, cycles=0):
   """Refine a structure with REFMAC"""
   result = {

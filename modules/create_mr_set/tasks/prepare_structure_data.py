@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse
-import datetime
-import glob
 import os
-import sys
 import modules.create_mr_set.utils.utils as utils
 
 ## PREPARE STRUCTURE DATA

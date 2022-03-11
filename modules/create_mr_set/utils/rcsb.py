@@ -1,16 +1,13 @@
-import argparse
+#!/usr/bin/env python3
+
 import copy
 import csv
-import operator
 import collections
-import json
 import os
 import urllib.request
-import gzip
-import sqlite3
+#import sqlite3
 import modules.create_mr_set.utils.utils as utils
 import multiprocessing
-from functools import partial
 
 _structures = None
 
@@ -34,8 +31,13 @@ class _Chain:
 
 def _get_structures(args):
   global _structures
+<<<<<<< HEAD
   #global add_pdb_redo_info
   #db = "/dls/science/users/ghp45345/pediip/modules/db_files/pdb_redo_db.sqlite"
+=======
+#  global add_pdb_redo_info
+#  db = "/dls/science/users/ghp45345/pediip/modules/db_files/pdb_redo_db.sqlite"
+>>>>>>> 67681f19faee64fe4f6858c5611da45ae778b856
   
   download_columns = ["entityMacromoleculeType",
                       "experimentalTechnique",
@@ -114,7 +116,19 @@ def _get_structures(args):
 
   print("remove duplicate PDB entries", len(final_lst))
 
+<<<<<<< HEAD
 #  added_pdb_info_lst = []  
+=======
+
+##########################################################################################
+# TO DO
+# this bit here needs some work; I don't want to have to access the database; need to get
+# the completeness from the PDB header when querying; then select the sampels on retrieved
+# completeness
+#
+#
+#  added_pdb_info_lst = []
+>>>>>>> 67681f19faee64fe4f6858c5611da45ae778b856
 #
 #  manager = multiprocessing.Manager()
 #  added_pdb_info_lst = manager.list()
@@ -161,6 +175,7 @@ def _get_structures(args):
 #  pool.map(add_pdb_redo_info, final_lst)
 #  pool.close()
 #  pool.join()
+<<<<<<< HEAD
 #  
 #  rm_low_completeness = []
 #  
@@ -177,6 +192,24 @@ def _get_structures(args):
 #      no_rfree_increase.append(row)
 #      
 #  print("remove increased Rfree", len(no_rfree_increase))
+=======
+  
+  rm_low_completeness = []
+  
+  for row in added_pdb_info_lst:
+    if float(row[17]) >= 90.0:
+      rm_low_completeness.append(row)
+
+  print("remove low completeness", len(rm_low_completeness))
+
+  no_rfree_increase = []
+
+  for row in rm_low_completeness:
+    if row[6] >= row[14]:
+      no_rfree_increase.append(row)
+      
+  print("remove increased Rfree", len(no_rfree_increase))
+>>>>>>> 67681f19faee64fe4f6858c5611da45ae778b856
       
   with open("pdb-chains-short.csv", "w", newline = "") as out_2:
     writer_2 = csv.writer(out_2)

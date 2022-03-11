@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import gemmi
 
 def count_elements(xyzin):
