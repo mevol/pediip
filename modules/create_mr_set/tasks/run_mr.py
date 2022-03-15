@@ -675,11 +675,11 @@ def run_mr_pipelines(key, homologue, args):
 #    print("MR and SSM already done.")
 #    print("\n")
 
-#  if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True:
-  try:
-    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True
-    print("Building with Buccaneer has been done")
-  except:
+  if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")):# == True:
+#  try:
+#    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True
+#    print("Building with Buccaneer has been done")
+#  except:
     print("Building with Buccaneer missing homologues")
     if os.path.exists(homologue.path("refmac_afterMR.mtz")):
       print("Building MR result")
@@ -732,7 +732,7 @@ def run_mr_pipelines(key, homologue, args):
     print("\n")
     print("No MR or SSM results found.")
     print("\n")
-    pass
+#    pass
 
   return key, homologue
 
