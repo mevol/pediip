@@ -614,66 +614,66 @@ def compare_phases_afterSSM_buccaneer_jelly(key, homologue, args):
 def run_mr_pipelines(key, homologue, args):
   #print("Working on homologue: ", homologue)
   #print("\n")
-  try:
-    os.path.exists(homologue.path("JOB_IS_DONE.txt")) == True
-    print("MR and SSM have been done")
-  except:
-    # superpose homologue on to PDB-redo target (ground truth); use sculptor to trim model
-    # to use in MR
-    print("Running MR and SSM")
-    superpose_homologue(key, homologue, args)
-    prepare_sculptor_alignment(key, homologue, args)
-    trim_model(key, homologue, args)
-
-    # superpose homologue on to PDB-redo target using Prosmart; refine placed model with 0-cycles and
-    # 100 cycles jelly body in Refmac against PDB-redo ground truth MTZ;
-    #combine the refinement phases (from 0-cycles as well
-    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
-    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
-    # and PDB-redo ground truth
-    superpose_prosmart(key, homologue, args)
-    refine_ssm_model_zero(key, homologue, args)
-    write_combined_mtz_afterSSM_zero(key, homologue, args)
-    compare_phases_afterSSM_zero(key, homologue, args)
-    refine_ssm_model_jelly(key, homologue, args)
-    write_combined_mtz_afterSSM_jelly(key, homologue, args)
-    compare_phases_afterSSM_jelly(key, homologue, args)
-
-    # superpose homologue on to PDB-redo target using Molrep; refine placed model with 0-cycles and
-    # 100 cycles jelly body in Refmac against PDB-redo ground truth MTZ;
-    #combine the refinement phases (from 0-cycles as well
-    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
-    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
-    # and PDB-redo ground truth
-    superpose_molrep(key, homologue, args)
-    refine_molrep_model_zero(key, homologue, args)
-    write_combined_mtz_afterMolrep_zero(key, homologue, args)
-    compare_phases_afterMolrep_zero(key, homologue, args)
-    refine_molrep_model_jelly(key, homologue, args)
-    write_combined_mtz_afterMolrep_jelly(key, homologue, args)
-    compare_phases_afterMolrep_jelly(key, homologue, args)
-
-    # MR of homologue on to PDB-redo target using Phaser; refine placed model with 0-cycles and
-    # 100 cycles jelly body in Refmac against PDB-redo ground truth MTZ;
-    # combine the refinement phases (from 0-cycles as well
-    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
-    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
-    # and PDB-redo ground truth
-    mr(key, homologue, args)
-    refine_placed_model_zero(key, homologue, args)
-    write_combined_mtz_afterMR_zero(key, homologue, args)
-    compare_phases_afterMR_zero(key, homologue, args)
-    refine_placed_model_jelly(key, homologue, args)
-    write_combined_mtz_afterMR_jelly(key, homologue, args)
-    compare_phases_afterMR_jelly(key, homologue, args)
-    
-    with open(homologue.path("JOB_IS_DONE.txt"), "w") as out_file:
-      line = "job is done"
-      out_file.writelines(line)
-  else:
-    print("\n")
-    print("MR and SSM already done.")
-    print("\n")
+#  try:
+#    os.path.exists(homologue.path("JOB_IS_DONE.txt")) == True
+#    print("MR and SSM have been done")
+#  except:
+#    # superpose homologue on to PDB-redo target (ground truth); use sculptor to trim model
+#    # to use in MR
+#    print("Running MR and SSM")
+#    superpose_homologue(key, homologue, args)
+#    prepare_sculptor_alignment(key, homologue, args)
+#    trim_model(key, homologue, args)
+#
+#    # superpose homologue on to PDB-redo target using Prosmart; refine placed model with 0-cycles and
+#    # 100 cycles jelly body in Refmac against PDB-redo ground truth MTZ;
+#    #combine the refinement phases (from 0-cycles as well
+#    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+#    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+#    # and PDB-redo ground truth
+#    superpose_prosmart(key, homologue, args)
+#    refine_ssm_model_zero(key, homologue, args)
+#    write_combined_mtz_afterSSM_zero(key, homologue, args)
+#    compare_phases_afterSSM_zero(key, homologue, args)
+#    refine_ssm_model_jelly(key, homologue, args)
+#    write_combined_mtz_afterSSM_jelly(key, homologue, args)
+#    compare_phases_afterSSM_jelly(key, homologue, args)
+#
+#    # superpose homologue on to PDB-redo target using Molrep; refine placed model with 0-cycles and
+#    # 100 cycles jelly body in Refmac against PDB-redo ground truth MTZ;
+#    #combine the refinement phases (from 0-cycles as well
+#    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+#    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+#    # and PDB-redo ground truth
+#    superpose_molrep(key, homologue, args)
+#    refine_molrep_model_zero(key, homologue, args)
+#    write_combined_mtz_afterMolrep_zero(key, homologue, args)
+#    compare_phases_afterMolrep_zero(key, homologue, args)
+#    refine_molrep_model_jelly(key, homologue, args)
+#    write_combined_mtz_afterMolrep_jelly(key, homologue, args)
+#    compare_phases_afterMolrep_jelly(key, homologue, args)
+#
+#    # MR of homologue on to PDB-redo target using Phaser; refine placed model with 0-cycles and
+#    # 100 cycles jelly body in Refmac against PDB-redo ground truth MTZ;
+#    # combine the refinement phases (from 0-cycles as well
+#    # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
+#    # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
+#    # and PDB-redo ground truth
+#    mr(key, homologue, args)
+#    refine_placed_model_zero(key, homologue, args)
+#    write_combined_mtz_afterMR_zero(key, homologue, args)
+#    compare_phases_afterMR_zero(key, homologue, args)
+#    refine_placed_model_jelly(key, homologue, args)
+#    write_combined_mtz_afterMR_jelly(key, homologue, args)
+#    compare_phases_afterMR_jelly(key, homologue, args)
+#    
+#    with open(homologue.path("JOB_IS_DONE.txt"), "w") as out_file:
+#      line = "job is done"
+#      out_file.writelines(line)
+#  else:
+#    print("\n")
+#    print("MR and SSM already done.")
+#    print("\n")
 
 #  if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True:
   try:
