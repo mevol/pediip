@@ -612,8 +612,8 @@ def compare_phases_afterSSM_buccaneer_jelly(key, homologue, args):
 
 
 def run_mr_pipelines(key, homologue, args):
-  print("Working on homologue: ", homologue)
-  print("\n")
+  #print("Working on homologue: ", homologue)
+  #print("\n")
   if not os.path.exists(homologue.path("JOB_IS_DONE.txt")):
     # superpose homologue on to PDB-redo target (ground truth); use sculptor to trim model
     # to use in MR
@@ -672,7 +672,12 @@ def run_mr_pipelines(key, homologue, args):
     print("\n")
     pass
 
-  if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")):
+#  if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True:
+  try:
+    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True
+    print("Building with Buccaneer has been done")
+  except:
+    print("Building with Buccaneer missing")
     if os.path.exists(homologue.path("refmac_afterMR.mtz")):
       print("Building MR result")
       print("\n")
@@ -716,11 +721,15 @@ def run_mr_pipelines(key, homologue, args):
       refine_prosmart_model_jelly_buccaneer_restraint(key, homologue, args)
       write_combined_mtz_afterSSM_buccaneer_jelly(key, homologue, args)
       compare_phases_afterSSM_buccaneer_jelly(key, homologue, args)
-    else:
-      print("No MR or SSM found to build")
     with open(homologue.path("BUILD_WITH_BUCCANEER.txt"), "w") as out_file:
       line = "job is done"
       out_file.writelines(line)
+    print("Finished building")
+  else:
+    print("\n")
+    print("No MR or SSM results found.")
+    print("\n")
+    pass
 
   return key, homologue
 
