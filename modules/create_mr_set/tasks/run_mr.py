@@ -614,9 +614,13 @@ def compare_phases_afterSSM_buccaneer_jelly(key, homologue, args):
 def run_mr_pipelines(key, homologue, args):
   #print("Working on homologue: ", homologue)
   #print("\n")
-  if not os.path.exists(homologue.path("JOB_IS_DONE.txt")):
+  try:
+    os.path.exists(homologue.path("JOB_IS_DONE.txt")) == True
+    print("MR and SSM have been done")
+  except:
     # superpose homologue on to PDB-redo target (ground truth); use sculptor to trim model
     # to use in MR
+    print("Running MR and SSM")
     superpose_homologue(key, homologue, args)
     prepare_sculptor_alignment(key, homologue, args)
     trim_model(key, homologue, args)
@@ -670,14 +674,13 @@ def run_mr_pipelines(key, homologue, args):
     print("\n")
     print("MR and SSM already done.")
     print("\n")
-    pass
 
 #  if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True:
   try:
     os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True
     print("Building with Buccaneer has been done")
   except:
-    print("Building with Buccaneer missing")
+    print("Building with Buccaneer missing homologues")
     if os.path.exists(homologue.path("refmac_afterMR.mtz")):
       print("Building MR result")
       print("\n")
