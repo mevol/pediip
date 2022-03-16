@@ -679,7 +679,7 @@ def run_mr_pipelines(key, homologue, args):
 #    print("\n")
 
   try:
-    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT"))
+    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.txt"))
     print("DONEDONEDONEDONEDONEDONEDONE")
   except FileNotFoundError:
     print("\n")
