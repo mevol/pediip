@@ -618,12 +618,13 @@ def run_mr_pipelines(key, homologue, args):
   #print("Working on homologue: ", homologue)
   #print("\n")
 #  try:
-#    os.path.exists(homologue.path("JOB_IS_DONE.txt")) == True
-#    print("MR and SSM have been done")
+  if os.path.exists(homologue.path("JOB_IS_DONE.txt")) == True:
+    print("MR and SSM have been done")
 #  except:
 #    # superpose homologue on to PDB-redo target (ground truth); use sculptor to trim model
 #    # to use in MR
-#    print("Running MR and SSM")
+  else:
+    print("Running MR and SSM")
 #    superpose_homologue(key, homologue, args)
 #    prepare_sculptor_alignment(key, homologue, args)
 #    trim_model(key, homologue, args)
