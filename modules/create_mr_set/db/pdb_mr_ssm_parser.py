@@ -123,24 +123,26 @@ class MRSSMParser(object):
 
     # get MTZ files from MR
     # after MR and 0-cycle refinement
-    try:
-      mtz_afterMR0 = os.path.join(homologue, "refmac_afterMR0.mtz")
-      os.path.exists(mtz_afterMR0)
-    # after MR and 100 jelly body refinement
-    except FileNotFoundException:
-      mtz_afterMR0 = None
+    mtz_afterMR0 = os.path.join(homologue, "refmac_afterMR0.mtz")
+    if os.path.exists(mtz_afterMR0) == True:
+      mtz_afterMR0_path = mtz_afterMR0
+    else:
+      mtz_afterMR0_path = None
       print("No MTZ file for 0-cycle refinement following MR")
-    try:
-      mtz_afterMR = os.path.join(homologue, "refmac_afterMR.mtz")
-      os.path.exists(mtz_afterMR)
-    except FileNotFoundException:
-      mtz_afterMR = None
+
+    # after MR and 100 jelly body refinement
+    mtz_afterMR = os.path.join(homologue, "refmac_afterMR.mtz")
+    if os.path.exists(mtz_afterMR) == True:
+      mtz_afterMR_path = mtz_afterMR
+    else:
+      mtz_afterMR_path = None
       print("No MTZ file for jelly body refinement following MR")
-    try:
-      mtz_afterMR_Buccaneer_defaultRefmac = os.path.join(homologue, "refmac_default_afterMR_Buccaneer.mtz")
-      os.path.exists(mtz_afterMR_Buccaneer_defaultRefmac)
-    except FileNotFoundException:
-      mtz_afterMR_Buccaneer_defaultRefmac = None
+    # after default Refmac, Buccaneer, MR and 100 jelly body refinement
+    mtz_afterMR_Buccaneer_defaultRefmac = os.path.join(homologue, "refmac_default_afterMR_Buccaneer.mtz")
+    if os.path.exists(mtz_afterMR_Buccaneer_defaultRefmac) == True:
+      mtz_afterMR_Buccaneer_defaultRefmac_path = mtz_afterMR_Buccaneer_defaultRefmac
+    else:
+      mtz_afterMR_Buccaneer_defaultRefmac_path = None
       print("No MTZ file for default refinement after Buccaneer of MR-jellybody")
 
     # after Molrep and 0-cycle refinement
@@ -700,6 +702,7 @@ class MRSSMParser(object):
               sd_cos_theta1 = 0
 
     homologue_dict = {
+        "ref_mtz"                          : ref_mtz,
         "homologue_resolution"             : homologue_resolution,
         # GESAMT related variables
         "gesamt_length"                    : gesamt_length,
