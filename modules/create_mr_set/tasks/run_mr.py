@@ -682,7 +682,7 @@ def run_mr_pipelines(key, homologue, args):
     print("\n")
     print("Buccaneer already done in")
     print("\n")
-    break
+  break
 #  try:
 #    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True
 #    print("Building with Buccaneer has been done")
