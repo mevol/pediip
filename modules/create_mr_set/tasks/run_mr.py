@@ -679,7 +679,8 @@ def run_mr_pipelines(key, homologue, args):
 #    print("\n")
 
   try:
-    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT"))
+    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True
+    break
   except FileNotFoundError:
     print("\n")
     print("Building missing homologues with Buccaneer in: ", key)
@@ -689,7 +690,7 @@ def run_mr_pipelines(key, homologue, args):
       print("\n")
       print("Building MR result in: ", key)
       print("\n")
-      break
+#      break
     except FileNotFoundError:
       print("\n")
       print("No valid MR result found in: ", key)
@@ -714,7 +715,7 @@ def run_mr_pipelines(key, homologue, args):
         print("\n")
         print("Building Molrep result in: ", key)
         print("\n")
-        break
+#        break
       # Molrep-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
       # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
       # MTZ;
@@ -736,7 +737,7 @@ def run_mr_pipelines(key, homologue, args):
           print("\n")
           print("Building Prosmart result in: ", key)
           print("\n")
-          break
+#          break
 
 
 #    if not os.path.exists(homologue.path("refmac_afterMR.mtz")) and not os.path.exists(homologue.path("refmac_afterMolrep.mtz")):
