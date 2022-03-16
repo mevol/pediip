@@ -678,11 +678,12 @@ def run_mr_pipelines(key, homologue, args):
 #    print("MR and SSM already done.")
 #    print("\n")
 
-  try:
-    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.txt")) == True
+#  try:
+  if  os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.txt")) == True:
     print(homologue.path("BUILD_WITH_BUCCANEER.txt"))
     print("DONEDONEDONEDONEDONEDONEDONE")
-  except FileNotFoundError:
+  else:
+#  except FileNotFoundError:
     print("\n")
     print("Building missing homologues with Buccaneer in: ", key)
     print("\n")
