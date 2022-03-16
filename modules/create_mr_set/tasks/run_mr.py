@@ -691,10 +691,10 @@ def run_mr_pipelines(key, homologue, args):
       # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
       # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
       # and PDB-redo ground truth
-      buccaneer_mr_after_refmac_jelly(key, homologue, args)
-      refine_placed_model_jelly_buccaneer_restraint(key, homologue, args)
-      write_combined_mtz_afterMR_buccaneer_jelly(key, homologue, args)
-      compare_phases_afterMR_buccaneer_jelly(key, homologue, args)
+#      buccaneer_mr_after_refmac_jelly(key, homologue, args)
+#      refine_placed_model_jelly_buccaneer_restraint(key, homologue, args)
+#      write_combined_mtz_afterMR_buccaneer_jelly(key, homologue, args)
+#      compare_phases_afterMR_buccaneer_jelly(key, homologue, args)
     else:
       print("Building Molrep result")
       print("\n")
@@ -706,10 +706,10 @@ def run_mr_pipelines(key, homologue, args):
       # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
       # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
       # and PDB-redo ground truth
-      buccaneer_molrep_after_refmac_jelly(key, homologue, args)
-      refine_molrep_model_jelly_buccaneer_restraint(key, homologue, args)
-      write_combined_mtz_afterMolrep_buccaneer_jelly(key, homologue, args)
-      compare_phases_afterMolrep_buccaneer_jelly(key, homologue, args)
+#      buccaneer_molrep_after_refmac_jelly(key, homologue, args)
+#      refine_molrep_model_jelly_buccaneer_restraint(key, homologue, args)
+#      write_combined_mtz_afterMolrep_buccaneer_jelly(key, homologue, args)
+#      compare_phases_afterMolrep_buccaneer_jelly(key, homologue, args)
     if not os.path.exists(homologue.path("refmac_afterMR.mtz")) and not os.path.exists(homologue.path("refmac_afterMolrep.mtz")):
       print("Building Prosmart result")
       print("\n")
@@ -720,13 +720,13 @@ def run_mr_pipelines(key, homologue, args):
       # as jelly body) with the ground truth from PDB-redo; calculate phase angle between
       # the phases from 0-cycle refinement and PDB-redo ground truth as well as jelly body
       # and PDB-redo ground truth
-      buccaneer_ssm_after_refmac_jelly(key, homologue, args)
-      refine_prosmart_model_jelly_buccaneer_restraint(key, homologue, args)
-      write_combined_mtz_afterSSM_buccaneer_jelly(key, homologue, args)
-      compare_phases_afterSSM_buccaneer_jelly(key, homologue, args)
-    with open(homologue.path("BUILD_WITH_BUCCANEER.txt"), "w") as out_file:
-      line = "job is done"
-      out_file.writelines(line)
+#      buccaneer_ssm_after_refmac_jelly(key, homologue, args)
+#      refine_prosmart_model_jelly_buccaneer_restraint(key, homologue, args)
+#      write_combined_mtz_afterSSM_buccaneer_jelly(key, homologue, args)
+#      compare_phases_afterSSM_buccaneer_jelly(key, homologue, args)
+#    with open(homologue.path("BUILD_WITH_BUCCANEER.txt"), "w") as out_file:
+#      line = "job is done"
+#      out_file.writelines(line)
     print("Finished building")
   else:
     print("\n")
