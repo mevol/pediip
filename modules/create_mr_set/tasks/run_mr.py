@@ -703,7 +703,7 @@ def run_mr_pipelines(key, homologue, args):
 #      write_combined_mtz_afterMR_buccaneer_jelly(key, homologue, args)
 #      compare_phases_afterMR_buccaneer_jelly(key, homologue, args)
     else:
-      print("\")
+      print("\n")
       print("Building Molrep result")
       print("\n")
       #os.path.exists(homologue.path("refmac_afterMolrep.mtz"))
