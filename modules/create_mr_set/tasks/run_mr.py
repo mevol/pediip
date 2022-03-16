@@ -675,13 +675,20 @@ def run_mr_pipelines(key, homologue, args):
 #    print("MR and SSM already done.")
 #    print("\n")
 
-  if not os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")):# == True:
+  if os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")):# == True:
+    print("\n")
+    print("Buccaneer already done in: ", os.path.getcwd())
+    print("\n")
 #  try:
 #    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True
 #    print("Building with Buccaneer has been done")
 #  except:
-    print("Building with Buccaneer missing homologues")
+  else:
+    print("\n")
+    print("Building missing homologues with Buccaneer in: ", os.path.getcwd())
+    print("\n")
     if os.path.exists(homologue.path("refmac_afterMR.mtz")):
+      print("\n")
       print("Building MR result")
       print("\n")
       # Phaser-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
@@ -696,6 +703,7 @@ def run_mr_pipelines(key, homologue, args):
 #      write_combined_mtz_afterMR_buccaneer_jelly(key, homologue, args)
 #      compare_phases_afterMR_buccaneer_jelly(key, homologue, args)
     else:
+      print("\")
       print("Building Molrep result")
       print("\n")
       #os.path.exists(homologue.path("refmac_afterMolrep.mtz"))
@@ -711,6 +719,7 @@ def run_mr_pipelines(key, homologue, args):
 #      write_combined_mtz_afterMolrep_buccaneer_jelly(key, homologue, args)
 #      compare_phases_afterMolrep_buccaneer_jelly(key, homologue, args)
     if not os.path.exists(homologue.path("refmac_afterMR.mtz")) and not os.path.exists(homologue.path("refmac_afterMolrep.mtz")):
+      print("\n")
       print("Building Prosmart result")
       print("\n")
       # Prosmart-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
@@ -727,7 +736,9 @@ def run_mr_pipelines(key, homologue, args):
 #    with open(homologue.path("BUILD_WITH_BUCCANEER.txt"), "w") as out_file:
 #      line = "job is done"
 #      out_file.writelines(line)
+    print("\n")
     print("Finished building")
+    print("\n")
   else:
     print("\n")
     print("No MR or SSM results found.")
