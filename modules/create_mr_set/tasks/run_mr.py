@@ -678,22 +678,21 @@ def run_mr_pipelines(key, homologue, args):
 #    print("MR and SSM already done.")
 #    print("\n")
 
-  if os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")):# == True:
-    print("\n")
-    print("Buccaneer already done in")
-    print("\n")
-  break
-#  try:
-#    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True
-#    print("Building with Buccaneer has been done")
-#  except:
-  else:
+  try:
+    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT"))
+  except FileNotFoundError:
     print("\n")
     print("Building missing homologues with Buccaneer in: ", key)
     print("\n")
-    if os.path.exists(homologue.path("refmac_afterMR.mtz")):
+    try:
+      os.path.exists(homologue.path("refmac_afterMR.mtz"))
       print("\n")
-      print("Building MR result")
+      print("Building MR result in: ", key)
+      print("\n")
+      break
+    except FileNotFoundError:
+      print("\n")
+      print("No valid MR result found in: ", key)
       print("\n")
       # Phaser-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
       # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
@@ -706,11 +705,16 @@ def run_mr_pipelines(key, homologue, args):
 #      refine_placed_model_jelly_buccaneer_restraint(key, homologue, args)
 #      write_combined_mtz_afterMR_buccaneer_jelly(key, homologue, args)
 #      compare_phases_afterMR_buccaneer_jelly(key, homologue, args)
-    else:
-      print("\n")
-      print("Building Molrep result")
-      print("\n")
-      #os.path.exists(homologue.path("refmac_afterMolrep.mtz"))
+#    else:
+#      print("\n")
+#      print("Building Molrep result")
+#      print("\n")
+      try:
+        os.path.exists(homologue.path("refmac_afterMolrep.mtz"))
+        print("\n")
+        print("Building Molrep result in: ", key)
+        print("\n")
+        break
       # Molrep-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
       # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
       # MTZ;
@@ -722,10 +726,23 @@ def run_mr_pipelines(key, homologue, args):
 #      refine_molrep_model_jelly_buccaneer_restraint(key, homologue, args)
 #      write_combined_mtz_afterMolrep_buccaneer_jelly(key, homologue, args)
 #      compare_phases_afterMolrep_buccaneer_jelly(key, homologue, args)
-    if not os.path.exists(homologue.path("refmac_afterMR.mtz")) and not os.path.exists(homologue.path("refmac_afterMolrep.mtz")):
-      print("\n")
-      print("Building Prosmart result")
-      print("\n")
+      except FileNotFoundError:
+        print("\n")
+        print("No valid Molrep result found in: ", key)
+        print("\n")
+        
+        try:
+          os.path.exists(homologue.path("refmac_afterSSM.mtz"))
+          print("\n")
+          print("Building Prosmart result in: ", key)
+          print("\n")
+          break
+
+
+#    if not os.path.exists(homologue.path("refmac_afterMR.mtz")) and not os.path.exists(homologue.path("refmac_afterMolrep.mtz")):
+#      print("\n")
+#      print("Building Prosmart result")
+#      print("\n")
       # Prosmart-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
       # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
       # MTZ;
@@ -740,6 +757,12 @@ def run_mr_pipelines(key, homologue, args):
 #    with open(homologue.path("BUILD_WITH_BUCCANEER.txt"), "w") as out_file:
 #      line = "job is done"
 #      out_file.writelines(line)
+
+        except FileNotFoundError:
+          print("\n")
+          print("No valid Prosmart result found in: ", key)
+          print("\n")
+
     print("\n")
     print("Finished building")
     print("\n")
