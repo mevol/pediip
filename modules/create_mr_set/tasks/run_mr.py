@@ -739,10 +739,10 @@ def run_mr_pipelines(key, homologue, args):
     print("\n")
     print("Finished building")
     print("\n")
-  else:
-    print("\n")
-    print("No MR or SSM results found.")
-    print("\n")
+#  else:
+#    print("\n")
+#    print("No MR or SSM results found.")
+#    print("\n")
 #    pass
 
   return key, homologue
