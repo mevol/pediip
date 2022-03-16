@@ -357,13 +357,13 @@ class MRSSMParser(object):
           final_rwork_refmac_default_afterSSM_Buccaneer = 0
 ######### PhaseError-RefmacJellyBody-Buccaneer-RefmacJellyBody-Prosmart
         try:
-          mean_phase_error_afterMolrep_Buccaneer_refmac_default = h_reader["mean_phase_error_afterMolrep_Buccaneer_refmac_default"]
+          mean_phase_error_afterSSM_Buccaneer_refmac_default = h_reader["mean_phase_error_afterSSM_Buccaneer_refmac_default"]
         except:
-          mean_phase_error_afterMolrep_Buccaneer_refmac_default = 0
+          mean_phase_error_afterSSM_Buccaneer_refmac_default = 0
         try:
-          f_map_correlation_afterMolrep_Buccaneer_refmac_default = h_reader["f_map_correlation_afterMolrep_Buccaneer_refmac_default"]
+          f_map_correlation_afterSSM_Buccaneer_refmac_default = h_reader["f_map_correlation_afterSSM_Buccaneer_refmac_default"]
         except:
-          f_map_correlation_afterMolrep_Buccaneer_refmac_default = 0
+          f_map_correlation_afterSSM_Buccaneer_refmac_default = 0
 
 
 ##########################################################################################
