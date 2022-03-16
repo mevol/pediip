@@ -36,7 +36,7 @@ class PDBRedo(object):
     rfree_tls = 0
     rwork_final = 0
     rfree_final = 0
-    completeness = 0
+#    completeness = 0
 
     # open the data file if it exists
     with open(filename, "r") as data_file:
@@ -51,7 +51,7 @@ class PDBRedo(object):
       rfree_tls = split[10]
       rwork_final = split[14]
       rfree_final = split[15]
-      completeness = split[-21]#-21
+#      completeness = split[-21]#-21
 
       # find the relevant structure entry in the database
       cur.executescript( '''
@@ -74,7 +74,7 @@ class PDBRedo(object):
             "rFree_tls"          : rfree_tls,
             "rWork_final"        : rwork_final,
             "rFree_final"        : rfree_final,
-            "completeness"       : completeness
+#            "completeness"       : completeness
                     }
 
       # entering the PDB-redo stats into the corresponding table in the database
