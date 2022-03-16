@@ -612,6 +612,9 @@ def compare_phases_afterSSM_buccaneer_jelly(key, homologue, args):
 
 
 def run_mr_pipelines(key, homologue, args):
+  print("\n")
+  print(key)
+  print("\n")
   #print("Working on homologue: ", homologue)
   #print("\n")
 #  try:
