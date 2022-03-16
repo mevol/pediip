@@ -677,7 +677,7 @@ def run_mr_pipelines(key, homologue, args):
 
   if os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")):# == True:
     print("\n")
-    print("Buccaneer already done in: ", os.path.getcwd())
+    print("Buccaneer already done in: ", os.getcwd())
     print("\n")
 #  try:
 #    os.path.exists(homologue.path("BUILD_WITH_BUCCANEER.TXT")) == True
@@ -685,7 +685,7 @@ def run_mr_pipelines(key, homologue, args):
 #  except:
   else:
     print("\n")
-    print("Building missing homologues with Buccaneer in: ", os.path.getcwd())
+    print("Building missing homologues with Buccaneer in: ", os.getcwd())
     print("\n")
     if os.path.exists(homologue.path("refmac_afterMR.mtz")):
       print("\n")
