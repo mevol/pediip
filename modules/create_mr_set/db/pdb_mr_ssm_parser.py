@@ -99,7 +99,7 @@ class MRSSMParser(object):
       os.path.exists(phaser_log)
     except:
       print("Failed to find phaser.log")
-    pass  
+    pass
 
     # find the prosmart_align_logfile.txt file containing analysis stats from MR, SSM and refinement for a given homologue
     prosmart_dir = os.path.join(homologue, "prosmart")
@@ -112,29 +112,32 @@ class MRSSMParser(object):
 
     # get file path to MTZ location to convert to map for CNN training
     # reference MTZ from PDB-redo
-    location = os.getcwd()
-    print(location)
-    split = location.split()
-    print(split)
-    
+    here = os.getcwd()
+    ref_location = here+"structres"+target_pdb
+    try:
+      ref_mtz = os.path.join(ref_location, "refmac.mtz")
+      os.path.exists(ref_mtz)
+    except:
+      ref_mtz = None
+      print("No reference MTZ file found")
+
     # get MTZ files from MR
     # after MR and 0-cycle refinement
-    mtz_afterMR0 = os.path.join(homologue, "refmac_afterMR0.mtz")
-    # after MR and 100 jelly body refinement
-    mtz_afterMR = os.path.join(homologue, "refmac_afterMR.mtz")
-    # after default Refmac, Buccaneer, MR and 100 jelly body refinement
-    mtz_afterMR_Buccaneer_defaultRefmac = os.path.join(homologue, "refmac_default_afterMR_Buccaneer.mtz")
     try:
+      mtz_afterMR0 = os.path.join(homologue, "refmac_afterMR0.mtz")
       os.path.exists(mtz_afterMR0)
+    # after MR and 100 jelly body refinement
     except FileNotFoundException:
       mtz_afterMR0 = None
       print("No MTZ file for 0-cycle refinement following MR")
     try:
+      mtz_afterMR = os.path.join(homologue, "refmac_afterMR.mtz")
       os.path.exists(mtz_afterMR)
     except FileNotFoundException:
       mtz_afterMR = None
       print("No MTZ file for jelly body refinement following MR")
     try:
+      mtz_afterMR_Buccaneer_defaultRefmac = os.path.join(homologue, "refmac_default_afterMR_Buccaneer.mtz")
       os.path.exists(mtz_afterMR_Buccaneer_defaultRefmac)
     except FileNotFoundException:
       mtz_afterMR_Buccaneer_defaultRefmac = None
