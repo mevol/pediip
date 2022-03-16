@@ -687,16 +687,16 @@ def run_mr_pipelines(key, homologue, args):
     print("\n")
     print("Building missing homologues with Buccaneer in: ", key)
     print("\n")
-    try:
-      os.path.exists(homologue.path("refmac_afterMR.mtz"))
+#    try:
+    if os.path.exists(homologue.path("refmac_afterMR.mtz")) == True:
       print("\n")
       print("Building MR result in: ", key)
       print("\n")
 #      break
-    except FileNotFoundError:
-      print("\n")
-      print("No valid MR result found in: ", key)
-      print("\n")
+#    except FileNotFoundError:
+#      print("\n")
+#      print("No valid MR result found in: ", key)
+#      print("\n")
       # Phaser-placed model after 100 cycles jelly body Refmac refinement; built with Buccaneer;
       # refined with Refmac 0-cycle and 100 cycles jelly body using the PDB-redo ground truth
       # MTZ;
@@ -708,10 +708,12 @@ def run_mr_pipelines(key, homologue, args):
 #      refine_placed_model_jelly_buccaneer_restraint(key, homologue, args)
 #      write_combined_mtz_afterMR_buccaneer_jelly(key, homologue, args)
 #      compare_phases_afterMR_buccaneer_jelly(key, homologue, args)
-#    else:
-#      print("\n")
-#      print("Building Molrep result")
-#      print("\n")
+    else:
+      print("\n")
+      print("No valid MR result found in: ", key)
+      print("\n")
+      print("Building Molrep result instead")
+      print("\n")
       try:
         os.path.exists(homologue.path("refmac_afterMolrep.mtz"))
         print("\n")
