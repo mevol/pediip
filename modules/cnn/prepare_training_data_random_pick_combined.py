@@ -172,9 +172,7 @@ def prepare_training_data_random_pick_combined(
 
             try:
                 # create a new list to hold the scaled, rounded and augmented images
-                edited_image_slices = np.zeros((slices_per_axis * 3,
-                                                int(xyz_limits[0]),
-                                                int(xyz_limits[0])))
+                edited_image_slices = np.zeros((slices_per_axis * 3))
 #               # initialize output image that will be created after *combining*
 #               # the 60 input images
 #               outputImage = np.zeros((3000, 3000, 1), dtype="uint8") # 1 for grey
@@ -193,12 +191,12 @@ def prepare_training_data_random_pick_combined(
                     slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
                     # Round to the nearest integer
                     slice_scaled_int = np.rint(slice_scaled)
-#                    edited_image_slices.append(slice_scaled_int)
+                    np.append(edited_image_slices, slice_scaled_int, axis=0)
                     # ENTER IMAGE AUGMENTATION HERE
                     # check the number of edited image slices
-#                    assert len(edited_image_slices) == 60
-#                    print("The number of edited image slices to be combined is: ",
-#                          len(edited_image_slices))
+                    assert len(edited_image_slices) == 60
+                    print("The number of edited image slices to be combined is: ",
+                          len(edited_image_slices))
 
 #                tiled_img = TileImage(edited_image_slices)
 
