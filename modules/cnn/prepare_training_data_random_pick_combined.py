@@ -166,16 +166,16 @@ def prepare_training_data_random_pick_combined(
                 map_array = np.array(map_grid, copy = False)
 
 
-            xyz_limits = [50, 50, 50]
-            upper_limit = gemmi.Position(*xyz_limits)
-            box = gemmi.FractionalBox()
-            box.minimum = gemmi.Fractional(0, 0, 0)
-            box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
-#            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(200, 200, 200))
-#            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(100, 100, 100))
-            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(50, 50, 50))
-            box.add_margin(1e-5)
-            map_to_map.set_extent(box)
+#            xyz_limits = [50, 50, 50]
+#            upper_limit = gemmi.Position(*xyz_limits)
+#            box = gemmi.FractionalBox()
+#            box.minimum = gemmi.Fractional(0, 0, 0)
+#            box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
+##            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(200, 200, 200))
+##            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(100, 100, 100))
+#            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(50, 50, 50))
+#            box.add_margin(1e-5)
+#            map_to_map.set_extent(box)
 
 
 
