@@ -12,6 +12,8 @@ setup(
     author_email="melanie.vollmar@diamond.ac.uk",
     packages=["modules",
               "modules.create_mr_set",
+              "module.cnn",
+              "modules.db_files"
               ],
     install_requires=[
 #         "procrunner",
