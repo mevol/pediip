@@ -179,7 +179,7 @@ def prepare_training_data_random_pick_combined(
 #               outputImage = np.zeros((3000, 3000, 1), dtype="uint8") # 1 for grey
 #               print("Intitialised combined output image")
                 # Slice the volume into images
-#                image_slices = slice_map(map_array, slices_per_axis)
+                image_slices = slice_map(map_array, slices_per_axis)
                 # Iterate through images, scale them and save them in output_directory
                 print("Number of slices to edit and manipulate: ", len(image_slices))
                 for slice_num in range(image_slices.shape[0]):
