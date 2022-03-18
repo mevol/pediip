@@ -108,8 +108,9 @@ def prepare_training_data_random_pick_combined(
 #this below works but runs serial
     with open(maps_list, "r") as ls:
         print(ls)
-        next(ls)
-        for line in ls:
+        csv_reader = csv.reader(ls, delimiter=",")
+        next(csv_reader)
+        for line in csv_reader:
             input_map_path = line.split(",")[0]
             print(input_map_path)
             split_path = line.split("/")
