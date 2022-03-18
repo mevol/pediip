@@ -257,7 +257,7 @@ def params_from_cmd(args):
 
 if __name__ == "__main__":
 
-    logging.basicConfig(level=logging.INFO, filename="preparing_data.log", filemode="w"))
+    logging.basicConfig(level=logging.INFO, filename="preparing_data.log", filemode="w")
     log = logging.getLogger(name="debug_log")
     userlog = logging.getLogger(name="usermessages")
 
