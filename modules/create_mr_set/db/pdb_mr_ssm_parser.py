@@ -113,7 +113,7 @@ class MRSSMParser(object):
     # get file path to MTZ location to convert to map for CNN training
     # reference MTZ from PDB-redo
     here = os.getcwd()
-    ref_location = here+"/structres/"+target_pdb
+    ref_location = here+"/structures/"+target_pdb
     try:
       ref_mtz = os.path.join(ref_location, "refmac.mtz")
       os.path.exists(ref_mtz)
