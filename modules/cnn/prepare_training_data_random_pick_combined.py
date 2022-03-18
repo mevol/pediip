@@ -24,6 +24,8 @@ def slice_map(volume, slices_per_axis):
     ), f"Please provide a volume which has dimensions of equal length, not {volume.shape[0]}x{volume.shape[1]}x{volume.shape[2]}"
 
     length = volume.shape[0]
+    
+    print("Volume single length: ", length)
 
     # Array to return the images
     image_stack = np.zeros((slices_per_axis * 3, length, length))
