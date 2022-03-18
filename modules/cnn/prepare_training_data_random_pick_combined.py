@@ -111,10 +111,12 @@ def prepare_training_data_random_pick_combined(
         csv_reader = csv.reader(ls, delimiter=",")
         next(csv_reader)
         for line in csv_reader:
-            input_map_path = line.split(",")[0]
-            print(input_map_path)
-            split_path = line.split("/")
-            print(split_path)
+            print(line)
+            print(line[0])
+#            input_map_path = line.split(",")[0]
+#            print(input_map_path)
+#            split_path = line.split("/")
+#            print(split_path)
 #        
 #        dir_stem = re.findall(r'\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b-\b[a-z0-9]{4}\b', line)
 #        
