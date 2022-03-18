@@ -226,7 +226,7 @@ def prepare_training_data_random_pick_combined(
 #        except Exception:
 #          logging.info(f"Finished creating images in {output_directory}")
 #          raise
-      return True
+        return True
 
 ##########################################################################################
 # OLD STUFF TO DELETE
