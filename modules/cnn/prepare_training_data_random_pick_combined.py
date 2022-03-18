@@ -123,7 +123,7 @@ def prepare_training_data_random_pick_combined(
                 homo = input_map_path.split("/")[12]
                 print("Working on homologue: ", homo)
             except Exception:
-                print("Could not find homologue to work with.)
+                print("Could not find homologue to work with.")
                 pass
             # Check path to map exists
             try:
