@@ -43,15 +43,15 @@ def slice_map(volume, slices_per_axis):
     print(range(slices_per_axis))
 
     # Get x slices and put in image_stack
-#    for slice in range(slices_per_axis):
-    for i, slice in enumerate(random_pick):
-        print(slice)
-        print(i)
-        print(volume[(slice + 1) * int((length) / (slices_per_axis + 1)), :, :])
-#        image_stack[slice, :, :] = volume[
-#            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
-        image_stack[i, :, :] = volume[
+    for slice in range(slices_per_axis):
+#    for i, slice in enumerate(random_pick):
+#        print(slice)
+#        print(i)
+#        print(volume[(slice + 1) * int((length) / (slices_per_axis + 1)), :, :])
+        image_stack[slice, :, :] = volume[
             (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
+#        image_stack[i, :, :] = volume[
+#            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
         ]
 
     # Get y slices and put in image_stack
