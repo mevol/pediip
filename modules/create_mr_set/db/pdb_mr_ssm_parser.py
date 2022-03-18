@@ -136,9 +136,9 @@ class MRSSMParser(object):
       print("No MTZ file for jelly body refinement following MR")
     # after default Refmac, Buccaneer, MR and 100 jelly body refinement
     if os.path.exists(os.path.join(homologue, "refmac_default_afterMR_Buccaneer.mtz")) == True:
-      mtz_afterMR_Buccaneer_defaultRefmac_path = os.path.join(homologue, "refmac_default_afterMR_Buccaneer.mtz")
+      mtz_afterMR_Buccaneer_default_refmac_path = os.path.join(homologue, "refmac_default_afterMR_Buccaneer.mtz")
     else:
-      mtz_afterMR_Buccaneer_defaultRefmac_path = None
+      mtz_afterMR_Buccaneer_default_refmac_path = None
       print("No MTZ file for default refinement after Buccaneer of MR-jellybody")
 
     # get MTZ files from Molrep
@@ -156,9 +156,9 @@ class MRSSMParser(object):
       print("No MTZ file for jelly body refinement following Molrep")
     # after default Refmac, Buccaneer, Molrep and 100 jelly body refinement
     if os.path.exists(os.path.join(homologue, "refmac_default_afterMolrep_Buccaneer.mtz")) == True:
-      mtz_afterMolrep_Buccaneer_defaultRefmac_path = os.path.join(homologue, "refmac_default_afterMolrep_Buccaneer.mtz")
+      mtz_afterMolrep_Buccaneer_default_refmac_path = os.path.join(homologue, "refmac_default_afterMolrep_Buccaneer.mtz")
     else:
-      mtz_afterMolrep_Buccaneer_defaultRefmac_path = None
+      mtz_afterMolrep_Buccaneer_default_refmac_path = None
       print("No MTZ file for default refinement after Buccaneer of Molrep-jellybody")
 
     # get MTZ files from SSM
@@ -176,9 +176,9 @@ class MRSSMParser(object):
       print("No MTZ file for jelly body refinement following SSM")
     # after default Refmac, Buccaneer, SSM and 100 jelly body refinement
     if os.path.exists(os.path.join(homologue, "refmac_default_afterSSM_Buccaneer.mtz")) == True:
-      mtz_afterSSM_Buccaneer_defaultRefmac_path = os.path.join(homologue, "refmac_default_afterSSM_Buccaneer.mtz")
+      mtz_afterSSM_Buccaneer_default_refmac_path = os.path.join(homologue, "refmac_default_afterSSM_Buccaneer.mtz")
     else:
-      mtz_afterSSM_Buccaneer_defaultRefmac_path = None
+      mtz_afterSSM_Buccaneer_default_refmac_path = None
       print("No MTZ file for default refinement after Buccaneer of SSM-jellybody")
 
 ##########################################################################################
@@ -734,7 +734,7 @@ class MRSSMParser(object):
         "longest_fragments_afterSSM"       : longest_fragments_afterSSM,
         "percent_chain_complete_afterSSM" : percent_chain_complete_afterSSM,
         "percent_res_complete_afterSSM" : percent_res_complete_afterSSM,
-        "mtz_afterSSM_Buccaneer_defaultRefmac" : mtz_afterSSM_Buccaneer_defaultRefmac_path,
+        "mtz_afterSSM_Buccaneer_default_refmac" : mtz_afterSSM_Buccaneer_default_refmac_path,
         "initial_rfree_refmac_default_afterSSM_Buccaneer" : initial_rfree_refmac_default_afterSSM_Buccaneer,
         "final_rfree_refmac_default_afterSSM_Buccaneer" : final_rfree_refmac_default_afterSSM_Buccaneer,
         "initial_rwork_refmac_default_afterSSM_Buccaneer" : initial_rwork_refmac_default_afterSSM_Buccaneer,
@@ -769,7 +769,7 @@ class MRSSMParser(object):
         "longest_fragments_afterMolrep"       : longest_fragments_afterMolrep,
         "percent_chain_complete_afterMolrep" : percent_chain_complete_afterMolrep,
         "percent_res_complete_afterMolrep" : percent_res_complete_afterMolrep,
-        "mtz_afterMolrep_Buccaneer_defaultRefmac" : mtz_afterMolrep_Buccaneer_defaultRefmac_path,
+        "mtz_afterMolrep_Buccaneer_default_refmac" : mtz_afterMolrep_Buccaneer_default_refmac_path,
         "initial_rfree_refmac_default_afterMolrep_Buccaneer" : initial_rfree_refmac_default_afterMolrep_Buccaneer,
         "final_rfree_refmac_default_afterMolrep_Buccaneer" : final_rfree_refmac_default_afterMolrep_Buccaneer,
         "initial_rwork_refmac_default_afterMolrep_Buccaneer" : initial_rwork_refmac_default_afterMolrep_Buccaneer,
@@ -801,7 +801,7 @@ class MRSSMParser(object):
         "longest_fragments_afterMR"       : longest_fragments_afterMR,
         "percent_chain_complete_afterMR" : percent_chain_complete_afterMR,
         "percent_res_complete_afterMR" : percent_res_complete_afterMR,
-        "mtz_afterMR_Buccaneer_defaultRefmac" : mtz_afterMR_Buccaneer_defaultRefmac_path,
+        "mtz_afterMR_Buccaneer_default_refmac" : mtz_afterMR_Buccaneer_default_refmac_path,
         "initial_rfree_refmac_default_afterMR_Buccaneer" : initial_rfree_refmac_default_afterMR_Buccaneer,
         "final_rfree_refmac_default_afterMR_Buccaneer" : final_rfree_refmac_default_afterMR_Buccaneer,
         "initial_rwork_refmac_default_afterMR_Buccaneer" : initial_rwork_refmac_default_afterMR_Buccaneer,
