@@ -34,6 +34,8 @@ def slice_map(volume, slices_per_axis):
 ###### RANDOMLY PICK 20 SLICES
 
     random_pick = np.random.choice(volume.shape[0], size = slices_per_axis)
+    
+    print(random_pick)
 
     print(range(slices_per_axis))
 
