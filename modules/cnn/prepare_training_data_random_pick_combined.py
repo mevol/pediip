@@ -27,21 +27,24 @@ def slice_map(volume, slices_per_axis):
     
     print("Volume single length: ", length)
 
+    random_pick = np.random.choice(length, size = slices_per_axis*3)
+
     # Array to return the images
+#    image_stack = np.zeros((slices_per_axis * 3, length, length))
     image_stack = np.zeros((slices_per_axis * 3, length, length))
+
     # print(image_stack.shape)
 
 ###### RANDOMLY PICK 20 SLICES
 
-    random_pick = np.random.choice(volume.shape[0], size = slices_per_axis)
     
     print(random_pick)
 
     print(range(slices_per_axis))
 
     # Get x slices and put in image_stack
-#    for slice in range(slices_per_axis):
-    for slice in random_pick:
+    for slice in range(slices_per_axis):
+#    for slice in random_pick:
         print(slice)
         image_stack[slice, :, :] = volume[
             (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
