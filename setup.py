@@ -26,7 +26,7 @@ setup(
 #         "numpy==1.21.0",
          "numpy==1.19.2",
          "tensorflow==2.5.3",
-#         "h5py==3.1.0",
+         "h5py==3.1.0",
 #         "tensorflow<=1.13",
          "Keras",
          "Pillow",
@@ -37,7 +37,7 @@ setup(
          "matplotlib",
          "configargparse",
          "scipy==1.4.1",
-         "h5py==2.10.0",
+#         "h5py==2.10.0",
     ],
     scripts=[
             "bin/create_mr_set",
