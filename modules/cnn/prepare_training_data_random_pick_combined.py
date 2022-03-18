@@ -114,7 +114,8 @@ def prepare_training_data_random_pick_combined(
         next(csv_reader)
         for line in csv_reader:
             input_map_path = line[1]
-#            print(line)
+            print(input_map_path.split("/"))
+            print(input_map_path.split("/")[7])
 #            print(line[1])
 
             # Check path to map exists
