@@ -27,7 +27,7 @@ def slice_map(volume, slices_per_axis):
     
     print("Volume single length: ", length)
 
-    random_pick = np.random.choice(length, size = slices_per_axis*3)
+    random_pick = np.random.choice(length, size = slices_per_axis)
 
     # Array to return the images
 #    image_stack = np.zeros((slices_per_axis * 3, length, length))
@@ -47,6 +47,7 @@ def slice_map(volume, slices_per_axis):
     for i, slice in enumerate(random_pick):
         print(slice)
         print(i)
+        print(volume[(slice + 1) * int((length) / (slices_per_axis + 1)), :, :])
 #        image_stack[slice, :, :] = volume[
 #            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
         image_stack[i, :, :] = volume[
