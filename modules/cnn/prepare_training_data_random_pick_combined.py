@@ -134,15 +134,24 @@ def prepare_training_data_random_pick_combined(
                 raise
 
             try:
-                # opening temporary map file which shouldn't be neccessary to be written out
-                map = gemmi.read_ccp4_map(str(map_file_path))
+                # try opening MTZ file
+                data = gemmi.read_mtz_file(str(map_file_path))
+                # create an empty map grid
+                data_to_map = gemmi.Ccp4Map()
+                print("Grid of MTZ file", data_to_map.grid)
+                # turn MTZ file into map
+                data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=4)
+
+
+#                # opening temporary map file which shouldn't be neccessary to be written out
+#                map = gemmi.read_ccp4_map(str(map_file_path))
             except Exception:
-                logging.error(f"Could not open map {map_file_path}")
+                logging.error(f"Could not open MTZ and convert to MAP {map_file_path}")
                 raise
 
             try:
-                map.setup() 
-                #print("Grid after loading temp file", map.grid)
+                data_to_map.setup() 
+                print("Grid after loading temp file", data_to_map.grid)
             except RuntimeError:
                 pass
 
@@ -153,14 +162,14 @@ def prepare_training_data_random_pick_combined(
                 upper_limit = gemmi.Position(*xyz_limits)
                 box = gemmi.FractionalBox()
                 box.minimum = gemmi.Fractional(0, 0, 0)
-                box.maximum = map.grid.unit_cell.fractionalize(upper_limit)
-                box.maximum = map.grid.point_to_fractional(
-                map.grid.get_point(int(xyz_limits[0]),
-                                   int(xyz_limits[1]),
-                                   int(xyz_limits[2])))
+                box.maximum = data_to_map.grid.unit_cell.fractionalize(upper_limit)
+                box.maximum = data_to_map.grid.point_to_fractional(
+                data_to_map.grid.get_point(int(xyz_limits[0]),
+                                           int(xyz_limits[1]),
+                                           int(xyz_limits[2])))
                 box.add_margin(1e-5)
-                map.set_extent(box)
-                map_grid = map.grid
+                data_to_map.set_extent(box)
+                map_grid = data_to_map.grid
                 map_array = np.array(map_grid, copy = False)
                 print(map_array.shape)
                 print("Grid after setting XYZ limits for MAP", map_grid)
