@@ -172,7 +172,7 @@ def prepare_training_data_random_pick_combined(
 
             try:
                 # create a new list to hold the scaled, rounded and augmented images
-                edited_image_slices = np.zeros((slices_per_axis * 3, int(xyz_limits[0])))
+                edited_image_slices = np.zeros((slices_per_axis * 3, int(xyz_limits[0])+1))
 #               # initialize output image that will be created after *combining*
 #               # the 60 input images
 #               outputImage = np.zeros((3000, 3000, 1), dtype="uint8") # 1 for grey
