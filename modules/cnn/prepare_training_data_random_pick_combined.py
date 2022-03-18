@@ -114,15 +114,6 @@ def prepare_training_data_random_pick_combined(
             input_map_path = line[1]
 #            print(line)
 #            print(line[1])
-#            input_map_path = line.split(",")[0]
-#            print(input_map_path)
-#            split_path = line.split("/")
-#            print(split_path)
-#        
-#        dir_stem = re.findall(r'\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b-\b[a-z0-9]{4}\b', line)
-#        
-#        # get directory stem
-#        print("directory stem is: ", dir_stem)
 
             # Check path to map exists
             try:
@@ -140,11 +131,9 @@ def prepare_training_data_random_pick_combined(
                 data_to_map = gemmi.Ccp4Map()
                 print("Grid of MTZ file", data_to_map.grid)
                 # turn MTZ file into map
-                data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=4)
-
-
-#                # opening temporary map file which shouldn't be neccessary to be written out
-#                map = gemmi.read_ccp4_map(str(map_file_path))
+                data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT',
+                                                               sample_rate=4)
+                data_to_map.update_ccp4_header(2, True)
             except Exception:
                 logging.error(f"Could not open MTZ and convert to MAP {map_file_path}")
                 raise
@@ -159,18 +148,45 @@ def prepare_training_data_random_pick_combined(
                 #this bit here expands the unit cell to be 200A^3;
                 #Can I expand the unit cell to standard volume and then extract a
                 #grid cube (200, 200, 200) or whatever value has been passed through YAML file
+#                xyz_limits = [50, 50, 50]
+#                xyz_limits = 
+
+                print("XYZ limits: ", xyz_limits[0], xyz_limits[1], xyz_limits[2])
                 upper_limit = gemmi.Position(*xyz_limits)
                 box = gemmi.FractionalBox()
                 box.minimum = gemmi.Fractional(0, 0, 0)
                 box.maximum = data_to_map.grid.unit_cell.fractionalize(upper_limit)
                 box.maximum = data_to_map.grid.point_to_fractional(
-                data_to_map.grid.get_point(int(xyz_limits[0]),
-                                           int(xyz_limits[1]),
-                                           int(xyz_limits[2])))
+                                          data_to_map.grid.get_point(int(xyz_limits[0]),
+                                                                     int(xyz_limits[1]),
+                                                                     int(xyz_limits[2])))
                 box.add_margin(1e-5)
                 data_to_map.set_extent(box)
                 map_grid = data_to_map.grid
                 map_array = np.array(map_grid, copy = False)
+
+
+            xyz_limits = [50, 50, 50]
+            upper_limit = gemmi.Position(*xyz_limits)
+            box = gemmi.FractionalBox()
+            box.minimum = gemmi.Fractional(0, 0, 0)
+            box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
+#            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(200, 200, 200))
+#            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(100, 100, 100))
+            box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(50, 50, 50))
+            box.add_margin(1e-5)
+            map_to_map.set_extent(box)
+
+
+
+
+
+
+
+
+
+
+
                 print(map_array.shape)
                 print("Grid after setting XYZ limits for MAP", map_grid)
             except Exception:
