@@ -6,7 +6,7 @@ import os
 import sys
 import yaml
 from pathlib import Path
-from modules.cnn.prepare_training_data_random_pick_combined import prepare_training_data_random_pick_combined
+from modules.cnn.prepare_training_data_random_pick_combine import prepare_training_data_random_pick_combined
 
 example_config = """maps_list: /path/to/maps/list
 xyz_limits:
