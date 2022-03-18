@@ -110,15 +110,18 @@ def prepare_training_data_random_pick_combined(
 
 #this below works but runs serial
     with open(maps_list, "r") as ls:
+      print(ls)
       next(ls)
       for line in ls:
         input_map_path = line.split(",")[0]
         print(input_map_path)
         split_path = line.split("/")
-        dir_stem = re.findall(r'\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b-\b[a-z0-9]{4}\b', line)
-        
-        # get directory stem
-        print("directory stem is: ", dir_stem)
+        print(split_path)
+#        
+#        dir_stem = re.findall(r'\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b-\b[a-z0-9]{4}\b', line)
+#        
+#        # get directory stem
+#        print("directory stem is: ", dir_stem)
 
         # Check path to map exists
         try:
@@ -211,19 +214,21 @@ def prepare_training_data_random_pick_combined(
 
 
 ###### ENTER PNG COMBINATION HERE
-            # Save image
-          try:
-            output_file = Path(output_directory) / Path(
-                      f"{dir_stem[0]}.png"
-                  )
-            Image.fromarray(tiled_img).convert("L").save(output_file)
-          except Exception:
-            logging.error(f"Could not create image file in {output_directory}")
+#            # Save image
+#          try:
+#            output_file = Path(output_directory) / Path(
+#                      f"{dir_stem[0]}.png"
+#                  )
+#            Image.fromarray(tiled_img).convert("L").save(output_file)
+#          except Exception:
+#            logging.error(f"Could not create image file in {output_directory}")
+#
+#        except Exception:
+#          logging.info(f"Finished creating images in {output_directory}")
+#          raise
 
-        except Exception:
-          logging.info(f"Finished creating images in {output_directory}")
-          raise
-
+##########################################################################################
+# OLD STUFF TO DELETE
 #              # Save image
 #              try:
 #                  output_file = Path(output_directory) / Path(
