@@ -211,14 +211,14 @@ def prepare_training_data_random_pick_combined(
 
 
 ###### ENTER PNG COMBINATION HERE
-              # Save image
-              try:
-                  output_file = Path(output_directory) / Path(
+            # Save image
+          try:
+            output_file = Path(output_directory) / Path(
                       f"{dir_stem[0]}.png"
                   )
-                  Image.fromarray(tiled_img).convert("L").save(output_file)
-              except Exception:
-                logging.error(f"Could not create image file in {output_directory}")
+            Image.fromarray(tiled_img).convert("L").save(output_file)
+          except Exception:
+            logging.error(f"Could not create image file in {output_directory}")
 
         except Exception:
           logging.info(f"Finished creating images in {output_directory}")
