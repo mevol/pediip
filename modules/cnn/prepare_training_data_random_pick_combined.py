@@ -31,11 +31,11 @@ def slice_map(volume, slices_per_axis):
 
 ###### RANDOMLY PICK 20 SLICES
 
-    random_pick = np.random.randint(volume.shape[0], size = slices_per_axis)
+    random_pick = np.random.choice(volume.shape[0], size = slices_per_axis)
 
     # Get x slices and put in image_stack
 #    for slice in range(slices_per_axis):
-    for slice in range(random_pick):
+    for slice in random_pick:
         print(slice)
         image_stack[slice, :, :] = volume[
             (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
