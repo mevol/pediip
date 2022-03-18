@@ -34,7 +34,8 @@ def slice_map(volume, slices_per_axis):
 
 
     # Get x slices and put in image_stack
-    for slice in range(slices_per_axis):
+#    for slice in range(slices_per_axis):
+    for slice in np.random.randint(volume.shape[0]+1, size = slices_per_axis):
         image_stack[slice, :, :] = volume[
             (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
         ]
@@ -179,11 +180,7 @@ def prepare_training_data_random_pick_combined(
 
             try:
                 # create a new list to hold the scaled, rounded and augmented images
-                edited_image_slices = np.zeros((slices_per_axis * 3, int(xyz_limits[0])+1, int(xyz_limits[0])+1))
-#               # initialize output image that will be created after *combining*
-#               # the 60 input images
-#               outputImage = np.zeros((3000, 3000, 1), dtype="uint8") # 1 for grey
-#               print("Intitialised combined output image")
+                edited_image_slices = np.zeros((slices_per_axis * 3, int(xyz_limits[0])+1))
                 # Slice the volume into images
                 image_slices = slice_map(map_array, slices_per_axis)
                 # Iterate through images, scale them and save them in output_directory
@@ -192,7 +189,6 @@ def prepare_training_data_random_pick_combined(
                     print("Working on slice number: ", slice_num)
                     # Get slice
                     slice = image_slices[slice_num, :, :]
-                    print(slice)
                     print("Slice dimension: ", slice.shape)
                     # Scale slice
                     slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
@@ -206,21 +202,6 @@ def prepare_training_data_random_pick_combined(
                           len(edited_image_slices))
 
 #                tiled_img = TileImage(edited_image_slices)
-
-
-
-#          # tile the four input images in the output image such the first
-#          # image goes in the top-right corner, the second image in the
-#          # top-left corner, the third image in the bottom-right corner,
-#          # and the final image in the bottom-left corner
-#          outputImage[0:32, 0:32] = inputImages[0]
-#          outputImage[0:32, 32:64] = inputImages[1]
-#          outputImage[32:64, 32:64] = inputImages[2]
-#          outputImage[32:64, 0:32] = inputImages[3]
-#          # add the tiled image to our set of images the network will be
-#          # trained on
-#          images.append(outputImage)
-
 
 ###### ENTER PNG COMBINATION HERE
 #            # Save image
@@ -237,88 +218,6 @@ def prepare_training_data_random_pick_combined(
                 raise
     return True
 
-##########################################################################################
-# OLD STUFF TO DELETE
-#              # Save image
-#              try:
-#                  output_file = Path(output_directory) / Path(
-#                      f"{dir_stem[0]}_{slice_num}.png"
-#                  )
-#                  Image.fromarray(slice_scaled_int).convert("L").save(output_file)
-#              except Exception:
-#                logging.error(f"Could not create image file in {output_directory}")
-#
-#        except Exception:
-#          logging.info(f"Finished creating images in {output_directory}")          
-#          raise
-
-
-          
-#         Check volume is equal in all directions
-#         
-#         assert (
-#           map_array.shape[0] == map_array.shape[1] == map_array.shape[2]
-#         ), f"Please provide a volume which has dimensions of equal length, not {map_array.shape[0]}x{volume.shape[1]}x{map_array.shape[2]}"
-# 
-#         length = map_array.shape[0]
-# 
-#         Array to return the images
-#         image_stack = np.zeros((slices_per_axis * 3, length, length))
-#         print(image_stack.shape)
-#           
-#     Get x slices and put in image_stack
-#     for slice in range(slices_per_axis):
-#         image_stack[slice, :, :] = volume[
-#             (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
-#         ]
-# 
-#     Get y slices and put in image_stack
-#     for slice in range(slices_per_axis):
-#         image_stack[slice + slices_per_axis, :, :] = volume[
-#             :, (slice + 1) * int((length) / (slices_per_axis + 1)), :
-#         ]
-# 
-#     Get z slices and put in image_stack
-#     for slice in range(slices_per_axis):
-#         image_stack[slice + (slices_per_axis * 2), :, :] = volume[
-#             :, :, (slice + 1) * int((length) / (slices_per_axis + 1))
-#         ]
-# 
-#     return image_stack          
-          
-#          
-# #Trying to account for resolution and make the distance between the grid points equal for
-# #all resolutions; this causes errors with some space groups
-# #          try:
-# #            map_to_map = gemmi.read_ccp4_map(temp_out_file)
-# #            map_to_map.setup()
-# #            print(map_to_map.grid)
-# #            grid = map_to_map.grid
-# #            print(grid)
-# #            new_grid = grid.set_value(200, 200, 200, 4.0)
-# #            print(new_grid.get_value)
-# #            xyz_limits = [200, 200, 200]
-# #            upper_limit = gemmi.Position(*xyz_limits)
-# #            box = gemmi.FractionalBox()
-# #            box.minimum = gemmi.Fractional(0, 0, 0)
-# #            box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
-# #            map_to_map.set_extent(box)
-# #          except Exception:
-# #            logging.error(f"Could not expand map {map_to_map}")
-# #            raise
-# 
-# 
-# 
-#           mtz_state = str(mtz_file).strip(".mtz")
-#           final_name = struct+"_"+homo+"_"+mtz_state+".ccp4"
-#           final = os.path.join(output_dir, final_name)
-# #          final = os.path.join(output_dir, struct+"_"+homo+"_"+mtz_state+".ccp4")
-#           try:
-#             map_to_map.write_ccp4_map(final)
-# #            data_to_map.write_ccp4_map(final)
-#           except Exception:
-#             logging.error(f"Could not write final map {final}")
-#               
 
 
 def params_from_yaml(args):
@@ -358,7 +257,7 @@ def params_from_cmd(args):
 
 if __name__ == "__main__":
 
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, filename="preparing_data.log", filemode="w"))
     log = logging.getLogger(name="debug_log")
     userlog = logging.getLogger(name="usermessages")
 
