@@ -111,8 +111,9 @@ def prepare_training_data_random_pick_combined(
         csv_reader = csv.reader(ls, delimiter=",")
         next(csv_reader)
         for line in csv_reader:
-            print(line)
-            print(line[0])
+            input_map_path = line[1]
+#            print(line)
+#            print(line[1])
 #            input_map_path = line.split(",")[0]
 #            print(input_map_path)
 #            split_path = line.split("/")
