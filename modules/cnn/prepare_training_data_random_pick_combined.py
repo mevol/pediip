@@ -77,46 +77,45 @@ def TileImage(imgs, picturesPerRow=10):
     return vstack(tiled)
 
 def prepare_training_data_random_pick_combined(
-    maps_list: str,
-    xyz_limits: List[int],
-    output_directory: str,
-    slices_per_axis: int,
-    ):
-    """Load electron density maps from phasing and slice into 2D images along all three
-    axis. Return True if no exceptions"""
+  maps_list: str,
+  xyz_limits: List[int],
+  output_directory: str,
+  slices_per_axis: int):
+  """Load electron density maps from phasing and slice into 2D images along all three
+  axis. Return True if no exceptions"""
 
-    print("Number of slices ", slices_per_axis)
+  print("Number of slices ", slices_per_axis)
 
-    logging.info("Preparing training data")
+  logging.info("Preparing training data")
 
-    # Check all directories exist
-    try:
-        output_dir = Path(output_directory)
-        assert output_dir.exists()
-    except Exception:
-        logging.error(f"Could not find output directory at {output_directory}")
-        raise
+  # Check all directories exist
+  try:
+    output_dir = Path(output_directory)
+    assert output_dir.exists()
+  except Exception:
+    logging.error(f"Could not find output directory at {output_directory}")
+    raise
 
-    # Check xyz limits are of correct format
-    try:
-        assert type(xyz_limits) == list or type(xyz_limits) == tuple
-        assert len(xyz_limits) == 3
-        assert all(type(values) == int for values in xyz_limits)
-    except AssertionError:
-        logging.error(
-            "xyz_limits muste be provided as a list or tupls of three integer values"
-        )
-        raise
+  # Check xyz limits are of correct format
+  try:
+    assert type(xyz_limits) == list or type(xyz_limits) == tuple
+    assert len(xyz_limits) == 3
+    assert all(type(values) == int for values in xyz_limits)
+  except AssertionError:
+    logging.error(
+        "xyz_limits muste be provided as a list or tupls of three integer values"
+     )
+    raise
 
 #this below works but runs serial
-    with open(maps_list, "r") as ls:
-      print(ls)
-      next(ls)
-      for line in ls:
-        input_map_path = line.split(",")[0]
-        print(input_map_path)
-        split_path = line.split("/")
-        print(split_path)
+  with open(maps_list, "r") as ls:
+    print(ls)
+    next(ls)
+    for line in ls:
+      input_map_path = line.split(",")[0]
+      print(input_map_path)
+      split_path = line.split("/")
+      print(split_path)
 #        
 #        dir_stem = re.findall(r'\b[a-z0-9]{8}\b-\b[a-z0-9]{4}\b-\b[a-z0-9]{4}\b', line)
 #        
@@ -124,78 +123,78 @@ def prepare_training_data_random_pick_combined(
 #        print("directory stem is: ", dir_stem)
 
         # Check path to map exists
-        try:
-          map_file_path = Path(input_map_path)
-          #print(map_file_path)
-          assert map_file_path.exists()
-        except Exception:
-          logging.error(f"Could not find mtz directory at {map_file_path}")
-          raise
+      try:
+        map_file_path = Path(input_map_path)
+        #print(map_file_path)
+        assert map_file_path.exists()
+      except Exception:
+        logging.error(f"Could not find mtz directory at {map_file_path}")
+        raise
 
-        try: 
-          # opening temporary map file which shouldn't be neccessary to be written out
-          map = gemmi.read_ccp4_map(str(map_file_path))
-        except Exception:
-          logging.error(f"Could not open map {map_file_path}")          
-          raise
-        
-        try:
-          map.setup() 
-          #print("Grid after loading temp file", map.grid)
-        except RuntimeError:
-          pass  
+      try: 
+        # opening temporary map file which shouldn't be neccessary to be written out
+        map = gemmi.read_ccp4_map(str(map_file_path))
+      except Exception:
+        logging.error(f"Could not open map {map_file_path}")
+        raise
 
-        try:
-          #this bit here expands the unit cell to be 200A^3;
-          #Can I expand the unit cell to standard volume and then extract a
-          #grid cube (200, 200, 200) or whatever value has been passed through YAML file
-          upper_limit = gemmi.Position(*xyz_limits)
-          box = gemmi.FractionalBox()
-          box.minimum = gemmi.Fractional(0, 0, 0)
-          box.maximum = map.grid.unit_cell.fractionalize(upper_limit)
-          box.maximum = map.grid.point_to_fractional(
-              map.grid.get_point(int(xyz_limits[0]),
-                                        int(xyz_limits[1]),
-                                        int(xyz_limits[2])))
-          box.add_margin(1e-5)
-          map.set_extent(box)
+      try:
+        map.setup() 
+        #print("Grid after loading temp file", map.grid)
+      except RuntimeError:
+        pass
 
-
+      try:
+        #this bit here expands the unit cell to be 200A^3;
+        #Can I expand the unit cell to standard volume and then extract a
+        #grid cube (200, 200, 200) or whatever value has been passed through YAML file
+        upper_limit = gemmi.Position(*xyz_limits)
+        box = gemmi.FractionalBox()
+        box.minimum = gemmi.Fractional(0, 0, 0)
+        box.maximum = map.grid.unit_cell.fractionalize(upper_limit)
+        box.maximum = map.grid.point_to_fractional(
+            map.grid.get_point(int(xyz_limits[0]),
+                                   int(xyz_limits[1]),
+                                   int(xyz_limits[2])))
+        box.add_margin(1e-5)
+        map.set_extent(box)
 
 
 
-          map_grid = map.grid
-          map_array = np.array(map_grid, copy = False)
-          print(map_array.shape)
-          print("Grid after setting XYZ limits for MAP", map_grid)
-        except Exception:
-          logging.error(f"Could not expand map {map_file_path}")          
-          raise
-          
-        try:
-          # create a new list to hold the scaled, rounded and augmented images
-          edited_image_slices = []
-#          # initialize output image that will be created after *combining*
-#          # the 60 input images
-#          outputImage = np.zeros((3000, 3000, 1), dtype="uint8") # 1 for grey
-#          print("Intitialised combined output image")
-          # Slice the volume into images
-          image_slices = slice_map(map_array, slices_per_axis)
-          # Iterate through images, scale them and save them in output_directory
-          for slice_num in range(image_slices.shape[0]):
-              # Get slice
-              slice = image_slices[slice_num, :, :]
-              # Scale slice
-              slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
-              # Round to the nearest integer
-              slice_scaled_int = np.rint(slice_scaled)
-              edited_image_slices.append(slice_scaled_int)
-              # ENTER IMAGE AUGMENTATION HERE
+
+
+        map_grid = map.grid
+        map_array = np.array(map_grid, copy = False)
+        print(map_array.shape)
+        print("Grid after setting XYZ limits for MAP", map_grid)
+      except Exception:
+        logging.error(f"Could not expand map {map_file_path}")          
+        raise
+
+      try:
+        # create a new list to hold the scaled, rounded and augmented images
+        edited_image_slices = []
+#        # initialize output image that will be created after *combining*
+#        # the 60 input images
+#        outputImage = np.zeros((3000, 3000, 1), dtype="uint8") # 1 for grey
+#        print("Intitialised combined output image")
+        # Slice the volume into images
+        image_slices = slice_map(map_array, slices_per_axis)
+        # Iterate through images, scale them and save them in output_directory
+        for slice_num in range(image_slices.shape[0]):
+          # Get slice
+          slice = image_slices[slice_num, :, :]
+          # Scale slice
+          slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
+          # Round to the nearest integer
+          slice_scaled_int = np.rint(slice_scaled)
+          edited_image_slices.append(slice_scaled_int)
+          # ENTER IMAGE AUGMENTATION HERE
           # check the number of edited image slices
           assert len(edited_image_slices) == 60
           print("The number of edited image slices to be combined is: ",
                 len(edited_image_slices))
-                
+
           tiled_img = TileImage(edited_image_slices)
 
 
@@ -226,7 +225,7 @@ def prepare_training_data_random_pick_combined(
 #        except Exception:
 #          logging.info(f"Finished creating images in {output_directory}")
 #          raise
-        return True
+  return True
 
 ##########################################################################################
 # OLD STUFF TO DELETE
