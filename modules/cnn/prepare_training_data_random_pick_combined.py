@@ -81,7 +81,7 @@ def prepare_training_data_random_pick_combined(
     xyz_limits: List[int],
     output_directory: str,
     slices_per_axis: int,
-):
+    ):
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
 
@@ -226,6 +226,7 @@ def prepare_training_data_random_pick_combined(
 #        except Exception:
 #          logging.info(f"Finished creating images in {output_directory}")
 #          raise
+    return True
 
 ##########################################################################################
 # OLD STUFF TO DELETE
@@ -309,7 +310,6 @@ def prepare_training_data_random_pick_combined(
 #           except Exception:
 #             logging.error(f"Could not write final map {final}")
 #               
-    return True
 
 
 def params_from_yaml(args):
