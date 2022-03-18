@@ -114,10 +114,17 @@ def prepare_training_data_random_pick_combined(
         next(csv_reader)
         for line in csv_reader:
             input_map_path = line[1]
-            print(input_map_path.split("/"))
-            print(input_map_path.split("/")[7])
-#            print(line[1])
-
+            try:
+                target = input_map_path.split("/")[8]
+                print("Working on target: ", target)
+            except Exception:
+                pass
+            try:
+                homo = input_map_path.split("/")[12]
+                print("Working on homologue: ", homo)
+            except Exception:
+                print("Could not find homologue to work with.)
+                pass
             # Check path to map exists
             try:
                 map_file_path = Path(input_map_path)
