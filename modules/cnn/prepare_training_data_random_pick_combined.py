@@ -130,6 +130,7 @@ def prepare_training_data_random_pick_combined(
         for line in csv_reader:
             input_map_path = line[1]
             print("INPUT: ", input_map_path)
+            print("REAL PATH: ", os.path.realpath(input_map_path))
             try:
                 target = input_map_path.split("/")[8]
                 print("Working on target: ", target)
