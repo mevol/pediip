@@ -163,7 +163,6 @@ def prepare_training_data_random_pick_combined(
                 map_file_path = Path(os.path.realpath(real_path_to_map_opt))
                 print(map_file_path)
                 assert map_file_path.exists()
-#                assert os.path.exists(map_file_path)
             except Exception:
                 logging.error(f"Could not find mtz directory at {map_file_path}")
                 pass
@@ -171,6 +170,37 @@ def prepare_training_data_random_pick_combined(
             try:
                 # try opening MTZ file
                 data = gemmi.read_mtz_file(str(map_file_path))
+                # unit cell of data
+                cell = data.cell
+                print("unit cell of data: ", cell)
+                # space group of data
+                sg = data.spacegroup
+                print("space group of data: ", sg)
+                # high resolution of the data
+                reso = data.resolution_high()
+                print("high resolution of MTZ: ", reso)
+                # get reciprocal lattice grid size
+                recip_grid = data.get_size_for_hkl()
+                print("reciprocal lattice grid: ", recip_grid)
+                # get grid size in relation to resolution and a sample rate of 4
+                size1 = data.get_size_for_hkl(sample_rate=4)
+                print("grid size at sample rate = 4: ", size1)
+                # get grid size in relation to resolution and a sample rate of 3
+                size2 = data.get_size_for_hkl(sample_rate=3)
+                print("grid size at sample rate = 3: ", size2)
+                # get grid size in relation to resolution and a sample rate of 2
+                size3 = data.get_size_for_hkl(sample_rate=2)
+                print("grid size at sample rate = 2: ", size3)
+                # get grid size in relation to resolution and a sample rate of 1
+                size4 = data.get_size_for_hkl(sample_rate=1)
+                print("grid size at sample rate = 1: ", size4)
+                # get grid size in relation to resolution and a sample rate of 1.5
+                size5 = data.get_size_for_hkl(sample_rate=1.5)
+                print("grid size at sample rate = 1.5: ", size5)
+                # get grid size in relation to resolution and a sample rate of 2.5
+                size6 = data.get_size_for_hkl(sample_rate=2.5)
+                print("grid size at sample rate = 2.5: ", size6)
+
                 # create an empty map grid
                 data_to_map = gemmi.Ccp4Map()
                 print("Grid of MTZ file", data_to_map.grid)
