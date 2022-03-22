@@ -148,9 +148,9 @@ def prepare_training_data_random_pick_combined(
             # Check path to map exists
             try:
                 map_file_path = Path(real_path_to_map_opt)
-#                print(map_file_path)
-#                assert map_file_path.exists()
-                assert os.path.exists(input_map_path)
+                print(map_file_path)
+                assert map_file_path.exists()
+#                assert os.path.exists(map_file_path)
             except Exception:
                 logging.error(f"Could not find mtz directory at {map_file_path}")
                 raise
