@@ -130,8 +130,10 @@ def prepare_training_data_random_pick_combined(
         for line in csv_reader:
             input_map_path = line[1]
             real_path_to_map = os.path.realpath(input_map_path)
+            real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
             print("INPUT: ", input_map_path)
             print("REAL PATH: ", real_path_to_map)
+            print("replace dls: ", real_path_to_map_opt)
             try:
                 target = input_map_path.split("/")[8]
                 print("Working on target: ", target)
@@ -145,7 +147,7 @@ def prepare_training_data_random_pick_combined(
                 pass
             # Check path to map exists
             try:
-                map_file_path = Path(real_path_to_map)
+                map_file_path = Path(real_path_to_map_opt)
 #                print(map_file_path)
 #                assert map_file_path.exists()
                 assert os.path.exists(input_map_path)
