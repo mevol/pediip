@@ -212,11 +212,11 @@ def prepare_training_data_random_pick_combined(
                 logging.error(f"Could not open MTZ and convert to MAP {map_file_path}")
                 raise
 
-            try:
-                data_to_map.setup() 
-                print("Grid after loading temp file", data_to_map.grid)
-            except RuntimeError:
-                pass
+#            try:
+#                data_to_map.setup() 
+#                print("Grid after loading temp file", data_to_map.grid)
+#            except RuntimeError:
+#                pass
 
             try:
                 #this bit here expands the unit cell to be 200A^3;
