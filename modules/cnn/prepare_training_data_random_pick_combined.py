@@ -147,7 +147,7 @@ def prepare_training_data_random_pick_combined(
                 pass
             # Check path to map exists
             try:
-                map_file_path = Path(real_path_to_map_opt)
+                map_file_path = Path(real_path_to_map)
                 print(map_file_path)
 #                assert map_file_path.exists()
 #                assert os.path.exists(map_file_path)
