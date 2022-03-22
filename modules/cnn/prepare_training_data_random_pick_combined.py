@@ -129,6 +129,7 @@ def prepare_training_data_random_pick_combined(
         next(csv_reader)
         for line in csv_reader:
             input_map_path = line[1]
+            print("INPUT: ", input_map_path)
             try:
                 target = input_map_path.split("/")[8]
                 print("Working on target: ", target)
@@ -143,8 +144,9 @@ def prepare_training_data_random_pick_combined(
             # Check path to map exists
             try:
                 map_file_path = Path(input_map_path)
-                #print(map_file_path)
-                assert map_file_path.exists()
+#                print(map_file_path)
+#                assert map_file_path.exists()
+                assert os.path.exists(input_map_path)
             except Exception:
                 logging.error(f"Could not find mtz directory at {map_file_path}")
                 raise
