@@ -527,10 +527,13 @@ def get_pipeline_parameters() -> dict:
     )
     parser.add_argument(
         "--slices_per_axis",
+        required=True,
+        type=int,
         help="number of slices to be produced for each axis of the standard volume",
     )
     parser.add_argument(
         "--slices_per_structure",
+        required=True,
         type=int,
         help="number of images for each structure. To be used in testing only",
     )
