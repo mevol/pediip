@@ -209,13 +209,14 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     
     ############## anything below doesn't seem to work
 
-    training_generator = DataGenerator(partition["train"],#X
+    training_generator = DataGenerator(
+                                       parameters_dict["xyz_limits"],
+                                       parameters_dict["slices_per_axis"],
+                                       partition["train"],#X
                                        label_dict,#y
                                        dim=IMG_DIM,
                                        batch_size=batch_size,
                                        n_classes=2,
-                                       parameters_dict["xyz_limits"],
-                                       parameters_dict["slices_per_axis"],
                                        shuffle=True)
     print(training_generator)
 
