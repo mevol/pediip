@@ -313,7 +313,7 @@ def prepare_training_data_random_pick_combined(
         logging.error(f"Could not open input map list \n")
         raise
     print("Shape of all maps stack: ", all_maps.shape)
-    return True
+    return all_maps
 
 
 
