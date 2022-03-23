@@ -7,6 +7,7 @@ import csv
 import re
 
 import numpy as np
+import pandas as pd
 
 from pathlib import Path
 from typing import List
@@ -127,7 +128,7 @@ def prepare_training_data_random_pick_combined(
 #this below works but runs serial
 
     try:
-        data = pandas.read_csv(maps_list)
+        data = pd.read_csv(maps_list)
         total_num_maps = len(data)
         logging.info(f"Found {total_num_maps} samples for training")
 
