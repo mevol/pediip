@@ -275,10 +275,10 @@ def prepare_training_data_random_pick_combined(
                 assert len(edited_image_slices) == 60
                 print("The number of edited image slices to be combined is: ",
                           len(edited_image_slices))
-            # adding the each produced map stack to a large numpy array to gather all maps
-            np.append(all_maps, edited_image_slices, axis=0)
-#            total_bytes = total_bytes + bytes
-            print("Accumulated byte size: ", total_bytes)
+                # adding the each produced map stack to a large numpy array to gather all maps
+                np.append(all_maps, edited_image_slices, axis=0)
+                total_bytes = total_bytes + bytes
+                print("Accumulated byte size: ", total_bytes)
 #                tiled_img = TileImage(edited_image_slices)
 
 ###### ENTER PNG COMBINATION HERE
