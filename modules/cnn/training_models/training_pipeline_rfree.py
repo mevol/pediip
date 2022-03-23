@@ -193,6 +193,16 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     print("Number of epochs: ", epochs)
     print("Batch size:", batch_size)
 
+    # New model
+    print("Using the following input parameters: ", input_shape)
+    model = create_model(input_shape)
+    model_info = model.get_config()
+    model_architecture = model.summary()
+    print(model_architecture)
+    logging.info(f"The model architecture is as follows:")
+    model.summary(print_fn=logging.info)
+
+
 
 
 
