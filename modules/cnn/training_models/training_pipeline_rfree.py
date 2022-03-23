@@ -152,7 +152,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     X_temp, X_challenge, y_temp, y_challenge = train_test_split(X, y, test_size=0.05,
                                                                 random_state=42)
 
-    print('Length of challenge data: ', len(X_val))
+    print('Length of challenge data: ', len(X_challenge))
 
     # use the remaining data for 80/20 train-test split
     X_train, X_test, y_train, y_test = train_test_split(X_temp, y_temp, test_size=0.2,
