@@ -72,45 +72,45 @@ def slice_map(volume, slices_per_axis):
     return image_stack, byte_size_stack
 
 
-def TileImage(imgs, picturesPerRow=10):
-    """ Convert to a true list of 16x16 images
-    """
-
-    # Calculate how many columns
-    picturesPerColumn = imgs.shape[0]/picturesPerRow + 1*((imgs.shape[0]%picturesPerRow)!=0)
-
-    # Padding
-    rowPadding = picturesPerRow - imgs.shape[0]%picturesPerRow
-    imgs = vstack([imgs,zeros([rowPadding,imgs.shape[1]])])
-
-    # Reshaping all images
-    imgs = imgs.reshape(imgs.shape[0],100,100)
-
-    # Tiling Loop (The conditionals are not necessary anymore)
-    tiled = []
-    for i in range(0,picturesPerColumn*picturesPerRow,picturesPerRow):
-        tiled.append(hstack(imgs[i:i+picturesPerRow,:,:]))
-
-
-    return vstack(tiled)
+#def TileImage(imgs, picturesPerRow=10):
+#    """ Convert to a true list of 16x16 images
+#    """
+#
+#    # Calculate how many columns
+#    picturesPerColumn = imgs.shape[0]/picturesPerRow + 1*((imgs.shape[0]%picturesPerRow)!=0)
+#
+#    # Padding
+#    rowPadding = picturesPerRow - imgs.shape[0]%picturesPerRow
+#    imgs = vstack([imgs,zeros([rowPadding,imgs.shape[1]])])
+#
+#    # Reshaping all images
+#    imgs = imgs.reshape(imgs.shape[0],100,100)
+#
+#    # Tiling Loop (The conditionals are not necessary anymore)
+#    tiled = []
+#    for i in range(0,picturesPerColumn*picturesPerRow,picturesPerRow):
+#        tiled.append(hstack(imgs[i:i+picturesPerRow,:,:]))
+#
+#
+#    return vstack(tiled)
 
 def prepare_training_data_random_pick_combined(
     maps_list: str,
     xyz_limits: List[int],
-    output_directory: str,
+#    output_directory: str,
     slices_per_axis: int):
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
     print("Number of slices ", slices_per_axis)
     logging.info("Preparing training data. \n")
 
-    # Check all directories exist
-    try:
-        output_dir = Path(output_directory)
-        assert output_dir.exists()
-    except Exception:
-        logging.error(f"Could not find output directory at {output_directory} \n")
-        raise
+#    # Check all directories exist
+#    try:
+#        output_dir = Path(output_directory)
+#        assert output_dir.exists()
+#    except Exception:
+#        logging.error(f"Could not find output directory at {output_directory} \n")
+#        raise
 
     # Check xyz limits are of correct format
     try:
@@ -302,7 +302,7 @@ def prepare_training_data_random_pick_combined(
 #            logging.error(f"Could not create image file in {output_directory}")
 #
             except Exception:
-                logging.info(f"Finished creating images in {output_directory} \n")
+#                logging.info(f"Finished creating images in {output_directory} \n")
                 raise
     except Exception:
         logging.error(f"Could not open input map list \n")
@@ -339,7 +339,7 @@ def params_from_cmd(args):
     params = {
         "maps_list": args.maps_list,
         "xyz_limits": args.xyz_limits,
-        "output_dir": args.output_dir,
+#        "output_dir": args.output_dir,
         "slices": args.slices_per_axis,
     }
 
@@ -371,9 +371,9 @@ if __name__ == "__main__":
     cmd_parser.add_argument(
         "xyz_limits", type=int, nargs=3, help="xyz size of the output map file"
     )
-    cmd_parser.add_argument(
-        "output_dir", type=str, help="directory to output all map files to"
-    )
+#    cmd_parser.add_argument(
+#        "output_dir", type=str, help="directory to output all map files to"
+#    )
     cmd_parser.add_argument(
         "slices", type=int, help="number of image slices to produce per axis, default=20",
         default=20
@@ -391,7 +391,7 @@ if __name__ == "__main__":
         prepare_training_data_binary(
             parameters["maps_list"],
             parameters["xyz_limits"],
-            parameters["output_dir"],
+#            parameters["output_dir"],
             parameters["slices"]
         )
     except KeyError as e:

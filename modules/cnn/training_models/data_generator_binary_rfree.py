@@ -12,10 +12,10 @@ from modules.cnn.prepare_training_data_random_pick_combined import prepare_train
 class DataGenerator(Sequence):
   'Generates data for Keras'
   def __init__(self, list_IDs, labels, batch_size=32, dim=(32,32),
-               n_classes=2, n_channels=1, shuffle=True):
+               n_classes=2, n_channels=1, shuffle=True, xyz_limits, slices_per_axis):
     'Initialization'
     self.dim = dim
-    #print(self.dim) #passed correctly
+    print(self.dim) #passed correctly
     self.batch_size = batch_size
     #print(self.batch_size) #passed correctly
     self.labels = labels
@@ -23,13 +23,17 @@ class DataGenerator(Sequence):
     self.list_IDs = list_IDs
     #print(self.list_IDs) #passed correctly
     self.iterator = self.list_IDs.index.tolist()
-    print(self.iterator)
+    #print(self.iterator) #passed correctly
     self.n_channels = n_channels
-    print(self.n_channels)
+    #print(self.n_channels) #passed correctly
     self.n_classes = n_classes
-    print(self.n_classes)
+    #print(self.n_classes) #passed correctly
     self.shuffle = shuffle
-    print(self.shuffle)
+    #print(self.shuffle) #passed correctly
+    self.xyz_limits = xyz_limits
+    print(self.xyz_limits)
+    self.slices_per_axis = slices_per_axis
+    print(self.slices_per_axis)
     self.on_epoch_end()
 
   def __len__(self):
@@ -52,7 +56,6 @@ class DataGenerator(Sequence):
   def on_epoch_end(self):
     'Updates indexes after each epoch'
     self.indexes = np.arange(len(self.list_IDs))
-
     if self.shuffle == True:
       np.random.shuffle(self.indexes)
 
@@ -65,11 +68,6 @@ class DataGenerator(Sequence):
     
     # Generate data
 
-## TO DO: This should go into the data generator; probably need to do a new one
-#    prepare_training_data_random_pick_combined(parameters_dict["sample_lable_lst"],
-#                                               parameters_dict["xyz_limits"],
-#                                               output_dir_path,
-#                                               parameters_dict["slices_per_axis"])
 
 
 
@@ -83,11 +81,11 @@ class DataGenerator(Sequence):
 
       print(99999999999999, X[i,])
  
-#      with mrcfile.open(self.list_IDs[ID]) as mrc:
-#        volume = mrc.data
-#        #TO DO: add standardisation or normalisation here for each volume
-#        #print("Loaded dimensions", volume.shape)
-#      # Store sample
+## TO DO: This should go into the data generator; probably need to do a new one
+    prepare_training_data_random_pick_combined(X[i,],
+                                               self.xyz_limits,
+#                                               output_dir_path,
+                                               print(self.slices_per_axis)
 #      X[i,] = volume.reshape(*self.dim, self.n_channels)
 
 #    for i, ID in enumerate(list_labels_temp):
