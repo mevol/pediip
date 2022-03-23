@@ -119,20 +119,59 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     IMG_DIM = tuple(parameters_dict["image_dim"])
     print("map dimensions ", IMG_DIM)
 
-    # Check if input CSV holding sample filepaths does exist
-    training_dir_path = Path(parameters_dict["sample_lable_lst"])
-    print("I AM HERE")
-    print(training_dir_path)
-    assert (training_dir_path.exists())
+    # Check if input CSV holding sample filepaths does exist and open the file
+    try:
+        training_dir_path = Path(parameters_dict["sample_lable_lst"])
+        print("I AM HERE")
+        print(training_dir_path)
+        assert (training_dir_path.exists())
+        # Load data CSV file with filenames and labels
+        data = pandas.read_csv(training_dir_path)
+        logging.info(f"Found {len(data)} samples for training")
+    except Exception:
+        logging.error(f"Could not open input map list")
 
-#     # Load data CSV file with filenames and labels
-#     data = pandas.read_csv(training_dir_path)
+    # separate data X from labels y; assigning labels based on rfree
+    X = data[['filename', 'protocol', 'stage']]
+    condition = (data.loc['rfree'] < 0.5)
+    data['ai_lable'] = np.where(condition, 1, 0)
+    y = data['ai_lable']
+    # getting the class distribution
+    print("Classes and their frequency in the data", data.groupby(y).size())
+    class_frequency = data.groupby(y).size()
+    logging.info(f"Number of samples per class {class_frequency}")
 
-#     logging.info(f"Found {len(data)} samples for training")
+    # creating a dictionary for the label column to match sample ID with label
+    label_dict = y.to_dict()
+    #print(label_dict)
 
-#     train_labels = []
+    # split the data into training and test set; this is splitting the input CSV data;
+    # and an additional challenge set of 5% of the data; this latter set is used to
+    # finally challenge the algorithm after training and testing
+    # create a 5% challenge set if needed
+    X_temp, X_challenge, y_temp, y_challenge = train_test_split(X, y, test_size=0.05,
+                                                                random_state=42)
+
+    print('Length of challenge data: ', len(X_val))
+
+    # use the remaining data for 80/20 train-test split
+    X_train, X_test, y_train, y_test = train_test_split(X_temp, y_temp, test_size=0.2,
+                                                        random_state=100)
+
+    print("Number of samples in y_test ", len(y_test[:-2]))
+    print("Number of samples in X_test ", len(X_test))
+    print("Number of samples in X_test ", len(X_test[:-2]))
     
-#     for row in data:
+    partition = {"train" : X_train,
+                 "validate" : X_test[:-2]}
+
+    print("Length of partition train", len(partition["train"]))
+    print(partition["validate"])
+
+    print("Length of partition validate: ", len(partition["validate"]))
+
+#    train_labels = []
+#    for row in data:
 #       sample = data.loc[data["filename"].str.contains(row)]
 #       print(sample)
 # #      criterium = sample["rfree"].values[0]
@@ -147,10 +186,16 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     
     # calling the map preparation function to laod the MTZ files, convert tem to maps,
     # standardise the maps and take slices
-    prepare_training_data_random_pick_combined(parameters_dict["sample_lable_lst"],
-                                               parameters_dict["xyz_limits"],
-                                               output_dir_path,
-                                               parameters_dict["slices_per_axis"])
+
+
+# TO DO: This should go into the data generator; probably need to do a new one
+#    prepare_training_data_random_pick_combined(parameters_dict["sample_lable_lst"],
+#                                               parameters_dict["xyz_limits"],
+#                                               output_dir_path,
+#                                               parameters_dict["slices_per_axis"])
+
+
+
 #     # Prepare data generators to get data out
 #     # Always rescale and also expand dictionary provided as parameter
 #     train_datagen = ImageDataGenerator(

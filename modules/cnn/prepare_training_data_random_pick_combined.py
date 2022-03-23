@@ -124,21 +124,31 @@ def prepare_training_data_random_pick_combined(
         raise
 
 #this below works but runs serial
-    with open(maps_list, "r") as ls:
-        #print(ls)
-        csv_reader = csv.reader(ls, delimiter=",")
-        next(csv_reader)
-        total_num_maps = len(next(csv_reader))
-        logging.info(f"Total number of maps to slice: {total_num_maps} \n")
+
+    try:
+        data = pandas.read_csv(maps_list)
+        total_num_maps = len(data)
+        logging.info(f"Found {total_num_maps} samples for training")
+
+
+
+#    with open(maps_list, "r") as ls:
+#        #print(ls)
+#        csv_reader = csv.reader(ls, delimiter=",")
+#        next(csv_reader)
+#        total_num_maps = len(next(csv_reader))
+#        logging.info(f"Total number of maps to slice: {total_num_maps} \n")
         total_bytes = 0
         number_maps = 0
         
         # make a new array that holds all the sets of slices
         all_maps = np.zeros((total_num_maps, int(xyz_limits[0])+1))
         
-        for line in csv_reader:
+#        for line in csv_reader:
+        for line in data:
             # get input path from row in CSV file
-            input_path = line[1]
+            input_path = data.loc[data["filename"].str.contains(row)]
+#            input_path = line[1]
 #            print("INPUT: ", input_path)
             # expand this path to its real path as it is a sym link pointing to my local,
             # hand-crafted PDB-redo version; this one has the same subfolder arrangement
@@ -294,6 +304,9 @@ def prepare_training_data_random_pick_combined(
             except Exception:
                 logging.info(f"Finished creating images in {output_directory} \n")
                 raise
+    except Exception:
+        logging.error(f"Could not open input map list \n")
+        raise
     return True
 
 
