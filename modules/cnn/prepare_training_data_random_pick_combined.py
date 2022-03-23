@@ -68,6 +68,7 @@ def slice_map(volume, slices_per_axis):
     print("Number of slices in image stack: ", len(image_stack))
     byte_size_stack = getsizeof(image_stack)
     print("Byte size of image stack is: ", byte_size_stack)
+    print("Image stack shape is: ", image_stack.shape)
 
     return image_stack, byte_size_stack
 
@@ -282,12 +283,14 @@ def prepare_training_data_random_pick_combined(
                 assert len(edited_image_slices) == 60
                 print("The number of edited image slices to be combined is: ",
                           len(edited_image_slices))
+                print("Shape of edited image slice stack: ", edited_image_slices.shape)
                 # adding the each produced map stack to a large numpy array to gather all maps
                 np.append(all_maps, edited_image_slices, axis=0)
                 total_bytes = total_bytes + bytes
                 number_maps = number_maps + 1
                 print("Accumulated byte size: ", total_bytes)
                 print("Total number of maps processed: ", number_maps)
+
 
 #                tiled_img = TileImage(edited_image_slices)
 
@@ -307,6 +310,7 @@ def prepare_training_data_random_pick_combined(
     except Exception:
         logging.error(f"Could not open input map list \n")
         raise
+    print("Shape of all maps stack: ", all_maps.shape)
     return True
 
 
