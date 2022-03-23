@@ -15,9 +15,13 @@ class DataGenerator(Sequence):
                n_classes=2, n_channels=1, shuffle=True):
     'Initialization'
     self.dim = dim
+    print(self.dim)
     self.batch_size = batch_size
+    print(self.batch_size)
     self.labels = labels
+    print(self.labels)
     self.list_IDs = list_IDs
+    print(self.list_IDs)
     self.iterator = self.list_IDs.index.tolist()
     self.n_channels = n_channels
     self.n_classes = n_classes

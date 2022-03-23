@@ -204,7 +204,10 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
     #Record start time to monitor training time
     start = datetime.now()
-    logging.info(f"Training start time : {start}")    
+    logging.info(f"Training start time : {start}")
+    
+    
+    ############## anything below doesn't seem to work
 
     training_generator = DataGenerator(partition["train"],#X
                                        label_dict,#y
@@ -212,6 +215,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                                        batch_size=batch_size,
                                        n_classes=2,
                                        shuffle=True)
+    print(training_generator)
 
 
 #    testing_generator = DataGenerator(partition["validate"],
