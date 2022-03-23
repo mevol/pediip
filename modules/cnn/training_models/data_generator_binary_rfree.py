@@ -11,8 +11,8 @@ from modules.cnn.prepare_training_data_random_pick_combined import prepare_train
 
 class DataGenerator(Sequence):
   'Generates data for Keras'
-  def __init__(self, list_IDs, labels, batch_size=32, dim=(32,32),
-               n_classes=2, n_channels=1, xyz_limits, slices_per_axis, shuffle=True):
+  def __init__(self, xyz_limits, slices_per_axis, list_IDs, labels, batch_size=32, dim=(32,32),
+               n_classes=2, n_channels=1, shuffle=True):
     'Initialization'
     self.dim = dim
     print(self.dim) #passed correctly
@@ -85,7 +85,7 @@ class DataGenerator(Sequence):
     prepare_training_data_random_pick_combined(X[i,],
                                                self.xyz_limits,
 #                                               output_dir_path,
-                                               print(self.slices_per_axis)
+                                               self.slices_per_axis)
 #      X[i,] = volume.reshape(*self.dim, self.n_channels)
 
 #    for i, ID in enumerate(list_labels_temp):
@@ -95,9 +95,9 @@ class DataGenerator(Sequence):
       # Store class
       #y[i] = ID#this one to use of one-hot encoding within the datagenerator
       #y = ID#this one to use if y had one-hot encoding set in training_pipeline_3d.py
-      y[i] = self.labels[ID]
+#      y[i] = self.labels[ID]
 
-    print("Lable shape", y.shape)  
+    print("Lable shape", y.shape)
     X = X.reshape(self.batch_size, *self.dim, self.n_channels)
     X = volume.reshape(self.batch_size, *self.dim, self.n_channels)
     #one-hot encoding on the fly
