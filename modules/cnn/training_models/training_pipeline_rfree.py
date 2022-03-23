@@ -218,7 +218,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                                        batch_size=batch_size,
                                        n_classes=2,
                                        shuffle=True)
-    print(training_generator)
+#    print(training_generator)
 
 
 #    testing_generator = DataGenerator(partition["validate"],
