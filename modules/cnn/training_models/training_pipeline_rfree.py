@@ -143,7 +143,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
     # creating a dictionary for the label column to match sample ID with label
     label_dict = y.to_dict()
-    print(label_dict.head())
+    print(label_dict)
 
     # split the data into training and test set; this is splitting the input CSV data;
     # and an additional challenge set of 5% of the data; this latter set is used to
