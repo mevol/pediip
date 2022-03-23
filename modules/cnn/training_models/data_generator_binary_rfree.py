@@ -21,9 +21,9 @@ class DataGenerator(Sequence):
     self.labels = labels
     #print(self.labels) #passed correctly
     self.list_IDs = list_IDs
-    #print(self.list_IDs) #passed correctly
+    print(self.list_IDs) #passed correctly
     self.iterator = self.list_IDs.index.tolist()
-    #print(self.iterator) #passed correctly
+    print(self.iterator) #passed correctly
     self.n_channels = n_channels
     #print(self.n_channels) #passed correctly
     self.n_classes = n_classes
@@ -38,6 +38,8 @@ class DataGenerator(Sequence):
 
   def __len__(self):
     'Denotes the number of batches per epoch'
+    print("Length of list to iterate over: ", len(self.list_IDs))
+    print("Length of each batch: ", int(np.floor(len(self.list_IDs) / self.batch_size)))
     return int(np.floor(len(self.list_IDs) / self.batch_size))
 
   def __getitem__(self, index):
