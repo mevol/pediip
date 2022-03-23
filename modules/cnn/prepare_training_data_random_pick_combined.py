@@ -126,11 +126,9 @@ def prepare_training_data_random_pick_combined(
 #this below works but runs serial
     with open(maps_list, "r") as ls:
         #print(ls)
+        print("Total number of maps to slice: ", len(ls)
         csv_reader = csv.reader(ls, delimiter=",")
-        print("Number of maps to slice: ", len(csv_reader))
         next(csv_reader)
-        total_num_maps = len(next(csv_reader))
-        print("Total number of maps to slice: ", total_num_maps)
         logging.info(f"Total number of maps to slice: {total_num_maps} \n")
         total_bytes = 0
         
@@ -140,23 +138,23 @@ def prepare_training_data_random_pick_combined(
         for line in csv_reader:
             # get input path from row in CSV file
             input_path = line[1]
-            print("INPUT: ", input_path)
+#            print("INPUT: ", input_path)
             # expand this path to its real path as it is a sym link pointing to my local,
             # hand-crafted PDB-redo version; this one has the same subfolder arrangement
             # as my local PDB version; makes traversing easier; however, in order to create
             # this custom PDB-redo version I created again sym links to the original
             # PDB-redo; hence I need two levels to expand the real file path
             real_input_path = os.path.realpath(input_path)
-            print("REAL PATH: ", real_input_path)
+#            print("REAL PATH: ", real_input_path)
             # replace "/dls/" with "/opt/" to read files in the mount pount
             real_input_path_opt = real_input_path.replace("/dls/", "/opt/")
-            print("replace dls: ", real_input_path_opt)
+#            print("replace dls: ", real_input_path_opt)
             # expand the next level of sym link to the real path
             real_path_to_map = os.path.realpath(real_input_path_opt)
-            print("REAL MTZ PATH: ", real_path_to_map)
+#            print("REAL MTZ PATH: ", real_path_to_map)
             # replace "/dls/" with "/opt/" to read files in the mount pount
             real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
-            print("replace dls in MTZ path: ", real_path_to_map_opt)
+#            print("replace dls in MTZ path: ", real_path_to_map_opt)
             try:
                 target = input_map_path.split("/")[8]
                 print("Working on target: ", target)
