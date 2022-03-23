@@ -133,7 +133,7 @@ def prepare_training_data_random_pick_combined(
         total_bytes = 0
         
         # make a new array that holds all the sets of slices
-        all_maps = np.zeros((total_num_maps, slices_per_axis * 3))
+        all_maps = np.zeros((total_num_maps, int(xyz_limits[0])+1))
         
         for line in csv_reader:
             # get input path from row in CSV file
