@@ -117,7 +117,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
         yaml.dump(parameters_dict, f)
 
     IMG_DIM = tuple(parameters_dict["image_dim"])
-    print("map dimensions ", IMG_DIM)
+    print("slice dimensions ", IMG_DIM)
 
     # Check if input CSV holding sample filepaths does exist and open the file
     try:
@@ -169,6 +169,33 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     print(partition["validate"])
 
     print("Length of partition validate: ", len(partition["validate"]))
+
+    # set input dimensions for images and number of channels based on whether color or
+    # grayscale is used
+    if parameters_dict["rgb"] is True:
+        logging.info("Using 3 channel image input to model")
+        input_shape = (parameters_dict["image_dim"][0],
+                       parameters_dict["image_dim"][1],
+                       3) #2D
+        color_mode = "rgb"
+    else:
+        logging.info("Using single channel image input to model")
+        input_shape = (parameters_dict["image_dim"][0],
+                       parameters_dict["image_dim"][1],
+                       1) #2D
+        color_mode = "grayscale"
+
+    # Prepare data generators to get data out
+    # Build model
+    # Model run parameters
+    epochs = parameters_dict["epochs"]
+    batch_size = parameters_dict["batch_size"]
+    print("Number of epochs: ", epochs)
+    print("Batch size:", batch_size)
+
+
+
+
 
 #    train_labels = []
 #    for row in data:
