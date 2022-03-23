@@ -292,7 +292,7 @@ def prepare_training_data_random_pick_combined(
 #            logging.error(f"Could not create image file in {output_directory}")
 #
             except Exception:
-                logging.info(f"Finished creating images in {output_directory}" \n)
+                logging.info(f"Finished creating images in {output_directory} \n")
                 raise
     return True
 
