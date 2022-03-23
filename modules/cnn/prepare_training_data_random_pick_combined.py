@@ -128,6 +128,7 @@ def prepare_training_data_random_pick_combined(
         #print(ls)
         csv_reader = csv.reader(ls, delimiter=",")
         next(csv_reader)
+        total_num_maps = len(next(csv_reader))
         logging.info(f"Total number of maps to slice: {total_num_maps} \n")
         total_bytes = 0
         number_maps = 0
