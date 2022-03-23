@@ -15,17 +15,21 @@ class DataGenerator(Sequence):
                n_classes=2, n_channels=1, shuffle=True):
     'Initialization'
     self.dim = dim
-    print(self.dim)
+    #print(self.dim) #passed correctly
     self.batch_size = batch_size
-    print(self.batch_size)
+    #print(self.batch_size) #passed correctly
     self.labels = labels
-    print(self.labels)
+    #print(self.labels) #passed correctly
     self.list_IDs = list_IDs
-    print(self.list_IDs)
+    #print(self.list_IDs) #passed correctly
     self.iterator = self.list_IDs.index.tolist()
+    print(self.iterator)
     self.n_channels = n_channels
+    print(self.n_channels)
     self.n_classes = n_classes
+    print(self.n_classes)
     self.shuffle = shuffle
+    print(self.shuffle)
     self.on_epoch_end()
 
   def __len__(self):
@@ -35,9 +39,9 @@ class DataGenerator(Sequence):
   def __getitem__(self, index):
     'Generate one batch of data'
     # Generate indexes of the batch
-    #print("All indexes ", index)
+    print("All indexes ", index)
     indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
-    #print("Indexes of batch ", indexes)
+    print("Indexes of batch ", indexes)
     # Find list of IDs
     list_IDs_temp = [self.iterator[k] for k in indexes]
     print("List of IDs ", self.iterator)
