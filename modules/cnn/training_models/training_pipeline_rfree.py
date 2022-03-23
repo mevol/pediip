@@ -133,7 +133,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
     # separate data X from labels y; assigning labels based on rfree
     X = data[['filename', 'protocol', 'stage']]
-    condition = (data.loc['rfree'] < 0.5)
+    condition = (data['rfree'] < 0.5)
     data['ai_lable'] = np.where(condition, 1, 0)
     y = data['ai_lable']
     # getting the class distribution
