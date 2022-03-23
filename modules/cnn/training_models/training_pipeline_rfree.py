@@ -143,7 +143,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
     # creating a dictionary for the label column to match sample ID with label
     label_dict = y.to_dict()
-    #print(label_dict)
+    print(label_dict.head())
 
     # split the data into training and test set; this is splitting the input CSV data;
     # and an additional challenge set of 5% of the data; this latter set is used to
@@ -202,27 +202,24 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     logging.info(f"The model architecture is as follows:")
     model.summary(print_fn=logging.info)
 
+    #Record start time to monitor training time
+    start = datetime.now()
+    logging.info(f"Training start time : {start}")    
+
+    training_generator = DataGenerator(partition["train"],#X
+                                       label_dict,#y
+                                       dim=IMG_DIM,
+                                       batch_size=batch_size,
+                                       n_classes=2,
+                                       shuffle=True)
 
 
-
-
-
-#    train_labels = []
-#    for row in data:
-#       sample = data.loc[data["filename"].str.contains(row)]
-#       print(sample)
-# #      criterium = sample["rfree"].values[0]
-#       criterium = sample["rfree"]
-
-#       print(criterium)
-#       if criterium > 0.5:
-#           label = 0
-#           train_labels.append(label)
-
-#     print(train_labels)
-    
-    # calling the map preparation function to laod the MTZ files, convert tem to maps,
-    # standardise the maps and take slices
+#    testing_generator = DataGenerator(partition["validate"],
+#                                      label_dict,
+#                                      dim=IMG_DIM,
+#                                      batch_size=batch_size,
+#                                      n_classes=2,
+#                                      shuffle=False)#was True
 
 
 # TO DO: This should go into the data generator; probably need to do a new one
