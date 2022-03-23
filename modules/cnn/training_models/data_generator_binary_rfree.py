@@ -12,7 +12,7 @@ from modules.cnn.prepare_training_data_random_pick_combined import prepare_train
 class DataGenerator(Sequence):
   'Generates data for Keras'
   def __init__(self, list_IDs, labels, batch_size=32, dim=(32,32),
-               n_classes=2, n_channels=1, shuffle=True, xyz_limits, slices_per_axis):
+               n_classes=2, n_channels=1, xyz_limits, slices_per_axis, shuffle=True):
     'Initialization'
     self.dim = dim
     print(self.dim) #passed correctly

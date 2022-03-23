@@ -214,9 +214,9 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                                        dim=IMG_DIM,
                                        batch_size=batch_size,
                                        n_classes=2,
-                                       shuffle=True,
                                        parameters_dict["xyz_limits"],
-                                       parameters_dict["slices_per_axis"])
+                                       parameters_dict["slices_per_axis"],
+                                       shuffle=True)
     print(training_generator)
 
 
