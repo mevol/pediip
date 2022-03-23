@@ -126,11 +126,11 @@ def prepare_training_data_random_pick_combined(
 #this below works but runs serial
     with open(maps_list, "r") as ls:
         #print(ls)
-        print("Total number of maps to slice: ", len(ls))
         csv_reader = csv.reader(ls, delimiter=",")
         next(csv_reader)
         logging.info(f"Total number of maps to slice: {total_num_maps} \n")
         total_bytes = 0
+        number_maps = 0
         
         # make a new array that holds all the sets of slices
         all_maps = np.zeros((total_num_maps, int(xyz_limits[0])+1))
@@ -274,7 +274,10 @@ def prepare_training_data_random_pick_combined(
                 # adding the each produced map stack to a large numpy array to gather all maps
                 np.append(all_maps, edited_image_slices, axis=0)
                 total_bytes = total_bytes + bytes
+                number_maps = number_maps + 1
                 print("Accumulated byte size: ", total_bytes)
+                print("Total number of maps processed: ", number_maps)
+
 #                tiled_img = TileImage(edited_image_slices)
 
 ###### ENTER PNG COMBINATION HERE
