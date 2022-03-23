@@ -127,7 +127,7 @@ def prepare_training_data_random_pick_combined(
     with open(maps_list, "r") as ls:
         #print(ls)
         csv_reader = csv.reader(ls, delimiter=",")
-        print("Number of maps to slice: ", len(csv_reaser))
+        print("Number of maps to slice: ", len(csv_reader))
         next(csv_reader)
         total_num_maps = len(next(csv_reader))
         print("Total number of maps to slice: ", total_num_maps)
