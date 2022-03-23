@@ -126,7 +126,7 @@ def prepare_training_data_random_pick_combined(
 #this below works but runs serial
     with open(maps_list, "r") as ls:
         #print(ls)
-        print("Total number of maps to slice: ", len(ls)
+        print("Total number of maps to slice: ", len(ls))
         csv_reader = csv.reader(ls, delimiter=",")
         next(csv_reader)
         logging.info(f"Total number of maps to slice: {total_num_maps} \n")
