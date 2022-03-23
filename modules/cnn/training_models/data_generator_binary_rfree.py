@@ -36,7 +36,7 @@ class DataGenerator(Sequence):
     #print("Indexes of batch ", indexes)
     # Find list of IDs
     list_IDs_temp = [self.iterator[k] for k in indexes]
-    #print("List of IDs ", self.iterator)
+    print("List of IDs ", self.iterator)
     # Generate data
     X, y = self.__data_generation(list_IDs_temp)
     return X, y
@@ -91,33 +91,8 @@ class DataGenerator(Sequence):
       #y = ID#this one to use if y had one-hot encoding set in training_pipeline_3d.py
       y[i] = self.labels[ID]
 
-   # print("Lable shape", y.shape)  
+    print("Lable shape", y.shape)  
     X = X.reshape(self.batch_size, *self.dim, self.n_channels)
-#    X = volume.reshape(self.batch_size, *self.dim, self.n_channels)
-    #print("Data shape", X.shape)
-   # print(X)
-    #print(y)
-
-    #encode class values as integers
-    #encoder = LabelEncoder()
-    #encoder.fit(y)
-    #encoded_y = encoder.transform(y)
-
-
-    #convert integers to dummy variables (i.e. one hot encoded)
-    #dummy_y = np_utils.to_categorical(encoded_y, num_classes=self.n_classes)
-    #dummy_y = to_categorical(encoded_y, num_classes=self.n_classes)
-    #print(dummy_y)
-
+    X = volume.reshape(self.batch_size, *self.dim, self.n_channels)
     #one-hot encoding on the fly
     return X, keras.utils.to_categorical(y, num_classes=self.n_classes) 
-
-    #one-hot encoding within the datagenerator
-    #print("Final X shape", X.shape)
-    #print("Final y shape", dummy_y.shape)
-    #return X, dummy_y
-
-    #one-hot encoding within training_pipeline_3d.py
-    #print(X)
-    #print(y)
-    #return X, y
