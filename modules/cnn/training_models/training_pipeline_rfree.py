@@ -43,7 +43,7 @@ from sklearn.preprocessing import LabelEncoder
 from modules.cnn.training_models.plot_history import history_to_csv, figure_from_csv
 from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
 #from modules.cnn.evaluate_model import evaluate
-from modules.cnn.training_models.data_generator_binary import DataGenerator
+from modules.cnn.training_models.data_generator_binary_rfree import DataGenerator
 from modules.cnn.prepare_training_data_random_pick_combined import prepare_training_data_random_pick_combined
 
 print(tensorflow.__version__)
