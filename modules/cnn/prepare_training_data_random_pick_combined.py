@@ -119,7 +119,7 @@ def prepare_training_data_random_pick_combined(
         assert all(type(values) == int for values in xyz_limits)
     except AssertionError:
         logging.error(
-        "xyz_limits muste be provided as a list or tupls of three integer values \n"
+        f"xyz_limits muste be provided as a list or tupls of three integer values \n"
         )
         raise
 
@@ -130,6 +130,7 @@ def prepare_training_data_random_pick_combined(
         next(csv_reader)
         total_num_maps = len(next(csv_reader))
         print("Total number of maps to slice: ", total_num_maps)
+        logging.info(f"Total number of maps to slice: {total_num_maps} \n")
         total_bytes = 0
         
         # make a new array that holds all the sets of slices
