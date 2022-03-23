@@ -103,10 +103,6 @@ def prepare_training_data_random_pick_combined(
     axis. Return True if no exceptions"""
     print("Number of slices ", slices_per_axis)
     logging.info("Preparing training data. \n")
-    
-    # create an empty numpy array to hold all produced image stacks
-    image_stack = np.zeros((slices_per_axis * 3, length, length))
-
 
     # Check all directories exist
     try:
