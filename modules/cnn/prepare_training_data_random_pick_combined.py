@@ -148,8 +148,9 @@ def prepare_training_data_random_pick_combined(
         
 #        for line in csv_reader:
         for line in data:
+            print(line)
             # get input path from row in CSV file
-            input_path = data.loc[data["filename"].str.contains(line)]
+            input_path = line["filename"]
 #            input_path = line[1]
 #            print("INPUT: ", input_path)
             # expand this path to its real path as it is a sym link pointing to my local,

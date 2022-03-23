@@ -230,10 +230,10 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
 
 # TO DO: This should go into the data generator; probably need to do a new one
-    prepare_training_data_random_pick_combined(parameters_dict["sample_lable_lst"],
-                                               parameters_dict["xyz_limits"],
+#    prepare_training_data_random_pick_combined(parameters_dict["sample_lable_lst"],
+#                                               parameters_dict["xyz_limits"],
 #                                               output_dir_path,
-                                               parameters_dict["slices_per_axis"])
+#                                               parameters_dict["slices_per_axis"])
 
 
 
