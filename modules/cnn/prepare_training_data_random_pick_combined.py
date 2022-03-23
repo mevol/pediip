@@ -277,7 +277,7 @@ def prepare_training_data_random_pick_combined(
                           len(edited_image_slices))
             # adding the each produced map stack to a large numpy array to gather all maps
             np.append(all_maps, edited_image_slices, axis=0)
-            total_bytes = total_bytes + bytes
+#            total_bytes = total_bytes + bytes
             print("Accumulated byte size: ", total_bytes)
 #                tiled_img = TileImage(edited_image_slices)
 
