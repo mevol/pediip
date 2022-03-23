@@ -125,8 +125,9 @@ def prepare_training_data_random_pick_combined(
 
 #this below works but runs serial
     with open(maps_list, "r") as ls:
-        print(ls)
+        #print(ls)
         csv_reader = csv.reader(ls, delimiter=",")
+        print("Number of maps to slice: ", len(csv_reaser))
         next(csv_reader)
         total_num_maps = len(next(csv_reader))
         print("Total number of maps to slice: ", total_num_maps)
@@ -258,10 +259,10 @@ def prepare_training_data_random_pick_combined(
                 # Iterate through images, scale them and save them in output_directory
                 print("Number of slices to edit and manipulate: ", len(image_slices))
                 for slice_num in range(image_slices.shape[0]):
-                    print("Working on slice number: ", slice_num)
+                    #print("Working on slice number: ", slice_num)
                     # Get slice
                     slice = image_slices[slice_num, :, :]
-                    print("Slice dimension: ", slice.shape)
+                    #print("Slice dimension: ", slice.shape)
                     # Scale slice
                     slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
                     # Round to the nearest integer
