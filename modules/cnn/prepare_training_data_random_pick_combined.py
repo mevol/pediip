@@ -11,6 +11,7 @@ import numpy as np
 from pathlib import Path
 from typing import List
 from PIL import Image
+from sys import getsizeof
 
 
 def slice_map(volume, slices_per_axis):
@@ -24,8 +25,6 @@ def slice_map(volume, slices_per_axis):
     ), f"Please provide a volume which has dimensions of equal length, not {volume.shape[0]}x{volume.shape[1]}x{volume.shape[2]}"
 
     length = volume.shape[0]
-    
-    print("Volume single length: ", length)
 
     random_pick = np.random.choice(length, size = slices_per_axis)
 
@@ -67,8 +66,10 @@ def slice_map(volume, slices_per_axis):
         ]
 
     print("Number of slices in image stack: ", len(image_stack))
+    byte_size_stack = getsizeof(image_stack)
+    print("Byte size of image stack is: ", byte_size_stack)
 
-    return image_stack
+    return image_stack, byte_size_stack
 
 
 def TileImage(imgs, picturesPerRow=10):
@@ -101,14 +102,18 @@ def prepare_training_data_random_pick_combined(
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
     print("Number of slices ", slices_per_axis)
-    logging.info("Preparing training data")
+    logging.info("Preparing training data. \n")
+    
+    # create an empty numpy array to hold all produced image stacks
+    image_stack = np.zeros((slices_per_axis * 3, length, length))
+
 
     # Check all directories exist
     try:
         output_dir = Path(output_directory)
         assert output_dir.exists()
     except Exception:
-        logging.error(f"Could not find output directory at {output_directory}")
+        logging.error(f"Could not find output directory at {output_directory} \n")
         raise
 
     # Check xyz limits are of correct format
@@ -118,7 +123,7 @@ def prepare_training_data_random_pick_combined(
         assert all(type(values) == int for values in xyz_limits)
     except AssertionError:
         logging.error(
-        "xyz_limits muste be provided as a list or tupls of three integer values"
+        "xyz_limits muste be provided as a list or tupls of three integer values \n"
         )
         raise
 
@@ -127,6 +132,13 @@ def prepare_training_data_random_pick_combined(
         print(ls)
         csv_reader = csv.reader(ls, delimiter=",")
         next(csv_reader)
+        total_num_maps = len(next(csv_reader))
+        print("Total number of maps to slice: ", total_num_maps)
+        total_bytes = 0
+        
+        # make a new array that holds all the sets of slices
+        all_maps = np.zeros((total_num_maps, slices_per_axis * 3))
+        
         for line in csv_reader:
             # get input path from row in CSV file
             input_path = line[1]
@@ -150,13 +162,16 @@ def prepare_training_data_random_pick_combined(
             try:
                 target = input_map_path.split("/")[8]
                 print("Working on target: ", target)
+                logging.info(f"Working on target: {target} \n")
             except Exception:
                 pass
             try:
                 homo = input_map_path.split("/")[12]
                 print("Working on homologue: ", homo)
+                logging.info(f"Working on homologue: {homo} \n")
             except Exception:
                 print("Could not find homologue to work with.")
+                logging.error(f"Could not find homologue to work with. \n")
                 pass
             # Check path to map exists
             try:
@@ -164,52 +179,56 @@ def prepare_training_data_random_pick_combined(
                 print(map_file_path)
                 assert map_file_path.exists()
             except Exception:
-                logging.error(f"Could not find mtz directory at {map_file_path}")
+                logging.error(f"Could not find mtz directory at {map_file_path} \n")
                 pass
 
             try:
                 # try opening MTZ file
                 data = gemmi.read_mtz_file(str(map_file_path))
-                # unit cell of data
-                cell = data.cell
-                print("unit cell of data: ", cell)
-                # space group of data
-                sg = data.spacegroup
-                print("space group of data: ", sg)
-                # high resolution of the data
-                reso = data.resolution_high()
-                print("high resolution of MTZ: ", reso)
-                # get reciprocal lattice grid size
+#                # unit cell of data
+#                cell = data.cell
+#                print("unit cell of data: ", cell)
+#                # space group of data
+#                sg = data.spacegroup
+#                print("space group of data: ", sg)
+#                # high resolution of the data
+#                reso = data.resolution_high()
+#                print("high resolution of MTZ: ", reso)
+#                # get reciprocal lattice grid size
                 recip_grid = data.get_size_for_hkl()
                 print("reciprocal lattice grid: ", recip_grid)
+                logging.info(f"Original size of reciprocal lattice grid: {recip_grid} \n")
                 # get grid size in relation to resolution and a sample rate of 4
                 size1 = data.get_size_for_hkl(sample_rate=4)
-                print("grid size at sample rate = 4: ", size1)
-                # get grid size in relation to resolution and a sample rate of 3
-                size2 = data.get_size_for_hkl(sample_rate=3)
-                print("grid size at sample rate = 3: ", size2)
-                # get grid size in relation to resolution and a sample rate of 2
-                size3 = data.get_size_for_hkl(sample_rate=2)
-                print("grid size at sample rate = 2: ", size3)
-                # get grid size in relation to resolution and a sample rate of 1
-                size4 = data.get_size_for_hkl(sample_rate=1)
-                print("grid size at sample rate = 1: ", size4)
-                # get grid size in relation to resolution and a sample rate of 1.5
-                size5 = data.get_size_for_hkl(sample_rate=1.5)
-                print("grid size at sample rate = 1.5: ", size5)
-                # get grid size in relation to resolution and a sample rate of 2.5
-                size6 = data.get_size_for_hkl(sample_rate=2.5)
-                print("grid size at sample rate = 2.5: ", size6)
+                logging.info(f"Reciprocal lattice grid size at sample_rate=4: {size1} \n")
+#                print("grid size at sample rate = 4: ", size1)
+#                # get grid size in relation to resolution and a sample rate of 3
+#                size2 = data.get_size_for_hkl(sample_rate=3)
+#                print("grid size at sample rate = 3: ", size2)
+#                # get grid size in relation to resolution and a sample rate of 2
+#                size3 = data.get_size_for_hkl(sample_rate=2)
+#                print("grid size at sample rate = 2: ", size3)
+#                # get grid size in relation to resolution and a sample rate of 1
+#                size4 = data.get_size_for_hkl(sample_rate=1)
+#                print("grid size at sample rate = 1: ", size4)
+#                # get grid size in relation to resolution and a sample rate of 1.5
+#                size5 = data.get_size_for_hkl(sample_rate=1.5)
+#                print("grid size at sample rate = 1.5: ", size5)
+#                # get grid size in relation to resolution and a sample rate of 2.5
+#                size6 = data.get_size_for_hkl(sample_rate=2.5)
+#                print("grid size at sample rate = 2.5: ", size6)
 
                 # create an empty map grid
                 data_to_map = gemmi.Ccp4Map()
                 print("Grid of MTZ file", data_to_map.grid)
-                # turn MTZ file into map
+                # turn MTZ file into map using a sample_rate=4; minimal grid size is
+                # placed in relation to the resolution, dmin/sample_rate; sample_rate=4
+                # doubles the original grid size
                 data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT',
                                                                sample_rate=4)
                 data_to_map.update_ccp4_header(2, True)
             except Exception:
-                logging.error(f"Could not open MTZ and convert to MAP {map_file_path}")
+                logging.error(f"Could not open MTZ and convert to MAP {map_file_path} \n")
                 raise
             try:
                 #this bit here expands the unit cell to be 200A^3;
@@ -231,14 +250,14 @@ def prepare_training_data_random_pick_combined(
                 print(map_array.shape)
                 print("Grid after setting XYZ limits for MAP", map_grid)
             except Exception:
-                logging.error(f"Could not expand map {map_file_path}")
+                logging.error(f"Could not expand map {map_file_path} \n")
                 raise
 
             try:
-                # create a new list to hold the scaled, rounded and augmented images
+                # create a new array to hold the scaled, rounded and augmented images
                 edited_image_slices = np.zeros((slices_per_axis * 3, int(xyz_limits[0])+1))
                 # Slice the volume into images
-                image_slices = slice_map(map_array, slices_per_axis)
+                image_slices, bytes = slice_map(map_array, slices_per_axis)
                 # Iterate through images, scale them and save them in output_directory
                 print("Number of slices to edit and manipulate: ", len(image_slices))
                 for slice_num in range(image_slices.shape[0]):
@@ -256,7 +275,10 @@ def prepare_training_data_random_pick_combined(
                 assert len(edited_image_slices) == 60
                 print("The number of edited image slices to be combined is: ",
                           len(edited_image_slices))
-
+            # adding the each produced map stack to a large numpy array to gather all maps
+            np.append(all_maps, edited_image_slices, axis=0)
+            total_bytes = total_bytes + bytes
+            print("Accumulated byte size: ", total_bytes)
 #                tiled_img = TileImage(edited_image_slices)
 
 ###### ENTER PNG COMBINATION HERE
@@ -270,7 +292,7 @@ def prepare_training_data_random_pick_combined(
 #            logging.error(f"Could not create image file in {output_directory}")
 #
             except Exception:
-                logging.info(f"Finished creating images in {output_directory}")
+                logging.info(f"Finished creating images in {output_directory}" \n)
                 raise
     return True
 
@@ -283,7 +305,7 @@ def params_from_yaml(args):
         config_file_path = Path(args.config_file)
         assert config_file_path.exists()
     except Exception:
-        logging.error(f"Could not find config file at {args.config_file}")
+        logging.error(f"Could not find config file at {args.config_file} \n")
         raise
 
     # Load the data from the config file
@@ -292,7 +314,7 @@ def params_from_yaml(args):
             params = yaml.safe_load(f)
     except Exception:
         logging.error(
-            f"Could not extract parameters from yaml file at {config_file_path}"
+            f"Could not extract parameters from yaml file at {config_file_path} \n"
         )
         raise
 
@@ -360,4 +382,4 @@ if __name__ == "__main__":
             parameters["slices"]
         )
     except KeyError as e:
-        logging.error(f"Could not find parameter {e} to prepare training data")
+        logging.error(f"Could not find parameter {e} to prepare training data \n")
