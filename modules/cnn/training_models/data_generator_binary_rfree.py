@@ -56,7 +56,7 @@ class DataGenerator(Sequence):
         print(list_IDs_temp)
 
         # Generate data
-#        X, y = self.__data_generation(list_IDs_temp)
+        X, y = self.__data_generation(list_IDs_temp)
 
 #        return X, y
 
@@ -76,6 +76,8 @@ class DataGenerator(Sequence):
 
         # Generate data
         for i, ID in enumerate(list_IDs_temp):
+            print(i)
+            print(ID)
             # Store sample
             X[i,] = np.load('data/' + ID + '.npy')
 

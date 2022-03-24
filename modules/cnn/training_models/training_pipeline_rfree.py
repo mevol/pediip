@@ -241,16 +241,6 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
         workers=8)#8)
 
 
-#    history = model.fit_generator(
-#             training_generator,
-#             steps_per_epoch=int((len(active_training_set["Files"]) / batch_size)),
-#             epochs=epochs,
-#             validation_data=testing_generator,
-#             validation_steps=(len(active_validation_set["Files"]) / batch_size),
-#             use_multiprocessing=True,
-#             workers=8,
-#         )
-
 # TO DO: This should go into the data generator; probably need to do a new one
 #    prepare_training_data_random_pick_combined(parameters_dict["sample_lable_lst"],
 #                                               parameters_dict["xyz_limits"],
