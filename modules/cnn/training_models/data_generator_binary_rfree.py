@@ -15,15 +15,15 @@ class DataGenerator(Sequence):
                n_classes=2, n_channels=1, shuffle=True):
     'Initialization'
     self.dim = dim
-    print(self.dim) #passed correctly
+    #print(self.dim) #passed correctly
     self.batch_size = batch_size
     #print(self.batch_size) #passed correctly
     self.labels = labels
     #print(self.labels) #passed correctly
     self.list_IDs = list_IDs
-    print(self.list_IDs) #passed correctly
+    #print(self.list_IDs) #passed correctly
     self.iterator = self.list_IDs.index.tolist()
-    print(self.iterator) #passed correctly
+    #print(self.iterator) #passed correctly
     self.n_channels = n_channels
     #print(self.n_channels) #passed correctly
     self.n_classes = n_classes
@@ -31,9 +31,9 @@ class DataGenerator(Sequence):
     self.shuffle = shuffle
     #print(self.shuffle) #passed correctly
     self.xyz_limits = xyz_limits
-    print(self.xyz_limits)
+    #print(self.xyz_limits)
     self.slices_per_axis = slices_per_axis
-    print(self.slices_per_axis)
+    #print(self.slices_per_axis)
     self.on_epoch_end()
     self.n = len(self.list_IDs)
 
@@ -42,6 +42,7 @@ class DataGenerator(Sequence):
 
     def __len__(self):
         'Denotes the number of batches per epoch'
+        print("Number of batches to run: ", int(np.floor(len(self.list_IDs) / self.batch_size)))
         return int(np.floor(len(self.list_IDs) / self.batch_size))
 
     def __getitem__(self, index):
