@@ -40,35 +40,48 @@ class DataGenerator(Sequence):
 #############################################################
 # parameters are passed correctly; why does it not run
 
-  def __len__(self):
-    number_of_batches = self.n // self.batch_size
-    print("Number of batches to process: ", number_of_batches)
-    return number_of_batches
+    def __len__(self):
+        'Denotes the number of batches per epoch'
+        return int(np.floor(len(self.list_IDs) / self.batch_size))
 
-  def on_epoch_end(self):
-    if self.shuffle:
-      self.list_IDs = self.list_IDs.sample(frac=1).reset_index(drop=True)
+    def __getitem__(self, index):
+        'Generate one batch of data'
+        # Generate indexes of the batch
+        indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
 
-#  def __get_output(self, y, num_classes):
-#    return keras.utils.to_categorical(y, num_classes=self.n_classes)
-#    return tf.keras.utils.to_categorical(y, num_classes=self.n_classes)
+        # Find list of IDs
+        list_IDs_temp = [self.list_IDs[k] for k in indexes]
         
-  def __get_data(self, batches):
-    X_batch = prepare_training_data_random_pick_combined(batches,
-                                               self.xyz_limits,
-#                                               output_dir_path,
-                                               self.slices_per_axis)
-    print(X.shape)
-#    name_batch = batches[self.y_col['name']]
-#    y0_batch = np.asarray([self.__get_output(y, self.n_name) for y in name_batch])
-#    y = self.labels[ID]
-    return X_batch, 
+        print(list_IDs_temp)
 
-  def __getitem__(self, index):
-    batches = self.df[list_IDs * self.batch_size:(index + 1) * self.batch_size]
-    print(batches)
-    X, y = self.__get_data(batches)
-    return X, y
+        # Generate data
+#        X, y = self.__data_generation(list_IDs_temp)
+
+#        return X, y
+
+    def on_epoch_end(self):
+        'Updates indexes after each epoch'
+        self.indexes = np.arange(len(self.list_IDs))
+        if self.shuffle == True:
+            np.random.shuffle(self.indexes)
+
+    def __data_generation(self, list_IDs_temp):
+        'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
+        # Initialization
+        X = np.empty((self.batch_size, *self.dim, self.n_channels))# needs to be the
+                                                                   # dimensions of the
+                                                                   # image stack
+        y = np.empty((self.batch_size), dtype=int)
+
+        # Generate data
+        for i, ID in enumerate(list_IDs_temp):
+            # Store sample
+            X[i,] = np.load('data/' + ID + '.npy')
+
+            # Store class
+            y[i] = self.labels[ID]
+
+        return X, keras.utils.to_categorical(y, num_classes=self.n_classes)
 
 
 #############################################################
