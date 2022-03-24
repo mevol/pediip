@@ -233,7 +233,8 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
     history = model.fit(
         training_generator,
-        steps_per_epoch=int((len(X_train) / batch_size)),#len(X) if not using train-test-split
+        #steps_per_epoch=int((len(X_train) / batch_size)),#len(X) if not using train-test-split
+        steps_per_epoch=int((len(partition["train"] / batch_size)),
         epochs=epochs,
         validation_data=testing_generator,
         validation_steps=(len(X_test) / batch_size),
