@@ -232,10 +232,10 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                                       shuffle=False)#was True
 
     history = model.fit_generator(
-             train_generator,
+             training_generator,
              steps_per_epoch=int((len(active_training_set["Files"]) / batch_size)),
              epochs=epochs,
-             validation_data=val_generator,
+             validation_data=testing_generator,
              validation_steps=(len(active_validation_set["Files"]) / batch_size),
              use_multiprocessing=True,
              workers=8,
