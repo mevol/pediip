@@ -248,7 +248,155 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 #                                               output_dir_path,
 #                                               parameters_dict["slices_per_axis"])
 
+def pipeline_from_command_line(
+    create_model: Callable[[int, int, int], Model], rgb: bool = False #2D):
+    """
+    Run the training pipeline from the command line with config file
 
+    Get parameters from the command line and pass them to training_pipeline in the parameter dict
+
+    :param create_model: function which returns new Keras model to train and evaluate
+    :param rgb: whether the model is expecting a 3 channel image
+    """
+
+    # Get from pipeline
+    argument_dict = get_pipeline_parameters()
+    
+    print("received arguments: ", argument_dict)
+
+
+    # Add rgb parameter
+    assert isinstance(
+        rgb, bool
+    ), f"Must provide bool for rgb, got {type(rgb)} of value {rgb}"
+    argument_dict["rgb"] = rgb
+
+    logging.info(f"Running model with parameters: {argument_dict}")
+
+    # Send parameters to full pipeline
+    pipeline(create_model, argument_dict)
+
+
+def get_pipeline_parameters() -> dict:
+    """
+    Extract the parameters from a mixture of config file and command line using configargparse
+
+    :return parameters_dict: dictionary containing all parameters necessary for pipeline
+    """
+
+    # Set up parser to work with command line argument or yaml file
+    parser = configargparse.ArgParser(
+        config_file_parser_class=configargparse.YAMLConfigFileParser,
+        description="Training pipeline for a Keras model which is parameterized from the command line "
+        "or YAML config file.\n"
+        "To perform image augmentation, please provide a dictionary in the config file entitled "
+        "image_augmentation_dict with kay value pair matching the parameters listed here: https://keras.io/preprocessing/image/"
+        " The images will automatically be rescaled.",
+    )
+
+    parser.add_argument(
+        "-c",
+        "--config",
+        required=True,
+        is_config_file=True,
+        help="config file to specify the following parameters in",
+    )
+
+    parser.add_argument(
+        "--sample_lable_lst",
+        required=True,
+        help="list of sample files with associated training lables",
+    )
+
+    parser.add_argument(
+        "--output_dir",
+        required=True,
+        help="directory to output results files to. Will be appended with date and time of program run",
+    )
+    parser.add_argument(
+        "--xyz_limits",
+        type=int,
+        nargs=3,
+        required=True,
+        help="xyz size of the output map file"
+    )
+    parser.add_argument(
+        "--image_dim",
+        required=True,
+        type=int,
+        nargs=2,
+        help="X and Y dimensions of the map image slices"
+    )
+    parser.add_argument(
+        "--k_folds",
+        required=True,
+        type=int,
+        help="number of folds to create for k-fold cross-validation",
+    )
+    parser.add_argument(
+        "--runs",
+        required=True,
+        type=int,
+        help="number of folds to run training and validation on. Must be equal or lower than k_folds",
+    )
+    parser.add_argument(
+        "--epochs", type=int,
+        required=True,
+        help="number of epochs to use in each run"
+    )
+    parser.add_argument(
+        "--batch_size",
+        required=True,
+        type=int,
+        help="size of batch to load during training and validation. Should be exact factor of the number of images provided",
+    )
+    parser.add_argument(
+        "--slices_per_axis",
+        required=True,
+        type=int,
+        help="number of slices to be produced for each axis of the standard volume",
+    )
+    parser.add_argument(
+        "--slices_per_structure",
+        required=True,
+        type=int,
+        help="number of images for each structure. To be used in testing only",
+    )
+
+    (known_args, unknown_args) = parser.parse_known_args()
+
+    assert known_args.k_folds >= known_args.runs, (
+        f"Number of runs must be less than or equal to k_folds, "
+        f"got {known_args.runs} runs and {known_args.k_folds} folds"
+    )
+    argument_dict = vars(known_args)
+
+    # Try to extract image_augmentation_dict
+    try:
+        assert unknown_args
+        assert "--image_augmentation_dict" in unknown_args
+        # Extract values from config file
+        with open(known_args.config, "r") as f:
+            image_augmentation_dict = yaml.load(f.read())["image_augmentation_dict"]
+    except (KeyError, AssertionError):
+        logging.warning(
+            f"Could not find image_augmentation_dict in {known_args.config}, performing scaling only"
+        )
+        image_augmentation_dict = {}
+    assert isinstance(
+        image_augmentation_dict, dict
+    ), f"image_augmentation_dict must be provided as a dictionary in YAML, got {image_augmentation_dict}"
+
+    argument_dict["image_augmentation_dict"] = image_augmentation_dict
+
+
+    return argument_dict
+
+
+if __name__ == "__main__":
+
+    args = get_pipeline_parameters()
+    print(f"Received the following arguments: {args}")
 
 #     # Prepare data generators to get data out
 #     # Always rescale and also expand dictionary provided as parameter
@@ -512,153 +660,4 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 # #         logging.warning("Could not copy training.log to output directory")
 
 
-def pipeline_from_command_line(
-    create_model: Callable[[int, int, int], Model], rgb: bool = False #2D
-):
-    """
-    Run the training pipeline from the command line with config file
 
-    Get parameters from the command line and pass them to training_pipeline in the parameter dict
-
-    :param create_model: function which returns new Keras model to train and evaluate
-    :param rgb: whether the model is expecting a 3 channel image
-    """
-
-    # Get from pipeline
-    argument_dict = get_pipeline_parameters()
-    
-    print("received arguments: ", argument_dict)
-
-
-    # Add rgb parameter
-    assert isinstance(
-        rgb, bool
-    ), f"Must provide bool for rgb, got {type(rgb)} of value {rgb}"
-    argument_dict["rgb"] = rgb
-
-    logging.info(f"Running model with parameters: {argument_dict}")
-
-    # Send parameters to full pipeline
-    pipeline(create_model, argument_dict)
-
-
-def get_pipeline_parameters() -> dict:
-    """
-    Extract the parameters from a mixture of config file and command line using configargparse
-
-    :return parameters_dict: dictionary containing all parameters necessary for pipeline
-    """
-
-    # Set up parser to work with command line argument or yaml file
-    parser = configargparse.ArgParser(
-        config_file_parser_class=configargparse.YAMLConfigFileParser,
-        description="Training pipeline for a Keras model which is parameterized from the command line "
-        "or YAML config file.\n"
-        "To perform image augmentation, please provide a dictionary in the config file entitled "
-        "image_augmentation_dict with kay value pair matching the parameters listed here: https://keras.io/preprocessing/image/"
-        " The images will automatically be rescaled.",
-    )
-
-    parser.add_argument(
-        "-c",
-        "--config",
-        required=True,
-        is_config_file=True,
-        help="config file to specify the following parameters in",
-    )
-
-    parser.add_argument(
-        "--sample_lable_lst",
-        required=True,
-        help="list of sample files with associated training lables",
-    )
-
-    parser.add_argument(
-        "--output_dir",
-        required=True,
-        help="directory to output results files to. Will be appended with date and time of program run",
-    )
-    parser.add_argument(
-        "--xyz_limits",
-        type=int,
-        nargs=3,
-        required=True,
-        help="xyz size of the output map file"
-    )
-    parser.add_argument(
-        "--image_dim",
-        required=True,
-        type=int,
-        nargs=2,
-        help="X and Y dimensions of the map image slices"
-    )
-    parser.add_argument(
-        "--k_folds",
-        required=True,
-        type=int,
-        help="number of folds to create for k-fold cross-validation",
-    )
-    parser.add_argument(
-        "--runs",
-        required=True,
-        type=int,
-        help="number of folds to run training and validation on. Must be equal or lower than k_folds",
-    )
-    parser.add_argument(
-        "--epochs", type=int,
-        required=True,
-        help="number of epochs to use in each run"
-    )
-    parser.add_argument(
-        "--batch_size",
-        required=True,
-        type=int,
-        help="size of batch to load during training and validation. Should be exact factor of the number of images provided",
-    )
-    parser.add_argument(
-        "--slices_per_axis",
-        required=True,
-        type=int,
-        help="number of slices to be produced for each axis of the standard volume",
-    )
-    parser.add_argument(
-        "--slices_per_structure",
-        required=True,
-        type=int,
-        help="number of images for each structure. To be used in testing only",
-    )
-
-    (known_args, unknown_args) = parser.parse_known_args()
-
-    assert known_args.k_folds >= known_args.runs, (
-        f"Number of runs must be less than or equal to k_folds, "
-        f"got {known_args.runs} runs and {known_args.k_folds} folds"
-    )
-    argument_dict = vars(known_args)
-
-    # Try to extract image_augmentation_dict
-    try:
-        assert unknown_args
-        assert "--image_augmentation_dict" in unknown_args
-        # Extract values from config file
-        with open(known_args.config, "r") as f:
-            image_augmentation_dict = yaml.load(f.read())["image_augmentation_dict"]
-    except (KeyError, AssertionError):
-        logging.warning(
-            f"Could not find image_augmentation_dict in {known_args.config}, performing scaling only"
-        )
-        image_augmentation_dict = {}
-    assert isinstance(
-        image_augmentation_dict, dict
-    ), f"image_augmentation_dict must be provided as a dictionary in YAML, got {image_augmentation_dict}"
-
-    argument_dict["image_augmentation_dict"] = image_augmentation_dict
-
-
-    return argument_dict
-
-
-if __name__ == "__main__":
-
-    args = get_pipeline_parameters()
-    print(f"Received the following arguments: {args}")
