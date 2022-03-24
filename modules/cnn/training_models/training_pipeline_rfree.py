@@ -249,7 +249,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 #                                               parameters_dict["slices_per_axis"])
 
 def pipeline_from_command_line(
-    create_model: Callable[[int, int, int], Model], rgb: bool = False #2D):
+    create_model: Callable[[int, int, int], Model], rgb: bool = False):
     """
     Run the training pipeline from the command line with config file
 
