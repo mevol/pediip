@@ -231,16 +231,32 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                                       n_classes=2,
                                       shuffle=False)#was True
 
+#    history = model.fit(
+#        training_generator,
+#        #steps_per_epoch=int((len(X_train) / batch_size)),#len(X) if not using train-test-split
+#        steps_per_epoch=int((len(partition["train"] / batch_size)),
+#        epochs=epochs,
+#        validation_data=testing_generator,
+#        validation_steps=(len(X_test) / batch_size),
+#        use_multiprocessing=True,
+#        workers=8)#8)
+
     history = model.fit(
         training_generator,
-        #steps_per_epoch=int((len(X_train) / batch_size)),#len(X) if not using train-test-split
-        steps_per_epoch=int((len(partition["train"] / batch_size)),
+        steps_per_epoch=int((len(X_train) / batch_size)),#len(X) if not using train-test-split
         epochs=epochs,
         validation_data=testing_generator,
         validation_steps=(len(X_test) / batch_size),
         use_multiprocessing=True,
         workers=8)#8)
 
+
+    # Send history to csv
+    history_to_csv(history, histories_path / f"history.csv")
+    figure_from_csv(os.path.join(histories_path, "history.csv"),
+                    histories_path / f"history.png")
+    # Save model as h5
+    model.save(str(models_path / f"model.h5"))
 
 # TO DO: This should go into the data generator; probably need to do a new one
 #    prepare_training_data_random_pick_combined(parameters_dict["sample_lable_lst"],
