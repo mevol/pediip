@@ -21,9 +21,9 @@ class DataGenerator(Sequence):
     self.labels = labels
     #print(self.labels) #passed correctly
     self.list_IDs = list_IDs
-    #print(self.list_IDs) #passed correctly
+    print("Sample list: ", self.list_IDs) #passed correctly
     self.iterator = self.list_IDs.index.tolist()
-    #print(self.iterator) #passed correctly
+    print("Index to iterate over: ", self.iterator) #passed correctly
     self.n_channels = n_channels
     #print(self.n_channels) #passed correctly
     self.n_classes = n_classes
@@ -41,7 +41,7 @@ class DataGenerator(Sequence):
 
   def __len__(self):
     'Denotes the number of batches per epoch'
-    print("Number of batches to run: ", int(np.floor(len(self.list_IDs) / self.batch_size)))
+#    print("Number of batches to run: ", int(np.floor(len(self.list_IDs) / self.batch_size)))
     return int(np.floor(len(self.list_IDs) / self.batch_size))
 
   def __getitem__(self, index):
@@ -51,8 +51,8 @@ class DataGenerator(Sequence):
     indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
 
     # Find list of IDs
-    list_IDs_temp = [self.list_IDs[k] for k in indexes]
-    #list_IDs_temp = [self.iterator[k] for k in indexes]
+    #list_IDs_temp = [self.list_IDs[k] for k in indexes]
+    list_IDs_temp = [self.iterator[k] for k in indexes]
     print("List of temporary IDs ", list_IDs_temp)
 
     # Generate data
@@ -76,8 +76,9 @@ class DataGenerator(Sequence):
 
     # Generate data
     for i, ID in enumerate(list_IDs_temp):
-      print("Sample index: ", i)
+#      print("Sample index: ", i)
       print("Sample path: ", ID)
+      sample = self.list_IDs.iloc[ID, :]
       # Store sample
       X[i,] = np.load('data/' + ID + '.npy')
 
