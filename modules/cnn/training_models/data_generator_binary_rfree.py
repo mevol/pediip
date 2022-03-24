@@ -46,6 +46,7 @@ class DataGenerator(Sequence):
 
     def __getitem__(self, index):
         'Generate one batch of data'
+        print(index)
         # Generate indexes of the batch
         indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
 
