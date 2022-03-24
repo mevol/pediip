@@ -46,19 +46,19 @@ class DataGenerator(Sequence):
 
     def __getitem__(self, index):
         'Generate one batch of data'
-        print(index)
+        print("Index of batch ", index)
         # Generate indexes of the batch
         indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
 
         # Find list of IDs
         list_IDs_temp = [self.list_IDs[k] for k in indexes]
         
-        print(list_IDs_temp)
+        print("List of temporary IDs ", list_IDs_temp)
 
         # Generate data
         X, y = self.__data_generation(list_IDs_temp)
 
-#        return X, y
+        return X, y
 
     def on_epoch_end(self):
         'Updates indexes after each epoch'
@@ -76,8 +76,8 @@ class DataGenerator(Sequence):
 
         # Generate data
         for i, ID in enumerate(list_IDs_temp):
-            print(i)
-            print(ID)
+            print("Sample index: ", i)
+            print("Sample path: ", ID)
             # Store sample
             X[i,] = np.load('data/' + ID + '.npy')
 
