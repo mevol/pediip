@@ -79,6 +79,7 @@ class DataGenerator(Sequence):
 #      print("Sample index: ", i)
       print("Sample path: ", ID)
       sample = self.list_IDs.iloc[ID, :]
+      print(sample)
       # Store sample
       X[i,] = np.load('data/' + ID + '.npy')
 
