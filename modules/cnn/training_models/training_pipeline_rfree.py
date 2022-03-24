@@ -221,13 +221,25 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 #    print(training_generator)
 
 
-#    testing_generator = DataGenerator(partition["validate"],
-#                                      label_dict,
-#                                      dim=IMG_DIM,
-#                                      batch_size=batch_size,
-#                                      n_classes=2,
-#                                      shuffle=False)#was True
+    testing_generator = DataGenerator(
+                                       parameters_dict["xyz_limits"],
+                                       parameters_dict["slices_per_axis"],
+                                      partition["validate"],
+                                      label_dict,
+                                      dim=IMG_DIM,
+                                      batch_size=batch_size,
+                                      n_classes=2,
+                                      shuffle=False)#was True
 
+    history = model.fit_generator(
+             train_generator,
+             steps_per_epoch=int((len(active_training_set["Files"]) / batch_size)),
+             epochs=epochs,
+             validation_data=val_generator,
+             validation_steps=(len(active_validation_set["Files"]) / batch_size),
+             use_multiprocessing=True,
+             workers=8,
+         )
 
 # TO DO: This should go into the data generator; probably need to do a new one
 #    prepare_training_data_random_pick_combined(parameters_dict["sample_lable_lst"],
@@ -321,15 +333,6 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 #             class_mode="categorical",
 #         )
 
-#         history = model.fit_generator(
-#             train_generator,
-#             steps_per_epoch=int((len(active_training_set["Files"]) / batch_size)),
-#             epochs=epochs,
-#             validation_data=val_generator,
-#             validation_steps=(len(active_validation_set["Files"]) / batch_size),
-#             use_multiprocessing=True,
-#             workers=8,
-#         )
 
 
 #         # Send history to csv
