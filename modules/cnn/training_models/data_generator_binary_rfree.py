@@ -80,8 +80,14 @@ class DataGenerator(Sequence):
       print("Sample path: ", ID)
       sample = self.list_IDs.iloc[ID, :]
       print(sample)
+      print(sample.iloc[:, 0])
+      print(sample.iloc[:, 1])
+      print(sample.iloc[:, 2])
       # Store sample
-      X[i,] = np.load('data/' + ID + '.npy')
+      X[i,] = prepare_training_data_random_pick_combined(sample.iloc[:, 0],
+                                               self.xyz_limits,
+                                               self.slices_per_axis)
+
 
       # Store class
       y[i] = self.labels[ID]
