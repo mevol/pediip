@@ -22,6 +22,7 @@ class DataGenerator(Sequence):
     #print(self.labels) #passed correctly
     self.list_IDs_new = np.arange(len(list_IDs))
     print("Sample list new: ", self.list_IDs_new) #passed correctly
+    self.list_IDs = list_IDs
     self.n_channels = n_channels
     #print(self.n_channels) #passed correctly
     self.n_classes = n_classes
@@ -79,7 +80,7 @@ class DataGenerator(Sequence):
     for i, ID in enumerate(list_IDs_temp):
 #      print("Sample index: ", i)
       print("Sample path: ", ID)
-      sample = self.list_IDs_new[ID, :]
+      sample = self.list_IDs.iloc[ID, :]
       print(sample)
       path = sample["filename"]
       protocol = sample["protocol"]
