@@ -30,7 +30,7 @@ def slice_map(volume, slices_per_axis):
     random_pick = np.random.choice(length, size = slices_per_axis)
 
     # Array to return the images
-    image_stack = np.zeros((slices_per_axis * 3, length, length))
+#    image_stack = np.zeros((slices_per_axis * 3, length, length))
 
 ###### RANDOMLY PICK 20 SLICES
 
@@ -87,12 +87,12 @@ def slice_map(volume, slices_per_axis):
 #    image_stack = np.append(image_stack, stack2)
 #    image_stack = np.append(image_stack, stack3)
 
-    image_stack = np.vstack([image_stack, stack1])
+    image_stack = np.vstack([stack1, stack2])
     print("After first addition: ", image_stack.shape)
-    image_stack = np.vstack([image_stack, stack2])
-    print("After second addition: ", image_stack.shape)
     image_stack = np.vstack([image_stack, stack3])
-    print("After third addition: ", image_stack.shape)
+    print("After second addition: ", image_stack.shape)
+#    image_stack = np.vstack([image_stack, stack3])
+#    print("After third addition: ", image_stack.shape)
 
     byte_size_stack = getsizeof(image_stack)
     
