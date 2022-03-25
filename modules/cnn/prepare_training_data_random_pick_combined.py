@@ -76,8 +76,12 @@ def slice_map(volume, slices_per_axis):
     print("Stack1 shape: ", stack1.shape)
     stack2 = volume[:, np.random.choice(volume.shape[1], slices_per_axis, replace=False), :]
     print("Stack2 shape: ", stack2.shape)
+    stack2 = stack2.reshape(slices_per_axis, volume.shape[0], volume.shape[0])
+    print("Stack2 shape after reshape: ", stack2.shape)
     stack3 = volume[:, :, np.random.choice(volume.shape[2], slices_per_axis, replace=False)]
     print("Stack3 shape: ", stack3.shape)
+    stack3 = stack3.reshape(slices_per_axis, volume.shape[0], volume.shape[0])
+    print("Stack3 shape after reshape: ", stack3.shape)
 
     image_stack = np.append(image_stack, stack1)
     image_stack = np.append(image_stack, stack2)
