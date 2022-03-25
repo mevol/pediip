@@ -99,20 +99,11 @@ def slice_map(volume, slices_per_axis):
 def prepare_training_data_random_pick_combined(
     maps_list: str,
     xyz_limits: List[int],
-#    output_directory: str,
     slices_per_axis: int):
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
     print("Number of slices ", slices_per_axis)
     logging.info("Preparing training data. \n")
-
-#    # Check all directories exist
-#    try:
-#        output_dir = Path(output_directory)
-#        assert output_dir.exists()
-#    except Exception:
-#        logging.error(f"Could not find output directory at {output_directory} \n")
-#        raise
 
     # Check xyz limits are of correct format
     try:
@@ -141,27 +132,17 @@ def prepare_training_data_random_pick_combined(
         total_bytes = 0
         number_maps = 0
         
-        # make a new array that holds all the sets of slices
-#        all_maps = np.zeros((total_num_maps, int(xyz_limits[0])+1))
-        
-#        for line in csv_reader:
-#        for line in data:
-#            print(line)
-            # get input path from row in CSV file
-#            input_path = line["filename"]
-#            input_path = line[1]
         input_path = data
-#            print("INPUT: ", input_path)
-            # expand this path to its real path as it is a sym link pointing to my local,
-            # hand-crafted PDB-redo version; this one has the same subfolder arrangement
-            # as my local PDB version; makes traversing easier; however, in order to create
-            # this custom PDB-redo version I created again sym links to the original
-            # PDB-redo; hence I need two levels to expand the real file path
+        # expand this path to its real path as it is a sym link pointing to my local,
+        # hand-crafted PDB-redo version; this one has the same subfolder arrangement
+        # as my local PDB version; makes traversing easier; however, in order to create
+        # this custom PDB-redo version I created again sym links to the original
+        # PDB-redo; hence I need two levels to expand the real file path
         real_input_path = os.path.realpath(input_path)
 #            print("REAL PATH: ", real_input_path)
-            # replace "/dls/" with "/opt/" to read files in the mount pount
+        # replace "/dls/" with "/opt/" to read files in the mount pount
         real_input_path_opt = real_input_path.replace("/dls/", "/opt/")
-#            print("replace dls: ", real_input_path_opt)
+#       print("replace dls: ", real_input_path_opt)
             # expand the next level of sym link to the real path
         real_path_to_map = os.path.realpath(real_input_path_opt)
 #            print("REAL MTZ PATH: ", real_path_to_map)
@@ -192,47 +173,21 @@ def prepare_training_data_random_pick_combined(
             pass
 
         try:
-                # try opening MTZ file
+            # try opening MTZ file
             data = gemmi.read_mtz_file(str(map_file_path))
-#                # unit cell of data
-#                cell = data.cell
-#                print("unit cell of data: ", cell)
-#                # space group of data
-#                sg = data.spacegroup
-#                print("space group of data: ", sg)
-#                # high resolution of the data
-#                reso = data.resolution_high()
-#                print("high resolution of MTZ: ", reso)
-#                # get reciprocal lattice grid size
+            # get reciprocal lattice grid size
             recip_grid = data.get_size_for_hkl()
             print("reciprocal lattice grid: ", recip_grid)
             logging.info(f"Original size of reciprocal lattice grid: {recip_grid} \n")
-                # get grid size in relation to resolution and a sample rate of 4
+            # get grid size in relation to resolution and a sample rate of 4
             size1 = data.get_size_for_hkl(sample_rate=4)
             logging.info(f"Reciprocal lattice grid size at sample_rate=4: {size1} \n")
-#                print("grid size at sample rate = 4: ", size1)
-#                # get grid size in relation to resolution and a sample rate of 3
-#                size2 = data.get_size_for_hkl(sample_rate=3)
-#                print("grid size at sample rate = 3: ", size2)
-#                # get grid size in relation to resolution and a sample rate of 2
-#                size3 = data.get_size_for_hkl(sample_rate=2)
-#                print("grid size at sample rate = 2: ", size3)
-#                # get grid size in relation to resolution and a sample rate of 1
-#                size4 = data.get_size_for_hkl(sample_rate=1)
-#                print("grid size at sample rate = 1: ", size4)
-#                # get grid size in relation to resolution and a sample rate of 1.5
-#                size5 = data.get_size_for_hkl(sample_rate=1.5)
-#                print("grid size at sample rate = 1.5: ", size5)
-#                # get grid size in relation to resolution and a sample rate of 2.5
-#                size6 = data.get_size_for_hkl(sample_rate=2.5)
-#                print("grid size at sample rate = 2.5: ", size6)
-
-                # create an empty map grid
+            # create an empty map grid
             data_to_map = gemmi.Ccp4Map()
             print("Grid of MTZ file", data_to_map.grid)
-                # turn MTZ file into map using a sample_rate=4; minimal grid size is
-                # placed in relation to the resolution, dmin/sample_rate; sample_rate=4
-                # doubles the original grid size
+            # turn MTZ file into map using a sample_rate=4; minimal grid size is
+            # placed in relation to the resolution, dmin/sample_rate; sample_rate=4
+            # doubles the original grid size
             data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT',
                                                                sample_rate=4)
             data_to_map.update_ccp4_header(2, True)
@@ -240,10 +195,12 @@ def prepare_training_data_random_pick_combined(
             logging.error(f"Could not open MTZ and convert to MAP {map_file_path} \n")
             raise
         try:
-                #this bit here expands the unit cell to be 200A^3;
-                #Can I expand the unit cell to standard volume and then extract a
-                #grid cube (200, 200, 200) or whatever value has been passed through YAML file
-            print("XYZ limits: ", xyz_limits[0], xyz_limits[1], xyz_limits[2])
+            #this bit here expands the unit cell to be 200A^3;
+            #Can I expand the unit cell to standard volume and then extract a
+            #grid cube (200, 200, 200) or whatever value has been passed through YAML file
+            print("XYZ limits to make standardised map: ", xyz_limits[0],
+                                                           xyz_limits[1],
+                                                           xyz_limits[2])
             upper_limit = gemmi.Position(*xyz_limits)
             box = gemmi.FractionalBox()
             box.minimum = gemmi.Fractional(0, 0, 0)
@@ -256,7 +213,7 @@ def prepare_training_data_random_pick_combined(
             data_to_map.set_extent(box)
             map_grid = data_to_map.grid
             map_array = np.array(map_grid, copy = False)
-            print(map_array.shape)
+            print("Size of standardise map when finished: ", map_array.shape)
             print("Grid after setting XYZ limits for MAP", map_grid)
         except Exception:
             logging.error(f"Could not expand map {map_file_path} \n")
@@ -264,20 +221,24 @@ def prepare_training_data_random_pick_combined(
 
         try:
             # create a new array to hold the scaled, rounded and augmented images
-            edited_image_slices = np.zeros((slices_per_axis * 3, int(xyz_limits[0])+1))
+            edited_image_slices = np.zeros((slices_per_axis * 3,
+                                            int(xyz_limits[0])+1,
+                                            int(xyz_limits[1])+1))
             # Slice the volume into images
             image_slices, bytes = slice_map(map_array, slices_per_axis)
             # Iterate through images, scale them and save them in output_directory
             print("Number of slices to edit and manipulate: ", len(image_slices))
+            print("Dimensions of returned image stack: ", image_slices.shape)
             for slice_num in range(image_slices.shape[0]):
                 #print("Working on slice number: ", slice_num)
                 # Get slice
                 slice = image_slices[slice_num, :, :]
-                #print("Slice dimension: ", slice.shape)
+                print("Slice dimension: ", slice.shape)
                 # Scale slice
                 slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
                 # Round to the nearest integer
                 slice_scaled_int = np.rint(slice_scaled)
+                print("Dimensions of scaled image slices: ", slice_scaled_int.shape)
                 np.append(edited_image_slices, slice_scaled_int, axis=0)
                 # ENTER IMAGE AUGMENTATION HERE
                 # check the number of edited image slices
