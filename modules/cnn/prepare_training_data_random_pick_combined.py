@@ -56,7 +56,7 @@ def slice_map(volume, slices_per_axis):
 #        ]
     for slice in random_pick:
         temp_stack2 = volume[:, slice, :]
-        image_stack = np.vstack([image_stack, temp_stack2])
+        image_stack = np.vstack([*image_stack, temp_stack2])
 
     # Get z slices and put in image_stack
 #    for slice in range(slices_per_axis):
@@ -65,9 +65,11 @@ def slice_map(volume, slices_per_axis):
 #        ]
     for slice in random_pick:
         temp_stack3 = volume[:, :, slice]
-        image_stack = np.vstack([image_stack, temp_stack3])
+        image_stack = np.vstack([*image_stack, temp_stack3])
 
     byte_size_stack = getsizeof(image_stack)
+    
+    image_stack = image_stack.reshape(60, 101, 101)
 
     return image_stack, byte_size_stack
 
