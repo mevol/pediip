@@ -247,7 +247,7 @@ def prepare_training_data_random_pick_combined(
 #            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
 #        image_stack[i, :, :] = volume[
 #            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
-        ]
+#        ]
                 
                 
                 # ENTER IMAGE AUGMENTATION HERE
