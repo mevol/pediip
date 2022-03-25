@@ -80,11 +80,11 @@ class DataGenerator(Sequence):
       print("Sample path: ", ID)
       sample = self.list_IDs.iloc[ID, :]
       print(sample)
-      print(sample["filename"])
-      print(sample["protocol"])
-      print(sample["stage"])
+      path = sample["filename"]
+      protocol = sample["protocol"]
+      stage = sample["stage"]
       # Store sample
-      X[i,] = prepare_training_data_random_pick_combined(sample.iloc[:, 0],
+      X[i,] = prepare_training_data_random_pick_combined(path,
                                                self.xyz_limits,
                                                self.slices_per_axis)
 
