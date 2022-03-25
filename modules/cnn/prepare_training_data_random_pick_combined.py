@@ -46,7 +46,7 @@ def slice_map(volume, slices_per_axis):
 #        ]
     for slice in random_pick:
         temp_stack1 = volume[slice, :, :]
-        print("Shape of random slice axis X: ", temps_stack1.shape)
+        print("Shape of random slice axis X: ", temp_stack1.shape)
         image_stack = np.vstack([*image_stack, temp_stack1])
 
     # Get y slices and put in image_stack
