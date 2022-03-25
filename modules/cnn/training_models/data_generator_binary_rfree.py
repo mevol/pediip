@@ -79,7 +79,7 @@ class DataGenerator(Sequence):
     for i, ID in enumerate(list_IDs_temp):
 #      print("Sample index: ", i)
       print("Sample path: ", ID)
-      sample = self.list_IDs_new.iloc[ID, :]
+      sample = self.list_IDs_new[ID, :]
       print(sample)
       path = sample["filename"]
       protocol = sample["protocol"]
