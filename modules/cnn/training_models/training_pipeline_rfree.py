@@ -256,11 +256,47 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # Save model as h5
     model.save(str(models_path / f"model.h5"))
 
-# TO DO: This should go into the data generator; probably need to do a new one
-#    prepare_training_data_random_pick_combined(parameters_dict["sample_lable_lst"],
-#                                               parameters_dict["xyz_limits"],
-#                                               output_dir_path,
-#                                               parameters_dict["slices_per_axis"])
+    #Record end time to monitor training time
+    end = datetime.now()
+    logging.info(f"Training end time : {end}")    
+    elapsed = end-start
+    logging.info(f"Training duration : {elapsed}")
+    print("Training duration: ", elapsed)
+
+    # Make evaluation folder
+
+    logging.info("Performing evaluation of model")
+    evaluation_dir_path = str(evaluations_path / f"evaluation")
+    if not Path(evaluation_dir_path).exists():
+      os.mkdir(evaluation_dir_path)
+
+    logging.info("Getting predictions")
+    
+#    print(int(math.ceil(len(X_test) / batch_size)))
+#    print(int(np.round(len(X_test) / batch_size)))
+
+    try:
+      predictions = model.predict(
+                          testing_generator,
+                          steps=math.ceil(len(X_test) / batch_size),
+                          verbose=1)
+      
+
+      preds_rounded = np.round(predictions, 0)
+      #print("Predictions after rounding")
+      #print(preds_rounded)
+      
+      y_pred = np.argmax(preds_rounded, axis=1)
+      y_pred1 = preds_rounded.argmax(1)
+
+      print("predicted labels ", y_pred)
+      print("known labels ", y_test[:-2])
+      #print(y_pred1)
+
+      #print("Length of predictions rounded: ", len(preds_rounded))
+    except Exception:
+      logging.warning("Could not round predictions")
+      raise
 
 def pipeline_from_command_line(
     create_model: Callable[[int, int, int, int], Model], rgb: bool = False):

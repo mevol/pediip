@@ -50,13 +50,19 @@ class DataGenerator(Sequence):
     print("Index of batch ", index)
     print("Length of indexes: ", len(self.indexes))
     print(5555555555, self.indexes.sort())
+    
+    
+    
     # Generate indexes of the batch
-    indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
-    print("range of indexes: ", indexes)
+    #indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
+    index = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
+    #print("range of indexes: ", indexes)
+    print("range of indexes: ", index)
 
     # Find list of IDs
     #list_IDs_temp = [self.list_IDs[k] for k in indexes.keys()]
-    list_IDs_temp = [self.iterator[k] for k in indexes]
+    list_IDs_temp = [self.list_IDs[k] for k in index]
+    #list_IDs_temp = [self.iterator[k] for k in indexes]
     print("List of temporary IDs ", list_IDs_temp)
     
     list_IDs_TEMP = []
@@ -71,8 +77,8 @@ class DataGenerator(Sequence):
 
 
     # Generate data
-    #X, y = self.__data_generation(list_IDs_temp)
-    X, y = self.__data_generation(list_IDs_TEMP)
+    X, y = self.__data_generation(list_IDs_temp)
+    #X, y = self.__data_generation(list_IDs_TEMP)
 
     return X, y
 
@@ -89,9 +95,6 @@ class DataGenerator(Sequence):
                   *self.dim,
                   self.n_channels))
     print("Size of empty array: ", X.shape)
-#    X = np.empty((self.batch_size, *self.dim, self.n_channels))# needs to be the
-#                                                                   # dimensions of the
-#                                                                   # image stack
     y = np.empty((self.batch_size), dtype=int)
 
     # Generate data
