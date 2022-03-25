@@ -1,10 +1,10 @@
-"""Testing with training_pipeline_2d"""
+"""Testing with training_pipeline_3d"""
 
 from typing import Tuple
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.layers import Conv2D, Dense, Dropout, Flatten, MaxPooling2D
+from tensorflow.keras.layers import Conv3D, Dense, Dropout, Flatten, MaxPooling3D
 from tensorflow.keras.layers import BatchNormalization #added 20210226
 from modules.cnn.training_models.training_pipeline_rfree import pipeline_from_command_line
 
