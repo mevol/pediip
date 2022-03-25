@@ -64,7 +64,7 @@ def slice_map(volume, slices_per_axis):
 #            :, :, (slice + 1) * int((length) / (slices_per_axis + 1))
 #        ]
     for slice in random_pick:
-        temp_stack2 = volume[:, :, (slice + 1) * int((length) / (slices_per_axis + 1)]
+        temp_stack2 = volume[:, :, (slice + 1) * int((length) / (slices_per_axis + 1))]
         image_stack = np.vstack([image_stack, temp_stack2])
 
     byte_size_stack = getsizeof(image_stack)
