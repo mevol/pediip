@@ -50,8 +50,8 @@ class DataGenerator(Sequence):
     print("Index of batch ", index)
 #    print("Length of indexes: ", len(self.indexes))
 #    print(5555555555, self.indexes.sort())
-    print("Length of index: ", len(self.index))
-    print(5555555555, self.index.sort())
+    print("Length of index: ", len(index))
+    print(5555555555, index.sort())
     
     
     0/1
