@@ -27,75 +27,27 @@ def slice_map(volume, slices_per_axis):
 
     length = volume.shape[0]
 
-    random_pick = np.random.choice(length, size = slices_per_axis)
-
-    # Array to return the images
-#    image_stack = np.zeros((slices_per_axis * 3, length, length))
-
-###### RANDOMLY PICK 20 SLICES
-
-    
-    print(random_pick)
-
-    print(range(slices_per_axis))
-
-    # Get x slices and put in image_stack
-#    for slice in range(slices_per_axis):
-#        image_stack[slice, :, :] = volume[
-#            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
-#        ]
-#    # random pick try 1
-#    for slice in random_pick:
-#        temp_stack1 = volume[slice, :, :]
-#        print("Shape of random slice axis X: ", temp_stack1.shape)
-#        image_stack = np.vstack([*image_stack, temp_stack1[None]])
-#        print("Shape of image stack axis X: ", image_stack.shape)
-
-    # Get y slices and put in image_stack
-#    for slice in range(slices_per_axis):
-#        image_stack[slice + slices_per_axis, :, :] = volume[
-#            :, (slice + 1) * int((length) / (slices_per_axis + 1)), :
-#        ]
-#    # random pick try 1
-#    for slice in random_pick:
-#        temp_stack2 = volume[:, slice, :]
-#        image_stack = np.vstack([*image_stack, temp_stack2[None]])
-
-    # Get z slices and put in image_stack
-#    for slice in range(slices_per_axis):
-#        image_stack[slice + (slices_per_axis * 2), :, :] = volume[
-#            :, :, (slice + 1) * int((length) / (slices_per_axis + 1))
-#        ]
-#    # random pick try 1
-#    for slice in random_pick:
-#        temp_stack3 = volume[:, :, slice]
-#        image_stack = np.vstack([*image_stack, temp_stack3[None]])
-
-
-    stack1 = volume[np.random.choice(volume.shape[0], slices_per_axis, replace=False), :, :]
+    # randomly select slices at each axis; the number of picks is determined by
+    # slices_per_axis; iterate over each axis; reshape to same dimensions as for first
+    # axis; stack vertically
+    stack1 = volume[np.random.choice(length, slices_per_axis, replace=False), :, :]
     print("Stack1 shape: ", stack1.shape)
-    stack2 = volume[:, np.random.choice(volume.shape[1], slices_per_axis, replace=False), :]
+    stack2 = volume[:, np.random.choice(length, slices_per_axis, replace=False), :]
     print("Stack2 shape: ", stack2.shape)
-    stack2 = stack2.reshape(slices_per_axis, volume.shape[0], volume.shape[0])
+    stack2 = stack2.reshape(slices_per_axis, length, length)
     print("Stack2 shape after reshape: ", stack2.shape)
-    stack3 = volume[:, :, np.random.choice(volume.shape[2], slices_per_axis, replace=False)]
+    stack3 = volume[:, :, np.random.choice(length, slices_per_axis, replace=False)]
     print("Stack3 shape: ", stack3.shape)
-    stack3 = stack3.reshape(slices_per_axis, volume.shape[0], volume.shape[0])
+    stack3 = stack3.reshape(slices_per_axis, length, length)
     print("Stack3 shape after reshape: ", stack3.shape)
-
-#    image_stack = np.append(image_stack, stack1)
-#    image_stack = np.append(image_stack, stack2)
-#    image_stack = np.append(image_stack, stack3)
 
     image_stack = np.vstack([stack1, stack2])
     print("After first addition: ", image_stack.shape)
     image_stack = np.vstack([image_stack, stack3])
     print("After second addition: ", image_stack.shape)
-#    image_stack = np.vstack([image_stack, stack3])
-#    print("After third addition: ", image_stack.shape)
 
     byte_size_stack = getsizeof(image_stack)
-    
+
     image_stack = image_stack.reshape(60, 101, 101)
 
     return image_stack, byte_size_stack
