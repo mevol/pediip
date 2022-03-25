@@ -44,28 +44,30 @@ class DataGenerator(Sequence):
 
   def __len__(self):
     'Denotes the number of batches per epoch'
-#    print("Number of batches to run: ", int(np.floor(len(self.list_IDs) / self.batch_size)))
-    return int(np.floor(len(self.list_IDs) / self.batch_size))
+    print("Number of batches to run: ", int(np.floor(len(self.list_IDs_new) / self.batch_size)))
+#    return int(np.floor(len(self.list_IDs) / self.batch_size))
+    return int(np.floor(len(self.list_IDs_new) / self.batch_size))
 
   def __getitem__(self, index):
     'Generate one batch of data'
     print("Index of batch ", index)
     print("Length of indexes: ", len(self.indexes))
-    print(5555555555, self.indexes.sort())
+#    print(5555555555, self.indexes.sort())
 #    print("Length of index: ", len(index))
 #    print(5555555555, index.sort())
     
     
-    0/1
+
     # Generate indexes of the batch
     #indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
     index = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
     #print("range of indexes: ", indexes)
     print("range of indexes: ", index)
-
+    0/1
     # Find list of IDs
     #list_IDs_temp = [self.list_IDs[k] for k in indexes.keys()]
-    list_IDs_temp = [self.list_IDs[k] for k in index]
+    #list_IDs_temp = [self.list_IDs[k] for k in index]
+    list_IDs_temp = [self.list_IDs_new[k] for k in index]
     #list_IDs_temp = [self.iterator[k] for k in indexes]
     print("List of temporary IDs ", list_IDs_temp)
     
