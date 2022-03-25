@@ -225,6 +225,7 @@ def prepare_training_data_random_pick_combined(
             edited_image_slices = np.zeros((slices_per_axis * 3,
                                             length,
                                             length))
+            print("Dimensions of empty edited image stack: ", edited_image_slices.shape)
             # Slice the volume into images
             image_slices, bytes = slice_map(map_array, slices_per_axis)
             # Iterate through images, scale them and save them in output_directory
@@ -240,7 +241,15 @@ def prepare_training_data_random_pick_combined(
                 # Round to the nearest integer
                 slice_scaled_int = np.rint(slice_scaled)
                 print("Dimensions of scaled image slices: ", slice_scaled_int.shape)
-                np.append(edited_image_slices, slice_scaled_int, axis=0)
+#                np.append(edited_image_slices, slice_scaled_int, axis=0)
+                
+                edited_image_slices[slice_num, :, :] = slice_scaled_int#volume[
+#            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
+#        image_stack[i, :, :] = volume[
+#            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
+        ]
+                
+                
                 # ENTER IMAGE AUGMENTATION HERE
                 # check the number of edited image slices
             assert len(edited_image_slices) == 60
