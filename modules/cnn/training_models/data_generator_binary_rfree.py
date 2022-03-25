@@ -24,7 +24,7 @@ class DataGenerator(Sequence):
     print("Sample list: ", self.list_IDs) #passed correctly
     #print("Index of sample list: ", self.list_IDs.index)
     self.iterator = self.list_IDs.index.tolist()
-    print("Index to iterate over: ", self.iterator.ordered()) #passed correctly
+    print("Index to iterate over: ", self.iterator.sort()) #passed correctly
     self.n_channels = n_channels
     #print(self.n_channels) #passed correctly
     self.n_classes = n_classes
@@ -49,7 +49,7 @@ class DataGenerator(Sequence):
     'Generate one batch of data'
     print("Index of batch ", index)
     print("Length of indexes: ", len(self.indexes))
-    print(5555555555, self.indexes.ordered())
+    print(5555555555, self.indexes.sort())
     # Generate indexes of the batch
     indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
     print("range of indexes: ", indexes)
