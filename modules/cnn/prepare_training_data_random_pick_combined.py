@@ -141,7 +141,7 @@ def prepare_training_data_random_pick_combined(
         number_maps = 0
         
         # make a new array that holds all the sets of slices
-        all_maps = np.zeros((total_num_maps, int(xyz_limits[0])+1))
+#        all_maps = np.zeros((total_num_maps, int(xyz_limits[0])+1))
         
 #        for line in csv_reader:
         for line in data:
@@ -284,7 +284,7 @@ def prepare_training_data_random_pick_combined(
                           len(edited_image_slices))
                 print("Shape of edited image slice stack: ", edited_image_slices.shape)
                 # adding the each produced map stack to a large numpy array to gather all maps
-                np.append(all_maps, edited_image_slices, axis=0)
+#                np.append(all_maps, edited_image_slices, axis=0)
                 total_bytes = total_bytes + bytes
                 number_maps = number_maps + 1
                 print("Accumulated byte size: ", total_bytes)
@@ -309,8 +309,9 @@ def prepare_training_data_random_pick_combined(
     except Exception:
         logging.error(f"Could not open input map list \n")
         raise
-    print("Shape of all maps stack: ", all_maps.shape)
-    return all_maps
+#    print("Shape of all maps stack: ", all_maps.shape)
+#    return all_maps
+    return edited_image_slices
 
 
 
