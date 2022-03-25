@@ -178,13 +178,15 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # grayscale is used
     if parameters_dict["rgb"] is True:
         logging.info("Using 3 channel image input to model")
-        input_shape = (parameters_dict["image_dim"][0],
+        input_shape = (parameters_dict["slices_per_structure"],
+                       parameters_dict["image_dim"][0],
                        parameters_dict["image_dim"][1],
                        3) #2D
         color_mode = "rgb"
     else:
         logging.info("Using single channel image input to model")
-        input_shape = (parameters_dict["image_dim"][0],
+        input_shape = (parameters_dict["slices_per_structure"],
+                       parameters_dict["image_dim"][0],
                        parameters_dict["image_dim"][1],
                        1) #2D
         color_mode = "grayscale"
