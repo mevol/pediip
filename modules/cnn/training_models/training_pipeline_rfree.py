@@ -55,7 +55,7 @@ print(tensorflow.__version__)
 logging.basicConfig(level=logging.INFO, filename="training.log", filemode="w")
 
 
-def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: dict):
+def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dict: dict):
     """
     Execute the pipeline on the model provided.
 
@@ -261,7 +261,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 #                                               parameters_dict["slices_per_axis"])
 
 def pipeline_from_command_line(
-    create_model: Callable[[int, int, int], Model], rgb: bool = False):
+    create_model: Callable[[int, int, int, int], Model], rgb: bool = False):
     """
     Run the training pipeline from the command line with config file
 
