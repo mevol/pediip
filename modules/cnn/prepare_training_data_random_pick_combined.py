@@ -44,28 +44,44 @@ def slice_map(volume, slices_per_axis):
 #        image_stack[slice, :, :] = volume[
 #            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
 #        ]
-    for slice in random_pick:
-        temp_stack1 = volume[slice, :, :]
-        print("Shape of random slice axis X: ", temp_stack1.shape)
-        image_stack = np.vstack([*image_stack, temp_stack1[None]])
+#    # random pick try 1
+#    for slice in random_pick:
+#        temp_stack1 = volume[slice, :, :]
+#        print("Shape of random slice axis X: ", temp_stack1.shape)
+#        image_stack = np.vstack([*image_stack, temp_stack1[None]])
+#        print("Shape of image stack axis X: ", image_stack.shape)
 
     # Get y slices and put in image_stack
 #    for slice in range(slices_per_axis):
 #        image_stack[slice + slices_per_axis, :, :] = volume[
 #            :, (slice + 1) * int((length) / (slices_per_axis + 1)), :
 #        ]
-    for slice in random_pick:
-        temp_stack2 = volume[:, slice, :]
-        image_stack = np.vstack([*image_stack, temp_stack2[None]])
+#    # random pick try 1
+#    for slice in random_pick:
+#        temp_stack2 = volume[:, slice, :]
+#        image_stack = np.vstack([*image_stack, temp_stack2[None]])
 
     # Get z slices and put in image_stack
 #    for slice in range(slices_per_axis):
 #        image_stack[slice + (slices_per_axis * 2), :, :] = volume[
 #            :, :, (slice + 1) * int((length) / (slices_per_axis + 1))
 #        ]
-    for slice in random_pick:
-        temp_stack3 = volume[:, :, slice]
-        image_stack = np.vstack([*image_stack, temp_stack3[None]])
+#    # random pick try 1
+#    for slice in random_pick:
+#        temp_stack3 = volume[:, :, slice]
+#        image_stack = np.vstack([*image_stack, temp_stack3[None]])
+
+
+    stack1 = volume[np.random.choice(volume.shape[0], slices_per_axis, replace=False), :, :]
+    print("Stack1 shape: ", stack1.shape)
+    stack2 = volume[:, np.random.choice(volume.shape[1], slices_per_axis, replace=False), :]
+    print("Stack2 shape: ", stack2.shape)
+    stack3 = volume[:, :, np.random.choice(volume.shape[2], slices_per_axis, replace=False)]
+    print("Stack3 shape: ", stack3.shape)
+
+    image_stack = np.append(image_stack, stack1)
+    image_stack = np.append(image_stack, stack2)
+    image_stack = np.append(image_stack, stack3)
 
     byte_size_stack = getsizeof(image_stack)
     
