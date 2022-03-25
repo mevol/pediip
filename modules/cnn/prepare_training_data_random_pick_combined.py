@@ -222,8 +222,8 @@ def prepare_training_data_random_pick_combined(
         try:
             # create a new array to hold the scaled, rounded and augmented images
             edited_image_slices = np.zeros((slices_per_axis * 3,
-                                            int(xyz_limits[0])+1,
-                                            int(xyz_limits[1])+1))
+                                            (int(xyz_limits[0])+1,
+                                             int(xyz_limits[1])+1)))
             # Slice the volume into images
             image_slices, bytes = slice_map(map_array, slices_per_axis)
             # Iterate through images, scale them and save them in output_directory
