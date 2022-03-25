@@ -22,6 +22,7 @@ class DataGenerator(Sequence):
     #print(self.labels) #passed correctly
     self.list_IDs = list_IDs
     print("Sample list: ", self.list_IDs) #passed correctly
+    print("Index of sample list: ", self.list_IDs.index)
     self.iterator = self.list_IDs.index.tolist()
     print("Index to iterate over: ", self.iterator) #passed correctly
     self.n_channels = n_channels
@@ -57,10 +58,11 @@ class DataGenerator(Sequence):
     
     list_IDs_TEMP = []
     for k in indexes:
-      print("Index ", k)
+      print("Index ", k)#index = 102
       print("List of IDs ", self.list_IDs)
-      print("ID for index k in iterator", self.iterator[k])
-      print("ID for index k in sample list", self.list_IDs[k])
+      id = self.iterator[k]
+      print("ID for index k in iterator", self.iterator[k])#ID = 111
+      print("ID for index k in sample list", self.list_IDs[id])
       list_IDs_TEMP.append(self.iterator[k])
 
 
