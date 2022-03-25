@@ -22,7 +22,7 @@ class DataGenerator(Sequence):
     #print(self.labels) #passed correctly
     self.list_IDs = list_IDs
     print("Sample list: ", self.list_IDs) #passed correctly
-    print("Index of sample list: ", self.list_IDs.index)
+    #print("Index of sample list: ", self.list_IDs.index)
     self.iterator = self.list_IDs.index.tolist()
     print("Index to iterate over: ", self.iterator) #passed correctly
     self.n_channels = n_channels
@@ -48,8 +48,10 @@ class DataGenerator(Sequence):
   def __getitem__(self, index):
     'Generate one batch of data'
     print("Index of batch ", index)
+    print(5555555555, self.indexes)
     # Generate indexes of the batch
     indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
+    print("range of indexes: ", indexes)
 
     # Find list of IDs
     #list_IDs_temp = [self.list_IDs[k] for k in indexes.keys()]
@@ -62,12 +64,13 @@ class DataGenerator(Sequence):
       print("List of IDs ", self.list_IDs)
       id = self.iterator[k]
       print("ID for index k in iterator", self.iterator[k])#ID = 111
-      print("ID for index k in sample list", self.list_IDs[id])
+      print("ID for index k in sample list", self.list_IDs.iloc[id])
       list_IDs_TEMP.append(self.iterator[k])
 
 
     # Generate data
-    X, y = self.__data_generation(list_IDs_temp)
+    #X, y = self.__data_generation(list_IDs_temp)
+    X, y = self.__data_generation(list_IDs_TEMP)
 
     return X, y
 
