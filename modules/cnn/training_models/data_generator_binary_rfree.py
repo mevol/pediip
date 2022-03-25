@@ -15,7 +15,7 @@ class DataGenerator(Sequence):
                n_classes=2, n_channels=1, shuffle=True):
     'Initialization'
     self.dim = dim
-    #print(self.dim) #passed correctly
+    print(self.dim) #passed correctly
     self.batch_size = batch_size
     #print(self.batch_size) #passed correctly
     self.labels = labels
@@ -70,7 +70,7 @@ class DataGenerator(Sequence):
     'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
     # Initialization
     X = np.zeros((self.batch_size,
-                  tuple(self.slices_per_axis*3, int(self.xyz_limits[0])+1)),
+                  *self.dim,
                   self.n_channels)
 #    X = np.empty((self.batch_size, *self.dim, self.n_channels))# needs to be the
 #                                                                   # dimensions of the

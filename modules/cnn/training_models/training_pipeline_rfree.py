@@ -117,7 +117,10 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
         yaml.dump(parameters_dict, f)
 
     IMG_DIM = tuple(parameters_dict["image_dim"])
+    STACK_DIM = tuple(parameters_dict["slices_per_structure"],
+                      parameters_dict["image_dim"][0])
     print("slice dimensions ", IMG_DIM)
+    print("stack dimensions ", STACK_DIM)
 
     # Check if input CSV holding sample filepaths does exist and open the file
     try:
@@ -214,7 +217,8 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                                        parameters_dict["slices_per_axis"],
                                        partition["train"],#X
                                        label_dict,#y
-                                       dim=IMG_DIM,
+                                       #dim=IMG_DIM,
+                                       dim=STACK_DIM,
                                        batch_size=batch_size,
                                        n_classes=2,
                                        shuffle=True)
@@ -226,7 +230,8 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                                        parameters_dict["slices_per_axis"],
                                       partition["validate"],
                                       label_dict,
-                                      dim=IMG_DIM,
+                                      #dim=IMG_DIM,
+                                      dim=STACK_DIM,
                                       batch_size=batch_size,
                                       n_classes=2,
                                       shuffle=False)#was True
