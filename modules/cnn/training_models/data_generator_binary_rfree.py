@@ -71,7 +71,7 @@ class DataGenerator(Sequence):
     # Initialization
     X = np.zeros((self.batch_size,
                   *self.dim,
-                  self.n_channels)
+                  self.n_channels))
 #    X = np.empty((self.batch_size, *self.dim, self.n_channels))# needs to be the
 #                                                                   # dimensions of the
 #                                                                   # image stack
