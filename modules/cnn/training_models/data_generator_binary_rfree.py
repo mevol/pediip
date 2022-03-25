@@ -69,7 +69,9 @@ class DataGenerator(Sequence):
   def __data_generation(self, list_IDs_temp):
     'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
     # Initialization
-    X = np.zeros((self.batch_size, int(self.xyz_limits[0])+1))
+    X = np.zeros((self.batch_size,
+                  tuple(self.slices_per_axis*3, int(self.xyz_limits[0])+1)),
+                  self.n_channels)
 #    X = np.empty((self.batch_size, *self.dim, self.n_channels))# needs to be the
 #                                                                   # dimensions of the
 #                                                                   # image stack
