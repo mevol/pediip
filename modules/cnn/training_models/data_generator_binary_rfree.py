@@ -22,11 +22,6 @@ class DataGenerator(Sequence):
     #print(self.labels) #passed correctly
     self.list_IDs_new = np.arange(len(list_IDs))
     print("Sample list new: ", self.list_IDs_new) #passed correctly
-    self.list_IDs = list_IDs
-    print("Sample list: ", self.list_IDs) #passed correctly
-    #print("Index of sample list: ", self.list_IDs.index)
-    self.iterator = self.list_IDs.index.tolist()
-    print("Index to iterate over: ", self.iterator.sort()) #passed correctly
     self.n_channels = n_channels
     #print(self.n_channels) #passed correctly
     self.n_classes = n_classes
@@ -45,46 +40,23 @@ class DataGenerator(Sequence):
   def __len__(self):
     'Denotes the number of batches per epoch'
     print("Number of batches to run: ", int(np.floor(len(self.list_IDs_new) / self.batch_size)))
-#    return int(np.floor(len(self.list_IDs) / self.batch_size))
     return int(np.floor(len(self.list_IDs_new) / self.batch_size))
 
   def __getitem__(self, index):
     'Generate one batch of data'
     print("Index of batch ", index)
     print("Length of indexes: ", len(self.indexes))
-#    print(5555555555, self.indexes.sort())
-#    print("Length of index: ", len(index))
-#    print(5555555555, index.sort())
-    
-    
 
     # Generate indexes of the batch
-    #indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
     index = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
-    #print("range of indexes: ", indexes)
     print("range of indexes: ", index)
 
     # Find list of IDs
-    #list_IDs_temp = [self.list_IDs[k] for k in indexes.keys()]
-    #list_IDs_temp = [self.list_IDs[k] for k in index]
     list_IDs_temp = [self.list_IDs_new[k] for k in index]
-    #list_IDs_temp = [self.iterator[k] for k in indexes]
     print("List of temporary IDs ", list_IDs_temp)
-    
-#    list_IDs_TEMP = []
-#    for k in indexes:
-#      print("Index ", k)#index = 102; 125
-#      print("List of IDs ", self.list_IDs)
-#      id = self.iterator[k]
-#      print("ID for index k in iterator", self.iterator[k])#ID = 111, 388
-#      #print("ID for index k in sample list", self.list_IDs.iloc[id])
-#      print("ID for index k in sample list", self.list_IDs.iloc[k])
-#      list_IDs_TEMP.append(self.iterator[k])
-
 
     # Generate data
     X, y = self.__data_generation(list_IDs_temp)
-    #X, y = self.__data_generation(list_IDs_TEMP)
 
     return X, y
 
@@ -125,73 +97,3 @@ class DataGenerator(Sequence):
 
     return X, to_categorical(y, num_classes=self.n_classes)
 
-
-#############################################################
-#  def __len__(self):
-#    'Denotes the number of batches per epoch'
-#    print("Length of list to iterate over: ", len(self.list_IDs))
-#    print("Length of each batch: ", int(np.floor(len(self.list_IDs) / self.batch_size)))
-#    return int(np.floor(len(self.list_IDs) / self.batch_size))
-#
-#  def __getitem__(self, index):
-#    'Generate one batch of data'
-#    # Generate indexes of the batch
-#    print("All indexes ", index)
-#    indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
-#    print("Indexes of batch ", indexes)
-#    # Find list of IDs
-#    list_IDs_temp = [self.iterator[k] for k in indexes]
-#    print("List of IDs ", self.iterator)
-#    # Generate data
-#    X, y = self.__data_generation(list_IDs_temp)
-#    return X, y
-#
-#  def on_epoch_end(self):
-#    'Updates indexes after each epoch'
-#    self.indexes = np.arange(len(self.list_IDs))
-#    if self.shuffle == True:
-#      np.random.shuffle(self.indexes)
-#
-#  def __data_generation(self, list_IDs_temp):
-#    'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
-#    # Initialization
-#    X = np.empty((self.batch_size, *self.dim, self.n_channels))
-#    #this version was used in python3-topaz
-#    y = np.empty([self.batch_size], dtype=int)
-#    
-    # Generate data
-
-
-
-
-
-
-#    for i, ID in enumerate(list_IDs_temp):
-#      print(777, ID)#is the path to the ccp4 map to open
-#      print(i)#is the index within the chosen batch size
-#    
-#      #print("Full list of IDs", self.list_IDs)
-#
-#      print(99999999999999, X[i,])
- 
-## TO DO: This should go into the data generator; probably need to do a new one
-#    prepare_training_data_random_pick_combined(X[i,],
-#                                               self.xyz_limits,
-#                                               output_dir_path,
-#                                               self.slices_per_axis)
-#      X[i,] = volume.reshape(*self.dim, self.n_channels)
-
-#    for i, ID in enumerate(list_labels_temp):
-#      print(888, ID)
-#      print(i)
-#      print("Stored labels", y)
-      # Store class
-      #y[i] = ID#this one to use of one-hot encoding within the datagenerator
-      #y = ID#this one to use if y had one-hot encoding set in training_pipeline_3d.py
-#      y[i] = self.labels[ID]
-
-#    print("Lable shape", y.shape)
-#    X = X.reshape(self.batch_size, *self.dim, self.n_channels)
-#    X = volume.reshape(self.batch_size, *self.dim, self.n_channels)
-    #one-hot encoding on the fly
-#    return X, keras.utils.to_categorical(y, num_classes=self.n_classes) 

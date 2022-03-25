@@ -211,9 +211,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     #Record start time to monitor training time
     start = datetime.now()
     logging.info(f"Training start time : {start}")
-    
-    
-    ############## anything below doesn't seem to work
 
     training_generator = DataGenerator(
                                        parameters_dict["xyz_limits"],
@@ -229,11 +226,10 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
 
     testing_generator = DataGenerator(
-                                       parameters_dict["xyz_limits"],
-                                       parameters_dict["slices_per_axis"],
+                                      parameters_dict["xyz_limits"],
+                                      parameters_dict["slices_per_axis"],
                                       partition["validate"],
                                       label_dict,
-                                      #dim=IMG_DIM,
                                       dim=STACK_DIM,
                                       batch_size=batch_size,
                                       n_classes=2,
@@ -271,31 +267,78 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       os.mkdir(evaluation_dir_path)
 
     logging.info("Getting predictions")
-    
-#    print(int(math.ceil(len(X_test) / batch_size)))
-#    print(int(np.round(len(X_test) / batch_size)))
+
+    print(int(math.ceil(len(X_test) / batch_size)))
+    print(int(np.round(len(X_test) / batch_size)))
 
     try:
       predictions = model.predict(
                           testing_generator,
                           steps=math.ceil(len(X_test) / batch_size),
                           verbose=1)
-      
 
       preds_rounded = np.round(predictions, 0)
       #print("Predictions after rounding")
       #print(preds_rounded)
-      
+
       y_pred = np.argmax(preds_rounded, axis=1)
       y_pred1 = preds_rounded.argmax(1)
 
-      print("predicted labels ", y_pred)
-      print("known labels ", y_test[:-2])
+      print("predicted labels for the test set ", y_pred)
+      print("known labels for the test set ", y_test["ai_lable"])
       #print(y_pred1)
 
       #print("Length of predictions rounded: ", len(preds_rounded))
     except Exception:
       logging.warning("Could not round predictions")
+      raise
+
+    #interim fix to be able to develop further; remove the last two samples in y_test
+    #y_test = y_test[:-2]
+    #print("Content of y_test")
+    #print(y_test[:-2])
+    try:
+      classes = ["class 0", "class 1"]
+      labels = np.arange(2)
+      classification_metrics = metrics.classification_report(y_test[:-2], y_pred,
+                                                      labels=labels, target_names=classes)
+      print(classification_metrics)
+      logging.info(f"Classification report")
+      logging.info(classification_metrics)
+    except Exception:
+      logging.warning("Could not get classification report")
+      raise
+
+    logging.info("Drawing confusion matrix.")
+    try:
+#      cat_labels = pd.DataFrame(y_test[:-2].idxmax(axis=1))
+#      cat_preds = pd.DataFrame(y_pred.idxmax(axis=1))
+      cat_labels = pd.DataFrame(y_test[:-2])
+      cat_preds = pd.DataFrame(y_pred)
+
+      confusion_matrix = metrics.confusion_matrix(cat_labels, cat_preds)
+    except Exception:
+      logging.warning("Could not calculate confusion matrix")
+      raise
+
+    try:  
+      def draw_conf_mat(matrix):
+        datestring = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
+        labels = ['0', '1']
+        ax = plt.subplot()
+        sns.heatmap(matrix, annot=True, ax=ax)
+        plt.title('Confusion matrix')
+        ax.set_xticklabels(labels)
+        ax.set_yticklabels(labels)
+        plt.xlabel('Predicted')
+        plt.ylabel('True')
+        plt.savefig(str(evaluations_path / f"confusion_matrix_{datestring}.png"))
+        plt.close()
+
+      draw_conf_mat(confusion_matrix)
+
+    except Exception:
+      logging.warning("Could not draw confusion matrix")
       raise
 
 def pipeline_from_command_line(

@@ -30,10 +30,7 @@ def slice_map(volume, slices_per_axis):
     random_pick = np.random.choice(length, size = slices_per_axis)
 
     # Array to return the images
-#    image_stack = np.zeros((slices_per_axis * 3, length, length))
     image_stack = np.zeros((slices_per_axis * 3, length, length))
-
-    # print(image_stack.shape)
 
 ###### RANDOMLY PICK 20 SLICES
 
@@ -44,14 +41,8 @@ def slice_map(volume, slices_per_axis):
 
     # Get x slices and put in image_stack
     for slice in range(slices_per_axis):
-#    for i, slice in enumerate(random_pick):
-#        print(slice)
-#        print(i)
-#        print(volume[(slice + 1) * int((length) / (slices_per_axis + 1)), :, :])
         image_stack[slice, :, :] = volume[
             (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
-#        image_stack[i, :, :] = volume[
-#            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
         ]
 
     # Get y slices and put in image_stack
@@ -66,10 +57,7 @@ def slice_map(volume, slices_per_axis):
             :, :, (slice + 1) * int((length) / (slices_per_axis + 1))
         ]
 
-    print("Number of slices in image stack: ", len(image_stack))
     byte_size_stack = getsizeof(image_stack)
-    print("Byte size of image stack is: ", byte_size_stack)
-    print("Image stack shape is: ", image_stack.shape)
 
     return image_stack, byte_size_stack
 
@@ -102,7 +90,6 @@ def prepare_training_data_random_pick_combined(
     slices_per_axis: int):
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
-    print("Number of slices ", slices_per_axis)
     logging.info("Preparing training data. \n")
 
     # Check xyz limits are of correct format
@@ -112,8 +99,7 @@ def prepare_training_data_random_pick_combined(
         assert all(type(values) == int for values in xyz_limits)
     except AssertionError:
         logging.error(
-        f"xyz_limits muste be provided as a list or tupls of three integer values \n"
-        )
+        f"xyz_limits muste be provided as a list or tupls of three integer values \n")
         raise
 
 #this below works but runs serial
@@ -131,7 +117,7 @@ def prepare_training_data_random_pick_combined(
         print("DATA for preparation: ", data)
         total_bytes = 0
         number_maps = 0
-        
+
         input_path = data
         # expand this path to its real path as it is a sym link pointing to my local,
         # hand-crafted PDB-redo version; this one has the same subfolder arrangement
@@ -139,16 +125,12 @@ def prepare_training_data_random_pick_combined(
         # this custom PDB-redo version I created again sym links to the original
         # PDB-redo; hence I need two levels to expand the real file path
         real_input_path = os.path.realpath(input_path)
-#            print("REAL PATH: ", real_input_path)
         # replace "/dls/" with "/opt/" to read files in the mount pount
         real_input_path_opt = real_input_path.replace("/dls/", "/opt/")
-#       print("replace dls: ", real_input_path_opt)
-            # expand the next level of sym link to the real path
+        # expand the next level of sym link to the real path
         real_path_to_map = os.path.realpath(real_input_path_opt)
-#            print("REAL MTZ PATH: ", real_path_to_map)
-            # replace "/dls/" with "/opt/" to read files in the mount pount
+        # replace "/dls/" with "/opt/" to read files in the mount pount
         real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
-#            print("replace dls in MTZ path: ", real_path_to_map_opt)
         try:
             target = input_map_path.split("/")[8]
             print("Working on target: ", target)
@@ -241,23 +223,14 @@ def prepare_training_data_random_pick_combined(
                 # Round to the nearest integer
                 slice_scaled_int = np.rint(slice_scaled)
                 print("Dimensions of scaled image slices: ", slice_scaled_int.shape)
-#                np.append(edited_image_slices, slice_scaled_int, axis=0)
-                
                 edited_image_slices[slice_num, :, :] = slice_scaled_int#volume[
-#            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
-#        image_stack[i, :, :] = volume[
-#            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
-#        ]
-                
                 
                 # ENTER IMAGE AUGMENTATION HERE
-                # check the number of edited image slices
+            # check the number of edited image slices
             assert len(edited_image_slices) == 60
             print("The number of edited image slices to be combined is: ",
                           len(edited_image_slices))
             print("Shape of edited image slice stack: ", edited_image_slices.shape)
-            # adding the each produced map stack to a large numpy array to gather all maps
-#           np.append(all_maps, edited_image_slices, axis=0)
             total_bytes = total_bytes + bytes
             number_maps = number_maps + 1
             print("Accumulated byte size: ", total_bytes)
@@ -266,24 +239,11 @@ def prepare_training_data_random_pick_combined(
 
 #                tiled_img = TileImage(edited_image_slices)
 
-###### ENTER PNG COMBINATION HERE
-#            # Save image
-#          try:
-#            output_file = Path(output_directory) / Path(
-#                      f"{dir_stem[0]}.png"
-#                  )
-#            Image.fromarray(tiled_img).convert("L").save(output_file)
-#          except Exception:
-#            logging.error(f"Could not create image file in {output_directory}")
-#
         except Exception:
-#                logging.info(f"Finished creating images in {output_directory} \n")
             raise
     except Exception:
         logging.error(f"Could not open input map list \n")
         raise
-#    print("Shape of all maps stack: ", all_maps.shape)
-#    return all_maps
     return edited_image_slices
 
 
@@ -316,7 +276,6 @@ def params_from_cmd(args):
     params = {
         "maps_list": args.maps_list,
         "xyz_limits": args.xyz_limits,
-#        "output_dir": args.output_dir,
         "slices": args.slices_per_axis,
     }
 
@@ -348,9 +307,6 @@ if __name__ == "__main__":
     cmd_parser.add_argument(
         "xyz_limits", type=int, nargs=3, help="xyz size of the output map file"
     )
-#    cmd_parser.add_argument(
-#        "output_dir", type=str, help="directory to output all map files to"
-#    )
     cmd_parser.add_argument(
         "slices", type=int, help="number of image slices to produce per axis, default=20",
         default=20
@@ -368,7 +324,6 @@ if __name__ == "__main__":
         prepare_training_data_binary(
             parameters["maps_list"],
             parameters["xyz_limits"],
-#            parameters["output_dir"],
             parameters["slices"]
         )
     except KeyError as e:
