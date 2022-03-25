@@ -51,8 +51,8 @@ class DataGenerator(Sequence):
     indexes = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
 
     # Find list of IDs
-    list_IDs_temp = [self.list_IDs[k] for k in indexes.keys()]
-    #list_IDs_temp = [self.iterator[k] for k in indexes]
+    #list_IDs_temp = [self.list_IDs[k] for k in indexes.keys()]
+    list_IDs_temp = [self.iterator[k] for k in indexes]
     print("List of temporary IDs ", list_IDs_temp)
     
     list_IDs_TEMP = []
