@@ -20,6 +20,8 @@ class DataGenerator(Sequence):
     #print(self.batch_size) #passed correctly
     self.labels = labels
     #print(self.labels) #passed correctly
+    self.list_IDs_new = np.arange(len(list_IDs))
+    print("Sample list new: ", self.list_IDs_new) #passed correctly
     self.list_IDs = list_IDs
     print("Sample list: ", self.list_IDs) #passed correctly
     #print("Index of sample list: ", self.list_IDs.index)
@@ -48,10 +50,10 @@ class DataGenerator(Sequence):
   def __getitem__(self, index):
     'Generate one batch of data'
     print("Index of batch ", index)
-#    print("Length of indexes: ", len(self.indexes))
-#    print(5555555555, self.indexes.sort())
-    print("Length of index: ", len(index))
-    print(5555555555, index.sort())
+    print("Length of indexes: ", len(self.indexes))
+    print(5555555555, self.indexes.sort())
+#    print("Length of index: ", len(index))
+#    print(5555555555, index.sort())
     
     
     0/1
