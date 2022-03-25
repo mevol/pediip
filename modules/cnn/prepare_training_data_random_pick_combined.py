@@ -137,6 +137,7 @@ def prepare_training_data_random_pick_combined(
 
     try:
         data = maps_list
+        print("DATA for preparation: ", data)
         total_bytes = 0
         number_maps = 0
         
