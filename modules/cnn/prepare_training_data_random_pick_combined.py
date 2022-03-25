@@ -88,8 +88,11 @@ def slice_map(volume, slices_per_axis):
 #    image_stack = np.append(image_stack, stack3)
 
     image_stack = np.vstack([image_stack, stack1])
+    print("After first addition: ", image_stack)
     image_stack = np.vstack([image_stack, stack2])
+    print("After second addition: ", image_stack)
     image_stack = np.vstack([image_stack, stack3])
+    print("After third addition: ", image_stack)
 
     byte_size_stack = getsizeof(image_stack)
     
