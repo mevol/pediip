@@ -54,6 +54,15 @@ class DataGenerator(Sequence):
     list_IDs_temp = [self.list_IDs[k] for k in indexes]
     #list_IDs_temp = [self.iterator[k] for k in indexes]
     print("List of temporary IDs ", list_IDs_temp)
+    
+    list_IDs_TEMP = []
+    for k in indexes:
+      print("Index ", k)
+      print("List of IDs ", self.list_IDs)
+      print("ID for index k in iterator", self.iterator[k])
+      print("ID for index k in sample list", self.list_IDs[k])
+      list_IDs_TEMP.append(self.iterator[k])
+
 
     # Generate data
     X, y = self.__data_generation(list_IDs_temp)
