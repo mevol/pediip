@@ -285,7 +285,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       y_pred1 = preds_rounded.argmax(1)
 
       print("predicted labels for the test set ", y_pred)
-      print("known labels for the test set ", y_test["ai_lable"])
+      print("known labels for the test set ", y_test[:-2])
       #print(y_pred1)
 
       #print("Length of predictions rounded: ", len(preds_rounded))

@@ -40,22 +40,32 @@ def slice_map(volume, slices_per_axis):
     print(range(slices_per_axis))
 
     # Get x slices and put in image_stack
-    for slice in range(slices_per_axis):
+#    for slice in range(slices_per_axis):
+#        image_stack[slice, :, :] = volume[
+#            (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
+#        ]
+    for slice in random_pick:
         image_stack[slice, :, :] = volume[
             (slice + 1) * int((length) / (slices_per_axis + 1)), :, :
         ]
 
     # Get y slices and put in image_stack
-    for slice in range(slices_per_axis):
-        image_stack[slice + slices_per_axis, :, :] = volume[
-            :, (slice + 1) * int((length) / (slices_per_axis + 1)), :
-        ]
+#    for slice in range(slices_per_axis):
+#        image_stack[slice + slices_per_axis, :, :] = volume[
+#            :, (slice + 1) * int((length) / (slices_per_axis + 1)), :
+#        ]
+    for slice in random_pick:
+        temp_stack1 = volume[:, (slice + 1) * int((length) / (slices_per_axis + 1)), :]
+        image_stack = np.vstack([image_stack, temp_stack1])
 
     # Get z slices and put in image_stack
-    for slice in range(slices_per_axis):
-        image_stack[slice + (slices_per_axis * 2), :, :] = volume[
-            :, :, (slice + 1) * int((length) / (slices_per_axis + 1))
-        ]
+#    for slice in range(slices_per_axis):
+#        image_stack[slice + (slices_per_axis * 2), :, :] = volume[
+#            :, :, (slice + 1) * int((length) / (slices_per_axis + 1))
+#        ]
+    for slice in random_pick:
+        temp_stack2 = volume[:, :, (slice + 1) * int((length) / (slices_per_axis + 1)]
+        image_stack = np.vstack([image_stack, temp_stack2])
 
     byte_size_stack = getsizeof(image_stack)
 
