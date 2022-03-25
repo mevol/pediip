@@ -118,7 +118,8 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
     IMG_DIM = tuple(parameters_dict["image_dim"])
     STACK_DIM = tuple((parameters_dict["slices_per_structure"],
-                      parameters_dict["image_dim"][0]))
+                      parameters_dict["image_dim"][0],
+                      parameters_dict["image_dim"][1]))
     print("slice dimensions ", IMG_DIM)
     print("stack dimensions ", STACK_DIM)
 
