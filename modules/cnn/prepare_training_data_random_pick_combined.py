@@ -131,15 +131,12 @@ def prepare_training_data_random_pick_combined(
         data = pd.read_csv(maps_list)
         total_num_maps = len(data)
         logging.info(f"Found {total_num_maps} samples for training")
+    except Exception:
+        logging.error(f"No LIST of samples provided; working on single sample instead")
+        pass
 
-
-
-#    with open(maps_list, "r") as ls:
-#        #print(ls)
-#        csv_reader = csv.reader(ls, delimiter=",")
-#        next(csv_reader)
-#        total_num_maps = len(next(csv_reader))
-#        logging.info(f"Total number of maps to slice: {total_num_maps} \n")
+    try:
+        data = maps_list
         total_bytes = 0
         number_maps = 0
         
