@@ -83,9 +83,13 @@ def slice_map(volume, slices_per_axis):
     stack3 = stack3.reshape(slices_per_axis, volume.shape[0], volume.shape[0])
     print("Stack3 shape after reshape: ", stack3.shape)
 
-    image_stack = np.append(image_stack, stack1)
-    image_stack = np.append(image_stack, stack2)
-    image_stack = np.append(image_stack, stack3)
+#    image_stack = np.append(image_stack, stack1)
+#    image_stack = np.append(image_stack, stack2)
+#    image_stack = np.append(image_stack, stack3)
+
+    image_stack = np.vstack(image_stack, stack1)
+    image_stack = np.vstack(image_stack, stack2)
+    image_stack = np.vstack(image_stack, stack3)
 
     byte_size_stack = getsizeof(image_stack)
     
