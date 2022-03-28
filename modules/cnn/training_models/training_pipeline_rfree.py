@@ -166,7 +166,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                        3) #2D
         color_mode = "rgb"
     else:
-        logging.info("Using single channel image input to model")
+        logging.info("Using single channel image input to model \n")
         input_shape = (parameters_dict["slices_per_structure"],
                        parameters_dict["image_dim"][0],
                        parameters_dict["image_dim"][1],
@@ -235,7 +235,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     print("Training duration: ", elapsed)
 
     # getting predictions on the testing data
-    logging.info("Getting predictions")
+    logging.info("Getting predictions \n")
 
     print(int(math.ceil(len(X_test) / batch_size)))
     print(int(np.round(len(X_test) / batch_size)))
@@ -259,7 +259,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
       #print("Length of predictions rounded: ", len(preds_rounded))
     except Exception:
-      logging.warning("Could not round predictions")
+      logging.warning("Could not round predictions \n")
       raise
 
     #interim fix to be able to develop further; remove the last two samples in y_test
@@ -275,10 +275,10 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       logging.info(f"Classification report")
       logging.info(classification_metrics)
     except Exception:
-      logging.warning("Could not get classification report")
+      logging.warning("Could not get classification report \n")
       raise
 
-    logging.info("Drawing confusion matrix.")
+    logging.info("Drawing confusion matrix. \n")
     try:
 #      cat_labels = pd.DataFrame(y_test[:-2].idxmax(axis=1))
 #      cat_preds = pd.DataFrame(y_pred.idxmax(axis=1))
@@ -287,7 +287,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
       confusion_matrix = metrics.confusion_matrix(cat_labels, cat_preds)
     except Exception:
-      logging.warning("Could not calculate confusion matrix")
+      logging.warning("Could not calculate confusion matrix \n")
       raise
 
     try:  
@@ -475,12 +475,12 @@ def get_pipeline_parameters() -> dict:
             image_augmentation_dict = yaml.load(f.read())["image_augmentation_dict"]
     except (KeyError, AssertionError):
         logging.warning(
-            f"Could not find image_augmentation_dict in {known_args.config}, \n
+            f"Could not find image_augmentation_dict in {known_args.config}, \n"
             f"performing scaling only. \n")
         image_augmentation_dict = {}
     assert isinstance(
         image_augmentation_dict, dict
-    ), f"image_augmentation_dict must be provided as a dictionary in YAML, \n
+    ), f"image_augmentation_dict must be provided as a dictionary in YAML, \n"
        f"got {image_augmentation_dict} \n"
 
     argument_dict["image_augmentation_dict"] = image_augmentation_dict
