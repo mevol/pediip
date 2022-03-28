@@ -168,7 +168,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.info(f"Length of partition train: {len(partition['train'])} \n")
     logging.info(f"Length of partition extended validate: {len(partition['validate'])} \n")
 
-    assert len(partition['validate']) == len(X_test) + additional_samples
+    assert len(partition['validate']) == len(X_test) + len(additional_samples)
     
     last_y = y_test.iloc[-1].values
     additional_y = pd.DataFrame(np.repeat(last_y, diff_batch_samples, axis=0))#last.values
