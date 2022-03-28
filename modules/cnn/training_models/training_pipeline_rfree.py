@@ -159,11 +159,11 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 #    logging.info(f"Length of partition validate: {len(partition['validate'])} \n")
     
     # get the number of samples that need to be created to fill a batch for prediction
-    num_batches_test = np.round(len(X_test) / parameters_dict["batch_size"])
+    num_batches_test = int(np.round(len(X_test) / parameters_dict["batch_size"]))
     print(1111111111, num_batches_test)
     num_batches_test_needed = int(math.ceil(len(X_test) / parameters_dict["batch_size"]))
     print(2222222222, num_batches_test_needed)
-    batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test
+    batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test_needed
     print(3333333333, batches_times_rounded_down)
     diff_batch_samples = int(len(X_test) - batches_times_rounded_down)
     print(555555555555, diff_batch_samples)
@@ -175,11 +175,14 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     new_keys = last_y_key + diff_batch_samples
     last_y = y_test.iloc[-1]
     last_X = X_test.iloc[-1].values
+    print(last_X.index, last_X.columns)
 
     for i in range(new_keys):
 #        print(i)
         label_dict[i] = last_y
-        partition['validate'][i] = last_X
+        last_X_index = last_X.reindex(i)
+        print(last_X_index)
+        X_test.append(last_X_index)
     
     print(len(label_dict))
     print(len(partition['validate']))
