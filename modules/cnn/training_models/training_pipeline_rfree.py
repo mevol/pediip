@@ -170,6 +170,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     new_keys = last_y_key + diff_batch_samples
     last_y = y_test.iloc[-1]
     last_X = X_test.iloc[-1].values
+    
+    print(X_text)
 
     for i in range(last_y_key+1, new_keys+1):
         print(i)
@@ -181,14 +183,12 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
         X_test = np.vstack([X_test, last_X])
 
+    print(X_text)
+
     partition = {"train" : X_train,
                  "validate" : X_test}
     logging.info(f"Length of partition train: {len(partition['train'])} \n")
     logging.info(f"Length of partition extended validate: {len(partition['validate'])} \n")
-
-    print(partition['validate'])
-    print(label_dict)
-
     print(len(label_dict))
     print(len(partition['validate']))
 
