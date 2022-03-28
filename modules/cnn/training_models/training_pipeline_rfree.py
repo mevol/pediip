@@ -151,6 +151,27 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                  "validate" : X_test}
     logging.info(f"Length of partition train: {len(partition['train'])} \n")
     logging.info(f"Length of partition validate: {len(partition['validate'])} \n")
+    
+    
+    # get the number of samples that need to be created to fill a batch for prediction
+    num_batches_test = np.round(len(X_test) / parameters_dict["batch_size"])
+    print("Number of batches for test rounded down: ", num_batch_testset)
+    
+    num_batches_test_needed = int(math.ceil(len(X_test) / parameters_dict["batch_size"]))
+    print("Number of batches for test needed: ", num_batches_test_needed)
+
+    batches_times_rounded_down = parameters_dict["batch_size"] * num_batch_testset
+    print("Samples after multiplying with rounded down: ", batches_times_rounded_down)
+    
+    diff_batch_samples = len(X_test) - batches_times_rounded_down
+    print("Difference X_test length and multiple batches: ", diff_batch_samples)
+    
+    additional_samples = repeat(X_test[-1], repeats = diff_batch_samples)
+    print("Additional samples needed to fill X_test: ", len(additional_samples))
+    
+    extend_X_test = np.append(X_test, additional_samples)
+    print("Length of extended X_test: ", len(extend_X_test))
+    print("Length of basic X_test: ", len(X_test))
 
     # set input dimensions for images and number of channels based on whether color or
     # grayscale is used
@@ -234,12 +255,11 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     predict_steps = int(math.ceil(len(X_test) / batch_size))
     print("Steps to run until prediction finished: ", predict_steps)
-    print(int(np.round(len(X_test) / batch_size)))
 
     try:
       predictions = model.predict(
                           testing_generator,
-                          steps=None,
+                          steps=None,#predict_steps
                           verbose=1)
 
 #      preds_rounded = np.round(predictions, 0)
