@@ -13,10 +13,8 @@ from tensorflow.compat.v1 import set_random_seed
 set_random_seed(2)
 
 import logging
-#import sqlite3
 import re
 from pathlib import Path
-#from typing import Tuple
 import os
 import shutil
 from datetime import datetime
@@ -24,8 +22,6 @@ from typing import Callable
 import tensorflow
 import matplotlib.pyplot as plt
 import pandas as pd
-#import seaborn as sns
-import mrcfile
 import configargparse
 import pandas
 import yaml
@@ -36,7 +32,6 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 from sklearn.metrics import confusion_matrix
-#from keras.utils import np_utils
 from tensorflow.keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
 
@@ -46,11 +41,7 @@ from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
 from modules.cnn.training_models.data_generator_binary_rfree import DataGenerator
 from modules.cnn.prepare_training_data_random_pick_combined import prepare_training_data_random_pick_combined
 
-print(tensorflow.__version__)
-
-#MAP_DIM = (201, 201, 201)
-#MAP_DIM = (101, 101, 101)
-#MAP_DIM = (51, 51, 51)
+print("TensorFlow version: ", tensorflow.__version__)
 
 logging.basicConfig(level=logging.INFO, filename="training.log", filemode="w")
 
@@ -102,53 +93,48 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
             os.mkdir(histories_path)
             os.mkdir(models_path)
             os.mkdir(evaluations_path)
-            logging.info(f"Created output directories at {output_dir_path}")
+            logging.info(f"Created output directories at {output_dir_path} \n")
         except Exception:
             logging.exception(
                 f"Could not create directory at {output_dir_path}.\n"
-                f"Please check permissions and location.")
+                f"Please check permissions and location. \n")
             raise
 
     # Log parameters
-    logging.info(f"Running with parameters: {parameters_dict}")
+    logging.info(f"Running with parameters: {parameters_dict} \n")
 
     # Log the key information about the model and run
     with open(output_dir_path / "parameters.yaml", "w") as f:
         yaml.dump(parameters_dict, f)
 
-    IMG_DIM = tuple(parameters_dict["image_dim"])
     STACK_DIM = tuple((parameters_dict["slices_per_structure"],
                       parameters_dict["image_dim"][0],
                       parameters_dict["image_dim"][1]))
-    print("slice dimensions ", IMG_DIM)
     print("stack dimensions ", STACK_DIM)
 
     # Check if input CSV holding sample filepaths does exist and open the file
     try:
         training_dir_path = Path(parameters_dict["sample_lable_lst"])
-        print("I AM HERE")
-        print(training_dir_path)
         assert (training_dir_path.exists())
         # Load data CSV file with filenames and labels
         data = pandas.read_csv(training_dir_path)
-        logging.info(f"Found {len(data)} samples for training")
+        logging.info(f"Found {len(data)} samples for training \n")
     except Exception:
-        logging.error(f"Could not open input map list")
+        logging.error(f"Could not open input map list \n")
 
     # separate data X from labels y; assigning labels based on rfree
     X = data[['filename', 'protocol', 'stage']]
     condition = (data['rfree'] < 0.5)
     data['ai_lable'] = np.where(condition, 1, 0)
     y = data['ai_lable']
+
     # getting the class distribution
-    print("Classes and their frequency in the data", data.groupby(y).size())
     class_frequency = data.groupby(y).size()
-    logging.info(f"Number of samples per class {class_frequency}")
+    logging.info(f"Number of samples per class {class_frequency} \n")
 
     # creating a dictionary for the label column to match sample ID with label
     label_dict = y.to_dict()
-    print(label_dict)
-
+    
     # split the data into training and test set; this is splitting the input CSV data;
     # and an additional challenge set of 5% of the data; this latter set is used to
     # finally challenge the algorithm after training and testing
@@ -156,23 +142,19 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     X_temp, X_challenge, y_temp, y_challenge = train_test_split(X, y, test_size=0.05,
                                                                 random_state=42)
 
-    print('Length of challenge data: ', len(X_challenge))
+    logging.info(f"Length of challenge data: {len(X_challenge)} \n")
 
     # use the remaining data for 80/20 train-test split
     X_train, X_test, y_train, y_test = train_test_split(X_temp, y_temp, test_size=0.2,
                                                         random_state=100)
+    logging.info(f"Number of samples in y_test: {len(y_test)} \n")
+    logging.info(f"Number of samples in X_test: {len(X_test)} \n")
+    logging.info(f"Number of samples in X_test: {len(X_test)} \n")
 
-    print("Number of samples in y_test ", len(y_test[:-2]))
-    print("Number of samples in X_test ", len(X_test))
-    print("Number of samples in X_test ", len(X_test[:-2]))
-    
     partition = {"train" : X_train,
-                 "validate" : X_test[:-2]}
-
-    print("Length of partition train", len(partition["train"]))
-    print(partition["validate"])
-
-    print("Length of partition validate: ", len(partition["validate"]))
+                 "validate" : X_test}
+    logging.info(f"Length of partition train: {len(partition['train']} \n")
+    logging.info(f"Length of partition validate: {len(partition['validate']} \n")
 
     # set input dimensions for images and number of channels based on whether color or
     # grayscale is used
@@ -196,40 +178,33 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # Model run parameters
     epochs = parameters_dict["epochs"]
     batch_size = parameters_dict["batch_size"]
-    print("Number of epochs: ", epochs)
-    print("Batch size:", batch_size)
 
     # New model
-    print("Using the following input parameters: ", input_shape)
     model = create_model(input_shape)
     model_info = model.get_config()
     model_architecture = model.summary()
-    print(model_architecture)
-    logging.info(f"The model architecture is as follows:")
+    logging.info(f"The model architecture is as follows: \n")
     model.summary(print_fn=logging.info)
 
     #Record start time to monitor training time
     start = datetime.now()
-    logging.info(f"Training start time : {start}")
+    logging.info(f"Training start time : {start} \n")
 
     training_generator = DataGenerator(
                                        parameters_dict["xyz_limits"],
                                        parameters_dict["slices_per_axis"],
                                        partition["train"],#X
-                                       label_dict,#y
-                                       #dim=IMG_DIM,
+                                       y_train,#label_dict,#y
                                        dim=STACK_DIM,
                                        batch_size=batch_size,
                                        n_classes=2,
                                        shuffle=True)
-#    print(training_generator)
-
 
     testing_generator = DataGenerator(
                                       parameters_dict["xyz_limits"],
                                       parameters_dict["slices_per_axis"],
                                       partition["validate"],
-                                      label_dict,
+                                      y_test,#label_dict,
                                       dim=STACK_DIM,
                                       batch_size=batch_size,
                                       n_classes=2,
@@ -254,18 +229,12 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     #Record end time to monitor training time
     end = datetime.now()
-    logging.info(f"Training end time : {end}")    
+    logging.info(f"Training end time : {end} \n")
     elapsed = end-start
-    logging.info(f"Training duration : {elapsed}")
+    logging.info(f"Training duration : {elapsed} \n")
     print("Training duration: ", elapsed)
 
-    # Make evaluation folder
-
-    logging.info("Performing evaluation of model")
-    evaluation_dir_path = str(evaluations_path / f"evaluation")
-    if not Path(evaluation_dir_path).exists():
-      os.mkdir(evaluation_dir_path)
-
+    # getting predictions on the testing data
     logging.info("Getting predictions")
 
     print(int(math.ceil(len(X_test) / batch_size)))
@@ -285,7 +254,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       y_pred1 = preds_rounded.argmax(1)
 
       print("predicted labels for the test set ", y_pred)
-      print("known labels for the test set ", y_test[:-2])
+      print("known labels for the test set ", y_test)
       #print(y_pred1)
 
       #print("Length of predictions rounded: ", len(preds_rounded))
@@ -300,7 +269,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:
       classes = ["class 0", "class 1"]
       labels = np.arange(2)
-      classification_metrics = metrics.classification_report(y_test[:-2], y_pred,
+      classification_metrics = metrics.classification_report(y_test, y_pred,
                                                       labels=labels, target_names=classes)
       print(classification_metrics)
       logging.info(f"Classification report")
@@ -313,7 +282,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:
 #      cat_labels = pd.DataFrame(y_test[:-2].idxmax(axis=1))
 #      cat_preds = pd.DataFrame(y_pred.idxmax(axis=1))
-      cat_labels = pd.DataFrame(y_test[:-2])
+      cat_labels = pd.DataFrame(y_test)
       cat_preds = pd.DataFrame(y_pred)
 
       confusion_matrix = metrics.confusion_matrix(cat_labels, cat_preds)
@@ -338,8 +307,41 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       draw_conf_mat(confusion_matrix)
 
     except Exception:
-      logging.warning("Could not draw confusion matrix")
+      logging.warning("Could not draw confusion matrix. \n")
       raise
+      
+      
+    # Make evaluation folder to use the challenge data
+    logging.info("Performing evaluation of model \n")
+    evaluation_dir_path = str(evaluations_path / f"evaluation")
+    if not Path(evaluation_dir_path).exists():
+      os.mkdir(evaluation_dir_path)
+      evaluate(
+                str(models_path / f"model.h5"),
+                parameters_dict["test_dir"],
+                evaluation_dir_path,
+                parameters_dict["sample_lable_lst"],
+                parameters_dict["slices_per_structure"],
+                rgb=parameters_dict["rgb"],
+            )
+        else:
+            logging.info(
+              f"Requires test directory and slices_per_structure for evaluation. \n"
+              f"No evaluation performed \n"
+            )
+
+    # Load the model config information as a yaml file
+    with open(output_dir_path / "model_info.yaml", "w") as f:
+        yaml.dump(model_info, f)
+
+    # Try to copy log file if it was created in training.log
+    try:
+        shutil.copy("training.log", output_dir_path)
+    except FileExistsError:
+        logging.warning("Could not find training.log to copy \n")
+    except Exception:
+        logging.warning("Could not copy training.log to output directory \n")
+
 
 def pipeline_from_command_line(
     create_model: Callable[[int, int, int, int], Model], rgb: bool = False):
@@ -361,10 +363,10 @@ def pipeline_from_command_line(
     # Add rgb parameter
     assert isinstance(
         rgb, bool
-    ), f"Must provide bool for rgb, got {type(rgb)} of value {rgb}"
+    ), f"Must provide bool for rgb, got {type(rgb)} of value {rgb} \n"
     argument_dict["rgb"] = rgb
 
-    logging.info(f"Running model with parameters: {argument_dict}")
+    logging.info(f"Running model with parameters: {argument_dict} \n")
 
     # Send parameters to full pipeline
     pipeline(create_model, argument_dict)
@@ -459,8 +461,8 @@ def get_pipeline_parameters() -> dict:
     (known_args, unknown_args) = parser.parse_known_args()
 
     assert known_args.k_folds >= known_args.runs, (
-        f"Number of runs must be less than or equal to k_folds, "
-        f"got {known_args.runs} runs and {known_args.k_folds} folds"
+        f"Number of runs must be less than or equal to k_folds, \n"
+        f"got {known_args.runs} runs and {known_args.k_folds} folds. \n"
     )
     argument_dict = vars(known_args)
 
@@ -473,12 +475,13 @@ def get_pipeline_parameters() -> dict:
             image_augmentation_dict = yaml.load(f.read())["image_augmentation_dict"]
     except (KeyError, AssertionError):
         logging.warning(
-            f"Could not find image_augmentation_dict in {known_args.config}, performing scaling only"
-        )
+            f"Could not find image_augmentation_dict in {known_args.config}, \n
+            f"performing scaling only. \n")
         image_augmentation_dict = {}
     assert isinstance(
         image_augmentation_dict, dict
-    ), f"image_augmentation_dict must be provided as a dictionary in YAML, got {image_augmentation_dict}"
+    ), f"image_augmentation_dict must be provided as a dictionary in YAML, \n
+       f"got {image_augmentation_dict} \n"
 
     argument_dict["image_augmentation_dict"] = image_augmentation_dict
 
@@ -489,7 +492,7 @@ def get_pipeline_parameters() -> dict:
 if __name__ == "__main__":
 
     args = get_pipeline_parameters()
-    print(f"Received the following arguments: {args}")
+    print(f"Received the following arguments: {args} \n")
 
 #     # Prepare data generators to get data out
 #     # Always rescale and also expand dictionary provided as parameter
