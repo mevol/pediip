@@ -31,20 +31,13 @@ def slice_map(volume, slices_per_axis):
     # slices_per_axis; iterate over each axis; reshape to same dimensions as for first
     # axis; stack vertically
     stack1 = volume[np.random.choice(length, slices_per_axis, replace=False), :, :]
-    print("Stack1 shape: ", stack1.shape)
     stack2 = volume[:, np.random.choice(length, slices_per_axis, replace=False), :]
-    print("Stack2 shape: ", stack2.shape)
     stack2 = stack2.reshape(slices_per_axis, length, length)
-    print("Stack2 shape after reshape: ", stack2.shape)
     stack3 = volume[:, :, np.random.choice(length, slices_per_axis, replace=False)]
-    print("Stack3 shape: ", stack3.shape)
     stack3 = stack3.reshape(slices_per_axis, length, length)
-    print("Stack3 shape after reshape: ", stack3.shape)
 
     image_stack = np.vstack([stack1, stack2])
-    print("After first addition: ", image_stack.shape)
     image_stack = np.vstack([image_stack, stack3])
-    print("After second addition: ", image_stack.shape)
 
     byte_size_stack = getsizeof(image_stack)
 
@@ -105,7 +98,6 @@ def prepare_training_data_random_pick_combined(
 
     try:
         data = maps_list
-        print("DATA for preparation: ", data)
         total_bytes = 0
         number_maps = 0
 
@@ -124,22 +116,18 @@ def prepare_training_data_random_pick_combined(
         real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
         try:
             target = input_map_path.split("/")[8]
-            print("Working on target: ", target)
             logging.info(f"Working on target: {target} \n")
         except Exception:
             pass
         try:
             homo = input_map_path.split("/")[12]
-            print("Working on homologue: ", homo)
             logging.info(f"Working on homologue: {homo} \n")
         except Exception:
-            print("Could not find homologue to work with.")
             logging.error(f"Could not find homologue to work with. \n")
             pass
         # Check path to map exists
         try:
             map_file_path = Path(os.path.realpath(real_path_to_map_opt))
-            print(map_file_path)
             assert map_file_path.exists()
         except Exception:
             logging.error(f"Could not find mtz directory at {map_file_path} \n")
@@ -150,14 +138,12 @@ def prepare_training_data_random_pick_combined(
             data = gemmi.read_mtz_file(str(map_file_path))
             # get reciprocal lattice grid size
             recip_grid = data.get_size_for_hkl()
-            print("reciprocal lattice grid: ", recip_grid)
             logging.info(f"Original size of reciprocal lattice grid: {recip_grid} \n")
             # get grid size in relation to resolution and a sample rate of 4
             size1 = data.get_size_for_hkl(sample_rate=4)
             logging.info(f"Reciprocal lattice grid size at sample_rate=4: {size1} \n")
             # create an empty map grid
             data_to_map = gemmi.Ccp4Map()
-            print("Grid of MTZ file", data_to_map.grid)
             # turn MTZ file into map using a sample_rate=4; minimal grid size is
             # placed in relation to the resolution, dmin/sample_rate; sample_rate=4
             # doubles the original grid size
@@ -171,9 +157,6 @@ def prepare_training_data_random_pick_combined(
             #this bit here expands the unit cell to be 200A^3;
             #Can I expand the unit cell to standard volume and then extract a
             #grid cube (200, 200, 200) or whatever value has been passed through YAML file
-            print("XYZ limits to make standardised map: ", xyz_limits[0],
-                                                           xyz_limits[1],
-                                                           xyz_limits[2])
             upper_limit = gemmi.Position(*xyz_limits)
             box = gemmi.FractionalBox()
             box.minimum = gemmi.Fractional(0, 0, 0)
@@ -186,8 +169,7 @@ def prepare_training_data_random_pick_combined(
             data_to_map.set_extent(box)
             map_grid = data_to_map.grid
             map_array = np.array(map_grid, copy = False)
-            print("Size of standardise map when finished: ", map_array.shape)
-            print("Grid after setting XYZ limits for MAP", map_grid)
+            logging.info(f"Size of standardise map when finished: {map_array.shape} \n")
         except Exception:
             logging.error(f"Could not expand map {map_file_path} \n")
             raise
@@ -202,31 +184,23 @@ def prepare_training_data_random_pick_combined(
             # Slice the volume into images
             image_slices, bytes = slice_map(map_array, slices_per_axis)
             # Iterate through images, scale them and save them in output_directory
-            print("Number of slices to edit and manipulate: ", len(image_slices))
-            print("Dimensions of returned image stack: ", image_slices.shape)
             for slice_num in range(image_slices.shape[0]):
                 #print("Working on slice number: ", slice_num)
                 # Get slice
                 slice = image_slices[slice_num, :, :]
-                print("Slice dimension: ", slice.shape)
                 # Scale slice
                 slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
                 # Round to the nearest integer
                 slice_scaled_int = np.rint(slice_scaled)
-                print("Dimensions of scaled image slices: ", slice_scaled_int.shape)
                 edited_image_slices[slice_num, :, :] = slice_scaled_int#volume[
                 
                 # ENTER IMAGE AUGMENTATION HERE
             # check the number of edited image slices
             assert len(edited_image_slices) == 60
-            print("The number of edited image slices to be combined is: ",
-                          len(edited_image_slices))
-            print("Shape of edited image slice stack: ", edited_image_slices.shape)
             total_bytes = total_bytes + bytes
             number_maps = number_maps + 1
-            print("Accumulated byte size: ", total_bytes)
-            print("Total number of maps processed: ", number_maps)
-
+            logging.info(f"Accumulated byte size: {total_bytes} \n")
+            logging.info(f"Total number of maps processed: {number_maps} \n")
 
 #                tiled_img = TileImage(edited_image_slices)
 
