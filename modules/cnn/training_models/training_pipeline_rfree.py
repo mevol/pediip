@@ -171,7 +171,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     last_y = y_test.iloc[-1]
     last_X = X_test.iloc[-1].values
     
-    print(X_text)
+    print(X_test)
 
     for i in range(last_y_key+1, new_keys+1):
         print(i)
@@ -183,7 +183,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
         X_test = np.vstack([X_test, last_X])
 
-    print(X_text)
+    print(X_test)
 
     partition = {"train" : X_train,
                  "validate" : X_test}
