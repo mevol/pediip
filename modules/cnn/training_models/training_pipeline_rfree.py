@@ -171,10 +171,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     last_y = y_test.iloc[-1]
     print(last_y)
     additional_y = pd.DataFrame(np.repeat(last_y, diff_batch_samples, axis=0))#last.values
+    print(len(additional_y))
     additional_y_dict = additional_y.to_dict()
     extended_y_test = label_dict.update(additional_y_dict)
-    
-    print(len(extended_y_test))
     
     # set input dimensions for images and number of channels based on whether color or
     # grayscale is used
