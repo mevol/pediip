@@ -166,9 +166,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     diff_batch_samples = len(X_test) - batches_times_rounded_down
     print("Difference X_test length and multiple batches: ", diff_batch_samples)
     
-    print("Last sample X_test: ", X_test[-1])
+    print("Last sample X_test: ", X_test.iloc[-1])
     
-    additional_samples = tensorflow.repeat(X_test[-1], repeats = diff_batch_samples, axis=0)
+    additional_samples = tensorflow.repeat(X_test.iloc[-1], repeats = diff_batch_samples, axis=0)
     print("Additional samples needed to fill X_test: ", len(additional_samples))
     
     extend_X_test = np.append(X_test, additional_samples)
