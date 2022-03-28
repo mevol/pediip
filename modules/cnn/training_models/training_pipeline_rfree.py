@@ -175,7 +175,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 #        print(i)
         label_dict[i] = last_y
         print(last_X)
-        np.append(last_X)
+        np.append(X_test, last_X, axis=0)
 
     partition = {"train" : X_train,
                  "validate" : X_test}
