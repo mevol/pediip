@@ -21,6 +21,7 @@ import math
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import tensorflow
 
 from tensorflow.keras import Model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
