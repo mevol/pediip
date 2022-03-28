@@ -155,7 +155,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     num_batches_test_needed = int(math.ceil(len(X_test) / parameters_dict["batch_size"]))
     batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test
     diff_batch_samples = len(X_test) - batches_times_rounded_down
-    print(diff_batch_samples)
+#    print(diff_batch_samples)
     last_X = X_test.iloc[-1].values
     additional_samples = pd.DataFrame(np.repeat(last_X, diff_batch_samples, axis=0))#last.values
     extend_X_test = pd.concat([X_test, additional_samples], ignore_index=True)
@@ -172,7 +172,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # creating a dictionary for the label column to match sample ID with label
     label_dict = y.to_dict()
     last_y_key = list(label_dict.keys())[-1]
-    print("Last y key: ", last_y_key[-1])
+    print("Last y key: ", last_y_key)
     new_keys = last_y_key + len(additional_samples)
     last_y = y_test.iloc[-1]
     for i in range(new_keys):
