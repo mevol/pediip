@@ -173,7 +173,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     additional_y = pd.DataFrame(np.repeat(last_y, diff_batch_samples, axis=0))#last.values
     print(len(additional_y))
     additional_y_dict = additional_y.to_dict()
-    print(len(additional_y_dict)
+    print(len(additional_y_dict))
     print(additional_y_dict)
     label_dict = label_dict.update(additional_y_dict)
     
