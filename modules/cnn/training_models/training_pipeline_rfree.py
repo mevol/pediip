@@ -167,19 +167,19 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     label_dict = y.to_dict()
     last_y_key = list(label_dict.keys())[-1]
     print("Last y key: ", last_y_key)
-    new_keys = last_y_key + 1 + diff_batch_samples
+    new_keys = last_y_key + diff_batch_samples
     last_y = y_test.iloc[-1]
     last_X = X_test.iloc[-1].values
 
-    for i in range(last_y_key, new_keys):
+    for i in range(last_y_key+1, new_keys):
         print(i)
         label_dict[i] = last_y
         print(last_X)
 #        np.append(X_test, last_X, axis=0)
-        rep = 2
+#        rep = 2
 #        last = np.repeat(last_X,repeats= rep-1 ,axis=0)
 
-        np.vstack([X_test, last_X])
+        X_test = np.vstack([X_test, last_X])
 
     partition = {"train" : X_train,
                  "validate" : X_test}
