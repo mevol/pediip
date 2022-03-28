@@ -159,8 +159,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     last_X = X_test.iloc[-1].values
     additional_samples = pd.DataFrame(np.repeat(last_X, diff_batch_samples, axis=0))#last.values
     extend_X_test = pd.concat([X_test, additional_samples], ignore_index=True)
-    print("Index of last 20 rows: ", extend_X_test.iloc[-20:])
-    print("Index of last 15 rows: ", extend_X_test.iloc[- diff_batch_samples:])
+#    print("Index of last 20 rows: ", extend_X_test.iloc[-20:])
+#    print("Index of last 15 rows: ", extend_X_test.iloc[- diff_batch_samples:])
 
     partition = {"train" : X_train,
                  "validate" : extend_X_test}
