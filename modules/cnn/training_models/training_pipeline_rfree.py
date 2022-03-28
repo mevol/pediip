@@ -241,14 +241,14 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                           steps=int(math.ceil(len(X_test) / batch_size)),
                           verbose=1)
 
-      preds_rounded = np.round(predictions, 0)
-      #print("Predictions after rounding")
-      #print(preds_rounded)
+#      preds_rounded = np.round(predictions, 0)
+#      #print("Predictions after rounding")
+#      #print(preds_rounded)
 
-      y_pred = np.argmax(preds_rounded, axis=1)
-      y_pred1 = preds_rounded.argmax(1)
+#      y_pred = np.argmax(preds_rounded, axis=1)
+#      y_pred1 = preds_rounded.argmax(1)
 
-      print("predicted labels for the test set ", y_pred)
+      print("predicted labels for the test set ", predictions)
       print("known labels for the test set ", y_test)
       #print(y_pred1)
 
@@ -264,7 +264,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:
       classes = ["class 0", "class 1"]
       labels = np.arange(2)
-      classification_metrics = metrics.classification_report(y_test, y_pred,
+      classification_metrics = metrics.classification_report(y_test, predictions,
                                                       labels=labels, target_names=classes)
       print(classification_metrics)
       logging.info(f"Classification report")
@@ -278,7 +278,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 #      cat_labels = pd.DataFrame(y_test[:-2].idxmax(axis=1))
 #      cat_preds = pd.DataFrame(y_pred.idxmax(axis=1))
       cat_labels = pd.DataFrame(y_test)
-      cat_preds = pd.DataFrame(y_pred)
+      cat_preds = pd.DataFrame(predictions)
 
       confusion_matrix = metrics.confusion_matrix(cat_labels, cat_preds)
     except Exception:
