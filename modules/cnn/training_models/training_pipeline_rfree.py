@@ -147,38 +147,36 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.info(f"Number of samples in y_train: {len(y_train)} \n")
     logging.info(f"Number of samples in X_train: {len(X_train)} \n")
 
-    partition = {"train" : X_train,
-                 "validate" : X_test}
-    logging.info(f"Length of partition train: {len(partition['train'])} \n")
-    logging.info(f"Length of partition validate: {len(partition['validate'])} \n")
-    
+#    partition = {"train" : X_train,
+#                 "validate" : X_test}
+#    logging.info(f"Length of partition train: {len(partition['train'])} \n")
+#    logging.info(f"Length of partition validate: {len(partition['validate'])} \n")
     
     # get the number of samples that need to be created to fill a batch for prediction
     num_batches_test = np.round(len(X_test) / parameters_dict["batch_size"])
-    print("Number of batches for test rounded down: ", num_batches_test)
-    
     num_batches_test_needed = int(math.ceil(len(X_test) / parameters_dict["batch_size"]))
-    print("Number of batches for test needed: ", num_batches_test_needed)
-
     batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test
     print("Samples after multiplying with rounded down: ", batches_times_rounded_down)
-    
     diff_batch_samples = len(X_test) - batches_times_rounded_down
-    print("Difference X_test length and multiple batches: ", diff_batch_samples)
-    
-    last = X_test.iloc[-1]
-    print("Last sample in X_test: ", last.values)
-    
-    additional_samples = pd.DataFrame(np.repeat(last.values, diff_batch_samples, axis=0))
-    print("Additional samples needed to fill X_test: ", len(additional_samples))
-    
-#    extend_X_test = np.append(X_test, additional_samples)
+    last_X = X_test.iloc[-1].values
+#    print("Last sample in X_test: ", last.values)
+    additional_samples = pd.DataFrame(np.repeat(last_X, diff_batch_samples, axis=0))#last.values
     extend_X_test = pd.concat([X_test, additional_samples])
-    print("Length of extended X_test: ", len(extend_X_test))
-    print("Length of basic X_test: ", len(X_test))
 
-    1/0
+    partition = {"train" : X_train,
+                 "validate" : extend_X_test}
+    logging.info(f"Length of partition train: {len(partition['train'])} \n")
+    logging.info(f"Length of partition extended validate: {len(partition['validate'])} \n")
 
+    assert len(partition['validate']) == len(X_test) + additional_samples
+    
+    last_y = y_test.iloc[-1].values
+    additional_y = pd.DataFrame(np.repeat(last_y, diff_batch_samples, axis=0))#last.values
+    additional_y_dict = additional_y.to_dict()
+    extended_y_test = label_dict.update(additional_y_dict)
+    
+    assert len(extended_y_test) == len(y_test) + len(y_train) + len(y_challenge) + len(additional_y)
+    
     # set input dimensions for images and number of channels based on whether color or
     # grayscale is used
     if parameters_dict["rgb"] is True:
