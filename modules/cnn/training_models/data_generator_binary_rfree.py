@@ -53,8 +53,7 @@ class DataGenerator(Sequence):
     y = np.empty((self.batch_size), dtype=int)
     # Generate data
     for i, ID in enumerate(list_IDs_temp):
-      #sample = self.list_IDs.iloc[ID, :]
-      sample = self.list_IDs[ID]
+      sample = self.list_IDs.iloc[ID, :]
       path = sample["filename"]
       protocol = sample["protocol"]
       stage = sample["stage"]
