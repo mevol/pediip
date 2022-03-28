@@ -168,7 +168,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     label_dict = y.to_dict()
     last_y_key = list(label_dict.keys())[-1]
     print("Last y key: ", last_y_key)
-    new_keys = last_y_key + len(diff_batch_samples)
+    new_keys = last_y_key + diff_batch_samples
     last_y = y_test.iloc[-1]
     last_X = X_test.iloc[-1].values
 
