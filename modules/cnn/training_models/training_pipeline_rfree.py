@@ -145,6 +145,13 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.info(f"Number of samples in y_train: {len(y_train)} \n")
     logging.info(f"Number of samples in X_train: {len(X_train)} \n")
 
+    partition = {"train" : X_train,
+                 "validate" : X_test}
+    logging.info(f"Length of partition train: {len(partition['train'])} \n")
+    logging.info(f"Length of partition extended validate: {len(partition['validate'])} \n")
+
+    print(partition['validate'])
+
 #    partition = {"train" : X_train,
 #                 "validate" : X_test}
 #    logging.info(f"Length of partition train: {len(partition['train'])} \n")
@@ -156,32 +163,36 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test
     diff_batch_samples = int(len(X_test) - batches_times_rounded_down)
     print(555555555555, diff_batch_samples)
-    last_X = X_test.iloc[-1].values
-    additional_samples = pd.DataFrame(np.repeat(last_X, diff_batch_samples, axis=0))#last.values
-    print(additional_samples)
-    extend_X_test = pd.concat([X_test, additional_samples], ignore_index=True)
-    print(extend_X_test)
-#    print("Index of last 20 rows: ", extend_X_test.iloc[-20:])
-#    print("Index of last 15 rows: ", extend_X_test.iloc[- diff_batch_samples:])
-
-    partition = {"train" : X_train,
-                 "validate" : extend_X_test}
-    logging.info(f"Length of partition train: {len(partition['train'])} \n")
-    logging.info(f"Length of partition extended validate: {len(partition['validate'])} \n")
-
-    assert len(partition['validate']) == len(X_test) + len(additional_samples)
 
     # creating a dictionary for the label column to match sample ID with label
     label_dict = y.to_dict()
     last_y_key = list(label_dict.keys())[-1]
     print("Last y key: ", last_y_key)
-    new_keys = last_y_key + len(additional_samples)
+    new_keys = last_y_key + len(diff_batch_samples)
     last_y = y_test.iloc[-1]
+    last_X = X_test.iloc[-1].values
+
     for i in range(new_keys):
 #        print(i)
         label_dict[i] = last_y
+        partition['validate'][i] = last_X
     
     print(len(label_dict))
+    print(len(partition['validate']))
+
+
+
+
+#    additional_samples = pd.DataFrame(np.repeat(last_X, diff_batch_samples, axis=0))#last.values
+#    print(additional_samples)
+#    extend_X_test = pd.concat([X_test, additional_samples], ignore_index=True)
+#    print(extend_X_test)
+#    print("Index of last 20 rows: ", extend_X_test.iloc[-20:])
+#    print("Index of last 15 rows: ", extend_X_test.iloc[- diff_batch_samples:])
+
+
+#    assert len(partition['validate']) == len(X_test) + len(additional_samples)
+
     
 #    print(last_y)
 #    additional_y = pd.DataFrame(np.repeat(last_y, diff_batch_samples, axis=0))#last.values
