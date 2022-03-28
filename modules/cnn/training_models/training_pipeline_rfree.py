@@ -171,8 +171,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     # creating a dictionary for the label column to match sample ID with label
     label_dict = y.to_dict()
-    last_y_key = [label_dict.keys()][-1]
-    print("Last y key: ", last_y_key)
+    last_y_key = list(label_dict.keys())[-1]
+    print("Last y key: ", last_y_key[-1])
     new_keys = last_y_key + len(additional_samples)
     last_y = y_test.iloc[-1]
     for i in range(new_keys):
