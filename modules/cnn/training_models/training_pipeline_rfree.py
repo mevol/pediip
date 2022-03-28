@@ -173,7 +173,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     print("Additional samples needed to fill X_test: ", len(additional_samples))
     
 #    extend_X_test = np.append(X_test, additional_samples)
-    extend_X_test = np.vstack([X_test, additional_samples])
+    extend_X_test = pd.concat([X_test, additional_samples])
     print("Length of extended X_test: ", len(extend_X_test))
     print("Length of basic X_test: ", len(X_test))
 
