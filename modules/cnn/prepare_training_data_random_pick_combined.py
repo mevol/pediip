@@ -45,29 +45,6 @@ def slice_map(volume, slices_per_axis):
 
     return image_stack, byte_size_stack
 
-
-#def TileImage(imgs, picturesPerRow=10):
-#    """ Convert to a true list of 16x16 images
-#    """
-#
-#    # Calculate how many columns
-#    picturesPerColumn = imgs.shape[0]/picturesPerRow + 1*((imgs.shape[0]%picturesPerRow)!=0)
-#
-#    # Padding
-#    rowPadding = picturesPerRow - imgs.shape[0]%picturesPerRow
-#    imgs = vstack([imgs,zeros([rowPadding,imgs.shape[1]])])
-#
-#    # Reshaping all images
-#    imgs = imgs.reshape(imgs.shape[0],100,100)
-#
-#    # Tiling Loop (The conditionals are not necessary anymore)
-#    tiled = []
-#    for i in range(0,picturesPerColumn*picturesPerRow,picturesPerRow):
-#        tiled.append(hstack(imgs[i:i+picturesPerRow,:,:]))
-#
-#
-#    return vstack(tiled)
-
 def prepare_training_data_random_pick_combined(
     maps_list: str,
     xyz_limits: List[int],
@@ -202,8 +179,6 @@ def prepare_training_data_random_pick_combined(
             logging.info(f"Accumulated byte size: {total_bytes} \n")
             logging.info(f"Total number of maps processed: {number_maps} \n")
 
-#                tiled_img = TileImage(edited_image_slices)
-
         except Exception:
             raise
     except Exception:
@@ -229,8 +204,7 @@ def params_from_yaml(args):
             params = yaml.safe_load(f)
     except Exception:
         logging.error(
-            f"Could not extract parameters from yaml file at {config_file_path} \n"
-        )
+            f"Could not extract parameters from yaml file at {config_file_path} \n")
         raise
 
     return params
@@ -238,11 +212,9 @@ def params_from_yaml(args):
 
 def params_from_cmd(args):
     """Extract the parameters for prepare_training_data from the command line and return a dict"""
-    params = {
-        "maps_list": args.maps_list,
-        "xyz_limits": args.xyz_limits,
-        "slices": args.slices_per_axis,
-    }
+    params = {"maps_list": args.maps_list,
+              "xyz_limits": args.xyz_limits,
+              "slices": args.slices_per_axis}
 
     return params
 
@@ -261,28 +233,22 @@ if __name__ == "__main__":
     yaml_parser.add_argument(
         "config_file",
         type=str,
-        help="yaml file with configuration information for this program",
-    )
+        help="yaml file with configuration information for this program")
     yaml_parser.set_defaults(func=params_from_yaml)
 
     cmd_parser = subparsers.add_parser("cmd")
     cmd_parser.add_argument(
-        "maps_list", type=str, help="list of map files to be converted"
-    )
+        "maps_list", type=str, help="list of map files to be converted")
     cmd_parser.add_argument(
-        "xyz_limits", type=int, nargs=3, help="xyz size of the output map file"
-    )
+        "xyz_limits", type=int, nargs=3, help="xyz size of the output map file")
     cmd_parser.add_argument(
         "slices", type=int, help="number of image slices to produce per axis, default=20",
-        default=20
-    )
+        default=20)
     cmd_parser.set_defaults(func=params_from_cmd)
 
     # Extract the parameters based on the yaml/command line argument
     args = parser.parse_args()
     parameters = args.func(args)
-
-    print(parameters)
 
     # Execute the command
     try:
