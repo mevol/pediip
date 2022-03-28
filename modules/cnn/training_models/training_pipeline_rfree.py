@@ -112,7 +112,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
         training_dir_path = Path(parameters_dict["sample_lable_lst"])
         assert (training_dir_path.exists())
         # Load data CSV file with filenames and labels
-        data = pandas.read_csv(training_dir_path)
+        data = pd.read_csv(training_dir_path)
         logging.info(f"Found {len(data)} samples for training \n")
     except Exception:
         logging.error(f"Could not open input map list \n")
