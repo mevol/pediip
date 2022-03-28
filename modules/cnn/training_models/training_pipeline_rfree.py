@@ -480,8 +480,7 @@ def get_pipeline_parameters() -> dict:
         image_augmentation_dict = {}
     assert isinstance(
         image_augmentation_dict, dict
-    ), f"image_augmentation_dict must be provided as a dictionary in YAML, \n"
-       f"got {image_augmentation_dict} \n"
+    ), f"image_augmentation_dict must be provided as a dictionary in YAML, got {image_augmentation_dict} \n"
 
     argument_dict["image_augmentation_dict"] = image_augmentation_dict
 
