@@ -232,13 +232,14 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # getting predictions on the testing data
     logging.info("Getting predictions \n")
 
-    print(int(math.ceil(len(X_test) / batch_size)))
+    predict_steps = int(math.ceil(len(X_test) / batch_size))
+    print("Steps to run until prediction finished: ", predict_steps)
     print(int(np.round(len(X_test) / batch_size)))
 
     try:
       predictions = model.predict(
                           testing_generator,
-                          steps=int(math.ceil(len(X_test) / batch_size)),
+                          steps=predict_steps),
                           verbose=1)
 
 #      preds_rounded = np.round(predictions, 0)
@@ -249,7 +250,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 #      y_pred1 = preds_rounded.argmax(1)
 
       print("predicted labels for the test set ", predictions)
+      print("Length of predictions: ", len(predictions))
       print("known labels for the test set ", y_test)
+      print("Length of y_test: ", len(y_test))
       #print(y_pred1)
 
       #print("Length of predictions rounded: ", len(preds_rounded))
