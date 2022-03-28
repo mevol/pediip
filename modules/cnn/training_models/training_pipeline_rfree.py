@@ -167,7 +167,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     print("Difference X_test length and multiple batches: ", diff_batch_samples)
     
     last = X_test.iloc[-1]
-    print("Last sample in X_test: ", last)
+    print("Last sample in X_test: ", last.values)
     np_last = last.to_numpy()
     print("As numpy array: ", np_last)
     
@@ -178,6 +178,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     extend_X_test = np.append(X_test, additional_samples)
     print("Length of extended X_test: ", len(extend_X_test))
     print("Length of basic X_test: ", len(X_test))
+
+    1/0
 
     # set input dimensions for images and number of channels based on whether color or
     # grayscale is used
