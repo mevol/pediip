@@ -324,7 +324,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                 parameters_dict["slices_per_structure"],
                 rgb=parameters_dict["rgb"],
             )
-        else:
+    else:
             logging.info(
               f"Requires test directory and slices_per_structure for evaluation. \n"
               f"No evaluation performed \n"
