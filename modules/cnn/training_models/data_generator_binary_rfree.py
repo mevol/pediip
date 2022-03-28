@@ -61,7 +61,6 @@ class DataGenerator(Sequence):
       stack = prepare_training_data_random_pick_combined(path,
                                                self.xyz_limits,
                                                self.slices_per_axis)
-      print("IMAGE STACK SHAPE: ", stack.shape)
       X[i,] = stack.reshape(*self.dim, self.n_channels)
       # Store class
       y[i] = self.labels[ID]

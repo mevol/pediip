@@ -157,7 +157,6 @@ def prepare_training_data_random_pick_combined(
             edited_image_slices = np.zeros((slices_per_axis * 3,
                                             length,
                                             length))
-            print("Dimensions of empty edited image stack: ", edited_image_slices.shape)
             # Slice the volume into images
             image_slices, bytes = slice_map(map_array, slices_per_axis)
             # Iterate through images, scale them and save them in output_directory
