@@ -168,14 +168,12 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     
     last = X_test.iloc[-1]
     print("Last sample in X_test: ", last.values)
-    np_last = last.to_numpy()
-    print("As numpy array: ", np_last)
     
     additional_samples = pd.DataFrame(np.repeat(last.values, diff_batch_samples, axis=0))
-#    additional_samples = tensorflow.repeat(np_last, repeats = diff_batch_samples, axis=0)
     print("Additional samples needed to fill X_test: ", len(additional_samples))
     
-    extend_X_test = np.append(X_test, additional_samples)
+#    extend_X_test = np.append(X_test, additional_samples)
+    extend_X_test = np.vstack([X_test, additional_samples])
     print("Length of extended X_test: ", len(extend_X_test))
     print("Length of basic X_test: ", len(X_test))
 
