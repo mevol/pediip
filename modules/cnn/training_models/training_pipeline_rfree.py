@@ -156,10 +156,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     num_batches_test = np.round(len(X_test) / parameters_dict["batch_size"])
     num_batches_test_needed = int(math.ceil(len(X_test) / parameters_dict["batch_size"]))
     batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test
-    print("Samples after multiplying with rounded down: ", batches_times_rounded_down)
     diff_batch_samples = len(X_test) - batches_times_rounded_down
     last_X = X_test.iloc[-1].values
-#    print("Last sample in X_test: ", last.values)
     additional_samples = pd.DataFrame(np.repeat(last_X, diff_batch_samples, axis=0))#last.values
     extend_X_test = pd.concat([X_test, additional_samples])
 
@@ -176,7 +174,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     additional_y_dict = additional_y.to_dict()
     extended_y_test = label_dict.update(additional_y_dict)
     
-    assert len(extended_y_test) == len(y_test) + len(y_train) + len(y_challenge) + len(additional_y)
+    print(len(extended_y_test))
     
     # set input dimensions for images and number of channels based on whether color or
     # grayscale is used
