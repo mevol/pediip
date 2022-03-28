@@ -160,7 +160,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     num_batches_test_needed = int(math.ceil(len(X_test) / parameters_dict["batch_size"]))
     print("Number of batches for test needed: ", num_batches_test_needed)
 
-    batches_times_rounded_down = parameters_dict["batch_size"] * num_batch_testset
+    batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test
     print("Samples after multiplying with rounded down: ", batches_times_rounded_down)
     
     diff_batch_samples = len(X_test) - batches_times_rounded_down
