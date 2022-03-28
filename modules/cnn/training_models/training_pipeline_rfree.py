@@ -145,13 +145,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.info(f"Number of samples in y_train: {len(y_train)} \n")
     logging.info(f"Number of samples in X_train: {len(X_train)} \n")
 
-    partition = {"train" : X_train,
-                 "validate" : X_test}
-    logging.info(f"Length of partition train: {len(partition['train'])} \n")
-    logging.info(f"Length of partition extended validate: {len(partition['validate'])} \n")
-
-    print(partition['validate'])
-    print(00000000, len(partition['validate']))
+    print(X_test)
+    print(00000000, len(X_test))
 
 #    partition = {"train" : X_train,
 #                 "validate" : X_test}
@@ -165,7 +160,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     print(2222222222, num_batches_test_needed)
     batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test_needed
     print(3333333333, batches_times_rounded_down)
-    diff_batch_samples = int(len(X_test) - batches_times_rounded_down)
+    diff_batch_samples = int( batches_times_rounded_down - len(X_test))
     print(555555555555, diff_batch_samples)
 
     # creating a dictionary for the label column to match sample ID with label
@@ -175,15 +170,21 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     new_keys = last_y_key + diff_batch_samples
     last_y = y_test.iloc[-1]
     last_X = X_test.iloc[-1].values
-    print(last_X.index, last_X.columns)
 
     for i in range(new_keys):
 #        print(i)
         label_dict[i] = last_y
         last_X_index = last_X.reindex(i)
         print(last_X_index)
-        X_test.append(last_X_index)
-    
+        np.append(last_X_index)
+
+    partition = {"train" : X_train,
+                 "validate" : X_test}
+    logging.info(f"Length of partition train: {len(partition['train'])} \n")
+    logging.info(f"Length of partition extended validate: {len(partition['validate'])} \n")
+
+    print(partition['validate'])
+
     print(len(label_dict))
     print(len(partition['validate']))
 
