@@ -149,12 +149,13 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                                         random_state=100)
     logging.info(f"Number of samples in y_test: {len(y_test)} \n")
     logging.info(f"Number of samples in X_test: {len(X_test)} \n")
-    logging.info(f"Number of samples in X_test: {len(X_test)} \n")
+    logging.info(f"Number of samples in y_train: {len(y_train)} \n")
+    logging.info(f"Number of samples in X_train: {len(X_train)} \n")
 
     partition = {"train" : X_train,
                  "validate" : X_test}
-    logging.info(f"Length of partition train: {len(partition['train']} \n")
-    logging.info(f"Length of partition validate: {len(partition['validate']} \n")
+    logging.info(f"Length of partition train: {len(partition['train'])} \n")
+    logging.info(f"Length of partition validate: {len(partition['validate'])} \n")
 
     # set input dimensions for images and number of channels based on whether color or
     # grayscale is used
