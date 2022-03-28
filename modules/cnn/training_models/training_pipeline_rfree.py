@@ -127,8 +127,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     class_frequency = data.groupby(y).size()
     logging.info(f"Number of samples per class {class_frequency} \n")
 
-    # creating a dictionary for the label column to match sample ID with label
-    label_dict = y.to_dict()
     
     # split the data into training and test set; this is splitting the input CSV data;
     # and an additional challenge set of 5% of the data; this latter set is used to
@@ -161,8 +159,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     last_X = X_test.iloc[-1].values
     additional_samples = pd.DataFrame(np.repeat(last_X, diff_batch_samples, axis=0))#last.values
     extend_X_test = pd.concat([X_test, additional_samples], ignore_index=True)
-    print("Index of last 20 rows: ", extend_X_test.iloc[-21:])
-    print("Index of last 15 rows: ", extend_X_test.iloc[-16:])
+    print("Index of last 20 rows: ", extend_X_test.iloc[-20:])
+    print("Index of last 15 rows: ", extend_X_test.iloc[- diff_batch_samples:])
 
     partition = {"train" : X_train,
                  "validate" : extend_X_test}
@@ -170,6 +168,11 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.info(f"Length of partition extended validate: {len(partition['validate'])} \n")
 
     assert len(partition['validate']) == len(X_test) + len(additional_samples)
+
+    # creating a dictionary for the label column to match sample ID with label
+    label_dict = y.to_dict()
+    last_y_key = label_dict.keys()[-1]
+    print("Last y key: ", last_y_key)
     
     last_y = y_test.iloc[-1]
     print(last_y)
