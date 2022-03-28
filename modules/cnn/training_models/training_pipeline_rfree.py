@@ -155,7 +155,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     
     # get the number of samples that need to be created to fill a batch for prediction
     num_batches_test = np.round(len(X_test) / parameters_dict["batch_size"])
-    print("Number of batches for test rounded down: ", num_batch_testset)
+    print("Number of batches for test rounded down: ", num_batches_test)
     
     num_batches_test_needed = int(math.ceil(len(X_test) / parameters_dict["batch_size"]))
     print("Number of batches for test needed: ", num_batches_test_needed)
