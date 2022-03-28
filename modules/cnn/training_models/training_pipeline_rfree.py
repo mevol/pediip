@@ -151,6 +151,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.info(f"Length of partition extended validate: {len(partition['validate'])} \n")
 
     print(partition['validate'])
+    print(00000000, len(partition['validate']))
 
 #    partition = {"train" : X_train,
 #                 "validate" : X_test}
@@ -159,8 +160,11 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     
     # get the number of samples that need to be created to fill a batch for prediction
     num_batches_test = np.round(len(X_test) / parameters_dict["batch_size"])
+    print(1111111111, num_batches_test)
     num_batches_test_needed = int(math.ceil(len(X_test) / parameters_dict["batch_size"]))
+    print(2222222222, num_batches_test_needed)
     batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test
+    print(3333333333, batches_times_rounded_down)
     diff_batch_samples = int(len(X_test) - batches_times_rounded_down)
     print(555555555555, diff_batch_samples)
 
