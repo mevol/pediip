@@ -657,12 +657,13 @@ class MRSSMParser(object):
 #########################################################################################################################          
 
     # transfer details from phaser.log into a dict for entering into database
-    if os.path.exists(phaser_log):
+    try:
+      os.path.exists(phaser_log):
       with open(phaser_log, "r") as p_log:
         for line in p_log:
           if line.rstrip() == "   eLLG: eLLG of chain alone":
             phaser_ellg = list(islice(p_log, 2))[1].split()[0]
-    else:
+    except:
       phaser_ellg = 0
 
     # transfer details from prosmart_align_logfile.txt into a dict for entering into database
