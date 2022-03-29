@@ -18,10 +18,11 @@ import shutil
 import configargparse
 import yaml
 import math
+import tensorflow
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-import tensorflow
+import seaborn as sns
 
 from tensorflow.keras import Model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -253,22 +254,18 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.info("Getting predictions \n")
 
     predict_steps = int(math.ceil(len(X_test) / batch_size))
-    print("Steps to run until prediction finished: ", predict_steps)
+    logging.info(f"Steps to run until prediction finished: {predict_steps} \n")
 
     try:
       y_pred = model.predict(
                           testing_generator,
                           steps=predict_steps,
                           verbose=1)
+      # rounding the prediction probabilities to integers for 0/1 classes in binary case
       preds_rounded = np.round(y_pred, 0)
-      print("Predictions after rounding")
-      print(preds_rounded)
-
+      logging.info(f"Turning probabilities into into integers \n")
+      # only get the class1 results
       y_pred1 = np.argmax(preds_rounded, axis=1)
-#      y_pred2 = preds_rounded.argmax(1)
-      print(y_pred1)
-#      print(y_pred2)
-
     except Exception:
       logging.warning("Could not round predictions \n")
       raise
@@ -277,11 +274,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:
       classes = ["class 0", "class 1"]
       labels = np.arange(2)
-#      classification_metrics = classification_report(y_test, y_pred,
-#                                                      labels=labels, target_names=classes)
       report = classification_report(y_test, y_pred1, labels=labels, target_names=classes,
                                       zero_division = 0)
-
       print(report)
       logging.info(f"Classification report \n")
       logging.info(report)
@@ -291,11 +285,10 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     logging.info("Drawing confusion matrix. \n")
     try:
-#      cat_labels = pd.DataFrame(y_test[:-2].idxmax(axis=1))
-#      cat_preds = pd.DataFrame(y_pred.idxmax(axis=1))
+    # turning the predictions into 
       cat_labels = pd.DataFrame(y_test)
       cat_preds = pd.DataFrame(y_pred1)
-
+      # make a confusion matrix for binary result
       conf_mat = confusion_matrix(cat_labels, cat_preds)
     except Exception:
       logging.warning("Could not calculate confusion matrix \n")
@@ -304,7 +297,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:  
       def draw_conf_mat(matrix):
         datestring = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
-        labels = ['0', '1']
+        labels = ['class 0', 'class 1']
         ax = plt.subplot()
         sns.heatmap(matrix, annot=True, ax=ax)
         plt.title('Confusion matrix')
