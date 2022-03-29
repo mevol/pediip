@@ -5,7 +5,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas
-
+import seaborn as sns
 
 def figure_from_csv(history_file, filename):
     history = pandas.read_csv(history_file)
@@ -56,7 +56,6 @@ def history_to_csv(history, filename):
 
 
 def draw_conf_mat(matrix, filename):
-    datestring = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
     labels = ['class 0', 'class 1']
     ax = plt.subplot()
     sns.heatmap(matrix, annot=True, ax=ax)

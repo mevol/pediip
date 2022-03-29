@@ -16,7 +16,6 @@ import tensorflow
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-import seaborn as sns
 
 from tensorflow.keras import Model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -292,6 +291,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       logging.warning("Could not calculate confusion matrix \n")
       raise
     try:
+      datestring = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
       draw_conf_mat(conf_mat, evaluations_path / f"confusion_matrix_{datestring}.png")
     except Exception:
       logging.warning("Could not draw confusion matrix. \n")
