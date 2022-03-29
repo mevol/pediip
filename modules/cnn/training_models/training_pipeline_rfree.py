@@ -292,7 +292,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       logging.warning("Could not calculate confusion matrix \n")
       raise
     try:
-      draw_conf_mat(matrix, evaluations_path / f"confusion_matrix_{datestring}.png")
+      draw_conf_mat(conf_mat, evaluations_path / f"confusion_matrix_{datestring}.png")
     except Exception:
       logging.warning("Could not draw confusion matrix. \n")
       raise
