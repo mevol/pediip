@@ -61,6 +61,9 @@ class MRSSMParser(object):
       VALUES (%s);
       ''' % (homologue_pk))
 
+    # variable set to 0 to start
+    phaser_ellg = 0
+
     # get homologue resolution
     # check whether the given PDB-redo summary stats file exists
     try:
