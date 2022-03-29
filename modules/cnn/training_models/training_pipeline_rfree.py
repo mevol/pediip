@@ -176,6 +176,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     for i in range(last_y_key+1, new_keys):
         print(i)
         label_dict[i] = last_y
+        y_test.loc[i] = last_y
         print(last_X)
         X_test.loc[i] = last_X
 #        np.append(X_test, last_X, axis=0)
