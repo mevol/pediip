@@ -260,6 +260,15 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                           testing_generator,
                           steps=predict_steps,
                           verbose=1)
+      preds_rounded = np.round(y_pred, 0)
+      print("Predictions after rounding")
+      print(preds_rounded)
+
+      y_pred1 = np.argmax(preds_rounded, axis=1)
+      y_pred2 = preds_rounded.argmax(1)
+      print(y_pred1)
+      print(y_pred2)
+
     except Exception:
       logging.warning("Could not round predictions \n")
       raise
