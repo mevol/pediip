@@ -295,7 +295,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       cat_labels = pd.DataFrame(y_test)
       cat_preds = pd.DataFrame(y_pred)
 
-      confusion_matrix = confusion_matrix(cat_labels, cat_preds)
+      conf_mat = confusion_matrix(cat_labels, cat_preds)
     except Exception:
       logging.warning("Could not calculate confusion matrix \n")
       raise
@@ -314,7 +314,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
         plt.savefig(str(evaluations_path / f"confusion_matrix_{datestring}.png"))
         plt.close()
 
-      draw_conf_mat(confusion_matrix)
+      draw_conf_mat(conf_mat)
 
     except Exception:
       logging.warning("Could not draw confusion matrix. \n")
