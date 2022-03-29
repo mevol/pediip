@@ -279,7 +279,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       labels = np.arange(2)
 #      classification_metrics = classification_report(y_test, y_pred,
 #                                                      labels=labels, target_names=classes)
-      report = classification_report(y_test, y_pred1, labels=labels, target_names=classes)
+      report = classification_report(y_test, y_pred1, labels=labels, target_names=classes,
+                                      zero_division = 0)
 
       print(report)
       logging.info(f"Classification report \n")
