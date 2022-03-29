@@ -658,7 +658,7 @@ class MRSSMParser(object):
 
     # transfer details from phaser.log into a dict for entering into database
     try:
-      os.path.exists(phaser_log):
+      os.path.exists(phaser_log)
       with open(phaser_log, "r") as p_log:
         for line in p_log:
           if line.rstrip() == "   eLLG: eLLG of chain alone":
