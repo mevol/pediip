@@ -265,9 +265,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       print(preds_rounded)
 
       y_pred1 = np.argmax(preds_rounded, axis=1)
-      y_pred2 = preds_rounded.argmax(1)
+#      y_pred2 = preds_rounded.argmax(1)
       print(y_pred1)
-      print(y_pred2)
+#      print(y_pred2)
 
     except Exception:
       logging.warning("Could not round predictions \n")
@@ -279,7 +279,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       labels = np.arange(2)
 #      classification_metrics = classification_report(y_test, y_pred,
 #                                                      labels=labels, target_names=classes)
-      report = classification_report(y_test, y_pred)
+      report = classification_report(y_test, y_pred1)
 
       print(report)
       logging.info(f"Classification report \n")
