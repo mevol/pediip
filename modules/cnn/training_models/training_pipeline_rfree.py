@@ -26,7 +26,7 @@ import tensorflow
 from tensorflow.keras import Model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
-from sklearn import metrics
+from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from datetime import datetime
 from typing import Callable
@@ -145,48 +145,23 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.info(f"Number of samples in y_train: {len(y_train)} \n")
     logging.info(f"Number of samples in X_train: {len(X_train)} \n")
 
-    print(X_test)
-    print(00000000, len(X_test))
-
-#    partition = {"train" : X_train,
-#                 "validate" : X_test}
-#    logging.info(f"Length of partition train: {len(partition['train'])} \n")
-#    logging.info(f"Length of partition validate: {len(partition['validate'])} \n")
-    
     # get the number of samples that need to be created to fill a batch for prediction
     num_batches_test = int(np.round(len(X_test) / parameters_dict["batch_size"]))
-    print(1111111111, num_batches_test)
     num_batches_test_needed = int(math.ceil(len(X_test) / parameters_dict["batch_size"]))
-    print(2222222222, num_batches_test_needed)
     batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test_needed
-    print(3333333333, batches_times_rounded_down)
     diff_batch_samples = int( batches_times_rounded_down - len(X_test))
-    print(555555555555, diff_batch_samples)
 
     # creating a dictionary for the label column to match sample ID with label
     label_dict = y.to_dict()
     last_y_key = list(label_dict.keys())[-1]
-    print("Last y key: ", last_y_key)
     new_keys = last_y_key + diff_batch_samples
     last_y = y_test.iloc[-1]
     last_X = X_test.iloc[-1].values
-    
-    print(X_test)
-    print(X_test.index)
 
     for i in range(last_y_key + 1, new_keys + 1):
-        print(i)
         label_dict[i] = last_y
         y_test.loc[i] = last_y
-        print(last_X)
         X_test.loc[i] = last_X
-#        np.append(X_test, last_X, axis=0)
-#        rep = 2
-#        last = np.repeat(last_X,repeats= rep-1 ,axis=0)
-
-#        X_test = np.vstack([X_test, last_X])
-
-    print(X_test)
 
     partition = {"train" : X_train,
                  "validate" : X_test}
@@ -195,28 +170,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     print(len(label_dict))
     print(len(partition['validate']))
 
-
     assert len(label_dict) == len(partition['validate']) + len(partition['train']) + len(X_challenge)
 
-#    additional_samples = pd.DataFrame(np.repeat(last_X, diff_batch_samples, axis=0))#last.values
-#    print(additional_samples)
-#    extend_X_test = pd.concat([X_test, additional_samples], ignore_index=True)
-#    print(extend_X_test)
-#    print("Index of last 20 rows: ", extend_X_test.iloc[-20:])
-#    print("Index of last 15 rows: ", extend_X_test.iloc[- diff_batch_samples:])
-
-
-#    assert len(partition['validate']) == len(X_test) + len(additional_samples)
-
-    
-#    print(last_y)
-#    additional_y = pd.DataFrame(np.repeat(last_y, diff_batch_samples, axis=0))#last.values
-#    print(len(additional_y))
-#    additional_y_dict = additional_y.to_dict()
-#    print(len(additional_y_dict))
-#    print(additional_y_dict)
-#    label_dict = label_dict.update(additional_y_dict)
-    
     # set input dimensions for images and number of channels based on whether color or
     # grayscale is used
     if parameters_dict["rgb"] is True:
@@ -301,41 +256,25 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     print("Steps to run until prediction finished: ", predict_steps)
 
     try:
-      predictions = model.predict(
+      y_pred = model.predict(
                           testing_generator,
-                          steps=predict_steps,#predict_steps
+                          steps=predict_steps,
                           verbose=1)
-
-#      preds_rounded = np.round(predictions, 0)
-#      #print("Predictions after rounding")
-#      #print(preds_rounded)
-
-#      y_pred = np.argmax(preds_rounded, axis=1)
-#      y_pred1 = preds_rounded.argmax(1)
-
-      print("predicted labels for the test set ", predictions)
-      print("Length of predictions: ", len(predictions))
-      print("known labels for the test set ", y_test)
-      print("Length of y_test: ", len(y_test))
-      #print(y_pred1)
-
-      #print("Length of predictions rounded: ", len(preds_rounded))
     except Exception:
       logging.warning("Could not round predictions \n")
       raise
 
-    #interim fix to be able to develop further; remove the last two samples in y_test
-    #y_test = y_test[:-2]
-    #print("Content of y_test")
-    #print(y_test[:-2])
+    # get classification report
     try:
       classes = ["class 0", "class 1"]
       labels = np.arange(2)
-      classification_metrics = metrics.classification_report(y_test, predictions,
-                                                      labels=labels, target_names=classes)
-      print(classification_metrics)
-      logging.info(f"Classification report")
-      logging.info(classification_metrics)
+#      classification_metrics = classification_report(y_test, y_pred,
+#                                                      labels=labels, target_names=classes)
+      report = classification_report(y_test, y_pred)
+
+      print(report)
+      logging.info(f"Classification report \n")
+      logging.info(report)
     except Exception:
       logging.warning("Could not get classification report \n")
       raise
@@ -345,9 +284,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 #      cat_labels = pd.DataFrame(y_test[:-2].idxmax(axis=1))
 #      cat_preds = pd.DataFrame(y_pred.idxmax(axis=1))
       cat_labels = pd.DataFrame(y_test)
-      cat_preds = pd.DataFrame(predictions)
+      cat_preds = pd.DataFrame(y_pred)
 
-      confusion_matrix = metrics.confusion_matrix(cat_labels, cat_preds)
+      confusion_matrix = confusion_matrix(cat_labels, cat_preds)
     except Exception:
       logging.warning("Could not calculate confusion matrix \n")
       raise
