@@ -172,8 +172,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     last_X = X_test.iloc[-1].values
     
     print(X_test)
+    print(X_test.index)
 
-    for i in range(last_y_key+1, new_keys):
+    for i in range(last_y_key + 1, new_keys + 1):
         print(i)
         label_dict[i] = last_y
         y_test.loc[i] = last_y
@@ -195,7 +196,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     print(len(partition['validate']))
 
 
-
+    assert len(label_dict) == len(partition['validate']) + len(partition['train']) + len(X_challenge)
 
 #    additional_samples = pd.DataFrame(np.repeat(last_X, diff_batch_samples, axis=0))#last.values
 #    print(additional_samples)
