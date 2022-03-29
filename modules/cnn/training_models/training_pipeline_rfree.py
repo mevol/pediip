@@ -6,12 +6,6 @@ same training parameters.
 """
 
 # Necessary to make the run as consistent as possible
-from numpy.random import seed
-
-seed(1)
-from tensorflow.compat.v1 import set_random_seed
-set_random_seed(2)
-
 import logging
 import os
 import shutil
@@ -33,8 +27,8 @@ from datetime import datetime
 from typing import Callable
 from pathlib import Path
 from modules.cnn.training_models.plot_history import history_to_csv, figure_from_csv
+from modules.cnn.training_models.plot_history import draw_conf_mat
 from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
-from modules.cnn.evaluate_model import evaluate
 from modules.cnn.training_models.data_generator_binary_rfree import DataGenerator
 from modules.cnn.prepare_training_data_random_pick_combined import prepare_training_data_random_pick_combined
 
@@ -250,13 +244,20 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.info(f"Training duration : {elapsed} \n")
     print("Training duration: ", elapsed)
 
-    # getting predictions on the testing data
-    logging.info("Getting predictions \n")
+    # getting predictions on the testing data to evaluate the model
+    # Make evaluation folder to use the challenge data
+    logging.info("Performing evaluation of model \n")
+    evaluation_dir_path = str(evaluations_path / f"evaluation")
+    if not Path(evaluation_dir_path).exists():
+      os.mkdir(evaluation_dir_path)
+    else:
+      logging.info(f"No evaluation performed \n")
 
+    # calculate the number of steps to be used in prediction and model evaluation
     predict_steps = int(math.ceil(len(X_test) / batch_size))
     logging.info(f"Steps to run until prediction finished: {predict_steps} \n")
-
     try:
+      logging.info("Getting predictions \n")
       y_pred = model.predict(
                           testing_generator,
                           steps=predict_steps,
@@ -269,7 +270,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     except Exception:
       logging.warning("Could not round predictions \n")
       raise
-
     # get classification report
     try:
       classes = ["class 0", "class 1"]
@@ -282,57 +282,20 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     except Exception:
       logging.warning("Could not get classification report \n")
       raise
-
-    logging.info("Drawing confusion matrix. \n")
+    # calculate and draw confusion matrix
     try:
-    # turning the predictions into 
+    logging.info("Drawing confusion matrix. \n")
       cat_labels = pd.DataFrame(y_test)
       cat_preds = pd.DataFrame(y_pred1)
-      # make a confusion matrix for binary result
       conf_mat = confusion_matrix(cat_labels, cat_preds)
     except Exception:
       logging.warning("Could not calculate confusion matrix \n")
       raise
-
-    try:  
-      def draw_conf_mat(matrix):
-        datestring = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
-        labels = ['class 0', 'class 1']
-        ax = plt.subplot()
-        sns.heatmap(matrix, annot=True, ax=ax)
-        plt.title('Confusion matrix')
-        ax.set_xticklabels(labels)
-        ax.set_yticklabels(labels)
-        plt.xlabel('Predicted')
-        plt.ylabel('True')
-        plt.savefig(str(evaluations_path / f"confusion_matrix_{datestring}.png"))
-        plt.close()
-
-      draw_conf_mat(conf_mat)
-
+    try:
+      draw_conf_mat(matrix, evaluations_path / f"confusion_matrix_{datestring}.png")
     except Exception:
       logging.warning("Could not draw confusion matrix. \n")
       raise
-      
-      
-    # Make evaluation folder to use the challenge data
-    logging.info("Performing evaluation of model \n")
-    evaluation_dir_path = str(evaluations_path / f"evaluation")
-    if not Path(evaluation_dir_path).exists():
-      os.mkdir(evaluation_dir_path)
-      evaluate(
-                str(models_path / f"model.h5"),
-                parameters_dict["test_dir"],
-                evaluation_dir_path,
-                parameters_dict["sample_lable_lst"],
-                parameters_dict["slices_per_structure"],
-                rgb=parameters_dict["rgb"],
-            )
-    else:
-            logging.info(
-              f"Requires test directory and slices_per_structure for evaluation. \n"
-              f"No evaluation performed \n"
-            )
 
     # Load the model config information as a yaml file
     with open(output_dir_path / "model_info.yaml", "w") as f:

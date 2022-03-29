@@ -55,6 +55,19 @@ def history_to_csv(history, filename):
     return file_path.absolute()
 
 
+def draw_conf_mat(matrix, filename):
+    datestring = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
+    labels = ['class 0', 'class 1']
+    ax = plt.subplot()
+    sns.heatmap(matrix, annot=True, ax=ax)
+    plt.title('Confusion matrix')
+    ax.set_xticklabels(labels)
+    ax.set_yticklabels(labels)
+    plt.xlabel('Predicted')
+    plt.ylabel('True')
+    plt.savefig(filename)
+
+
 if __name__ == "__main__":
 
     filename = sys.argv[1]
