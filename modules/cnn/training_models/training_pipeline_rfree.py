@@ -284,7 +284,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       raise
     # calculate and draw confusion matrix
     try:
-    logging.info("Drawing confusion matrix. \n")
+      logging.info("Drawing confusion matrix. \n")
       cat_labels = pd.DataFrame(y_test)
       cat_preds = pd.DataFrame(y_pred1)
       conf_mat = confusion_matrix(cat_labels, cat_preds)
