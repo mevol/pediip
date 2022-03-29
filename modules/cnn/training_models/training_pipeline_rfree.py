@@ -302,7 +302,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:
       predictions = model.predict(
                           testing_generator,
-                          steps=None,#predict_steps
+                          steps=predict_steps,#predict_steps
                           verbose=1)
 
 #      preds_rounded = np.round(predictions, 0)
