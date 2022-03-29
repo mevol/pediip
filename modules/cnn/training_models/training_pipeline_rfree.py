@@ -279,7 +279,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       labels = np.arange(2)
 #      classification_metrics = classification_report(y_test, y_pred,
 #                                                      labels=labels, target_names=classes)
-      report = classification_report(y_test, y_pred1)
+      report = classification_report(y_test, y_pred1, labels=labels, target_names=classes)
 
       print(report)
       logging.info(f"Classification report \n")
@@ -293,7 +293,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 #      cat_labels = pd.DataFrame(y_test[:-2].idxmax(axis=1))
 #      cat_preds = pd.DataFrame(y_pred.idxmax(axis=1))
       cat_labels = pd.DataFrame(y_test)
-      cat_preds = pd.DataFrame(y_pred)
+      cat_preds = pd.DataFrame(y_pred1)
 
       conf_mat = confusion_matrix(cat_labels, cat_preds)
     except Exception:
