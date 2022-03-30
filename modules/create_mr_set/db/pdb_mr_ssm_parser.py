@@ -743,8 +743,8 @@ class MRSSMParser(object):
         "final_rfree_refmac_default_afterSSM_Buccaneer" : final_rfree_refmac_default_afterSSM_Buccaneer,
         "initial_rwork_refmac_default_afterSSM_Buccaneer" : initial_rwork_refmac_default_afterSSM_Buccaneer,
         "final_rwork_refmac_default_afterSSM_Buccaneer" : final_rwork_refmac_default_afterSSM_Buccaneer,
-        "mean_phase_error_afterMolrep_Buccaneer_refmac_default" : mean_phase_error_afterMolrep_Buccaneer_refmac_default,
-        "f_map_correlation_afterMolrep_Buccaneer_refmac_default" : f_map_correlation_afterMolrep_Buccaneer_refmac_default,
+        "mean_phase_error_afterSSM_Buccaneer_refmac_default" : mean_phase_error_afterSSM_Buccaneer_refmac_default,
+        "f_map_correlation_afterSSM_Buccaneer_refmac_default" : f_map_correlation_afterSSM_Buccaneer_refmac_default,
         # Molrep related variables
         "molrep_TF_sig"                    : molrep_TF_sig,
         "molrep_contrast"                  : molrep_contrast,
