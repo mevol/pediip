@@ -113,9 +113,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     # separate data X from labels y; assigning labels based on rfree
     X = data[['filename', 'protocol', 'stage']]
-    condition = (data['rfree'] < 0.5)
-    data['ai_lable'] = np.where(condition, 1, 0)
-    y = data['ai_lable']
+    y = data['ai_label']
 
     # getting the class distribution
     class_frequency = data.groupby(y).size()
@@ -246,11 +244,11 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # getting predictions on the testing data to evaluate the model
     # Make evaluation folder to use the challenge data
     logging.info("Performing evaluation of model \n")
-    evaluation_dir_path = str(evaluations_path / f"evaluation")
-    if not Path(evaluation_dir_path).exists():
-      os.mkdir(evaluation_dir_path)
-    else:
-      logging.info(f"No evaluation performed \n")
+#    evaluation_dir_path = str(evaluations_path / f"evaluation")
+#    if not Path(evaluation_dir_path).exists():
+#      os.mkdir(evaluation_dir_path)
+#    else:
+#      logging.info(f"No evaluation performed \n")
 
     # calculate the number of steps to be used in prediction and model evaluation
     predict_steps = int(math.ceil(len(X_test) / batch_size))
