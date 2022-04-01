@@ -176,7 +176,7 @@ def prepare_training_data_random_pick_combined(
                         # get a random number between 0 and 90 deg
                         deg = np.random.choice(90, 1, replace=False)
                         # rotate the slice by this deg
-                        slice_scaled_int = rotate(slice_scaled_int.reshape((-1, 1)), angle = deg)
+                        slice_scaled_int = rotate(slice_scaled_int.T.reshape((-1, 1)), angle = deg)
                 # combine the slices to a new image stack for training
                 edited_image_slices[slice_num, :, :] = slice_scaled_int#volume[
 
