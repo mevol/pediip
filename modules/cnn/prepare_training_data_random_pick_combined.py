@@ -46,8 +46,8 @@ def slice_map(volume, slices_per_axis):
 def prepare_training_data_random_pick_combined(
     maps_list: str,
     xyz_limits: List[int],
-    slices_per_axis: int),
-    augmentation = False:
+    slices_per_axis: int,
+    augmentation = False):
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
     logging.info("Preparing training data. \n")
