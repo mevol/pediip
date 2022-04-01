@@ -159,8 +159,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                  "validate" : X_test}
     logging.info(f"Length of partition train: {len(partition['train'])} \n")
     logging.info(f"Length of partition extended validate: {len(partition['validate'])} \n")
-    print(len(label_dict))
-    print(len(partition['validate']))
 
     assert len(label_dict) == len(partition['validate']) + len(partition['train']) + len(X_challenge)
 
@@ -206,7 +204,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                        dim=STACK_DIM,
                                        batch_size=batch_size,
                                        n_classes=2,
-                                       shuffle=True)
+                                       shuffle=True
+                                       augmentation=True)
 
     testing_generator = DataGenerator(
                                       parameters_dict["xyz_limits"],
@@ -244,11 +243,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # getting predictions on the testing data to evaluate the model
     # Make evaluation folder to use the challenge data
     logging.info("Performing evaluation of model \n")
-#    evaluation_dir_path = str(evaluations_path / f"evaluation")
-#    if not Path(evaluation_dir_path).exists():
-#      os.mkdir(evaluation_dir_path)
-#    else:
-#      logging.info(f"No evaluation performed \n")
 
     # calculate the number of steps to be used in prediction and model evaluation
     predict_steps = int(math.ceil(len(X_test) / batch_size))

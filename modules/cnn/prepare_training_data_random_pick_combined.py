@@ -13,13 +13,11 @@ from pathlib import Path
 from typing import List
 from PIL import Image
 from sys import getsizeof
+from scipy.ndimage.interpolation import rotate
 
 
 def slice_map(volume, slices_per_axis):
     """Slice the volume into 2d panes along x, y, z axes and return as an image stack"""
-
-
-
     # Check volume is equal in all directions
     assert (
         volume.shape[0] == volume.shape[1] == volume.shape[2]
@@ -48,7 +46,8 @@ def slice_map(volume, slices_per_axis):
 def prepare_training_data_random_pick_combined(
     maps_list: str,
     xyz_limits: List[int],
-    slices_per_axis: int):
+    slices_per_axis: int),
+    augmentation = False:
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
     logging.info("Preparing training data. \n")
@@ -168,9 +167,18 @@ def prepare_training_data_random_pick_combined(
                 slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
                 # Round to the nearest integer
                 slice_scaled_int = np.rint(slice_scaled)
+                # do data augmentation as rotation for a random angle between 0 and 90 deg
+                # for all even numbers in the total image stack
+                # check that the remainder of division is 0 and hence the result even
+                if augmentation == True:
+                    if slice_num % 2 == 0:
+                        # get a random number between 0 and 90 deg
+                        deg = np.random.choice(90, 1, replace=False)
+                        # rotate the slice by this deg
+                        slice_scaled_int = rotate(slice_scaled_int, angle = deg)
+                # combine the slices to a new image stack for training
                 edited_image_slices[slice_num, :, :] = slice_scaled_int#volume[
-                
-                # ENTER IMAGE AUGMENTATION HERE
+
             # check the number of edited image slices
             assert len(edited_image_slices) == 60
             total_bytes = total_bytes + bytes
@@ -237,11 +245,18 @@ if __name__ == "__main__":
 
     cmd_parser = subparsers.add_parser("cmd")
     cmd_parser.add_argument(
-        "maps_list", type=str, help="list of map files to be converted")
+        "maps_list",
+        type=str,
+        help="list of map files to be converted")
     cmd_parser.add_argument(
-        "xyz_limits", type=int, nargs=3, help="xyz size of the output map file")
+        "xyz_limits",
+        type=int,
+        nargs=3,
+        help="xyz size of the output map file")
     cmd_parser.add_argument(
-        "slices", type=int, help="number of image slices to produce per axis, default=20",
+        "slices",
+        type=int,
+        help="number of image slices to produce per axis, default=20",
         default=20)
     cmd_parser.set_defaults(func=params_from_cmd)
 
@@ -254,7 +269,6 @@ if __name__ == "__main__":
         prepare_training_data_binary(
             parameters["maps_list"],
             parameters["xyz_limits"],
-            parameters["slices"]
-        )
+            parameters["slices"])
     except KeyError as e:
         logging.error(f"Could not find parameter {e} to prepare training data \n")
