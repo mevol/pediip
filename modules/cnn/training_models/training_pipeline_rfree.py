@@ -132,21 +132,26 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # use the remaining data for 80/20 train-test split
     X_train, X_test, y_train, y_test = train_test_split(X_temp, y_temp, test_size=0.2,
                                                         random_state=100)
-    logging.info(f"Number of samples in y_test: {len(y_test)} \n")
-    logging.info(f"Number of samples in X_test: {len(X_test)} \n")
-    logging.info(f"Number of samples in y_train: {len(y_train)} \n")
-    logging.info(f"Number of samples in X_train: {len(X_train)} \n")
+    logging.info(f"Number of samples in y_test: {len(y_test)} \n"
+                 f"Number of samples in X_test: {len(X_test)} \n"
+                 f"Number of samples in y_train: {len(y_train)} \n"
+                 f"Number of samples in X_train: {len(X_train)} \n"
+                 f"Number of samples in y_challenge: {len(y_challenge)} \n"
+                 f"Number of samples in X_challenge: {len(X_challenge)} \n")
 
     # get the number of samples that need to be created to fill a batch for prediction
-    num_batches_test = int(np.round(len(X_test) / parameters_dict["batch_size"]))
+    # y_test and X_test
     num_batches_test_needed = int(math.ceil(len(X_test) / parameters_dict["batch_size"]))
     batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test_needed
     diff_batch_samples = int( batches_times_rounded_down - len(X_test))
 
     # creating a dictionary for the label column to match sample ID with label
     label_dict = y.to_dict()
+    # checking y length to extend missing y_test
     last_y_key = list(label_dict.keys())[-1]
+    # get the ID of the last sample to expand from there
     new_keys = last_y_key + diff_batch_samples
+    # getting last sample of y_test and X_test
     last_y = y_test.iloc[-1]
     last_X = X_test.iloc[-1].values
 
@@ -155,12 +160,35 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
         y_test.loc[i] = last_y
         X_test.loc[i] = last_X
 
-    partition = {"train" : X_train,
-                 "validate" : X_test}
-    logging.info(f"Length of partition train: {len(partition['train'])} \n")
-    logging.info(f"Length of partition extended validate: {len(partition['validate'])} \n")
+    # get the number of samples that need to be created to fill a batch for prediction
+    # y_challenge and y_test
+    num_batches_challenge_needed = int(math.ceil(len(X_challenge) / parameters_dict["batch_size"]))
+    batches_times_rounded_down2 = parameters_dict["batch_size"] * num_batches_challenge_needed
+    diff_batch_samples2 = int( batches_times_rounded_down2 - len(X_challenge))
 
-    assert len(label_dict) == len(partition['validate']) + len(partition['train']) + len(X_challenge)
+    # checking y length to extend missing y_test
+    last_y_key2 = list(label_dict.keys())[-1]
+    # get the ID of the last sample to expand from there
+    new_keys2 = last_y_key2 + diff_batch_samples2
+    # getting last sample of y_test and X_test
+    last_challenge_X = X_challenge.iloc[-1].values
+    last_challenge_y = y_challenge.iloc[-1]
+
+    for i in range(last_y_key2 + 1, new_keys2 + 1):
+        label_dict[i] = last_challenge_y
+        y_challenge.loc[i] = last_challenge_y
+        X_chellenge.loc[i] = last_challenge_X
+
+    partition = {"train" : X_train,
+                 "validate" : X_test,
+                 "challenge" : X_challenge}
+    logging.info(f"Length of partition train: {len(partition['train'])} \n"
+                 f"Length of partition extended validate: {len(partition['validate'])} \n"
+                 f"Length of partition extended challenge: {len(partition['challenge'])} \n")
+
+    assert len(label_dict) == (len(partition['validate'])
+                               + len(partition['train'])
+                               + len(partition['challenge']))
 
     # set input dimensions for images and number of channels based on whether color or
     # grayscale is used
@@ -217,6 +245,16 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                       n_classes=2,
                                       shuffle=False)#was True
 
+    challenge_generator = DataGenerator(
+                                      parameters_dict["xyz_limits"],
+                                      parameters_dict["slices_per_axis"],
+                                      partition["challenge"],
+                                      label_dict,#y_test,
+                                      dim=STACK_DIM,
+                                      batch_size=batch_size,
+                                      n_classes=2,
+                                      shuffle=False)#was True
+
     history = model.fit(
         training_generator,
         steps_per_epoch=int((len(X_train) / batch_size)),#len(X) if not using train-test-split
@@ -242,24 +280,25 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     # getting predictions on the testing data to evaluate the model
     # Make evaluation folder to use the challenge data
-    logging.info("Performing evaluation of model \n")
+    logging.info("Performing evaluation of model using X_test and X_challenge \n")
 
     # calculate the number of steps to be used in prediction and model evaluation
+    # X_test
     predict_steps = int(math.ceil(len(X_test) / batch_size))
-    logging.info(f"Steps to run until prediction finished: {predict_steps} \n")
+    logging.info(f"Steps to run until prediction for X_test finished: {predict_steps} \n")
     try:
-      logging.info("Getting predictions \n")
+      logging.info("Getting predictions for X_test\n")
       y_pred = model.predict(
                           testing_generator,
                           steps=predict_steps,
                           verbose=1)
       # rounding the prediction probabilities to integers for 0/1 classes in binary case
       preds_rounded = np.round(y_pred, 0)
-      logging.info(f"Turning probabilities into into integers \n")
+      logging.info(f"Turning probabilities for X_test into integers \n")
       # only get the class1 results
       y_pred1 = np.argmax(preds_rounded, axis=1)
     except Exception:
-      logging.warning("Could not round predictions \n")
+      logging.warning("Could not round predictions for X_test\n")
       raise
     # get classification report
     try:
@@ -268,38 +307,95 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       report = classification_report(y_test, y_pred1, labels=labels, target_names=classes,
                                       zero_division = 0)
       print(report)
-      logging.info(f"Classification report \n")
+      logging.info(f"Classification report for X_test\n")
       logging.info(report)
     except Exception:
-      logging.warning("Could not get classification report \n")
+      logging.warning("Could not get classification report for X_test\n")
       raise
     # calculate and draw confusion matrix
     try:
-      logging.info("Drawing confusion matrix. \n")
+      logging.info("Drawing confusion matrix for X_test. \n")
       cat_labels = pd.DataFrame(y_test)
       cat_preds = pd.DataFrame(y_pred1)
       conf_mat_dict = confusion_matrix_and_stats(cat_labels, cat_preds,
-                                  evaluations_path / f"confusion_matrix_{datetime.now()}.png")
+                         evaluations_path / f"confusion_matrix_test_{datetime.now()}.png")
       logging.info(conf_mat_dict)
     except Exception:
-      logging.warning("Could not calculate confusion matrix \n")
+      logging.warning("Could not calculate confusion matrix for X_test\n")
       raise
     try:
       plot_precision_recall_vs_threshold(cat_labels, cat_preds,
-                                  evaluations_path / f"precision_recall_curve_{datetime.now()}.png")
+                    evaluations_path / f"precision_recall_curve_test_{datetime.now()}.png")
     except Exception:
-      logging.warning("Could not draw precision-recall curve. \n")
+      logging.warning("Could not draw precision-recall curve for X_test. \n")
       raise
     try:
       fpr, tpr, thresholds = plot_roc_curve(cat_labels, cat_preds,
-                                  evaluations_path / f"ROC_curve_{datetime.now()}.png")
-      logging.info(f"False-positive rate: {fpr} \n"
-                    f"True-negative rate: {tpr} \n"
-                    f"Probability threshold for class 1 to be True: {thresholds} \n")
+                                evaluations_path / f"ROC_curve_test_{datetime.now()}.png")
+      logging.info(f"False-positive rate for X_test: {fpr} \n"
+                    f"True-negative rate for X_test: {tpr} \n"
+              f"Probability threshold for X_test for class 1 to be True: {thresholds} \n")
     except Exception:
-      logging.warning("Could not draw precision-recall curve. \n")
+      logging.warning("Could not draw precision-recall curve for X_test. \n")
       raise
 
+    # calculate the number of steps to be used in prediction and model evaluation
+    # X_challenge
+    challenge_steps = int(math.ceil(len(X_challenge) / batch_size))
+    logging.info(f"Steps to run until prediction finished: {challenge_steps} \n")
+    try:
+      logging.info("Getting predictions for challenge data \n")
+      y_pred_challenge = model.predict(
+                          challenge_generator,
+                          steps=challenge_steps,
+                          verbose=1)
+      # rounding the prediction probabilities to integers for 0/1 classes in binary case
+      preds_challenge_rounded = np.round(y_pred_challenge, 0)
+      logging.info(f"Turning probabilities into into integers \n")
+      # only get the class1 results
+      y_pred_challenge1 = np.argmax(preds_challenge_rounded, axis=1)
+    except Exception:
+      logging.warning("Could not round predictions \n")
+      raise
+    # get classification report
+    try:
+      classes = ["class 0", "class 1"]
+      labels = np.arange(2)
+      report = classification_report(y_challenge, y_pred_challenge1, labels=labels,
+                                     target_names=classes,
+                                     zero_division = 0)
+      print(report_challenge)
+      logging.info(f"Classification report for challenge data \n")
+      logging.info(report_challenge)
+    except Exception:
+      logging.warning("Could not get classification report for challenge data \n")
+      raise
+    # calculate and draw confusion matrix
+    try:
+      logging.info("Drawing confusion matrix for challenge data. \n")
+      challenge_cat_labels = pd.DataFrame(y_challenge)
+      challenge_cat_preds = pd.DataFrame(y_pred_challenge1)
+      conf_mat_dict_challenge = confusion_matrix_and_stats(cat_labels, cat_preds,
+                    evaluations_path / f"confusion_matrix_challenge_{datetime.now()}.png")
+      logging.info(conf_mat_dict_challenge)
+    except Exception:
+      logging.warning("Could not calculate confusion matrix for challenge data \n")
+      raise
+    try:
+      plot_precision_recall_vs_threshold(challenge_cat_labels, challenge_cat_preds,
+              evaluations_path / f"precision_recall_curve_challenge_{datetime.now()}.png")
+    except Exception:
+      logging.warning("Could not draw precision-recall curve for challenge data. \n")
+      raise
+    try:
+      fpr_challenge, tpr_challenge, thresholds_challenge = plot_roc_curve(challenge_cat_labels, challenge_cat_preds,
+                              evaluations_path / f"ROC_curve_challenge_{datetime.now()}.png")
+      logging.info(f"False-positive rate: {fpr_challenge} \n"
+                   f"True-negative rate: {tpr_challenge} \n"
+       f"Probability threshold for challenge datafor class 1 to be True: {thresholds_challenge} \n")
+    except Exception:
+      logging.warning("Could not draw precision-recall curve for challenge data. \n")
+      raise
     # Load the model config information as a yaml file
     with open(output_dir_path / "model_info.yaml", "w") as f:
         yaml.dump(model_info, f)
