@@ -7,6 +7,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
+from sklearn.metrics import balanced_accuracy_score, f1_score, confusion_matrix, matthews_corrcoef
+from sklearn.metrics import precision_recall_curve, roc_curve, classification_report, accuracy_score
+from sklearn.model_selection import cross_val_score, cross_val_predict
+
+
 def figure_from_csv(history_file, filename):
     history = pd.read_csv(history_file)
     f, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
