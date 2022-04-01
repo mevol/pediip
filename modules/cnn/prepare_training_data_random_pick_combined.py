@@ -13,7 +13,8 @@ from pathlib import Path
 from typing import List
 from PIL import Image
 from sys import getsizeof
-from scipy.ndimage.interpolation import rotate
+#from scipy.ndimage.interpolation import rotate
+from scipy.ndimage import rotate
 
 
 def slice_map(volume, slices_per_axis):
@@ -176,7 +177,8 @@ def prepare_training_data_random_pick_combined(
                         # get a random number between 0 and 90 deg
                         deg = np.random.choice(90, 1, replace=False)
                         # rotate the slice by this deg
-                        slice_scaled_int = rotate(slice_scaled_int.T.reshape((-1, 1)), angle = deg)
+                        slice_scaled_int = rotate(slice_scaled_int,#slice_scaled_int.T.reshape((-1, 1))
+                                                  angle = deg, reshape=False)
                 # combine the slices to a new image stack for training
                 edited_image_slices[slice_num, :, :] = slice_scaled_int#volume[
 
