@@ -172,6 +172,7 @@ def prepare_training_data_random_pick_combined(
                 # check that the remainder of division is 0 and hence the result even
                 if augmentation == True:
                     if slice_num % 2 == 0:
+                        print(slice_scaled_int.shape)
                         # get a random number between 0 and 90 deg
                         deg = np.random.choice(90, 1, replace=False)
                         # rotate the slice by this deg
