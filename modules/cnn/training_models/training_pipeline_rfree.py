@@ -281,7 +281,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # getting predictions on the testing data to evaluate the model
     # Make evaluation folder to use the challenge data
     logging.info("Performing evaluation of model using X_test and X_challenge \n")
-
+    date = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
     # calculate the number of steps to be used in prediction and model evaluation
     # X_test
     predict_steps = int(math.ceil(len(X_test) / batch_size))
@@ -318,20 +318,20 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       cat_labels = pd.DataFrame(y_test)
       cat_preds = pd.DataFrame(y_pred1)
       conf_mat_dict = confusion_matrix_and_stats(cat_labels, cat_preds,
-                         evaluations_path / f"confusion_matrix_test_{datetime.now()}.png")
+                         evaluations_path / f"confusion_matrix_test_{date}.png")
       logging.info(conf_mat_dict)
     except Exception:
       logging.warning("Could not calculate confusion matrix for X_test\n")
       raise
     try:
       plot_precision_recall_vs_threshold(cat_labels, cat_preds,
-                    evaluations_path / f"precision_recall_curve_test_{datetime.now()}.png")
+                    evaluations_path / f"precision_recall_curve_test_{date}.png")
     except Exception:
       logging.warning("Could not draw precision-recall curve for X_test. \n")
       raise
     try:
       fpr, tpr, thresholds = plot_roc_curve(cat_labels, cat_preds,
-                                evaluations_path / f"ROC_curve_test_{datetime.now()}.png")
+                                evaluations_path / f"ROC_curve_test_{date}.png")
       logging.info(f"False-positive rate for X_test: {fpr} \n"
                     f"True-negative rate for X_test: {tpr} \n"
               f"Probability threshold for X_test for class 1 to be True: {thresholds} \n")
@@ -361,7 +361,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     try:
       classes = ["class 0", "class 1"]
       labels = np.arange(2)
-      report = classification_report(y_challenge, y_pred_challenge1, labels=labels,
+      report_challenge = classification_report(y_challenge, y_pred_challenge1, labels=labels,
                                      target_names=classes,
                                      zero_division = 0)
       print(report_challenge)
@@ -376,20 +376,20 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       challenge_cat_labels = pd.DataFrame(y_challenge)
       challenge_cat_preds = pd.DataFrame(y_pred_challenge1)
       conf_mat_dict_challenge = confusion_matrix_and_stats(cat_labels, cat_preds,
-                    evaluations_path / f"confusion_matrix_challenge_{datetime.now()}.png")
+                    evaluations_path / f"confusion_matrix_challenge_{date}.png")
       logging.info(conf_mat_dict_challenge)
     except Exception:
       logging.warning("Could not calculate confusion matrix for challenge data \n")
       raise
     try:
       plot_precision_recall_vs_threshold(challenge_cat_labels, challenge_cat_preds,
-              evaluations_path / f"precision_recall_curve_challenge_{datetime.now()}.png")
+              evaluations_path / f"precision_recall_curve_challenge_{date}.png")
     except Exception:
       logging.warning("Could not draw precision-recall curve for challenge data. \n")
       raise
     try:
       fpr_challenge, tpr_challenge, thresholds_challenge = plot_roc_curve(challenge_cat_labels, challenge_cat_preds,
-                              evaluations_path / f"ROC_curve_challenge_{datetime.now()}.png")
+                              evaluations_path / f"ROC_curve_challenge_{date}.png")
       logging.info(f"False-positive rate: {fpr_challenge} \n"
                    f"True-negative rate: {tpr_challenge} \n"
        f"Probability threshold for challenge datafor class 1 to be True: {thresholds_challenge} \n")
