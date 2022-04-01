@@ -204,7 +204,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                        dim=STACK_DIM,
                                        batch_size=batch_size,
                                        n_classes=2,
-                                       shuffle=True
+                                       shuffle=True,
                                        augmentation=True)
 
     testing_generator = DataGenerator(
