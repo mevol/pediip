@@ -11,9 +11,7 @@ import pandas as pd
 
 from pathlib import Path
 from typing import List
-from PIL import Image
 from sys import getsizeof
-#from scipy.ndimage.interpolation import rotate
 from scipy.ndimage import rotate
 
 
@@ -173,6 +171,7 @@ def prepare_training_data_random_pick_combined(
                 # check that the remainder of division is 0 and hence the result even
                 if augmentation == True:
                     if slice_num % 2 == 0:
+                        print(slice_num)
                         print(slice_scaled_int.shape)
                         # get a random number between 0 and 90 deg
                         deg = np.random.choice(90, 1, replace=False)[0]
@@ -180,7 +179,6 @@ def prepare_training_data_random_pick_combined(
                         # rotate the slice by this deg
                         slice_scaled_int = rotate(slice_scaled_int,
                                                   angle = deg, reshape=False)
-#                        slice_scaled_int = np.rot90(slice_scaled_int)
                 # combine the slices to a new image stack for training
                 edited_image_slices[slice_num, :, :] = slice_scaled_int#volume[
 

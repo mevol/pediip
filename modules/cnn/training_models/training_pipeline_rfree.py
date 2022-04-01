@@ -26,7 +26,9 @@ from datetime import datetime
 from typing import Callable
 from pathlib import Path
 from modules.cnn.training_models.plot_history import history_to_csv, figure_from_csv
-from modules.cnn.training_models.plot_history import draw_conf_mat
+from modules.cnn.training_models.plot_history import confusion_matrix_and_stats
+from modules.cnn.training_models.plot_history import plot_precision_recall_vs_threshold
+from modules.cnn.training_models.plot_history import plot_roc_curve
 from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
 from modules.cnn.training_models.data_generator_binary_rfree import DataGenerator
 from modules.cnn.prepare_training_data_random_pick_combined import prepare_training_data_random_pick_combined
@@ -278,15 +280,26 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       logging.info("Drawing confusion matrix. \n")
       cat_labels = pd.DataFrame(y_test)
       cat_preds = pd.DataFrame(y_pred1)
-      conf_mat = confusion_matrix(cat_labels, cat_preds)
+      conf_mat_dict = confusion_matrix_and_stats(cat_labels, cat_preds,
+                                  evaluations_path / f"confusion_matrix_{datetime.now()}.png")
+      logging.info(conf_mat_dict)
     except Exception:
       logging.warning("Could not calculate confusion matrix \n")
       raise
     try:
-      datestring = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
-      draw_conf_mat(conf_mat, evaluations_path / f"confusion_matrix_{datestring}.png")
+      plot_precision_recall_vs_threshold(cat_labels, cat_preds,
+                                  evaluations_path / f"confusion_matrix_{datetime.now()}.png")
     except Exception:
-      logging.warning("Could not draw confusion matrix. \n")
+      logging.warning("Could not draw precision-recall curve. \n")
+      raise
+    try:
+      fpr, tpr, thresholds = plot_roc_curve(cat_labels, cat_preds,
+                                  evaluations_path / f"confusion_matrix_{datetime.now()}.png")
+       logging.info(f"False-positive rate: {fpr} \n"
+                    f"True-negative rate: {tpr} \n"
+                    f"Probability threshold for class 1 to be True: {thresholds} \n")
+    except Exception:
+      logging.warning("Could not draw precision-recall curve. \n")
       raise
 
     # Load the model config information as a yaml file

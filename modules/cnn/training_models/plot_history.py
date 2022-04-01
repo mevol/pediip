@@ -32,7 +32,7 @@ def figure_from_csv(history_file, filename):
 
 def history_to_csv(history, filename):
     """Put the history in a csv file with known format"""
-    history_data = pandas.DataFrame(
+    history_data = pd.DataFrame(
         {"Accuracy": history.history["accuracy"],
          "Val Accuracy": history.history["val_accuracy"],
          "Loss": history.history["loss"],
@@ -42,16 +42,78 @@ def history_to_csv(history, filename):
     return file_path.absolute()
 
 
-def draw_conf_mat(matrix, filename):
-    labels = ['class 0', 'class 1']
+def confusion_matrix_and_stats(y_test, y_pred, filename):
+    # Plot predictions in confusion matrix
+    conf_mat = confusion_matrix(y_test, y_pred)
+
+    # draw confusion matrix
+    labels = ['0', '1']      
     ax = plt.subplot()
-    sns.heatmap(matrix, annot=True, ax=ax)
-    plt.title('Confusion matrix')
+    sns.heatmap(conf_mat, annot=True, ax=ax)
+    plt.title('Confusion matrix of the classifier')
     ax.set_xticklabels(labels)
     ax.set_yticklabels(labels)
     plt.xlabel('Predicted')
     plt.ylabel('True')
-    plt.savefig(filename)
+    plt.savefig(filename, dpi=600)
+    plt.close()
+
+    # separating prediction outcomes in TP, TN, FP, FN
+    TP = conf_mat[1, 1]
+    TN = conf_mat[0, 0]
+    FP = conf_mat[0, 1]
+    FN = conf_mat[1, 0]
+    
+    acc_score = round(((TP + TN) / (TP + TN + FP + FN)) * 100, 2)
+    class_err = round(((FP + FN) / (TP + TN + FP + FN)) * 100, 2)
+    sensitivity = round((TP / (FN + TP)) * 100, 2)
+    specificity = round((TN / (TN + FP)) * 100, 2)
+    false_positive_rate = round((FP / (TN + FP)) * 100, 2)
+    false_negative_rate = round((FN / (TP + FN)) * 100, 2)
+    precision = round((TP / (TP + FP)) * 100, 2)
+    f1 = round(f1_score(y_test, y_pred) * 100, 2)
+
+    conf_mat_dict = {'TP' : TP,
+                     'TN' : TN,
+                     'FP' : FP,
+                     'FN' : FN,
+                     'acc' : acc_score,
+                     'err' : class_err,
+                     'sensitivity' : sensitivity,
+                     'specificity' : specificity,
+                     'FP-rate' : false_positive_rate,
+                     'FN-rate' : false_negative_rate,
+                     'precision' : precision,
+                     'F1-score' : f1}
+    return conf_mat_dict
+
+
+#plot precision and recall curve
+def plot_precision_recall_vs_threshold(y_test, y_pred_proba_ones, filename):
+    precisions, recalls, thresholds = precision_recall_curve(y_test, y_pred_proba_ones)
+    plt.plot(thresholds, precisions[:-1], "b--", label="Precision")
+    plt.plot(thresholds, recalls[:-1], "g--", label="Recall")
+    plt.title('Precsion-Recall plot test set class 1')
+    plt.xlabel("Threshold")
+    plt.legend(loc="upper left")
+    plt.ylim([0,1])
+    plt.savefig(filename, dpi=600)
+    plt.close()
+
+
+#plot ROC curves
+def plot_roc_curve(y_test, y_pred_proba_ones, filename):
+    fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba_ones)
+    plt.plot(fpr, tpr, linewidth=2)
+    plt.plot([0, 1], [0, 1], 'k--')
+    plt.axis([0, 1, 0, 1])
+    plt.title('ROC curve for classifier on test set for class 1') 
+    plt.xlabel('False Positive Rate (1 - Specificity)')
+    plt.ylabel('True Positive Rate (Sensitivity)')
+    plt.grid(True)
+    plt.savefig(filename, dpi=600)
+    plt.close()
+    return fpr, tpr, thresholds
 
 
 if __name__ == "__main__":
