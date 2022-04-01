@@ -10,7 +10,7 @@ from modules.cnn.prepare_training_data_random_pick_combined import prepare_train
 class DataGenerator(Sequence):
   'Generates data for Keras'
   def __init__(self, xyz_limits, slices_per_axis, list_IDs, labels, batch_size=32, dim=(32,32),
-               n_classes=2, n_channels=1, shuffle=True, augmentation):
+               n_classes=2, n_channels=1, shuffle=True, augmentation=False):
     'Initialization'
     self.dim = dim
     self.batch_size = batch_size
@@ -20,6 +20,7 @@ class DataGenerator(Sequence):
     self.n_channels = n_channels
     self.n_classes = n_classes
     self.shuffle = shuffle
+    self.augmentation = augmentation
     self.xyz_limits = xyz_limits
     self.slices_per_axis = slices_per_axis
     self.on_epoch_end()
@@ -61,7 +62,7 @@ class DataGenerator(Sequence):
       stack = prepare_training_data_random_pick_combined(path,
                                                self.xyz_limits,
                                                self.slices_per_axis,
-                                               augmentation)
+                                               self.augmentation)
       X[i,] = stack.reshape(*self.dim, self.n_channels)
       # Store class
       y[i] = self.labels[ID]
