@@ -177,7 +177,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     for i in range(last_y_key2 + 1, new_keys2 + 1):
         label_dict[i] = last_challenge_y
         y_challenge.loc[i] = last_challenge_y
-        X_chellenge.loc[i] = last_challenge_X
+        X_challenge.loc[i] = last_challenge_X
 
     partition = {"train" : X_train,
                  "validate" : X_test,
