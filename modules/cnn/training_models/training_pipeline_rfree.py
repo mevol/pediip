@@ -286,13 +286,13 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       raise
     try:
       plot_precision_recall_vs_threshold(cat_labels, cat_preds,
-                                  evaluations_path / f"confusion_matrix_{datetime.now()}.png")
+                                  evaluations_path / f"precision_recall_curve_{datetime.now()}.png")
     except Exception:
       logging.warning("Could not draw precision-recall curve. \n")
       raise
     try:
       fpr, tpr, thresholds = plot_roc_curve(cat_labels, cat_preds,
-                                  evaluations_path / f"confusion_matrix_{datetime.now()}.png")
+                                  evaluations_path / f"ROC_curve_{datetime.now()}.png")
       logging.info(f"False-positive rate: {fpr} \n"
                     f"True-negative rate: {tpr} \n"
                     f"Probability threshold for class 1 to be True: {thresholds} \n")
