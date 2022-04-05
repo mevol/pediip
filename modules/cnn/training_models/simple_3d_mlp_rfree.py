@@ -13,6 +13,7 @@ from modules.cnn.training_models.training_pipeline_rfree import pipeline_from_co
 def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     model = Sequential()
 
+    model.add(Flatten())
     model.add(Dense(512, activation="relu", input_shape=input_shape))
     model.add(Dense(2, activation="softmax"))
 
