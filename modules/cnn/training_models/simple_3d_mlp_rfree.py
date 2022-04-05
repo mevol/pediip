@@ -5,17 +5,16 @@ from typing import Tuple
 #from keras import Sequential, optimizers
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.layers import Conv3D, Dense, Dropout, Flatten, MaxPooling3D
-from tensorflow.keras.layers import GlobalAveragePooling3D, BatchNormalization
+from tensorflow.keras.layers import Dense
 
 from modules.cnn.training_models.training_pipeline_rfree import pipeline_from_command_line
 
 def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     model = Sequential()
 
-    model.add(Flatten())
+    
     model.add(Dense(512, activation="relu", input_shape=input_shape))
-    model.add(Dense(2, activation="softmax"))
+    model.add(Dense(1, activation="linear"))
 
     print(model.output_shape)
 
