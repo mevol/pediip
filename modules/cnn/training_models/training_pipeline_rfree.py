@@ -231,7 +231,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                        label_dict,#y_train,#y
                                        dim=STACK_DIM,
                                        batch_size=batch_size,
-                                       n_classes=2,
+                                       n_classes=4,#2
                                        shuffle=True,
                                        augmentation=True)
 
@@ -242,7 +242,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                       label_dict,#y_test,
                                       dim=STACK_DIM,
                                       batch_size=batch_size,
-                                      n_classes=2,
+                                      n_classes=4,#2
                                       shuffle=False)#was True
 
     challenge_generator = DataGenerator(
@@ -252,7 +252,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                       label_dict,#y_test,
                                       dim=STACK_DIM,
                                       batch_size=batch_size,
-                                      n_classes=2,
+                                      n_classes=4,#2
                                       shuffle=False)#was True
 
     history = model.fit(
