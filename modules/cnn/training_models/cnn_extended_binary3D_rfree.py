@@ -54,7 +54,8 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int]):
     model.add(Dense(1024, activation="relu"))
     model.add(Dropout(0.3))
     model.add(Dense(1024, activation="relu"))
-    model.add(Dense(2, activation="softmax"))
+#    model.add(Dense(2, activation="softmax"))
+    model.add(Dense(4, activation="softmax"))
 
     print(model.output_shape)
 
