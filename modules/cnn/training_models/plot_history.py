@@ -52,7 +52,7 @@ def confusion_matrix_and_stats(y_test, y_pred, filename):
     conf_mat = confusion_matrix(y_test, y_pred)
 
     # draw confusion matrix
-    labels = ['0', '1']      
+    labels = ['0', '1']
     ax = plt.subplot()
     sns.heatmap(conf_mat, annot=True, ax=ax)
     plt.title('Confusion matrix of the classifier')
@@ -91,6 +91,31 @@ def confusion_matrix_and_stats(y_test, y_pred, filename):
                      'precision' : precision,
                      'F1-score' : f1}
     return conf_mat_dict
+
+def confusion_matrix_and_stats_multiclass(y_test, y_pred, filename):
+    # Plot predictions in confusion matrix
+    conf_mat = confusion_matrix(y_test, y_pred)
+    cmap=plt.cm.Blues
+
+    # draw confusion matrix
+    classes = list(y_test.unique())
+    plt.imshow(conf_mat, interpolation='nearest', cmap=cmap)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    thresh = conf_mat.max() / 2.
+    for i, j in itertools.product(range(conf_mat.shape[0]), range(conf_mat.shape[1])):
+        plt.text(j, i, conf_mat[i, j],
+                 horizontalalignment="center",
+                 color="white" if conf_mat[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.savefig(filename, dpi=600)
+    plt.close()
 
 
 #plot precision and recall curve

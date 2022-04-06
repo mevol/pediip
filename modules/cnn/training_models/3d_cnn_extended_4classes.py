@@ -9,7 +9,6 @@ from tensorflow.keras.layers import BatchNormalization #added 20210226
 from modules.cnn.training_models.training_pipeline_3d import pipeline_from_command_line
 
 def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
-    print(1111, input_shape)
     model = Sequential()
 
     #reduced number of filters 32 --> 16 20210303
@@ -62,7 +61,6 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
 
     model.compile(
         loss="categorical_crossentropy",
-#        optimizer=optimizers.adam(lr=1e-5),
         optimizer='adam',
         metrics=["accuracy"],
     )
