@@ -7,7 +7,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.layers import Conv3D, Dense, Dropout, Flatten, MaxPooling3D
 
-from modules.cnn.training_models.training_pipeline_rfree import pipeline_from_command_line
+from modules.cnn.training_models.training_pipeline_image_stack_classification import pipeline_from_command_line
 
 def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     model = Sequential()
@@ -30,7 +30,7 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     model.add(Dropout(0.3))
     model.add(Dense(1024, activation="relu"))
     model.add(Dropout(0.3))
-    model.add(Dense(2, activation="softmax"))
+    model.add(Dense(3, activation="softmax"))
 
     print(model.output_shape)
 
