@@ -13,6 +13,7 @@ from typing import List
 from sys import getsizeof
 
 from scipy.spatial.transform import Rotation as R
+from scipy.ndimage import rotate
 
 #def rotation(volume):
 #  r = R.from_euler('xyz', [
@@ -23,7 +24,7 @@ from scipy.spatial.transform import Rotation as R
 #  rot_volume = r.apply(volume)
 #  return rot_volume
 
-def rotate(self, deg_angle, axis):
+def rotate_man(self, deg_angle, axis):
   d = len(self.matrix)
   h = len(self.matrix[0])
   w = len(self.matrix[0][0])
@@ -85,6 +86,24 @@ def rotate(self, deg_angle, axis):
 
   self.matrix = rotated
   return self.matrix
+
+def rotate(volume):
+    """Rotate the volume by a few degrees"""
+
+    def scipy_rotate(volume):
+        # define some rotation angles
+        #angles = [-20, -10, -5, 5, 10, 20]
+        # pick angles at random
+        angle = np.random.choice(volume.shaep[0], 1, replace=False)
+        # rotate volume
+        volume = ndimage.rotate(volume, angle, reshape=False)
+        volume[volume < 0] = 0
+        volume[volume > 1] = 1
+        return volume
+
+    augmented_volume = tf.numpy_function(scipy_rotate, [volume], tf.float32)
+    return augmented_volume
+
 
 def prepare_training_data_volume(
     maps_list: str,
@@ -189,7 +208,9 @@ def prepare_training_data_volume(
             map_array = np.array(map_grid, copy = False)
 #            rotated_volume = rotation(map_array)
 
+#            rotated_volume = rotate_man(map_array, 20, x)
             rotated_volume = rotate(map_array)
+
             logging.info(f"Size of standardise map when finished: {map_array.shape} \n")
         except Exception:
             logging.error(f"Could not expand map {map_file_path} \n")
