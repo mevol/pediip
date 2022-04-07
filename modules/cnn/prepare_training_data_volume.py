@@ -14,7 +14,7 @@ from typing import List
 from sys import getsizeof
 
 from scipy.spatial.transform import Rotation as R
-from scipy import ndimage
+from scipy.ndimage import rotate
 
 #def rotation(volume):
 #  r = R.from_euler('xyz', [
@@ -88,26 +88,26 @@ def rotate_man(self, deg_angle, axis):
   self.matrix = rotated
   return self.matrix
 
-@tf.function
-def rotate(volume):
-    """Rotate the volume by a few degrees"""
-    def scipy_rotate(volume):
-        print(1111111, volume.shape)
-        # define some rotation angles
-        angles = [-20, -10, -5, 5, 10, 20]
-        # pick angles at random
-        #angle = random.choice(angles)
-        angle = np.random.choice(90, 1, replace=False)
-        # rotate volume
-        volume = ndimage.rotate(volume, angle, reshape=False)
-        print(2222222, volume.shape)
-        volume[volume < 0] = 0
-        volume[volume > 1] = 1
-        print(3333333, volume.shape)
-        return volume
-
-    augmented_volume = tf.numpy_function(scipy_rotate, [volume], tf.float32)
-    return augmented_volume
+#@tf.function
+#def rotate(volume):
+#    """Rotate the volume by a few degrees"""
+#    def scipy_rotate(volume):
+#        print(1111111, volume.shape)
+#        # define some rotation angles
+#        angles = [-20, -10, -5, 5, 10, 20]
+#        # pick angles at random
+#        #angle = random.choice(angles)
+#        angle = np.random.choice(90, 1, replace=False)
+#        # rotate volume
+#        volume = ndimage.rotate(volume, angle, reshape=False)
+#        print(2222222, volume.shape)
+#        volume[volume < 0] = 0
+#        volume[volume > 1] = 1
+#        print(3333333, volume.shape)
+#        return volume
+#
+#    augmented_volume = tf.numpy_function(scipy_rotate, [volume], tf.float32)
+#    return augmented_volume
 
 
 def prepare_training_data_volume(
