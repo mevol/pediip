@@ -98,9 +98,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     with open(output_dir_path / "parameters.yaml", "w") as f:
         yaml.dump(parameters_dict, f)
 
-    MAP_DIM = tuple((parameters_dict["image_dim"][0],
-                     parameters_dict["image_dim"][1],
-                     parameters_dict["image_dim"][2]))
+    MAP_DIM = tuple((parameters_dict["xyz_limits"][0] + 1,
+                     parameters_dict["xyz_limits"][1] + 1,
+                     parameters_dict["xyz_limits"][2] + 1))
 
     # Check if input CSV holding sample filepaths does exist and open the file
     try:
@@ -194,17 +194,11 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # grayscale is used
     if parameters_dict["rgb"] is True:
         logging.info("Using 3 channel image input to model")
-        input_shape = (parameters_dict["image_dim"][0],
-                       parameters_dict["image_dim"][1],
-                       parameters_dict["image_dim"][2],
-                       3)
+        input_shape = (MAP_DIM, 3)
         color_mode = "rgb"
     else:
         logging.info("Using single channel image input to model \n")
-        input_shape = (parameters_dict["image_dim"][0],
-                       parameters_dict["image_dim"][1],
-                       parameters_dict["image_dim"][2],
-                       1)
+        input_shape = (MAP_DIM, 1)
         color_mode = "grayscale"
 
     # Prepare data generators to get data out
