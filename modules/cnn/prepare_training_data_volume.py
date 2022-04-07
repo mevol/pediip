@@ -14,14 +14,77 @@ from sys import getsizeof
 
 from scipy.spatial.transform import Rotation as R
 
-def rotation(volume):
-  r = R.from_euler('xyz', [
-                           [np.random.choice(90, 1, replace=False), 0, 0],
-                           [0, np.random.choice(90, 1, replace=False), 0],
-                           [0, 0, np.random.choice(90, 1, replace=False)]])
-  print(r)
-  rot_volume = r.apply(volume)
-  return rot_volume
+#def rotation(volume):
+#  r = R.from_euler('xyz', [
+#                           [np.random.choice(90, 1, replace=False), 0, 0],
+#                           [0, np.random.choice(90, 1, replace=False), 0],
+#                           [0, 0, np.random.choice(90, 1, replace=False)]])
+#  print(r)
+#  rot_volume = r.apply(volume)
+#  return rot_volume
+
+def rotate(self, deg_angle, axis):
+  d = len(self.matrix)
+  h = len(self.matrix[0])
+  w = len(self.matrix[0][0])
+  min_new_x = 0
+  max_new_x = 0
+  min_new_y = 0
+  max_new_y = 0
+  min_new_z = 0
+  max_new_z = 0
+  new_coords = []
+  angle = radians(deg_angle)
+
+  for z in range(d):
+    for y in range(h):
+      for x in range(w):
+        new_x = None
+        new_y = None
+        new_z = None
+
+        if axis == "x":
+          new_x = int(round(x))
+          new_y = int(round(y*cos(angle) - z*sin(angle)))
+          new_z = int(round(y*sin(angle) + z*cos(angle)))
+        elif axis == "y":
+          new_x = int(round(z*sin(angle) + x*cos(angle)))
+          new_y = int(round(y))
+          new_z = int(round(z*cos(angle) - x*sin(angle)))
+        elif axis == "z":
+          new_x = int(round(x*cos(angle) - y*sin(angle)))
+          new_y = int(round(x*sin(angle) + y*cos(angle)))
+          new_z = int(round(z))
+        val = self.matrix.item((z, y, x))
+        new_coords.append((val, new_x, new_y, new_z))
+        if new_x < min_new_x: min_new_x = new_x
+        if new_x > max_new_x: max_new_x = new_x
+        if new_y < min_new_y: min_new_y = new_y
+        if new_y > max_new_y: max_new_y = new_y
+        if new_z < min_new_z: min_new_z = new_z
+        if new_z > max_new_z: max_new_z = new_z
+
+  new_x_offset = abs(min_new_x)
+  new_y_offset = abs(min_new_y)
+  new_z_offset = abs(min_new_z)
+
+  new_width = abs(min_new_x - max_new_x)
+  new_height = abs(min_new_y - max_new_y)
+  new_depth = abs(min_new_z - max_new_z)
+
+  rotated = np.empty((new_depth + 1, new_height + 1, new_width + 1))
+  rotated.fill(0)
+  for coord in new_coords:
+    val = coord[0]
+    x = coord[1]
+    y = coord[2]
+    z = coord[3]
+
+    if rotated[new_z_offset + z][new_y_offset + y][new_x_offset + x] == 0:
+      rotated[new_z_offset + z][new_y_offset + y][new_x_offset + x] = val
+
+  self.matrix = rotated
+  return self.matrix
 
 def prepare_training_data_volume(
     maps_list: str,
@@ -124,7 +187,9 @@ def prepare_training_data_volume(
             data_to_map.set_extent(box)
             map_grid = data_to_map.grid
             map_array = np.array(map_grid, copy = False)
-            rotated_volume = rotation(map_array)
+#            rotated_volume = rotation(map_array)
+
+            rotated_volume = rotate(map_array)
             logging.info(f"Size of standardise map when finished: {map_array.shape} \n")
         except Exception:
             logging.error(f"Could not expand map {map_file_path} \n")
