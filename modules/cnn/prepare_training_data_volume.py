@@ -97,7 +97,7 @@ def rotate(volume):
         # pick angles at random
         angle = np.random.choice(volume.shape[0], 1, replace=False)
         # rotate volume
-        volume = ndimage.rotate(volume, angle, reshape=False)
+        volume = ndimage.rotate(volume, angle, reshape=True)#change from False
         volume[volume < 0] = 0
         volume[volume > 1] = 1
         return volume
