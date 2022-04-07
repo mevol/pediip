@@ -7,6 +7,7 @@ import csv
 
 import numpy as np
 import pandas as pd
+import tensorflow as tf
 
 from pathlib import Path
 from typing import List
@@ -96,7 +97,7 @@ def rotate(volume):
         # pick angles at random
         angle = np.random.choice(volume.shaep[0], 1, replace=False)
         # rotate volume
-        volume = ndimage.rotate(volume, angle, reshape=False)
+        volume = rotate(volume, angle, reshape=False)
         volume[volume < 0] = 0
         volume[volume > 1] = 1
         return volume
