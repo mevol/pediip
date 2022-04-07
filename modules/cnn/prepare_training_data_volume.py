@@ -95,7 +95,7 @@ def rotate(volume):
         # define some rotation angles
         #angles = [-20, -10, -5, 5, 10, 20]
         # pick angles at random
-        angle = np.random.choice(volume.shaep[0], 1, replace=False)
+        angle = np.random.choice(volume.shape[0], 1, replace=False)
         # rotate volume
         volume = rotate(volume, angle, reshape=False)
         volume[volume < 0] = 0
