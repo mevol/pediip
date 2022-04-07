@@ -196,8 +196,8 @@ if __name__ == "__main__":
 
     # Execute the command
     try:
-        prepare_training_data_binary(
+        prepare_training_data_volume(
             parameters["maps_list"],
-            parameters["xyz_limits"],
+            parameters["xyz_limits"])
     except KeyError as e:
         logging.error(f"Could not find parameter {e} to prepare training data \n")
