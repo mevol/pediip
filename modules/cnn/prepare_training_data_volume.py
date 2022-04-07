@@ -14,7 +14,7 @@ from typing import List
 from sys import getsizeof
 
 from scipy.spatial.transform import Rotation as R
-from scipy.ndimage import rotate
+from scipy import ndimage
 
 #def rotation(volume):
 #  r = R.from_euler('xyz', [
@@ -97,7 +97,7 @@ def rotate(volume):
         # pick angles at random
         angle = np.random.choice(volume.shape[0], 1, replace=False)
         # rotate volume
-        volume = rotate(volume, angle, reshape=False)
+        volume = ndimage.rotate(volume, angle, reshape=False)
         volume[volume < 0] = 0
         volume[volume > 1] = 1
         return volume
