@@ -45,7 +45,7 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     model.add(Conv3D(512, kernel_size=(3, 3, 3), strides=(1, 1, 1), activation="relu", padding='same'))
     model.add(Conv3D(512, kernel_size=(3, 3, 3), strides=(1, 1, 1), activation="relu", padding='same'))
     model.add(Conv3D(512, kernel_size=(3, 3, 3), strides=(1, 1, 1), activation="relu", padding='same'))
-    model.add(MaxPooling3D(pool_size=(2, 2, 2), strides=(2, 2, 2)))#strides added 20210303
+    model.add(MaxPooling3D(pool_size=(1, 1, 1), strides=(1, 1, 1)))#strides added 20210303
     model.add(BatchNormalization())#added 20210226
 
     model.add(Flatten())
