@@ -13,7 +13,6 @@ import configargparse
 import yaml
 import math
 import tensorflow
-import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
@@ -29,7 +28,6 @@ from modules.cnn.training_models.plot_history import plot_precision_recall_vs_th
 from modules.cnn.training_models.plot_history import plot_roc_curve, confusion_matrix_and_stats_multiclass
 from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
 from modules.cnn.training_models.data_generator_classification import DataGenerator
-from modules.cnn.prepare_training_data_random_pick_combined import prepare_training_data_random_pick_combined
 
 print("TensorFlow version: ", tensorflow.__version__)
 
@@ -119,7 +117,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     class_frequency = data.groupby(y).size()
     logging.info(f"Number of samples per class {class_frequency} \n")
 
-    
     # split the data into training and test set; this is splitting the input CSV data;
     # and an additional challenge set of 5% of the data; this latter set is used to
     # finally challenge the algorithm after training and testing
@@ -197,14 +194,14 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
         input_shape = (parameters_dict["slices_per_structure"],
                        parameters_dict["image_dim"][0],
                        parameters_dict["image_dim"][1],
-                       3) #2D
+                       3)
         color_mode = "rgb"
     else:
         logging.info("Using single channel image input to model \n")
         input_shape = (parameters_dict["slices_per_structure"],
                        parameters_dict["image_dim"][0],
                        parameters_dict["image_dim"][1],
-                       1) #2D
+                       1)
         color_mode = "grayscale"
 
     # Prepare data generators to get data out
@@ -301,8 +298,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     except Exception:
       logging.warning("Could not round predictions for X_test\n")
       raise
-    # get classification report
+##### 2-class case
     if num_classes == 2:
+    # get classification report for the test set
       try:
         classes = list(y_test.unique())
         labels = np.arange(len(classes))
@@ -314,7 +312,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       except Exception:
         logging.warning("Could not get classification report for X_test\n")
         raise
-      # calculate and draw confusion matrix
+      # calculate and draw confusion matrix for the test set
       try:
         logging.info("Drawing confusion matrix for X_test. \n")
         cat_labels = pd.DataFrame(y_test)
@@ -325,12 +323,14 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       except Exception:
         logging.warning("Could not calculate confusion matrix for X_test\n")
         raise
+      # get precision and recall curve for test set
       try:
         plot_precision_recall_vs_threshold(cat_labels, cat_preds,
                     evaluations_path / f"precision_recall_curve_test_{date}.png")
       except Exception:
         logging.warning("Could not draw precision-recall curve for X_test. \n")
         raise
+      # get ROC curve for test set
       try:
         fpr, tpr, thresholds = plot_roc_curve(cat_labels, cat_preds,
                                 evaluations_path / f"ROC_curve_test_{date}.png")
@@ -340,7 +340,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       except Exception:
         logging.warning("Could not draw precision-recall curve for X_test. \n")
         raise
+##### multi-class case
     else:
+    # get classification report for the test set
       try:
         classes = list(y_test.unique())
         labels = np.arange(len(classes))
@@ -352,7 +354,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       except Exception:
         logging.warning("Could not get classification report for X_test\n")
         raise
-      # calculate and draw confusion matrix
+      # calculate and draw confusion matrix for test set
       try:
         logging.info("Drawing confusion matrix for X_test. \n")
         cat_labels = pd.DataFrame(y_test)
@@ -381,8 +383,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     except Exception:
       logging.warning("Could not round predictions \n")
       raise
-    # get classification report
+##### 2-class case
     if num_classes == 2:
+    # get classification report for the challenge data
       try:
         classes = list(y_test.unique())
         labels = np.arange(len(classes))
@@ -395,7 +398,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       except Exception:
         logging.warning("Could not get classification report for challenge data \n")
         raise
-      # calculate and draw confusion matrix
+      # calculate and draw confusion matrix for the challenge data
       try:
         logging.info("Drawing confusion matrix for challenge data. \n")
         challenge_cat_labels = pd.DataFrame(y_challenge)
@@ -406,12 +409,14 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       except Exception:
         logging.warning("Could not calculate confusion matrix for challenge data \n")
         raise
+      # get precision-recall curve for challenge data
       try:
         plot_precision_recall_vs_threshold(challenge_cat_labels, challenge_cat_preds,
               evaluations_path / f"precision_recall_curve_challenge_{date}.png")
       except Exception:
         logging.warning("Could not draw precision-recall curve for challenge data. \n")
         raise
+      # get ROC curve for challenge data
       try:
         fpr_challenge, tpr_challenge, thresholds_challenge = plot_roc_curve(challenge_cat_labels, challenge_cat_preds,
                               evaluations_path / f"ROC_curve_challenge_{date}.png")
@@ -421,7 +426,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       except Exception:
         logging.warning("Could not draw precision-recall curve for challenge data. \n")
         raise
+##### multi-class case
     else:
+    # get classification report for the challenge data
       try:
         classes = list(y_test.unique())
         labels = np.arange(len(classes))
@@ -434,7 +441,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       except Exception:
         logging.warning("Could not get classification report for challenge data \n")
         raise
-      # calculate and draw confusion matrix
+      # calculate and draw confusion matrix for the challenge data
       try:
         logging.info("Drawing confusion matrix for challenge data. \n")
         challenge_cat_labels = pd.DataFrame(y_challenge)
@@ -561,31 +568,13 @@ def get_pipeline_parameters() -> dict:
         type=int,
         help="number of images for each structure. To be used in testing only")
 
-    (known_args, unknown_args) = parser.parse_known_args()
+    known_args = parser.parse_known_args()
 
     assert known_args.k_folds >= known_args.runs, (
         f"Number of runs must be less than or equal to k_folds, \n"
         f"got {known_args.runs} runs and {known_args.k_folds} folds. \n")
+
     argument_dict = vars(known_args)
-
-    # Try to extract image_augmentation_dict
-    try:
-        assert unknown_args
-        assert "--image_augmentation_dict" in unknown_args
-        # Extract values from config file
-        with open(known_args.config, "r") as f:
-            image_augmentation_dict = yaml.load(f.read())["image_augmentation_dict"]
-    except (KeyError, AssertionError):
-        logging.warning(
-            f"Could not find image_augmentation_dict in {known_args.config}, \n"
-            f"performing scaling only. \n")
-        image_augmentation_dict = {}
-    assert isinstance(
-        image_augmentation_dict, dict
-    ), f"image_augmentation_dict must be provided as a dictionary in YAML, got {image_augmentation_dict} \n"
-
-    argument_dict["image_augmentation_dict"] = image_augmentation_dict
-
 
     return argument_dict
 
