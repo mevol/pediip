@@ -12,6 +12,17 @@ from pathlib import Path
 from typing import List
 from sys import getsizeof
 
+from scipy.spatial.transform import Rotation as R
+
+def rotation(volume):
+  r = R.from_euler('xyz', [
+                           [np.random.choice(90, 1, replace=False), 0, 0],
+                           [0, np.random.choice(90, 1, replace=False), 0],
+                           [0, 0, np.random.choice(90, 1, replace=False)]])
+  print(r)
+  rot_volume = r.apply(volume)
+  return rot_volume
+
 def prepare_training_data_volume(
     maps_list: str,
     xyz_limits: List[int],
@@ -113,6 +124,7 @@ def prepare_training_data_volume(
             data_to_map.set_extent(box)
             map_grid = data_to_map.grid
             map_array = np.array(map_grid, copy = False)
+            rotated_volume = rotation(map_array)
             logging.info(f"Size of standardise map when finished: {map_array.shape} \n")
         except Exception:
             logging.error(f"Could not expand map {map_file_path} \n")
@@ -127,7 +139,8 @@ def prepare_training_data_volume(
     except Exception:
         logging.error(f"Could not open input map list \n")
         raise
-    return map_array
+#    return map_array
+    return rotated_volume
 
 
 
