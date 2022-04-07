@@ -540,7 +540,7 @@ def get_pipeline_parameters() -> dict:
         "--output_dir",
         required=True,
         help="directory to output results files to. Will be appended with date and time of program run")
-        parser.add_argument(
+    parser.add_argument(
         "--num_classes",
         required=True,
         type=int,
