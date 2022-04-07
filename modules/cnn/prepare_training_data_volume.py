@@ -88,14 +88,16 @@ def rotate_man(self, deg_angle, axis):
   self.matrix = rotated
   return self.matrix
 
+@tf.function
 def rotate(volume):
     """Rotate the volume by a few degrees"""
     def scipy_rotate(volume):
         print(1111111, volume.shape)
         # define some rotation angles
-        #angles = [-20, -10, -5, 5, 10, 20]
+        angles = [-20, -10, -5, 5, 10, 20]
         # pick angles at random
-        angle = np.random.choice(volume.shape[0], 1, replace=False)
+        #angle = random.choice(angles)
+        angle = np.random.choice(90, 1, replace=False)
         # rotate volume
         volume = ndimage.rotate(volume, angle, reshape=False)
         print(2222222, volume.shape)
