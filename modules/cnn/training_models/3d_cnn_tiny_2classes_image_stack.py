@@ -21,15 +21,16 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     model.add(GlobalAveragePooling3D())
     model.add(Dense(128, activation="relu"))
     model.add(Dropout(0.3))
-    model.add(Dense(2, activation="tanh"))#was softmax
+    model.add(Dense(2, activation="softmax"))#was tanh
 
     print(model.output_shape)
 
 
     model.compile(
-        loss="categorical_crossentropy",
+        loss="binary_crossentropy",
 #        optimizer=optimizers.adam(lr=1e-5),
-        optimizer='adam',
+#        optimizer='adam',
+        optimizer=Adam(learning_rate=0.1),
         metrics=["accuracy"],
     )
 
