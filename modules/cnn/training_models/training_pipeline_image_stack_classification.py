@@ -27,7 +27,7 @@ from modules.cnn.training_models.plot_history import confusion_matrix_and_stats
 from modules.cnn.training_models.plot_history import plot_precision_recall_vs_threshold
 from modules.cnn.training_models.plot_history import plot_roc_curve, confusion_matrix_and_stats_multiclass
 from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
-from modules.cnn.training_models.data_generator_classification import DataGenerator
+from modules.cnn.training_models.data_generator_image_stack_classification import DataGenerator
 
 print("TensorFlow version: ", tensorflow.__version__)
 
