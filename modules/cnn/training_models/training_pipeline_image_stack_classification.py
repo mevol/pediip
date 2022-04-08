@@ -568,13 +568,13 @@ def get_pipeline_parameters() -> dict:
         type=int,
         help="number of images for each structure. To be used in testing only")
 
-    known_args = parser.parse_known_args()
+    args = parser.parse_args()
 
-    assert known_args.k_folds >= known_args.runs, (
+    assert args.k_folds >= args.runs, (
         f"Number of runs must be less than or equal to k_folds, \n"
-        f"got {known_args.runs} runs and {known_args.k_folds} folds. \n")
+        f"got {args.runs} runs and {args.k_folds} folds. \n")
 
-    argument_dict = vars(known_args)
+    argument_dict = vars(args)
 
     return argument_dict
 
