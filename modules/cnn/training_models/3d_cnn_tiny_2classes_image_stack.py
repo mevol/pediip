@@ -21,7 +21,7 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     model.add(GlobalAveragePooling3D())
     model.add(Dense(128, activation="relu"))
     model.add(Dropout(0.3))
-    model.add(Dense(2, activation="softmax"))
+    model.add(Dense(2, activation="tanh"))#was softmax
 
     print(model.output_shape)
 
