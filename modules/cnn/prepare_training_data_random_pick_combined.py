@@ -12,7 +12,7 @@ import pandas as pd
 from pathlib import Path
 from typing import List
 from sys import getsizeof
-from scipy.ndimage import rotate
+from scipy import ndimage
 
 
 def slice_map(volume, slices_per_axis):
