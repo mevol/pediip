@@ -13,101 +13,7 @@ from pathlib import Path
 from typing import List
 from sys import getsizeof
 
-from scipy.spatial.transform import Rotation as R
 from scipy.ndimage import rotate
-
-#def rotation(volume):
-#  r = R.from_euler('xyz', [
-#                           [np.random.choice(90, 1, replace=False), 0, 0],
-#                           [0, np.random.choice(90, 1, replace=False), 0],
-#                           [0, 0, np.random.choice(90, 1, replace=False)]])
-#  print(r)
-#  rot_volume = r.apply(volume)
-#  return rot_volume
-
-def rotate_man(self, deg_angle, axis):
-  d = len(self.matrix)
-  h = len(self.matrix[0])
-  w = len(self.matrix[0][0])
-  min_new_x = 0
-  max_new_x = 0
-  min_new_y = 0
-  max_new_y = 0
-  min_new_z = 0
-  max_new_z = 0
-  new_coords = []
-  angle = radians(deg_angle)
-
-  for z in range(d):
-    for y in range(h):
-      for x in range(w):
-        new_x = None
-        new_y = None
-        new_z = None
-
-        if axis == "x":
-          new_x = int(round(x))
-          new_y = int(round(y*cos(angle) - z*sin(angle)))
-          new_z = int(round(y*sin(angle) + z*cos(angle)))
-        elif axis == "y":
-          new_x = int(round(z*sin(angle) + x*cos(angle)))
-          new_y = int(round(y))
-          new_z = int(round(z*cos(angle) - x*sin(angle)))
-        elif axis == "z":
-          new_x = int(round(x*cos(angle) - y*sin(angle)))
-          new_y = int(round(x*sin(angle) + y*cos(angle)))
-          new_z = int(round(z))
-        val = self.matrix.item((z, y, x))
-        new_coords.append((val, new_x, new_y, new_z))
-        if new_x < min_new_x: min_new_x = new_x
-        if new_x > max_new_x: max_new_x = new_x
-        if new_y < min_new_y: min_new_y = new_y
-        if new_y > max_new_y: max_new_y = new_y
-        if new_z < min_new_z: min_new_z = new_z
-        if new_z > max_new_z: max_new_z = new_z
-
-  new_x_offset = abs(min_new_x)
-  new_y_offset = abs(min_new_y)
-  new_z_offset = abs(min_new_z)
-
-  new_width = abs(min_new_x - max_new_x)
-  new_height = abs(min_new_y - max_new_y)
-  new_depth = abs(min_new_z - max_new_z)
-
-  rotated = np.empty((new_depth + 1, new_height + 1, new_width + 1))
-  rotated.fill(0)
-  for coord in new_coords:
-    val = coord[0]
-    x = coord[1]
-    y = coord[2]
-    z = coord[3]
-
-    if rotated[new_z_offset + z][new_y_offset + y][new_x_offset + x] == 0:
-      rotated[new_z_offset + z][new_y_offset + y][new_x_offset + x] = val
-
-  self.matrix = rotated
-  return self.matrix
-
-#@tf.function
-#def rotate(volume):
-#    """Rotate the volume by a few degrees"""
-#    def scipy_rotate(volume):
-#        print(1111111, volume.shape)
-#        # define some rotation angles
-#        angles = [-20, -10, -5, 5, 10, 20]
-#        # pick angles at random
-#        #angle = random.choice(angles)
-#        angle = np.random.choice(90, 1, replace=False)
-#        # rotate volume
-#        volume = ndimage.rotate(volume, angle, reshape=False)
-#        print(2222222, volume.shape)
-#        volume[volume < 0] = 0
-#        volume[volume > 1] = 1
-#        print(3333333, volume.shape)
-#        return volume
-#
-#    augmented_volume = tf.numpy_function(scipy_rotate, [volume], tf.float32)
-#    return augmented_volume
 
 
 def prepare_training_data_volume(
@@ -213,12 +119,7 @@ def prepare_training_data_volume(
             map_array = np.array(map_grid, copy = False)
 
             length = int(xyz_limits[0])+1
-            edited_volume = np.zeros((length,
-                                            length,
-                                            length))
-            print("empty edited volume: ", edited_volume.shape)
-            # Slice the volume into images
-            #image_slices, bytes = slice_map(map_array, slices_per_axis)
+            edited_volume = np.zeros((length, length, length))
             # Iterate through images, scale them and save them in output_directory
             deg = np.random.choice(90, 1, replace=False)[0]
             for slice_num in range(map_array.shape[0]):
@@ -237,15 +138,6 @@ def prepare_training_data_volume(
                 slice_scaled_int = rotate(slice_scaled_int, angle = deg, reshape=False)
                 # combine the slices to a new image stack for training
                 edited_volume[slice_num, :, :] = slice_scaled_int
-            print("filled edited volume: ", edited_volume.shape)
-
-
-
-#            rotated_volume = rotation(map_array)
-
-#            rotated_volume = rotate_man(map_array, 20, x)
-#            rotated_volume = rotate(map_array)
-
             logging.info(f"Size of standardise map when finished: {map_array.shape} \n")
         except Exception:
             logging.error(f"Could not expand map {map_file_path} \n")
@@ -260,8 +152,6 @@ def prepare_training_data_volume(
     except Exception:
         logging.error(f"Could not open input map list \n")
         raise
-#    return map_array
-#    return rotated_volume
     return edited_volume
 
 

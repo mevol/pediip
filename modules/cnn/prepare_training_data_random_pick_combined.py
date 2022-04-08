@@ -24,29 +24,58 @@ def slice_map(volume, slices_per_axis):
 
     length = volume.shape[0]
 
-    # randomly select slices at each axis; the number of picks is determined by
-    # slices_per_axis; iterate over each axis; reshape to same dimensions as for first
-    # axis; stack vertically
-    stack1 = volume[np.random.choice(length, slices_per_axis, replace=False), :, :]
-    stack2 = volume[:, np.random.choice(length, slices_per_axis, replace=False), :]
-    stack2 = stack2.reshape(slices_per_axis, length, length)
-    stack3 = volume[:, :, np.random.choice(length, slices_per_axis, replace=False)]
-    stack3 = stack3.reshape(slices_per_axis, length, length)
+    first_pick = np.random.choice(length, slices_per_axis, replace=False)
+    second_pick = np.random.choice(length, slices_per_axis, replace=False)
+    third_pick = np.random.choice(length, slices_per_axis, replace=False)
 
-    image_stack = np.vstack([stack1, stack2])
-    image_stack = np.vstack([image_stack, stack3])
+    image_stack = np.zeros((slices_per_axis * 3, length, length))
 
+    index = 0
+    for s in first_pick:
+        print(index)
+        deg1 = np.random.choice(90, 1, replace=False)[0]
+        stack1 = np.copy(volume[s, :, :])
+        print(stack1.shape)
+        rotate1 = ndimage.rotate(stack1, angle = deg1, reshape=False)
+        image_stack[index, :, :] = rotate1
+        index = index + 1
+
+    for ss in second_pick:
+        print(index)
+        stack2 = np.copy(volume[:, ss, :])
+        print(stack2.shape)
+        image_stack[index, :, :] = stack2
+        index = index + 1
+
+    for sss in second_pick:
+        print(index)
+        stack3 = np.copy(volume[:, :, sss])
+        print(stack3.shape)
+        image_stack[index, :, :] = stack3
+        index = index + 1
+
+#    # randomly select slices at each axis; the number of picks is determined by
+#    # slices_per_axis; iterate over each axis; reshape to same dimensions as for first
+#    # axis; stack vertically
+#    stack1 = volume[np.random.choice(length, slices_per_axis, replace=False), :, :]
+#    stack2 = volume[:, np.random.choice(length, slices_per_axis, replace=False), :]
+#    stack2 = stack2.reshape(slices_per_axis, length, length)
+#    stack3 = volume[:, :, np.random.choice(length, slices_per_axis, replace=False)]
+#    stack3 = stack3.reshape(slices_per_axis, length, length)
+#
+#    image_stack = np.vstack([stack1, stack2])
+#    image_stack = np.vstack([image_stack, stack3])
+#
     byte_size_stack = getsizeof(image_stack)
 
-    image_stack = image_stack.reshape(60, 101, 101)
+#    image_stack = image_stack.reshape(60, 101, 101)
 
     return image_stack, byte_size_stack
 
 def prepare_training_data_random_pick_combined(
     maps_list: str,
     xyz_limits: List[int],
-    slices_per_axis: int,
-    augmentation = False):
+    slices_per_axis: int):
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
     logging.info("Preparing training data. \n")
@@ -169,13 +198,12 @@ def prepare_training_data_random_pick_combined(
                 # do data augmentation as rotation for a random angle between 0 and 90 deg
                 # for all even numbers in the total image stack
                 # check that the remainder of division is 0 and hence the result even
-                if augmentation == True:
-                    if slice_num % 2 == 0:
-                        # get a random number between 0 and 90 deg
-                        deg = np.random.choice(90, 1, replace=False)[0]
-                        # rotate the slice by this deg
-                        slice_scaled_int = rotate(slice_scaled_int,
-                                                  angle = deg, reshape=False)
+#                if augmentation == True:
+#                    if slice_num % 2 == 0:
+#                        # get a random number between 0 and 90 deg
+                deg = np.random.choice(90, 1, replace=False)[0]
+                # rotate the slice by this deg
+                slice_scaled_int = rotate(slice_scaled_int, angle = deg, reshape=False)
                 # combine the slices to a new image stack for training
                 edited_image_slices[slice_num, :, :] = slice_scaled_int#volume[
 
