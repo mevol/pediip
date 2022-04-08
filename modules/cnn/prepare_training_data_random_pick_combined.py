@@ -24,6 +24,13 @@ def slice_map(volume, slices_per_axis):
 
     length = volume.shape[0]
 
+    # randomly select slices at each axis; the number of picks is determined by
+    # slices_per_axis; iterate over each axis; reshape to same dimensions as for first
+    # axis; stack vertically
+    # do data augmentation as rotation for a random angle between 0 and 90 deg
+    # for all even numbers in the total image stack
+    # check that the remainder of division is 0 and hence the result even
+
     first_pick = np.random.choice(length, slices_per_axis, replace=False)
     second_pick = np.random.choice(length, slices_per_axis, replace=False)
     third_pick = np.random.choice(length, slices_per_axis, replace=False)
@@ -32,43 +39,27 @@ def slice_map(volume, slices_per_axis):
 
     index = 0
     for s in first_pick:
-        print(index)
         deg1 = np.random.choice(90, 1, replace=False)[0]
         stack1 = np.copy(volume[s, :, :])
-        print(stack1.shape)
         rotate1 = ndimage.rotate(stack1, angle = deg1, reshape=False)
         image_stack[index, :, :] = rotate1
         index = index + 1
 
     for ss in second_pick:
-        print(index)
+        deg2 = np.random.choice(90, 1, replace=False)[0]
         stack2 = np.copy(volume[:, ss, :])
-        print(stack2.shape)
+        rotate2 = ndimage.rotate(stack2, angle = deg2, reshape=False)
         image_stack[index, :, :] = stack2
         index = index + 1
 
-    for sss in second_pick:
-        print(index)
+    for sss in third_pick:
+        deg3 = np.random.choice(90, 1, replace=False)[0]
         stack3 = np.copy(volume[:, :, sss])
-        print(stack3.shape)
+        rotate3 = ndimage.rotate(stack3, angle = deg3, reshape=False)
         image_stack[index, :, :] = stack3
         index = index + 1
 
-#    # randomly select slices at each axis; the number of picks is determined by
-#    # slices_per_axis; iterate over each axis; reshape to same dimensions as for first
-#    # axis; stack vertically
-#    stack1 = volume[np.random.choice(length, slices_per_axis, replace=False), :, :]
-#    stack2 = volume[:, np.random.choice(length, slices_per_axis, replace=False), :]
-#    stack2 = stack2.reshape(slices_per_axis, length, length)
-#    stack3 = volume[:, :, np.random.choice(length, slices_per_axis, replace=False)]
-#    stack3 = stack3.reshape(slices_per_axis, length, length)
-#
-#    image_stack = np.vstack([stack1, stack2])
-#    image_stack = np.vstack([image_stack, stack3])
-#
     byte_size_stack = getsizeof(image_stack)
-
-#    image_stack = image_stack.reshape(60, 101, 101)
 
     return image_stack, byte_size_stack
 
@@ -188,22 +179,12 @@ def prepare_training_data_random_pick_combined(
             image_slices, bytes = slice_map(map_array, slices_per_axis)
             # Iterate through images, scale them and save them in output_directory
             for slice_num in range(image_slices.shape[0]):
-                #print("Working on slice number: ", slice_num)
                 # Get slice
                 slice = image_slices[slice_num, :, :]
                 # Scale slice
                 slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
                 # Round to the nearest integer
                 slice_scaled_int = np.rint(slice_scaled)
-                # do data augmentation as rotation for a random angle between 0 and 90 deg
-                # for all even numbers in the total image stack
-                # check that the remainder of division is 0 and hence the result even
-#                if augmentation == True:
-#                    if slice_num % 2 == 0:
-#                        # get a random number between 0 and 90 deg
-#                deg = np.random.choice(90, 1, replace=False)[0]
-#                # rotate the slice by this deg
-#                slice_scaled_int = rotate(slice_scaled_int, angle = deg, reshape=False)
                 # combine the slices to a new image stack for training
                 edited_image_slices[slice_num, :, :] = slice_scaled_int#volume[
 
