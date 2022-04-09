@@ -302,7 +302,15 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # get classification report for the test set
       try:
         classes = list(y_test.unique())
+        print(classes)
+        target_names = []
+        for cl in classes:
+          print(cl)
+          name = "class_" + str(cl)
+          target_names.append(name)
+        
         labels = np.arange(len(classes))
+        print(labels)
         report = classification_report(y_test, y_pred1, labels=labels, target_names=classes,
                                       zero_division = 0)
         print(report)
