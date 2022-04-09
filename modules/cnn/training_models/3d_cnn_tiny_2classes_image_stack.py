@@ -30,7 +30,7 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
         loss="binary_crossentropy",
 #        optimizer=optimizers.adam(lr=1e-5),
 #        optimizer='adam',
-        optimizer=Adam(learning_rate=0.1),
+        optimizer=Adam(learning_rate=0.0001),
         metrics=["accuracy"],
     )
 

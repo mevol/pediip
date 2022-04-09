@@ -302,17 +302,11 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # get classification report for the test set
       try:
         classes = list(y_test.unique())
-        print(classes)
         target_names = []
         for cl in classes:
-          print(cl)
           name = "class_" + str(cl)
           target_names.append(name)
-        
-        print(target_names)
-        
         labels = np.arange(len(classes))
-        print(labels)
         report = classification_report(y_test, y_pred1, labels=labels,
                                        target_names=target_names, zero_division = 0)
         print(report)
@@ -354,9 +348,13 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # get classification report for the test set
       try:
         classes = list(y_test.unique())
+        target_names = []
+        for cl in classes:
+          name = "class_" + str(cl)
+          target_names.append(name)
         labels = np.arange(len(classes))
-        report = classification_report(y_test, y_pred1, labels=labels, target_names=classes,
-                                      zero_division = 0)
+        report = classification_report(y_test, y_pred1, labels=labels,
+                                       target_names=target_names, zero_division = 0)
         print(report)
         logging.info(f"Classification report for X_test\n")
         logging.info(report)
@@ -397,10 +395,13 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # get classification report for the challenge data
       try:
         classes = list(y_test.unique())
+        target_names = []
+        for cl in classes:
+          name = "class_" + str(cl)
+          target_names.append(name)
         labels = np.arange(len(classes))
         report_challenge = classification_report(y_challenge, y_pred_challenge1, labels=labels,
-                                     target_names=classes,
-                                     zero_division = 0)
+                                     target_names=target_names, zero_division = 0)
         print(report_challenge)
         logging.info(f"Classification report for challenge data \n")
         logging.info(report_challenge)
@@ -440,10 +441,13 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     # get classification report for the challenge data
       try:
         classes = list(y_test.unique())
+        target_names = []
+        for cl in classes:
+          name = "class_" + str(cl)
+          target_names.append(name)
         labels = np.arange(len(classes))
         report_challenge = classification_report(y_challenge, y_pred_challenge1, labels=labels,
-                                     target_names=classes,
-                                     zero_division = 0)
+                                     target_names=target_names, zero_division = 0)
         print(report_challenge)
         logging.info(f"Classification report for challenge data \n")
         logging.info(report_challenge)
