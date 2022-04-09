@@ -12,8 +12,8 @@ from modules.cnn.training_models.training_pipeline_image_stack_classification im
 
 def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     model = Sequential()
-
-    model.add(Conv3D(64, kernel_size=(3, 3, 3), strides=(1, 1, 1), padding='same',
+    # filter from 64 to 8 --> 09/04/2022
+    model.add(Conv3D(8, kernel_size=(3, 3, 3), strides=(1, 1, 1), padding='same',
                activation="relu", input_shape=input_shape))
     model.add(MaxPooling3D(pool_size=(2, 2, 2)))
     model.add(BatchNormalization())
