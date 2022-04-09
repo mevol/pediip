@@ -309,10 +309,12 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
           name = "class_" + str(cl)
           target_names.append(name)
         
+        print(target_names)
+        
         labels = np.arange(len(classes))
         print(labels)
-        report = classification_report(y_test, y_pred1, labels=labels, target_names=classes,
-                                      zero_division = 0)
+        report = classification_report(y_test, y_pred1, labels=labels,
+                                       target_names=target_names, zero_division = 0)
         print(report)
         logging.info(f"Classification report for X_test\n")
         logging.info(report)
