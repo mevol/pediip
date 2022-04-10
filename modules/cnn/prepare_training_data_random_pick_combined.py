@@ -15,7 +15,7 @@ from sys import getsizeof
 from scipy import ndimage
 
 
-def slice_map(volume, slices_per_axis, augentation = False):
+def slice_map(volume, slices_per_axis, augentation):
     """Slice the volume into 2d panes along x, y, z axes and return as an image stack"""
     # Check volume is equal in all directions
     assert (
@@ -75,7 +75,8 @@ def slice_map(volume, slices_per_axis, augentation = False):
 def prepare_training_data_random_pick_combined(
     maps_list: str,
     xyz_limits: List[int],
-    slices_per_axis: int):
+    slices_per_axis: int,
+    augmentation = False):
     """Load electron density maps from phasing and slice into 2D images along all three
     axis. Return True if no exceptions"""
     logging.info("Preparing training data. \n")
