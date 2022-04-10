@@ -15,7 +15,7 @@ from sys import getsizeof
 from scipy import ndimage
 
 
-def slice_map(volume, slices_per_axis, augentation):
+def slice_map(volume, slices_per_axis, augmentation):
     """Slice the volume into 2d panes along x, y, z axes and return as an image stack"""
     # Check volume is equal in all directions
     assert (
