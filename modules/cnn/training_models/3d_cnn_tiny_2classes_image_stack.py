@@ -5,6 +5,7 @@ from typing import Tuple
 #from keras import Sequential, optimizers
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras import regularizers
 from tensorflow.keras.layers import Conv3D, Dense, Dropout, Flatten, MaxPooling3D
 from tensorflow.keras.layers import GlobalAveragePooling3D, BatchNormalization
 
@@ -19,7 +20,7 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     model.add(BatchNormalization())
 
     model.add(GlobalAveragePooling3D())
-    model.add(Dense(16, activation="relu"))#was 128
+    model.add(Dense(16, activation="relu", kernel_regularizer = regularizers.l2(1e-4)))#was 128
     model.add(Dropout(0.3))
     model.add(Dense(2, activation="softmax"))#was tanh
 
