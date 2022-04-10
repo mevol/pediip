@@ -15,7 +15,7 @@ from sys import getsizeof
 from scipy import ndimage
 
 
-def slice_map(volume, slices_per_axis):
+def slice_map(volume, slices_per_axis, augentation = False):
     """Slice the volume into 2d panes along x, y, z axes and return as an image stack"""
     # Check volume is equal in all directions
     assert (
@@ -41,22 +41,31 @@ def slice_map(volume, slices_per_axis):
     for s in first_pick:
         deg1 = np.random.choice(90, 1, replace=False)[0]
         stack1 = np.copy(volume[s, :, :])
-        rotate1 = ndimage.rotate(stack1, angle = deg1, reshape=False)
-        image_stack[index, :, :] = rotate1
+        if augmentation == True:
+          rotate1 = ndimage.rotate(stack1, angle = deg1, reshape=False)
+          image_stack[index, :, :] = rotate1
+        else:
+          image_stack[index, :, :] = stack1
         index = index + 1
 
     for ss in second_pick:
         deg2 = np.random.choice(90, 1, replace=False)[0]
         stack2 = np.copy(volume[:, ss, :])
-        rotate2 = ndimage.rotate(stack2, angle = deg2, reshape=False)
-        image_stack[index, :, :] = stack2
+        if augmentation == True:
+          rotate2 = ndimage.rotate(stack2, angle = deg2, reshape=False)
+          image_stack[index, :, :] = rotate2
+        else:
+          image_stack[index, :, :] = stack2
         index = index + 1
 
     for sss in third_pick:
         deg3 = np.random.choice(90, 1, replace=False)[0]
         stack3 = np.copy(volume[:, :, sss])
-        rotate3 = ndimage.rotate(stack3, angle = deg3, reshape=False)
-        image_stack[index, :, :] = stack3
+        if augmentation == True:
+          rotate3 = ndimage.rotate(stack3, angle = deg3, reshape=False)
+          image_stack[index, :, :] = rotate3
+        else:
+          image_stack[index, :, :] = stack3
         index = index + 1
 
     byte_size_stack = getsizeof(image_stack)
