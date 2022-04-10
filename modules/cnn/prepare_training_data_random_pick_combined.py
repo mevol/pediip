@@ -186,7 +186,7 @@ def prepare_training_data_random_pick_combined(
                                             length,
                                             length))
             # Slice the volume into images
-            image_slices, bytes = slice_map(map_array, slices_per_axis)
+            image_slices, bytes = slice_map(map_array, slices_per_axis, augmentation)
             # Iterate through images, scale them and save them in output_directory
             for slice_num in range(image_slices.shape[0]):
                 # Get slice
