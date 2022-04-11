@@ -56,6 +56,20 @@ def prepare_training_data(
 
         for sample in data_reader:
             print(sample)
+            mtz_path = sample[1]
+            try:
+              os.path.exists(mtz_path)
+            except Exception:
+              logging.error(f"Could not find MTZ file {mtz_path}")
+            pass
+            try:
+              data = gemmi.read_mtz_file(mtz_path)
+              cell = data.cell
+              sg = data.spacegroup
+            except Exception:
+              logging.error(f"Could not read {mtz_path}")
+            pass
+
       
             1/0
 
