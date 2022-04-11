@@ -172,7 +172,7 @@ def prepare_training_data(
         final_name = struct+"_"+homo+"_"+mtz_state+".ccp4"
         final = os.path.join(output_dir, final_name)
 #         final = os.path.join(output_dir, struct+"_"+homo+"_"+mtz_state+".ccp4")
-         try:
+        try:
           map_to_map.write_ccp4_map(final)
 #         data_to_map.write_ccp4_map(final)
         except Exception:
