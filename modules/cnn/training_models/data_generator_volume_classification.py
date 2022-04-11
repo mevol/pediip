@@ -9,7 +9,7 @@ from modules.cnn.prepare_training_data_volume import prepare_training_data_volum
 
 class DataGenerator(Sequence):
   'Generates data for Keras'
-  def __init__(self, xyz_limits, list_IDs, labels, batch_size=32, dim=(32,32),
+  def __init__(self, xyz_limits, list_IDs, labels, batch_size=32, dim=(32,32,32),
                n_classes=2, n_channels=1, shuffle=True, augmentation=False):
     'Initialization'
     self.dim = dim
