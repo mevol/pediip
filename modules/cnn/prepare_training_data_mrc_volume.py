@@ -49,8 +49,8 @@ def prepare_training_data(
         pass
 
 #this below works but runs serial
-    with open(maps_list, "r") as data:
-        data_reader = csv.reader(data, delimiter=',')
+    with open(maps_list, "r") as map_files:
+        data_reader = csv.reader(map_files, delimiter=',')
         print(data_reader)
         next(data_reader)
 
@@ -73,16 +73,54 @@ def prepare_training_data(
               print(homo)
               logging.info(f"Working on homologue: {homo} \n")
             except Exception:
+              homo = "none"
               logging.error(f"Could not find homologue to work with. \n")
               pass
 
             try:
               data = gemmi.read_mtz_file(mtz_path)
-              cell = data.cell
-              sg = data.spacegroup
             except Exception:
               logging.error(f"Could not read {mtz_path}")
             pass
+            try:
+              # get reciprocal lattice grid size
+              recip_grid = data.get_size_for_hkl()
+              logging.info(f"Original size of reciprocal lattice grid: {recip_grid} \n")
+              # get grid size in relation to resolution and a sample rate of 4
+              size1 = data.get_size_for_hkl(sample_rate=6)
+              logging.info(f"Reciprocal lattice grid size at sample_rate=4: {size1} \n")
+              # create an empty map grid
+              data_to_map = gemmi.Ccp4Map()
+              # turn MTZ file into map using a sample_rate=4; minimal grid size is
+              # placed in relation to the resolution, dmin/sample_rate; sample_rate=4
+              # doubles the original grid size
+              data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT',
+                                                               sample_rate=6)#was 4
+              data_to_map.update_ccp4_header(2, True)
+            except Exception:
+              logging.error(f"Could not create map from {mtz_path}")
+              raise
+            try:
+              #this bit here expands the unit cell to be 200A^3;
+              #Can I expand the unit cell to standard volume and then extract a
+              #grid cube (200, 200, 200) or whatever value has been passed through YAML file
+              upper_limit = gemmi.Position(*xyz_limits)
+              box = gemmi.FractionalBox()
+              box.minimum = gemmi.Fractional(0, 0, 0)
+              box.maximum = data_to_map.grid.unit_cell.fractionalize(upper_limit)
+              box.maximum = data_to_map.grid.point_to_fractional(
+                                          data_to_map.grid.get_point(int(xyz_limits[0]),
+                                                                     int(xyz_limits[1]),
+                                                                     int(xyz_limits[2])))
+              box.add_margin(1e-5)
+              data_to_map.set_extent(box)
+              map_grid = data_to_map.grid
+              map_array = np.array(map_grid, copy = False)
+            try:
+              final = os.path.join(output_dir, target+"_"+homo+".ccp4")
+              data_to_map.write_ccp4_map(final)
+            except Exception:
+              logging.error(f"Could not write final map {final}")
 
       
             1/0
