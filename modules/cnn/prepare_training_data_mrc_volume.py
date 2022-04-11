@@ -53,7 +53,7 @@ def prepare_training_data(
         print(sample)
         print(sample["filename"])
       
-            1/0
+        1/0
 
 
     struct_dir = Path(os.path.join(mtz_dir, struct))
