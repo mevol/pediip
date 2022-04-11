@@ -55,8 +55,7 @@ def prepare_training_data(
 
         for sample in data_reader:
             print(sample)
-            print(sample.split())
-            print(sample.split()[0])
+            print(next(sample[0]))
       
             1/0
 
