@@ -63,13 +63,13 @@ def prepare_training_data(
               logging.error(f"Could not find MTZ file {mtz_path}")
             pass
             try:
-              target = input_map_path.split("/")[8]
+              target = mtz_path.split("/")[8]
               print(target)
               logging.info(f"Working on target: {target} \n")
             except Exception:
               pass
             try:
-              homo = input_map_path.split("/")[12]
+              homo = mtz_path.split("/")[12]
               print(homo)
               logging.info(f"Working on homologue: {homo} \n")
             except Exception:
