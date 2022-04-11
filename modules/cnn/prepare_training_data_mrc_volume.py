@@ -52,12 +52,12 @@ def prepare_training_data(
     with open(maps_list, "r") as data:
         data_reader = csv.reader(data, delimiter=',')
         print(data_reader)
-#        no_header = next(data_reader)
+        next(data_reader)
 
-        for sample in next(data_reader):
+        for sample in data_reader:
             print(sample)
       
-#            1/0
+            1/0
 
 
     struct_dir = Path(os.path.join(mtz_dir, struct))
