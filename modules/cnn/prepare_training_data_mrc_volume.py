@@ -42,20 +42,16 @@ def prepare_training_data(
 
     # opening sample list to iterate over
     try:
-        print(maps_list)
-        assert os.path.exists(maps_list)
+        data = pd.read_csv(maps_list)
+        total_num_maps = len(data)
+        logging.info(f"Found {total_num_maps} samples for training")
     except Exception:
         logging.error(f"No LIST of samples provided; working on single sample instead")
         pass
 
-#this below works but runs serial
-    with open(maps_list, "r") as data:
-        data_reader = csv.reader(data, delimiter=',')
-        print(data_reader)
-
-        for sample in data_reader:
-            print(sample)
-            print(next(sample[0]))
+    for sample in data:
+        print(sample)
+        print(sample["filename"])
       
             1/0
 
