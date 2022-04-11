@@ -60,6 +60,7 @@ def prepare_training_data(
               logging.error(f"Could not find MTZ file {mtz_path}")
             pass
             try:
+              print(mtz_path.split("/"))
               target_file = mtz_path.split("/")[-1]
               print(target_file)
               logging.info(f"Working on target: {target} \n")
