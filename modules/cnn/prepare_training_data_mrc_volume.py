@@ -63,6 +63,20 @@ def prepare_training_data(
               logging.error(f"Could not find MTZ file {mtz_path}")
             pass
             try:
+              target = input_map_path.split("/")[8]
+              print(target)
+              logging.info(f"Working on target: {target} \n")
+            except Exception:
+              pass
+            try:
+              homo = input_map_path.split("/")[12]
+              print(homo)
+              logging.info(f"Working on homologue: {homo} \n")
+            except Exception:
+              logging.error(f"Could not find homologue to work with. \n")
+              pass
+
+            try:
               data = gemmi.read_mtz_file(mtz_path)
               cell = data.cell
               sg = data.spacegroup
