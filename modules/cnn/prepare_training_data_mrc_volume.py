@@ -42,8 +42,11 @@ def prepare_training_data(
 
     # opening sample list to iterate over
     try:
+        print(maps_list)
+        assert os.path.exists(maps_list)
         with open(maps_list, "r") as data:
             data_reader = csv.reader(data, delimiter=',')
+            print(data_reader)
         total_num_maps = len(data_reader)
         logging.info(f"Found {total_num_maps} samples for training")
     except Exception:
