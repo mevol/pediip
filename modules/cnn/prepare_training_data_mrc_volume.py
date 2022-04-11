@@ -60,13 +60,14 @@ def prepare_training_data(
               logging.error(f"Could not find MTZ file {mtz_path}")
             pass
             try:
-              split_path = mtz_path.split("/")
-              print(split_path[-1])
               target_file = mtz_path.split("/")[-1]
               print(target_file)
-              logging.info(f"Working on target: {target} \n")
-              target_file_stripped = target_file.strip(".mtz")
+              target_file_stripped = target_file.split(".")[0]
               print(target_file_stripped)
+            try:
+              target_name = split_path[8]
+              print(target_name)
+              logging.info(f"Working on target: {target_name} \n")
             except Exception:
               pass
             try:
@@ -121,7 +122,9 @@ def prepare_training_data(
               raise
 
             try:
-              final = os.path.join(output_dir, target_file_stripped+".ccp4")
+              final = os.path.join(output_dir,
+                                   target_name+"_"+homo+"_"+target_file_stripped+".ccp4")
+              print(final)
               data_to_map.write_ccp4_map(final)
             except Exception:
               logging.error(f"Could not write final map {final}")
