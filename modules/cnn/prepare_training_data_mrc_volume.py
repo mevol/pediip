@@ -115,7 +115,7 @@ def prepare_training_data(
               box.add_margin(1e-5)
               data_to_map.set_extent(box)
               map_grid = data_to_map.grid
-              map_array = np.array(map_grid, copy = False)
+#              map_array = np.array(map_grid, copy = False)
             except Exception:
               logging.error(f"Could not expand map {map_to_map}")          
               raise
