@@ -16,14 +16,14 @@ def prepare_training_data(
     """Convert both the original and inverse hands of a structure into a regular map file based on information
     about the cell info and space group and the xyz dimensions. Return True if no exceptions"""
 
-    logging.info("Preparing training data")
+    logging.info("Preparing training data \n")
 
     # Check all directories exist
     try:
         output_dir = Path(output_directory)
         assert output_dir.exists()
     except Exception:
-        logging.error(f"Could not find output directory at {output_directory}")
+        logging.error(f"Could not find output directory at {output_directory} \n")
         raise
 
     # Check xyz limits are of correct format
@@ -33,8 +33,7 @@ def prepare_training_data(
         assert all(type(values) == int for values in xyz_limits)
     except AssertionError:
         logging.error(
-            "xyz_limits muste be provided as a list or tupls of three integer values"
-        )
+            "xyz_limits muste be provided as a list or tupls of three integer values \n")
         raise
 
     # opening sample list to iterate over
@@ -42,7 +41,7 @@ def prepare_training_data(
         print(maps_list)
         assert os.path.exists(maps_list)
     except Exception:
-        logging.error(f"No LIST of samples provided; working on single sample instead")
+        logging.error(f"No LIST of samples provided; working on single sample instead \n")
         pass
 
 #this below works but runs serial
@@ -57,15 +56,18 @@ def prepare_training_data(
             try:
               os.path.exists(mtz_path)
             except Exception:
-              logging.error(f"Could not find MTZ file {mtz_path}")
+              logging.error(f"Could not find MTZ file {mtz_path} \n")
             pass
             try:
               target_file = mtz_path.split("/")[-1]
               print(target_file)
               target_file_stripped = target_file.split(".")[0]
               print(target_file_stripped)
+            except Exception:
+              logging.error(f"MTZ file stem {target_file_stripped} \n")
+            pass
             try:
-              target_name = split_path[8]
+              target_name = mtz_path.split("/")[8]
               print(target_name)
               logging.info(f"Working on target: {target_name} \n")
             except Exception:
@@ -82,7 +84,7 @@ def prepare_training_data(
             try:
               data = gemmi.read_mtz_file(mtz_path)
             except Exception:
-              logging.error(f"Could not read {mtz_path}")
+              logging.error(f"Could not read {mtz_path} \n")
             pass
             try:
               # get reciprocal lattice grid size
@@ -100,7 +102,7 @@ def prepare_training_data(
                                                                sample_rate=6)#was 4
               data_to_map.update_ccp4_header(2, True)
             except Exception:
-              logging.error(f"Could not create map from {mtz_path}")
+              logging.error(f"Could not create map from {mtz_path} \n")
               raise
             try:
               #this bit here expands the unit cell to standard volume and then extract a
@@ -118,7 +120,7 @@ def prepare_training_data(
               map_grid = data_to_map.grid
               logging.info(f"Reciprocal lattice grid size after standardization : {map_grid} \n")
             except Exception:
-              logging.error(f"Could not expand map {data_to_map}")
+              logging.error(f"Could not expand map {data_to_map} \n")
               raise
 
             try:
@@ -127,7 +129,7 @@ def prepare_training_data(
               print(final)
               data_to_map.write_ccp4_map(final)
             except Exception:
-              logging.error(f"Could not write final map {final}")
+              logging.error(f"Could not write final map {final} \n")
 
     return True
 
@@ -139,7 +141,7 @@ def params_from_yaml(args):
         config_file_path = Path(args.config_file)
         assert config_file_path.exists()
     except Exception:
-        logging.error(f"Could not find config file at {args.config_file}")
+        logging.error(f"Could not find config file at {args.config_file} \n")
         raise
 
     # Load the data from the config file
@@ -148,8 +150,7 @@ def params_from_yaml(args):
             params = yaml.safe_load(f)
     except Exception:
         logging.error(
-            f"Could not extract parameters from yaml file at {config_file_path}"
-        )
+            f"Could not extract parameters from yaml file at {config_file_path} \n")
         raise
 
 
