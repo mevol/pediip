@@ -53,9 +53,6 @@ def prepare_training_data(
         data_reader = csv.reader(data, delimiter=',')
         print(data_reader)
 
-        total_num_maps = len(data_reader)
-        logging.info(f"Found {total_num_maps} samples for training")
-
         for sample in data_reader:
             print(sample)
             print(sample.split())
