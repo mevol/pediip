@@ -88,7 +88,7 @@ def prepare_training_data(
               logging.info(f"Original size of reciprocal lattice grid: {recip_grid} \n")
               # get grid size in relation to resolution and a sample rate of 4
               size1 = data.get_size_for_hkl(sample_rate=6)
-              logging.info(f"Reciprocal lattice grid size at sample_rate=4: {size1} \n")
+              logging.info(f"Reciprocal lattice grid size at sample_rate=6: {size1} \n")
               # create an empty map grid
               data_to_map = gemmi.Ccp4Map()
               # turn MTZ file into map using a sample_rate=4; minimal grid size is
@@ -115,7 +115,7 @@ def prepare_training_data(
               box.add_margin(1e-5)
               data_to_map.set_extent(box)
               map_grid = data_to_map.grid
-#              map_array = np.array(map_grid, copy = False)
+              logging.info(f"Reciprocal lattice grid size after expansio : {map_grid} \n")
             except Exception:
               logging.error(f"Could not expand map {data_to_map}")
               raise
