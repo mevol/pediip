@@ -52,8 +52,9 @@ def prepare_training_data(
     with open(maps_list, "r") as data:
         data_reader = csv.reader(data, delimiter=',')
         print(data_reader)
+        no_header = next(data_reader)
 
-        for sample in data_reader:
+        for sample in no_header:
             print(sample)
       
             1/0
