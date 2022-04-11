@@ -104,9 +104,9 @@ def prepare_training_data(
 
           data_to_map.update_ccp4_header(2, True)
           data_to_map.write_ccp4_map(temp_out_file) 
-          except Exception:
+        except Exception:
           logging.error(f"Could not create map from {homo_mtz}")
-          raise         
+          raise
 
         try: 
           # opening temporary map file which shouldn't be neccessary to be written out
