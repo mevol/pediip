@@ -84,17 +84,17 @@ def main():
     if args.make_output:
         logging.info("Generating output directories")
         try:
-            os.mkdir(parameters["maps_dir"])
+            os.mkdir(parameters["output_dir"])
         except TypeError:
             logging.error(
-                f"Expected file path for maps_dir, got {parameters['maps_dir']}"
+                f"Expected file path for maps_dir, got {parameters['output_dir']}"
             )
             raise
         except FileExistsError:
-            logging.error(f"Using existing maps_dir at {parameters['maps_dir']}")
+            logging.error(f"Using existing output_dir at {parameters['output_dir']}")
         except PermissionError:
             logging.error(
-                f"Do not have permission to create maps_dir at {parameters['maps_dir']}"
+                f"Do not have permission to create output_dir at {parameters['output_dir']}"
             )
             raise
 
@@ -103,7 +103,7 @@ def main():
     prepare_training_data(
         parameters["maps_list"],
         parameters["xyz_limits"],
-        parameters["maps_dir"],
+        parameters["output_dir"],
     )
 
 
