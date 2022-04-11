@@ -44,8 +44,6 @@ def prepare_training_data(
     try:
         print(maps_list)
         assert os.path.exists(maps_list)
-        total_num_maps = len(data_reader)
-        logging.info(f"Found {total_num_maps} samples for training")
     except Exception:
         logging.error(f"No LIST of samples provided; working on single sample instead")
         pass
@@ -54,6 +52,10 @@ def prepare_training_data(
     with open(maps_list, "r") as data:
         data_reader = csv.reader(data, delimiter=',')
         print(data_reader)
+
+        total_num_maps = len(data_reader)
+        logging.info(f"Found {total_num_maps} samples for training")
+
         for sample in data_reader:
             print(sample)
             print(sample.split())
