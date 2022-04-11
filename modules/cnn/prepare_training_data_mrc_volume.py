@@ -8,13 +8,10 @@ import csv
 from pathlib import Path
 from typing import List
 
-from modules.cnn.delete_temp_files import delete_temp_files
-
 def prepare_training_data(
     maps_list: str,
     xyz_limits: List[int],
     output_directory: str,
-    delete_temp: bool = True,
 ):
     """Convert both the original and inverse hands of a structure into a regular map file based on information
     about the cell info and space group and the xyz dimensions. Return True if no exceptions"""
@@ -101,9 +98,8 @@ def prepare_training_data(
               logging.error(f"Could not create map from {mtz_path}")
               raise
             try:
-              #this bit here expands the unit cell to be 200A^3;
-              #Can I expand the unit cell to standard volume and then extract a
-              #grid cube (200, 200, 200) or whatever value has been passed through YAML file
+              #this bit here expands the unit cell to standard volume and then extract a
+              #grid cube of whatever value for xyz_limits has been passed through YAML file
               upper_limit = gemmi.Position(*xyz_limits)
               box = gemmi.FractionalBox()
               box.minimum = gemmi.Fractional(0, 0, 0)
@@ -115,7 +111,7 @@ def prepare_training_data(
               box.add_margin(1e-5)
               data_to_map.set_extent(box)
               map_grid = data_to_map.grid
-              logging.info(f"Reciprocal lattice grid size after expansio : {map_grid} \n")
+              logging.info(f"Reciprocal lattice grid size after standardization : {map_grid} \n")
             except Exception:
               logging.error(f"Could not expand map {data_to_map}")
               raise
@@ -126,124 +122,6 @@ def prepare_training_data(
             except Exception:
               logging.error(f"Could not write final map {final}")
 
-      
-            1/0
-
-
-    struct_dir = Path(os.path.join(mtz_dir, struct))
-    homo_lst = [homo.stem for homo in struct_dir.iterdir()] 
-    for homo in homo_lst:
-      homo_dir = os.path.join(struct_dir, homo)
-      logging.info(
-        f"Converting results for structure {struct}, {mtz_structs.index(struct)+1}/{len(mtz_structs)}")
-      if mtz_file in os.listdir(homo_dir):
-        logging.info(
-          f"Collecting info for {homo}, {homo_lst.index(homo)+1}/{len(homo_lst)}")
-        homo_mtz = Path(os.path.join(homo_dir, mtz_file))
-
-        try:
-          homo_mtz = Path(os.path.join(homo_dir, mtz_file))
-          assert homo_mtz.exists()
-        except Exception:
-          logging.error(f"Could not find homologue phased MTZ file {homo_mtz}")
-          raise
-
-        try:
-          data = gemmi.read_mtz_file(str(homo_mtz))
-          cell = data.cell
-          sg = data.spacegroup
-        except Exception:
-          logging.error(f"Could not read {homo_mtz}")
-         # raise
-          pass
-
-        temp_out_file = os.path.join(output_dir, "temp_"+struct+"_"+homo+".ccp4")
-        try:
-          data_to_map = gemmi.Ccp4Map()
-          print("Grid of MTZ file", data_to_map.grid)
-
-          #map_obs = mtz.transform_f_phi_to_map('FWT','PHWT', sample_rate=opt['sample_rate'])
-          data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=4)
-#           shape = [round(a/1.2/2)*2 for a in data.cell.parameters[:3]]
-#           data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', exact_size=shape)
-          print("Grid after converting MTZ to MAP", data_to_map.grid)
-
-          data_to_map.update_ccp4_header(2, True)
-          data_to_map.write_ccp4_map(temp_out_file) 
-        except Exception:
-          logging.error(f"Could not create map from {homo_mtz}")
-          raise
-
-        try: 
-          # opening temporary map file which shouldn't be neccessary to be written out
-          map_to_map = gemmi.read_ccp4_map(temp_out_file)
-          map_to_map.setup()
-
-          print("Grid after loading temp file", map_to_map.grid)
-          #this bit here expands the unit cell to be 200A^3;
-          #Can I expand the unit cell to standard volume and then extract a
-          #grid cube (200, 200, 200)
-#           xyz_limits = [200, 200, 200]
-#           xyz_limits = [100, 100, 100]
-          xyz_limits = [50, 50, 50]
-          upper_limit = gemmi.Position(*xyz_limits)
-          box = gemmi.FractionalBox()
-          box.minimum = gemmi.Fractional(0, 0, 0)
-          box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
-#           box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(200, 200, 200))
-#           box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(100, 100, 100))
-          box.maximum = map_to_map.grid.point_to_fractional(map_to_map.grid.get_point(50, 50, 50))
-          box.add_margin(1e-5)
-          map_to_map.set_extent(box)
-
-          print("Grid after setting XYZ limits for MAP", map_to_map.grid)
-
-          #create a grid with extend x=0-->200, y=0-->200, z=0-->200
-          #currently problems as the 200 limit not always reached for all axes;
-          #adding a margin maybe that will help
-         # new_map.setup()
-          # box1 = gemmi.FractionalBox()
-         # box1.minimum = gemmi.Fractional(0, 0, 0)
-         # box1.maximum = new_map.grid.point_to_fractional(new_map.grid.get_point(200, 200, 200))
-         # map_to_map.setup()
-         # new_map.set_extent(box1)
-
-          # print("Grid after setting grid dimensions", new_map.grid)
-
-        except Exception:
-          logging.error(f"Could not expand map {map_to_map}")          
-          raise
-#
-#          try:
-#            map_to_map = gemmi.read_ccp4_map(temp_out_file)
-#            map_to_map.setup()
-#            print(map_to_map.grid)
-#            grid = map_to_map.grid
-#            print(grid)
-#            new_grid = grid.set_value(200, 200, 200, 4.0)
-#            print(new_grid.get_value)
-#            xyz_limits = [200, 200, 200]
-#            upper_limit = gemmi.Position(*xyz_limits)
-#            box = gemmi.FractionalBox()
-#            box.minimum = gemmi.Fractional(0, 0, 0)
-#            box.maximum = map_to_map.grid.unit_cell.fractionalize(upper_limit)
-#            map_to_map.set_extent(box)
-#          except Exception:
-#            logging.error(f"Could not expand map {map_to_map}")
-#            raise
-
-
-
-        mtz_state = str(mtz_file).strip(".mtz")
-        final_name = struct+"_"+homo+"_"+mtz_state+".ccp4"
-        final = os.path.join(output_dir, final_name)
-#         final = os.path.join(output_dir, struct+"_"+homo+"_"+mtz_state+".ccp4")
-        try:
-          map_to_map.write_ccp4_map(final)
-#         data_to_map.write_ccp4_map(final)
-        except Exception:
-          logging.error(f"Could not write final map {final}")
-              
     return True
 
 
@@ -277,15 +155,10 @@ def params_from_yaml(args):
 def params_from_cmd(args):
     """Extract the parameters for prepare_training_data from the command line and return a dict"""
     params = {
-        "mtz_dir": args.mtz_dir,
-        "mtz_file": args.mtz_file,
-        "xyz_limits": args.xyz,
-        "output_dir": args.maps_dir,
-        "db_file": args.db_file,
-        "delete_temp": True,
+        "maps_list": args.maps_list,
+        "xyz_limits": args.xyz_limits,
+        "output_dir": args.output_dir,
     }
-    if args.keep_temp:
-        params["delete_temp"] = False
 
     return params
 
@@ -310,24 +183,13 @@ if __name__ == "__main__":
 
     cmd_parser = subparsers.add_parser("cmd")
     cmd_parser.add_argument(
-        "mtz_dir", type=str, help="top level directory for mtz information"
+        "maps_list", type=str, help="list of MTZ files to convert to CCP4 maps"
     )
     cmd_parser.add_argument(
-        "mtz_file", type=str, help="mtz file from specific structure solution step"
-    )
-    cmd_parser.add_argument(
-        "xyz", type=int, nargs=3, help="xyz size of the output map file"
+        "xyz_limits", type=int, nargs=3, help="xyz size of the output map file"
     )
     cmd_parser.add_argument(
         "output_dir", type=str, help="directory to output all map files to"
-    )
-    cmd_parser.add_argument(
-        "db_file", type=str, help="database file with training lables"
-    )
-    cmd_parser.add_argument(
-        "--keep_temp",
-        action="store_false",
-        help="keep the temporary files after processing",
     )
     cmd_parser.set_defaults(func=params_from_cmd)
 
@@ -340,16 +202,9 @@ if __name__ == "__main__":
     # Execute the command
     try:
         prepare_training_data(
-        parameters["maps_list"],
+            parameters["maps_list"],
             parameters["xyz_limits"],
             parameters["output_dir"],
         )
     except KeyError as e:
         logging.error(f"Could not find parameter {e} to prepare training data")
-        
-        
-        
-        
-#peakheight_obs = map_obs.get_nearest_point(cra.atom.pos).value
-#peakheight_obs = map_obs.interpolate_value(cra.atom.pos)
-#peakheight_obs = map_obs.tricubic_interpolation(cra.atom.pos)
