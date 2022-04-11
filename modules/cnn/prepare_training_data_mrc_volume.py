@@ -116,6 +116,10 @@ def prepare_training_data(
               data_to_map.set_extent(box)
               map_grid = data_to_map.grid
               map_array = np.array(map_grid, copy = False)
+            except Exception:
+              logging.error(f"Could not expand map {map_to_map}")          
+              raise
+
             try:
               final = os.path.join(output_dir, target+"_"+homo+".ccp4")
               data_to_map.write_ccp4_map(final)
