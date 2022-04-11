@@ -44,16 +44,6 @@ def prepare_training_data(
     try:
         print(maps_list)
         assert os.path.exists(maps_list)
-        with open(maps_list, "r") as data:
-            data_reader = csv.reader(data, delimiter=',')
-            print(data_reader)
-                for sample in data_reader:
-                print(sample)
-                print(sample.split())
-                print(sample.split()[0])
-      
-                1/0
-
         total_num_maps = len(data_reader)
         logging.info(f"Found {total_num_maps} samples for training")
     except Exception:
@@ -61,7 +51,17 @@ def prepare_training_data(
         pass
 
 #this below works but runs serial
+    with open(maps_list, "r") as data:
+        data_reader = csv.reader(data, delimiter=',')
+        print(data_reader)
+        for sample in data_reader:
+            print(sample)
+            print(sample.split())
+            print(sample.split()[0])
       
+            1/0
+
+
       struct_dir = Path(os.path.join(mtz_dir, struct))
       homo_lst = [homo.stem for homo in struct_dir.iterdir()] 
       for homo in homo_lst:
