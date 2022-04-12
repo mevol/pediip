@@ -124,7 +124,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
 
     # replacing filename from original MTZ with file name pointing at map
     def replace_filename(x):
-      print(x)
       try:
         target_file = x.split("/")[-1]
         target_file_stripped = target_file.split(".")[0]
@@ -161,7 +160,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
         # replace "/dls/" with "/opt/" to read files in the mount pount
         real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
         map_file_path = Path(os.path.realpath(real_path_to_map_opt))
-        print(map_file_path)
         assert map_file_path.exists()
       except Exception:
         logging.error(f"Could not find mtz directory at {map_file_path} \n")
@@ -319,120 +317,209 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.info(f"Training duration : {elapsed}")
     print("Training duration: ", elapsed)
 
-    # Make evaluation folder
-
-    logging.info("Performing evaluation of model")
-    evaluation_dir_path = str(evaluations_path / f"evaluation")
-    if not Path(evaluation_dir_path).exists():
-      os.mkdir(evaluation_dir_path)
-
-    logging.info("Getting predictions")
-    
-#    print(int(math.ceil(len(X_test) / batch_size)))
-#    print(int(np.round(len(X_test) / batch_size)))
-
-    try:
-      predictions = model.predict(
+  # getting predictions on the testing data to evaluate the model
+  # Make evaluation folder to use the challenge data
+  logging.info("Performing evaluation of model using X_test and X_challenge \n")
+  date = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
+  # calculate the number of steps to be used in prediction and model evaluation
+  # X_test
+  predict_steps = int(math.ceil(len(X_test) / batch_size))
+  logging.info(f"Steps to run until prediction for X_test finished: {predict_steps} \n")
+  try:
+    logging.info("Getting predictions for X_test\n")
+    y_pred = model.predict(
                           testing_generator,
-                          steps=math.ceil(len(X_test) / batch_size),
+                          steps=predict_steps,
                           verbose=1)
-      
-
-      preds_rounded = np.round(predictions, 0)
-      #print("Predictions after rounding")
-      #print(preds_rounded)
-      
-      y_pred = np.argmax(preds_rounded, axis=1)
-      y_pred1 = preds_rounded.argmax(1)
-
-      print("predicted labels ", y_pred)
-      print("known labels ", y_test[:-2])
-      #print(y_pred1)
-
-      #print("Length of predictions rounded: ", len(preds_rounded))
-    except Exception:
-      logging.warning("Could not round predictions")
-      raise
-
-    #interim fix to be able to develop further; remove the last two samples in y_test
-    #y_test = y_test[:-2]
-    #print("Content of y_test")
-    #print(y_test[:-2])
+    # rounding the prediction probabilities to integers for 0/1 classes in binary case
+    preds_rounded = np.round(y_pred, 0)
+    logging.info(f"Turning probabilities for X_test into integers \n")
+    # only get the class1 results
+    y_pred1 = np.argmax(preds_rounded, axis=1)
+  except Exception:
+    logging.warning("Could not round predictions for X_test\n")
+    raise
+##### 2-class case
+  if num_classes == 2:
+  # get classification report for the test set
     try:
-      classes = ["class 1", "class 2", "class 3", "class 4", "class 5"]
-      labels = np.arange(5)
-      classification_metrics = metrics.classification_report(y_test[:-2], y_pred, labels=labels, target_names=classes)
-      print(classification_metrics)
-      logging.info(f"Multi-class classification report")
-      logging.info(classification_metrics)
+      classes = list(y_test.unique())
+      target_names = []
+      for cl in classes:
+        name = "class_" + str(cl)
+        target_names.append(name)
+      labels = np.arange(len(classes))
+      report = classification_report(y_test, y_pred1, labels=labels,
+                                     target_names=target_names, zero_division = 0)
+      print(report)
+      logging.info(f"Classification report for X_test\n")
+      logging.info(report)
     except Exception:
-      logging.warning("Could not get multi-class classification report")
+      logging.warning("Could not get classification report for X_test\n")
       raise
-
-    logging.info("Drawing confusion matrix.")
+    # calculate and draw confusion matrix for the test set
     try:
-#      cat_labels = pd.DataFrame(y_test[:-2].idxmax(axis=1))
-#      cat_preds = pd.DataFrame(y_pred.idxmax(axis=1))
-      cat_labels = pd.DataFrame(y_test[:-2])
-      cat_preds = pd.DataFrame(y_pred)
-
-      confusion_matrix = metrics.confusion_matrix(cat_labels, cat_preds)
+      logging.info("Drawing confusion matrix for X_test. \n")
+      cat_labels = pd.DataFrame(y_test)
+      cat_preds = pd.DataFrame(y_pred1)
+      conf_mat_dict = confusion_matrix_and_stats(cat_labels, cat_preds,
+                         evaluations_path / f"confusion_matrix_test_{date}.png")
+      logging.info(conf_mat_dict)
     except Exception:
-      logging.warning("Could not calculate confusion matrix")
+      logging.warning("Could not calculate confusion matrix for X_test\n")
       raise
-#    def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
-#      #Add Normalization Option
-#      if normalize:
-#        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-#        print("Normalized confusion matrix")
-#      else:
-#        print("Confusion matrix withou normalization")
-#      #print(cm)
-      
-      
-    try:  
-      def draw_conf_mat(matrix):
-        datestring = datetime.strftime(datetime.now(), '%Y%m%d_%H%M')
-        labels = ['0', '1', '2', '3', '4']      
-        ax = plt.subplot()
-        sns.heatmap(matrix, annot=True, ax=ax)
-        plt.title('Confusion matrix')
-        ax.set_xticklabels(labels)
-        ax.set_yticklabels(labels)
-        plt.xlabel('Predicted')
-        plt.ylabel('True')
-        plt.savefig(str(evaluations_path / f"confusion_matrix_{datestring}.png"))
-        plt.close()
-
-      draw_conf_mat(confusion_matrix)
-
-    except Exception:
-      logging.warning("Could not draw confusion matrix")
-      raise
-      
-
-      
-      
-      
-      
-      
-      
-      
-      
-    logging.info("Evaluations complete.")
-
-
-    # Load the model config information as a yaml file
-    with open(output_dir_path / "model_info.yaml", "w") as f:
-        yaml.dump(model_info, f)
-
-    # Try to copy log file if it was created in training.log
+    # get precision and recall curve for test set
     try:
-        shutil.copy("training.log", output_dir_path)
-    except FileExistsError:
-        logging.warning("Could not find training.log to copy")
+      plot_precision_recall_vs_threshold(cat_labels, cat_preds,
+                  evaluations_path / f"precision_recall_curve_test_{date}.png")
     except Exception:
-        logging.warning("Could not copy training.log to output directory")
+      logging.warning("Could not draw precision-recall curve for X_test. \n")
+      raise
+    # get ROC curve for test set
+    try:
+      fpr, tpr, thresholds = plot_roc_curve(cat_labels, cat_preds,
+                                evaluations_path / f"ROC_curve_test_{date}.png")
+      logging.info(f"False-positive rate for X_test: {fpr} \n"
+                   f"True-negative rate for X_test: {tpr} \n"
+              f"Probability threshold for X_test for class 1 to be True: {thresholds} \n")
+    except Exception:
+      logging.warning("Could not draw precision-recall curve for X_test. \n")
+      raise
+##### multi-class case
+  else:
+  # get classification report for the test set
+    try:
+      classes = list(y_test.unique())
+      target_names = []
+      for cl in classes:
+        name = "class_" + str(cl)
+        target_names.append(name)
+      labels = np.arange(len(classes))
+      report = classification_report(y_test, y_pred1, labels=labels,
+                                     target_names=target_names, zero_division = 0)
+      print(report)
+      logging.info(f"Classification report for X_test\n")
+      logging.info(report)
+    except Exception:
+      logging.warning("Could not get classification report for X_test\n")
+      raise
+    # calculate and draw confusion matrix for test set
+    try:
+      logging.info("Drawing confusion matrix for X_test. \n")
+      cat_labels = pd.DataFrame(y_test)
+      cat_preds = pd.DataFrame(y_pred1)
+      conf_mat_dict = confusion_matrix_and_stats_multiclass(cat_labels, cat_preds,
+                       evaluations_path / f"confusion_matrix_test_{date}.png")
+      logging.info(conf_mat_dict)
+    except Exception:
+      logging.warning("Could not calculate confusion matrix for X_test\n")
+      raise
+  # calculate the number of steps to be used in prediction and model evaluation
+  # X_challenge
+  challenge_steps = int(math.ceil(len(X_challenge) / batch_size))
+  logging.info(f"Steps to run until prediction finished: {challenge_steps} \n")
+  try:
+    logging.info("Getting predictions for challenge data \n")
+    y_pred_challenge = model.predict(
+                          challenge_generator,
+                          steps=challenge_steps,
+                          verbose=1)
+    # rounding the prediction probabilities to integers for 0/1 classes in binary case
+    preds_challenge_rounded = np.round(y_pred_challenge, 0)
+    logging.info(f"Turning probabilities into into integers \n")
+    # only get the class1 results
+    y_pred_challenge1 = np.argmax(preds_challenge_rounded, axis=1)
+  except Exception:
+    logging.warning("Could not round predictions \n")
+    raise
+##### 2-class case
+  if num_classes == 2:
+  # get classification report for the challenge data
+    try:
+      classes = list(y_test.unique())
+      target_names = []
+      for cl in classes:
+        name = "class_" + str(cl)
+        target_names.append(name)
+      labels = np.arange(len(classes))
+      report_challenge = classification_report(y_challenge, y_pred_challenge1, labels=labels,
+                                   target_names=target_names, zero_division = 0)
+      print(report_challenge)
+      logging.info(f"Classification report for challenge data \n")
+      logging.info(report_challenge)
+    except Exception:
+      logging.warning("Could not get classification report for challenge data \n")
+      raise
+    # calculate and draw confusion matrix for the challenge data
+    try:
+      logging.info("Drawing confusion matrix for challenge data. \n")
+      challenge_cat_labels = pd.DataFrame(y_challenge)
+      challenge_cat_preds = pd.DataFrame(y_pred_challenge1)
+      conf_mat_dict_challenge = confusion_matrix_and_stats(cat_labels, cat_preds,
+                  evaluations_path / f"confusion_matrix_challenge_{date}.png")
+      logging.info(conf_mat_dict_challenge)
+    except Exception:
+      logging.warning("Could not calculate confusion matrix for challenge data \n")
+      raise
+    # get precision-recall curve for challenge data
+    try:
+      plot_precision_recall_vs_threshold(challenge_cat_labels, challenge_cat_preds,
+            evaluations_path / f"precision_recall_curve_challenge_{date}.png")
+    except Exception:
+      logging.warning("Could not draw precision-recall curve for challenge data. \n")
+      raise
+    # get ROC curve for challenge data
+    try:
+      fpr_challenge, tpr_challenge, thresholds_challenge = plot_roc_curve(challenge_cat_labels, challenge_cat_preds,
+                              evaluations_path / f"ROC_curve_challenge_{date}.png")
+      logging.info(f"False-positive rate: {fpr_challenge} \n"
+                  f"True-negative rate: {tpr_challenge} \n"
+        f"Probability threshold for challenge datafor class 1 to be True: {thresholds_challenge} \n")
+    except Exception:
+      logging.warning("Could not draw precision-recall curve for challenge data. \n")
+      raise
+##### multi-class case
+  else:
+  # get classification report for the challenge data
+    try:
+      classes = list(y_test.unique())
+      target_names = []
+      for cl in classes:
+        name = "class_" + str(cl)
+        target_names.append(name)
+      labels = np.arange(len(classes))
+      report_challenge = classification_report(y_challenge, y_pred_challenge1, labels=labels,
+                                   target_names=target_names, zero_division = 0)
+      print(report_challenge)
+      logging.info(f"Classification report for challenge data \n")
+      logging.info(report_challenge)
+    except Exception:
+      logging.warning("Could not get classification report for challenge data \n")
+      raise
+    # calculate and draw confusion matrix for the challenge data
+    try:
+      logging.info("Drawing confusion matrix for challenge data. \n")
+      challenge_cat_labels = pd.DataFrame(y_challenge)
+      challenge_cat_preds = pd.DataFrame(y_pred_challenge1)
+      conf_mat_dict_challenge = confusion_matrix_and_stats_multiclass(cat_labels, cat_preds,
+                  evaluations_path / f"confusion_matrix_challenge_{date}.png")
+      logging.info(conf_mat_dict_challenge)
+    except Exception:
+      logging.warning("Could not calculate confusion matrix for challenge data \n")
+      raise
+
+
+  # Load the model config information as a yaml file
+  with open(output_dir_path / "model_info.yaml", "w") as f:
+    yaml.dump(model_info, f)
+
+  # Try to copy log file if it was created in training.log
+  try:
+    shutil.copy("training.log", output_dir_path)
+  except FileExistsError:
+    logging.warning("Could not find training.log to copy")
+  except Exception:
+    logging.warning("Could not copy training.log to output directory")
 
 
 def pipeline_from_command_line(
