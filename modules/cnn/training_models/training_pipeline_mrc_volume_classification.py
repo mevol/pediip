@@ -119,7 +119,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       logging.error(f"Could not open input map list \n")
 
     # separate data X from labels y
-    X = data['filename']
+    X = data[['filename', 'protocol', 'stage']]
     y = data['ai_label']
 
     # split the data into training and test set; this is splitting the input CSV data;
