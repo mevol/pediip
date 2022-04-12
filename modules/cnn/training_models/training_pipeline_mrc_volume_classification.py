@@ -167,7 +167,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       pass
     return map_file_path
 
-  X['filename'] = X['filename'].apply(replace_filename)
+  X['filename'] = X.loc[:, 'filename'].apply(replace_filename)
 
   # split the data into training and test set; this is splitting the input CSV data;
   # and an additional challenge set of 5% of the data; this latter set is used to
