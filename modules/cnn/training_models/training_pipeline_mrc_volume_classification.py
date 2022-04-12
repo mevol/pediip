@@ -276,8 +276,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                        dim=MAP_DIM,
                                        batch_size=batch_size,
                                        n_classes=num_classes,
-                                       shuffle=True,
-                                       augmentation=True)
+                                       shuffle=True)
 
     testing_generator = DataGenerator(
                                       partition["validate"],
@@ -285,8 +284,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                       dim=MAP_DIM,
                                       batch_size=batch_size,
                                       n_classes=num_classes,
-                                      shuffle=False,
-                                      augmentation=False)
+                                      shuffle=False)
 
     challenge_generator = DataGenerator(
                                       partition["challenge"],
@@ -294,8 +292,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                       dim=MAP_DIM,
                                       batch_size=batch_size,
                                       n_classes=num_classes,
-                                      shuffle=False,
-                                      augmentation=False)
+                                      shuffle=False)
 
     history = model.fit(
         training_generator,
