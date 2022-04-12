@@ -102,7 +102,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   # Load training files
   try:
     maps_dir_path = Path(parameters_dict["map_dir"])
-    assert (training_dir_path.exists()), f"Could not find directory at {map_dir} \n"
+    assert (maps_dir_path.exists()), f"Could not find directory at {map_dir} \n"
     all_files = [str(file) for file in maps_dir_path.iterdir()]
     assert len(all_files) > 0
     logging.info(f"Found {len(all_files)} files for training, testing and challenge \n")
