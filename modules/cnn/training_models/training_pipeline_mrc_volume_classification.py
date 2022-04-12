@@ -107,7 +107,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       assert len(all_files) > 0
       logging.info(f"Found {len(all_files)} files for training, testing and challenge \n")
     except Exception:
-        logging.error(f"Found no files in {map_dir} \n")
+        logging.error(f"Found no files in {maps_dir_path} \n")
 
     try:
       training_dir_path = Path(parameters_dict["sample_lable_lst"])
