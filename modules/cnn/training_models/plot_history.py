@@ -22,6 +22,7 @@ def figure_from_csv(history_file, filename):
     ax1.plot(epoch_list, history["Accuracy"], label="Train Accuracy")
     ax1.plot(epoch_list, history["Val Accuracy"], label="Validation Accuracy")
     ax1.set_ylabel("Accuracy Value")
+    ax1.set_ylim(-0.1, 1.1)
     ax1.set_xlabel("Epoch")
     ax1.set_title("Accuracy")
     ax1.legend(loc="best")

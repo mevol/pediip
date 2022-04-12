@@ -123,6 +123,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   y = data['ai_label']
 
   # replacing filename from original MTZ with file name pointing at map
+  logging.info(f"Making map file paths locatable \n")
   def replace_filename(x):
     try:
       target_file = x.split("/")[-1]
