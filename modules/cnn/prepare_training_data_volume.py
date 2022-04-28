@@ -166,7 +166,7 @@ def params_from_cmd(args):
   params = {"maps_list": args.maps_list,
             "xyz_limits": args.xyz_limits}
 
-    return params
+  return params
 
 
 if __name__ == "__main__":
