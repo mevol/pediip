@@ -82,7 +82,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
       os.mkdir(histories_path)
       os.mkdir(models_path)
       os.mkdir(evaluations_path)
-      logging.info(f"Created output directories at {output_dir_path} n\")
+      logging.info(f"Created output directories at {output_dir_path} \n")
     except Exception:
       logging.exception(
           f"Could not create directory at {output_dir_path}.\n"
