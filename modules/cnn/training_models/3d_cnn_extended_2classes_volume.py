@@ -60,7 +60,8 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
 
   model.compile(
         loss="categorical_crossentropy",
-        optimizer='adam',
+        #optimizer='adam',
+        optimizer=Adam(learning_rate=0.0001), # was added 20220506
         metrics=["accuracy"],)
 
   return model
