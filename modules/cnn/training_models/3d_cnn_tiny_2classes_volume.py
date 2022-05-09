@@ -22,7 +22,7 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
 
     model.add(GlobalAveragePooling3D())
     model.add(Dense(16, activation="relu", kernel_regularizer = regularizers.l2(1e-4)))#was 128
-#    model.add(Dropout(0.3))
+    model.add(Dropout(0.3))
     model.add(Dense(2, activation="softmax"))#was tanh
 
     print(model.output_shape)
