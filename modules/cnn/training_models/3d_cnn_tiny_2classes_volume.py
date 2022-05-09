@@ -33,7 +33,7 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
 #        optimizer=optimizers.adam(lr=1e-5),
 #        optimizer='adam',
 #        optimizer=Adam(learning_rate=0.0001),
-        optimizer=SGD(learning_rate=0.0001), # was added 20220509
+        optimizer=SGD(learning_rate=0.001), # was added 20220509
         metrics=["accuracy"],
     )
 
