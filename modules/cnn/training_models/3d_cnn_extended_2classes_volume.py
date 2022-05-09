@@ -50,9 +50,9 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
 
   model.add(Flatten())
   model.add(Dense(1024, activation="relu"))
-  model.add(Dropout(0.5))#20210305 0.3 --> 0.5
+  #model.add(Dropout(0.5))#20210305 0.3 --> 0.5
   model.add(Dense(1024, activation="relu"))
-  model.add(Dropout(0.3))
+  #model.add(Dropout(0.3))
   model.add(Dense(1024, activation="relu"))
   model.add(Dense(2, activation="softmax"))
 
