@@ -125,7 +125,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     assert len(train_files) > 0, f"Found no files in {image_dir_path} \n"
     print(len(train_files))
     print(train_files)
-    logging.info(f"Found {len(train_files)} files for training" \n)
+    logging.info(f"Found {len(train_files)} files for training \n")
   except Exception:
     logging.error(f"Found no files in {image_dir_path} \n")
     raise
