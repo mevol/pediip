@@ -115,6 +115,7 @@ def prepare_training_data_binary(
     next(data_reader)
     for sample in data_reader:
       mtz_path = sample[1]
+      print(mtz_path)
       try:
         os.path.exists(mtz_path)
       except Exception:
@@ -122,7 +123,9 @@ def prepare_training_data_binary(
         pass
       try:
         target_file = mtz_path.split("/")[-1]
+        print(target_file)
         target_file_stripped = target_file.split(".")[0]
+        print(target_file_stripped)
       except Exception:
         logging.error(f"MTZ file stem {target_file_stripped} \n")
         pass
