@@ -114,7 +114,7 @@ def prepare_training_data_binary(
     data_reader = csv.reader(map_files, delimiter=',')
     next(data_reader)
     for sample in data_reader:
-      mtz_path = sample[1]
+      mtz_path = sample[2]#currently needs changing based on column order; pandas way?
       print(mtz_path)
       try:
         os.path.exists(mtz_path)
