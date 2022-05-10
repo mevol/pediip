@@ -55,94 +55,99 @@ logging.basicConfig(level=logging.INFO, filename="training.log", filemode="w")
 
 
 def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: dict):
-    """
-    Execute the pipeline on the model provided.
+  """
+  Execute the pipeline on the model provided.
 
-    Reads all files in from the training directory path provided, gets their labels from the *ai_labels*
-    table in the database provided.
+  Reads all files in from the training directory path provided, gets their labels from the *ai_labels*
+  table in the database provided.
 
-    Sets up Keras ImageDataGenerator for training images with scaling and extra parameters provided,
-    and for validation images with scaling only.
+  Sets up Keras ImageDataGenerator for training images with scaling and extra parameters provided,
+  and for validation images with scaling only.
 
-    Randomly mixes training data and creates k folds.
+  Randomly mixes training data and creates k folds.
 
-    If test directory is provided, evaluates against test data and records that in evaluation folder.
+  If test directory is provided, evaluates against test data and records that in evaluation folder.
 
-    Records in output directory the history and saves model for each run.
+  Records in output directory the history and saves model for each run.
 
-    Parameters in **parameters_dict**:
+  Parameters in **parameters_dict**:
 
-    - *training_dir* (required) - directory with training images
-    - *database_file* (required) - path to database with ai_labels table to get labels from
-    - *output_dir* (required) - directory to output files to (this name will be appended with date and time when the training was started)
-    - *epochs* (required) - how many epochs to use in each run
-    - *batch_size* (required) - size of batch when loading files during training (usually exact multiple of number of files)
-    - *test_dir* - directory with testing images
-    - *rgb* - whether the model is expecting a 3 channel image
-    - image_augmentation_dict - dictionary of key-value pairs to pass as parameters to the Keras ImageGenerator for training images
+  - *training_dir* (required) - directory with training images
+  - *database_file* (required) - path to database with ai_labels table to get labels from
+  - *output_dir* (required) - directory to output files to (this name will be appended with date and time when the training was started)
+  - *epochs* (required) - how many epochs to use in each run
+  - *batch_size* (required) - size of batch when loading files during training (usually exact multiple of number of files)
+  - *test_dir* - directory with testing images
+  - *rgb* - whether the model is expecting a 3 channel image
+  - image_augmentation_dict - dictionary of key-value pairs to pass as parameters to the Keras ImageGenerator for training images
 
-    :param create_model: function which returns new Keras model to train and evaluate
-    :param parameters_dict: dictionary of parameters for use in pipeline
-    """
+  :param create_model: function which returns new Keras model to train and evaluate
+  :param parameters_dict: dictionary of parameters for use in pipeline
+  """
 
-    # Create an output directory if it doesn't exist
-    output_dir_path = Path(
-        parameters_dict["output_dir"] + "_" + datetime.now().strftime("%Y%m%d_%H%M")
-    )
-    histories_path = output_dir_path / "histories"
-    models_path = output_dir_path / "models"
-    evaluations_path = output_dir_path / "evaluations"
+  # Create an output directory if it doesn't exist
+  output_dir_path = Path(
+        parameters_dict["output_dir"] + "_" + datetime.now().strftime("%Y%m%d_%H%M"))
+  histories_path = output_dir_path / "histories"
+  models_path = output_dir_path / "models"
+  evaluations_path = output_dir_path / "evaluations"
 
-    if not output_dir_path.exists():
-        # Make one
-        try:
-            # Make directories
-            os.mkdir(output_dir_path)
-            os.mkdir(histories_path)
-            os.mkdir(models_path)
-            os.mkdir(evaluations_path)
-            logging.info(f"Created output directories at {output_dir_path}")
-        except Exception:
-            logging.exception(
-                f"Could not create directory at {output_dir_path}.\n"
-                f"Please check permissions and location."
-            )
-            raise
+  if not output_dir_path.exists():
+    # Make one
+    try:
+      # Make directories
+      os.mkdir(output_dir_path)
+      os.mkdir(histories_path)
+      os.mkdir(models_path)
+      os.mkdir(evaluations_path)
+      logging.info(f"Created output directories at {output_dir_path} \n")
+    except Exception:
+      logging.exception(f"Could not create directory at {output_dir_path}.\n"
+                        f"Please check permissions and location. \n")
+      raise
 
-    # Log parameters
-    logging.info(f"Running with parameters: {parameters_dict}")
+  # Log parameters
+  logging.info(f"Running with parameters: {parameters_dict} \n")
 
-    # Log the key information about the model and run
-    with open(output_dir_path / "parameters.yaml", "w") as f:
-        yaml.dump(parameters_dict, f)
+  # Log the key information about the model and run
+  with open(output_dir_path / "parameters.yaml", "w") as f:
+    yaml.dump(parameters_dict, f)
 
-    IMG_DIM = tuple(parameters_dict["image_dim"])
-    print("map dimensions ", IMG_DIM)
+  IMG_DIM = tuple(parameters_dict["image_dim"][0],
+                  parameters_dict["image_dim"][1])
+  print("image dimensions ", IMG_DIM)
 
-    # Load training files
-    training_dir_path = Path(parameters_dict["training_dir"])
-    assert (
-        training_dir_path.exists()
-    ), f"Could not find directory at {training_dir_path}"
-    train_files = [str(file) for file in training_dir_path.iterdir()]
-    assert len(train_files) > 0, f"Found no files in {training_dir_path}"
+  # Load training files
+  try:
+    image_dir_path = Path(parameters_dict["training_dir"])
+    assert (image_dir_path.exists()), f"Could not find directory at {image_dir_path} \n"
+    train_files = [str(file) for file in image_dir_path.iterdir()]
+    assert len(train_files) > 0, f"Found no files in {image_dir_path} \n"
     print(len(train_files))
     print(train_files)
-    
-    logging.info(f"Found {len(train_files)} files for training")
-
-
+    logging.info(f"Found {len(train_files)} files for training" \n)
+  except Exception:
+    logging.error(f"Found no files in {image_dir_path} \n")
+    raise
+  try:
+    training_dir_path = Path(parameters_dict["sample_lable_lst"])
+    assert (training_dir_path.exists())
     # Load data CSV file with filenames and labels
-    data = pandas.read_csv(parameters_dict["sample_lable_lst"])
+    data = pd.read_csv(training_dir_path)
+    logging.info(f"Found {len(data)} samples for training \n")
+  except Exception:
+    logging.error(f"Could not open input map list \n")
+    raise
 
     # remove image number from file name
     names = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in train_files]
+    print(names)
 
     train_labels = []
     
     for name in names:
-      sample = data.loc[data["file_path"].str.contains(name)]
-      label = sample["map_class_autobuild"].values[0]
+      sample = data.loc[data["filename"].str.contains(name)]#"file_path" original column name for sampels
+      label = sample["ai_label"].values[0]#"map_class_autobuild" original column name for "label"
       train_labels.append(label)
 
     print(train_labels)
