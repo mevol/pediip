@@ -113,8 +113,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   with open(output_dir_path / "parameters.yaml", "w") as f:
     yaml.dump(parameters_dict, f)
 
-  IMG_DIM = tuple(parameters_dict["image_dim"][0],
-                  parameters_dict["image_dim"][1])
+  IMG_DIM = tuple(parameters_dict["image_dim"])
   print("image dimensions ", IMG_DIM)
 
   # Load training files
