@@ -204,7 +204,7 @@ def prepare_training_data_binary(
 
           # Save image
           try:
-            output_file = Path(output_directory) / Path(f"{dir_stem[0]}_{slice_num}.png")
+            output_file = Path(output_directory) / Path(f"{target_name}_{homo}_{target_file_stripped}_{slice_num}.png")
             Image.fromarray(slice_scaled_int).convert("L").save(output_file)
           except Exception:
             logging.error(f"Could not create image file in {output_directory}")
