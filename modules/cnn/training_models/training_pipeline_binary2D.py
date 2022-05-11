@@ -123,7 +123,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     train_files = [str(file) for file in image_dir_path.iterdir()]
     assert len(train_files) > 0, f"Found no files in {image_dir_path} \n"
     print(len(train_files))
-    print(train_files)
+    #print(train_files)
     logging.info(f"Found {len(train_files)} files for training \n")
   except Exception:
     logging.error(f"Found no files in {image_dir_path} \n")
@@ -219,11 +219,19 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 
   # expand X_train, X_test and X_validation from single MTZ to contain
   # the corresponding 60 image slices
-  def expand_sets(X_set, y_set):
+  def expand_sets(X_set, y_set, images):
+    new_set = []
     for sample in X_set:
-      print(sample.index)
+      print(sample)
+      sample_mtz = sample.loc[sample["filename"]]
+      print(sample_mtz)
+      sample_mtz_stripped = sample_mtz.strip('.mtz')
+      sample_images = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in images]
+      print(sample_images)
+      new_set.append(sample_images)
+    print(new_set)
 
-  expand_sets(X_challenge, y_challenge)
+  expand_sets(X_challenge, y_challenge, train_files)
 
   1/0
 
