@@ -225,7 +225,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
       
   expand_sets(X_challenge)
 
-    1/0
+  1/0
 
 ### anything below needs looking at; in particular how to split the data
 
