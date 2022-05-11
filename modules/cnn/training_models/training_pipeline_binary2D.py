@@ -223,7 +223,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     for sample in X_set:
       print(sample.index)
 
-  expand_sets(X_challenge)
+  expand_sets(X_challenge, y_challenge)
 
   1/0
 
