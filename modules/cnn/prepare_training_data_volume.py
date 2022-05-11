@@ -113,7 +113,9 @@ def prepare_training_data_volume(
       edited_volume = np.zeros((length, length, length))
       # Iterate through images, scale them and save them in output_directory
       deg = np.random.choice(90, 1, replace=False)[0]
-      for slice_num in range(map_array.shape[0]):
+      map_array = rotate(map_array, angle = deg, reshape=False)# see what happens with no rotation
+#      for slice_num in range(map_array.shape[0]):
+      for slice_num in range(edited_volume.shape[0]):
         #print("Working on slice number: ", slice_num)
         # Get slice
         slice = map_array[slice_num, :, :]
