@@ -221,7 +221,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   # the corresponding 60 image slices
   def expand_sets(X_set, y_set, images):
     print(X_set)
-    names = X_set[X_set["filename"]]
+    names = X_set["filename"]
     new_set = []
     for sample in names:
       print(sample)
