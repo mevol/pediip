@@ -222,6 +222,8 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   def expand_sets(X_set, y_set):
     for sample in X_set:
       print(sample.index)
+      
+  expand_sets(X_challenge)
 
     1/0
 
