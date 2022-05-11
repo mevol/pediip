@@ -222,216 +222,219 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   def expand_sets(X_set, y_set):
     for sample in X_set:
       print(sample.index)
-      
+
   expand_sets(X_challenge)
 
   1/0
 
-### anything below needs looking at; in particular how to split the data
-
-    # remove image number from file name
-    names = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in train_files]
-    print(names)
-
-    train_labels = []
-    
-    for name in names:
-      sample = data.loc[data["filename"].str.contains(name)]#"file_path" original column name for sampels
-      label = sample["ai_label"].values[0]#"map_class_autobuild" original column name for "label"
-      train_labels.append(label)
-
-    print(train_labels)
-    
-    
-    # Prepare data generators to get data out
-    # Always rescale and also expand dictionary provided as parameter
-    train_datagen = ImageDataGenerator(
-        rescale=1.0 / 255, **parameters_dict["image_augmentation_dict"]
-    )
-    # Only rescale validation
-    validation_datagen = ImageDataGenerator(rescale=1.0 / 255)
-
-    # Build model
-    if parameters_dict["rgb"] is True:
-        logging.info("Using 3 channel image input to model")
-        input_shape = (IMG_DIM[0], IMG_DIM[1], 3)
-        color_mode = "rgb"
-    else:
-        logging.info("Using single channel image input to model")
-        input_shape = (IMG_DIM[0], IMG_DIM[1], 1)
-        color_mode = "grayscale"
-        
-    # Create training dataframe
-    training_dataframe = pandas.DataFrame(
-        {"Files": train_files, "Labels": [str(label) for label in train_labels]}
-    )
-    print(training_dataframe.head())
-    training_dataframe.set_index("Files")
-    training_data_shuffled = training_dataframe.sample(frac=1)    
-        
-        
-    
-    # Train the model k-fold number of times on different folds and record the output
-    # Model run parameters
-    k_folds = parameters_dict["k_folds"]
-    runs = parameters_dict["runs"]
-    epochs = parameters_dict["epochs"]
-    batch_size = parameters_dict["batch_size"]
-
-    fold_boundaries = k_fold_boundaries(train_files, k_folds)
-    for k in range(runs):
-        logging.info(f"Running cross validation set {k + 1}")
-
-        # New model
-        model = create_model(input_shape)
-        model_info = model.get_config()
-
-        # Separate the active training and validations set based on the fold boundaries
-        active_training_set = pandas.concat(
-            [
-                training_data_shuffled[: fold_boundaries[k][0]],
-                training_data_shuffled[fold_boundaries[k][1] :],
-            ]
-        )
-        active_validation_set = training_data_shuffled[
-            fold_boundaries[k][0] : fold_boundaries[k][1]
-        ]
-
-        logging.info(f"Active training set of {len(active_training_set['Files'])}")
-        logging.info(f"Active validation set of {len(active_validation_set['Files'])}")
-
-        #Record start time to monitor training time
-        start = datetime.now()
-        logging.info(f"Training start time : {start}")    
-
-        # Create generators
-        train_generator = train_datagen.flow_from_dataframe(
-            active_training_set,
-            x_col="Files",
-            y_col="Labels",
-            target_size=IMG_DIM,
-            color_mode=color_mode,
-            shuffle=True,
-            batch_size=batch_size,
-            class_mode="categorical",
-        )
-
-        val_generator = validation_datagen.flow_from_dataframe(
-            active_validation_set,
-            x_col="Files",
-            y_col="Labels",
-            target_size=IMG_DIM,
-            color_mode=color_mode,
-            shuffle=True,
-            batch_size=batch_size,
-            class_mode="categorical",
-        )
-
-        history = model.fit_generator(
-            train_generator,
-            steps_per_epoch=int((len(active_training_set["Files"]) / batch_size)),
-            epochs=epochs,
-            validation_data=val_generator,
-            validation_steps=(len(active_validation_set["Files"]) / batch_size),
-            use_multiprocessing=True,
-            workers=8,
-        )
-
-
-        # Send history to csv
-        history_to_csv(history, histories_path / f"history_{k}.csv")
-        figure_from_csv(histories_path / f"history_{k}.csv",
-                      histories_path / f"history_{k}.png")
-        # Save model as h5
-        model.save(str(models_path / f"model_{k}.h5"))
-
-
-        #Record end time to monitor training time
-        end = datetime.now()
-        logging.info(f"Training end time : {end}")    
-        elapsed = end-start
-        logging.info(f"Training duration : {elapsed}")
-        print("Training duration: ", elapsed)
-
-        # Make evaluation folder to use the test data
-
+# #anything below needs looking at; in particular how to split the data
+# 
+#     #remove image number from file name
+#     names = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in train_files]
+#     print(names)
+# 
+#     train_labels = []
+#     
+#     for name in names:
+#       sample = data.loc[data["filename"].str.contains(name)]#"file_path" original column name for sampels
+#       label = sample["ai_label"].values[0]#"map_class_autobuild" original column name for "label"
+#       train_labels.append(label)
+# 
+#     print(train_labels)
+#     
+#     
+#     #Prepare data generators to get data out
+#     #Always rescale and also expand dictionary provided as parameter
+#     train_datagen = ImageDataGenerator(
+#         rescale=1.0 / 255, **parameters_dict["image_augmentation_dict"]
+#     )
+#     #Only rescale validation
+#     validation_datagen = ImageDataGenerator(rescale=1.0 / 255)
+# 
+#     #Build model
+#     if parameters_dict["rgb"] is True:
+#         logging.info("Using 3 channel image input to model")
+#         input_shape = (IMG_DIM[0], IMG_DIM[1], 3)
+#         color_mode = "rgb"
+#     else:
+#         logging.info("Using single channel image input to model")
+#         input_shape = (IMG_DIM[0], IMG_DIM[1], 1)
+#         color_mode = "grayscale"
+#         
+#     #Create training dataframe
+#     training_dataframe = pandas.DataFrame(
+#         {"Files": train_files, "Labels": [str(label) for label in train_labels]}
+#     )
+#     print(training_dataframe.head())
+#     training_dataframe.set_index("Files")
+#     training_data_shuffled = training_dataframe.sample(frac=1)    
+#         
+#         
+#     
+#     #Train the model k-fold number of times on different folds and record the output
+#     Model run parameters
+#     k_folds = parameters_dict["k_folds"]
+#     runs = parameters_dict["runs"]
+#     epochs = parameters_dict["epochs"]
+#     batch_size = parameters_dict["batch_size"]
+# 
+#     fold_boundaries = k_fold_boundaries(train_files, k_folds)
+#     for k in range(runs):
+#         logging.info(f"Running cross validation set {k + 1}")
+# 
+#         #New model
+#         model = create_model(input_shape)
+#         model_info = model.get_config()
+# 
+#         #Separate the active training and validations set based on the fold boundaries
+#         active_training_set = pandas.concat(
+#             [
+#                 training_data_shuffled[: fold_boundaries[k][0]],
+#                 training_data_shuffled[fold_boundaries[k][1] :],
+#             ]
+#         )
+#         active_validation_set = training_data_shuffled[
+#             fold_boundaries[k][0] : fold_boundaries[k][1]
+#         ]
+# 
+#         logging.info(f"Active training set of {len(active_training_set['Files'])}")
+#         logging.info(f"Active validation set of {len(active_validation_set['Files'])}")
+# 
+#         #Record start time to monitor training time
+#         start = datetime.now()
+#         logging.info(f"Training start time : {start}")    
+# 
+#         #Create generators
+#         train_generator = train_datagen.flow_from_dataframe(
+#             active_training_set,
+#             x_col="Files",
+#             y_col="Labels",
+#             target_size=IMG_DIM,
+#             color_mode=color_mode,
+#             shuffle=True,
+#             batch_size=batch_size,
+#             class_mode="categorical",
+#         )
+# 
+#         val_generator = validation_datagen.flow_from_dataframe(
+#             active_validation_set,
+#             x_col="Files",
+#             y_col="Labels",
+#             target_size=IMG_DIM,
+#             color_mode=color_mode,
+#             shuffle=True,
+#             batch_size=batch_size,
+#             class_mode="categorical",
+#         )
+# 
+#         history = model.fit_generator(
+#             train_generator,
+#             steps_per_epoch=int((len(active_training_set["Files"]) / batch_size)),
+#             epochs=epochs,
+#             validation_data=val_generator,
+#             validation_steps=(len(active_validation_set["Files"]) / batch_size),
+#             use_multiprocessing=True,
+#             workers=8,
+#         )
+# 
+# 
+#         #Send history to csv
+#         history_to_csv(history, histories_path / f"history_{k}.csv")
+#         figure_from_csv(histories_path / f"history_{k}.csv",
+#                       histories_path / f"history_{k}.png")
+#         #Save model as h5
+#         model.save(str(models_path / f"model_{k}.h5"))
+# 
+# 
+#         #Record end time to monitor training time
+#         end = datetime.now()
+#         logging.info(f"Training end time : {end}")    
+#         elapsed = end-start
+#         logging.info(f"Training duration : {elapsed}")
+#         print("Training duration: ", elapsed)
+# 
+#         #Make evaluation folder to use the test data
+# 
 #        logging.info("Performing evaluation of model")
 #        evaluation_dir_path = str(evaluations_path / f"evaluation")
 #        if not Path(evaluation_dir_path).exists():
 #          os.mkdir(evaluation_dir_path)
-
-
-        # Make evaluation folder
-        if parameters_dict["test_dir"] and parameters_dict["slices_per_structure"]:
-            logging.info("Performing evaluation of model")
-            evaluation_dir_path = str(evaluations_path / f"evaluation_{k}")
-            if not Path(evaluation_dir_path).exists():
-                os.mkdir(evaluation_dir_path)
-            evaluate(
-                str(models_path / f"model_{k}.h5"),
-                parameters_dict["test_dir"],
-                evaluation_dir_path,
-                parameters_dict["sample_lable_lst"],
-                parameters_dict["slices_per_structure"],
-                rgb=parameters_dict["rgb"],
-            )
-        else:
-            logging.info(
-                "Requires test directory and slices_per_structure for evaluation. "
-                "No evaluation performed"
-            )
-
-    # Load the model config information as a yaml file
-    with open(output_dir_path / "model_info.yaml", "w") as f:
-        yaml.dump(model_info, f)
-
-    # Try to copy log file if it was created in training.log
-    try:
-        shutil.copy("training.log", output_dir_path)
-    except FileExistsError:
-        logging.warning("Could not find training.log to copy")
-    except Exception:
-        logging.warning("Could not copy training.log to output directory")
-
-
-
-
-        logging.info("Getting predictions")
-
+# 
+# 
+#         #Make evaluation folder
+#         if parameters_dict["test_dir"] and parameters_dict["slices_per_structure"]:
+#             logging.info("Performing evaluation of model")
+#             evaluation_dir_path = str(evaluations_path / f"evaluation_{k}")
+#             if not Path(evaluation_dir_path).exists():
+#                 os.mkdir(evaluation_dir_path)
+#             evaluate(
+#                 str(models_path / f"model_{k}.h5"),
+#                 parameters_dict["test_dir"],
+#                 evaluation_dir_path,
+#                 parameters_dict["sample_lable_lst"],
+#                 parameters_dict["slices_per_structure"],
+#                 rgb=parameters_dict["rgb"],
+#             )
+#         else:
+#             logging.info(
+#                 "Requires test directory and slices_per_structure for evaluation. "
+#                 "No evaluation performed"
+#             )
+# 
+#     #Load the model config information as a yaml file
+#     with open(output_dir_path / "model_info.yaml", "w") as f:
+#         yaml.dump(model_info, f)
+# 
+#     #Try to copy log file if it was created in training.log
+#     try:
+#         shutil.copy("training.log", output_dir_path)
+#     except FileExistsError:
+#         logging.warning("Could not find training.log to copy")
+#     except Exception:
+#         logging.warning("Could not copy training.log to output directory")
+# 
+# 
+# 
+# 
+#         logging.info("Getting predictions")
+# 
 #        print(int(math.ceil(len(X_test) / batch_size)))
 #        print(int(np.round(len(X_test) / batch_size)))
+# 
+# #TO DO: put evaluation function here and make a test generator to use the test data
+# #       need to look at the old way by Tim to make sure things are correct
+# #       code below should update "evaluate_model.py" and then "evaluate section" of
+# #       code needs to be run
+# 
+# 
+# 
+# 
+# 
+# 
+#         try:
+#           predictions = model.predict(
+#                            testing_generator,
+#                            steps=math.ceil(len(X_test) / batch_size),
+#                            verbose=1)
+# 
+#           preds_rounded = np.round(predictions, 0)
+#          print("Predictions after rounding")
+#          print(preds_rounded)
+# 
+#           y_pred = np.argmax(preds_rounded, axis=1)
+#           y_pred1 = preds_rounded.argmax(1)
+# 
+#           print("predicted labels ", y_pred)
+#           print("known labels ", y_test[:-2])
+#          print(y_pred1)
+# 
+#          print("Length of predictions rounded: ", len(preds_rounded))
+#         except Exception:
+#           logging.warning("Could not round predictions")
+#           raise
 
-# TO DO: put evaluation function here and make a test generator to use the test data
-#        need to look at the old way by Tim to make sure things are correct
-#        code below should update "evaluate_model.py" and then "evaluate section" of
-#        code needs to be run
 
-
-
-
-
-
-        try:
-          predictions = model.predict(
-                           testing_generator,
-                           steps=math.ceil(len(X_test) / batch_size),
-                           verbose=1)
-
-          preds_rounded = np.round(predictions, 0)
-         #print("Predictions after rounding")
-         #print(preds_rounded)
-
-          y_pred = np.argmax(preds_rounded, axis=1)
-          y_pred1 = preds_rounded.argmax(1)
-
-          print("predicted labels ", y_pred)
-          print("known labels ", y_test[:-2])
-         #print(y_pred1)
-
-         #print("Length of predictions rounded: ", len(preds_rounded))
-        except Exception:
-          logging.warning("Could not round predictions")
-          raise
+##########################################################################################
 
     #interim fix to be able to develop further; remove the last two samples in y_test
     #y_test = y_test[:-2]
