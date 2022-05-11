@@ -119,7 +119,7 @@ def prepare_training_data_volume(
       Amax = np.max(map_array)
       Amin = np.min(map_array)
       Range = Amax - Amin
-      Anrm = ((map_array - Amin)/Range - 0.5) * 2
+      Anrm = ((map_array - Amin)/Range)# try next without '-0.5)*2'
       
       
 #      for slice_num in range(map_array.shape[0]):
