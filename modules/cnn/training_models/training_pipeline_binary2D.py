@@ -226,8 +226,10 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     for sample in names:
       print(sample)
       sample_split = sample.split('/')
-      print(sample[-1])
-      sample_split_stripped = sample_mtz.strip('.mtz')
+      name = sample_split[-1]
+      print(name)
+      sample_stem = name.strip('.mtz')
+      print(sample_stem)
       sample_images = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in images]
       print(sample_images)
       new_set.append(sample_images)
