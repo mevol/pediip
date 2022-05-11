@@ -64,7 +64,9 @@ class DataGenerator(Sequence):
       X[i,] = volume.reshape(*self.dim, self.n_channels)
       # Store class
       y[i] = self.labels[ID]
-
+      
+    print(X)
+    print(y)
     #return X, to_categorical(y, num_classes=self.n_classes)
     return X, y
 
