@@ -54,14 +54,14 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
   model.add(Dense(1024, activation="relu"))
   model.add(Dropout(0.3))
   model.add(Dense(1024, activation="relu"))
-  model.add(Dense(2, activation="softmax"))
+  #model.add(Dense(2, activation="softmax"))
   model.add(Dense(1, activation="sigmoid"))
 
   print(model.output_shape)
 
 
   model.compile(
-        loss="categorical_crossentropy",
+        loss="binary_crossentropy",#categorical_crossentropy
         #optimizer='adam',
         optimizer=Adam(learning_rate=0.0001), # was added 20220506
 #        optimizer=SGD(learning_rate=0.0001), # was added 20220509
