@@ -138,6 +138,95 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     logging.error(f"Could not open input map list \n")
     raise
 
+  # creating test, train and validation set
+  # separate data X from labels y; assigning labels based on rfree
+  X = data[['filename', 'protocol', 'stage']]
+  y = data['ai_label']
+
+  # getting the class distribution
+  class_frequency = data.groupby(y).size()
+  logging.info(f"Number of samples per class {class_frequency} \n")
+
+  # split the data into training and test set; this is splitting the input CSV data;
+  # and an additional challenge set of 5% of the data; this latter set is used to
+  # finally challenge the algorithm after training and testing
+  # create a 5% challenge set if needed
+  X_temp, X_challenge, y_temp, y_challenge = train_test_split(X, y, test_size=0.05,
+                                                                random_state=42)
+
+  logging.info(f"Length of challenge data: {len(X_challenge)} \n")
+
+  # use the remaining data for 80/20 train-test split
+  X_train, X_test, y_train, y_test = train_test_split(X_temp, y_temp, test_size=0.2,
+                                                        random_state=100)
+  logging.info(f"Number of samples in y_test: {len(y_test)} \n"
+               f"Number of samples in X_test: {len(X_test)} \n"
+               f"Number of samples in y_train: {len(y_train)} \n"
+               f"Number of samples in X_train: {len(X_train)} \n"
+               f"Number of samples in y_challenge: {len(y_challenge)} \n"
+               f"Number of samples in X_challenge: {len(X_challenge)} \n")
+
+  # get the number of samples that need to be created to fill a batch for prediction
+  # y_test and X_test
+  num_batches_test_needed = int(math.ceil(len(X_test) / parameters_dict["batch_size"]))
+  batches_times_rounded_down = parameters_dict["batch_size"] * num_batches_test_needed
+  diff_batch_samples = int( batches_times_rounded_down - len(X_test))
+
+  # creating a dictionary for the label column to match sample ID with label
+  label_dict = y.to_dict()
+  # checking y length to extend missing y_test
+  last_y_key = list(label_dict.keys())[-1]
+  # get the ID of the last sample to expand from there
+  new_keys = last_y_key + diff_batch_samples
+  # getting last sample of y_test and X_test
+  last_y = y_test.iloc[-1]
+  last_X = X_test.iloc[-1].values
+
+  for i in range(last_y_key + 1, new_keys + 1):
+    label_dict[i] = last_y
+    y_test.loc[i] = last_y
+    X_test.loc[i] = last_X
+
+  # get the number of samples that need to be created to fill a batch for prediction
+  # y_challenge and y_test
+  num_batches_challenge_needed = int(math.ceil(len(X_challenge) / parameters_dict["batch_size"]))
+  batches_times_rounded_down2 = parameters_dict["batch_size"] * num_batches_challenge_needed
+  diff_batch_samples2 = int( batches_times_rounded_down2 - len(X_challenge))
+
+  # checking y length to extend missing y_test
+  last_y_key2 = list(label_dict.keys())[-1]
+  # get the ID of the last sample to expand from there
+  new_keys2 = last_y_key2 + diff_batch_samples2
+  # getting last sample of y_test and X_test
+  last_challenge_X = X_challenge.iloc[-1].values
+  last_challenge_y = y_challenge.iloc[-1]
+
+  for i in range(last_y_key2 + 1, new_keys2 + 1):
+    label_dict[i] = last_challenge_y
+    y_challenge.loc[i] = last_challenge_y
+    X_challenge.loc[i] = last_challenge_X
+
+  partition = {"train" : X_train,
+               "validate" : X_test,
+               "challenge" : X_challenge}
+  logging.info(f"Length of partition train: {len(partition['train'])} \n"
+               f"Length of partition extended validate: {len(partition['validate'])} \n"
+               f"Length of partition extended challenge: {len(partition['challenge'])} \n")
+
+  assert len(label_dict) == (len(partition['validate'])
+                             + len(partition['train'])
+                             + len(partition['challenge']))
+
+  # expand X_train, X_test and X_validation from single MTZ to contain
+  # the corresponding 60 image slices
+  def expand_sets(X_set, y_set):
+    for sample in X_set:
+      print(sample.index)
+
+  1/0
+
+### anything below needs looking at; in particular how to split the data
+
     # remove image number from file name
     names = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in train_files]
     print(names)
