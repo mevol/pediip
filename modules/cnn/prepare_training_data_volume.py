@@ -126,7 +126,7 @@ def prepare_training_data_volume(
         # check that the remainder of division is 0 and hence the result even
         # get a random number between 0 and 90 deg
         # rotate the slice by this deg
-        slice_scaled_int = rotate(slice_scaled_int, angle = deg, reshape=False)
+        #slice_scaled_int = rotate(slice_scaled_int, angle = deg, reshape=False)# see what happens with no rotation
         # combine the slices to a new image stack for training
         edited_volume[slice_num, :, :] = slice_scaled_int
       logging.info(f"Size of standardise map when finished: {map_array.shape} \n")
