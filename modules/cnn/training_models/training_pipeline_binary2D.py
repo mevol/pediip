@@ -239,7 +239,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 #      print(sample_images)
 #      for img in sample_images:
 #        if sample_stem 
-      new_set.append(glob(os.path.join(image_dir_path, sample_stem))))
+      new_set.append(glob(os.path.join(image_dir_path, sample_stem)))
     print(new_set)
 
   expand_sets(X_challenge, y_challenge, train_files)
