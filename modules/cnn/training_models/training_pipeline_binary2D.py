@@ -243,7 +243,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     print(new_set)
 #    single_list = list(map(int, chain.from_iterable(new_set)))
 #    print(single_list)
-    df = pd.DataFrame(columns = ["filename", "ai_label"]
+    df = pd.DataFrame(columns = ["filename", "ai_label"])
     df['filename'] = df.filename.apply(lambda x: sum(x, new_set))
     print(df['filename'])
 
