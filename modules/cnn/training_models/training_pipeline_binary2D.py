@@ -39,6 +39,7 @@ from sklearn.metrics import confusion_matrix
 #from keras.utils import np_utils
 from tensorflow.keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
+from glob import glob
 
 from modules.cnn.training_models.plot_history import history_to_csv, figure_from_csv
 from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
@@ -230,9 +231,15 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
       print(name)
       sample_stem = name.strip('.mtz')
       print(sample_stem)
-      sample_images = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in images]
-      print(sample_images)
-      new_set.append(sample_images)
+      
+      
+      
+      
+#      sample_images = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in images]
+#      print(sample_images)
+#      for img in sample_images:
+#        if sample_stem 
+      new_set.append(glob(os.path.join(image_dir_path, sample_stem))))
     print(new_set)
 
   expand_sets(X_challenge, y_challenge, train_files)
