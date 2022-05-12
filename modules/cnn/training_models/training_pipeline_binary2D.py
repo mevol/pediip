@@ -243,24 +243,23 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   test_new = expand_sets(X_test, y_test, train_files)
   challenge_new = expand_sets(X_challenge, y_challenge, train_files)
 
-     #Prepare data generators to get data out
-     #Always rescale and also expand dictionary provided as parameter
-     train_datagen = ImageDataGenerator(
-         rescale=1.0 / 255, **parameters_dict["image_augmentation_dict"]
-     )
-     #Only rescale test and validation
-     test_datagen = ImageDataGenerator(rescale=1.0 / 255)
+  #Prepare data generators to get data out
+  #Always rescale and also expand dictionary provided as parameter
+  train_datagen = ImageDataGenerator(
+         rescale=1.0 / 255, **parameters_dict["image_augmentation_dict"])
+  #Only rescale test and validation
+  test_datagen = ImageDataGenerator(rescale=1.0 / 255)
      validation_datagen = ImageDataGenerator(rescale=1.0 / 255)
  
-     #Build model
-     if parameters_dict["rgb"] is True:
-         logging.info("Using 3 channel image input to model")
-         input_shape = (IMG_DIM[0], IMG_DIM[1], 3)
-         color_mode = "rgb"
-     else:
-         logging.info("Using single channel image input to model")
-         input_shape = (IMG_DIM[0], IMG_DIM[1], 1)
-         color_mode = "grayscale"
+  #Build model
+  if parameters_dict["rgb"] is True:
+    logging.info("Using 3 channel image input to model")
+    input_shape = (IMG_DIM[0], IMG_DIM[1], 3)
+    color_mode = "rgb"
+  else:
+    logging.info("Using single channel image input to model")
+    input_shape = (IMG_DIM[0], IMG_DIM[1], 1)
+    color_mode = "grayscale"
 
 #     #Create training dataframe
 #     training_dataframe = pandas.DataFrame(
