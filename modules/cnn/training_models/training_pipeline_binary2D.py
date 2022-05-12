@@ -219,19 +219,16 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                              + len(partition['train'])
                              + len(partition['challenge']))
                              
-  train_merge = X_train.merge(y_train,left_index=True, right_index=True)
+  train_merge = X_train.merge(y_train, left_index=True, right_index=True)
   print(train_merge.columns)
   print(train_merge.head())
+  test_merge = X_test.merge(y_test, left_index=True, right_index=True)
+  print(test_merge.columns)
+  print(test_merge.head())
+  challenge_merge = X_challenge.merge(y_challenge, left_index=True, right_index=True)
+  print(challenge_merge.columns)
+  print(challenge_merge.head())
 
-  column_names = {0:'filename', 1:'protocol',
-                                  2:'stage', 3:'ai_label'}
-  train_concat = pd.concat([X_train, y_train], axis = 1, ignore_index = True)
-  print(train_concat.columns)
-  print(train_concat.head())
-  train_concat.rename(columns = column_names)
-  print(train_concat.columns)
-  test_concat = pd.concat([X_test, y_test], axis = 1, ignore_index = True)
-  challenge_concat = pd.concat([X_challenge, y_challenge], axis = 1, ignore_index = True)
   # expand X_train, X_test and X_validation from single MTZ to contain
   # the corresponding 60 image slices
   def get_sample_name(x):
@@ -253,15 +250,15 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     name = target_name+"_"+homo+"_"+target_file_stripped
     return name
   
-  train_concat['name'] = train_concat.loc[:, 'filename'].apply(get_sample_name)
-  print(train_concat)
-  print(len(train_concat))
-  test_concat['name'] = test_concat.loc[:, 'filename'].apply(get_sample_name)
-  print(test_concat)
-  print(len(test_concat))
-  challenge_concat['name'] = challenge_concat.loc[:, 'filename'].apply(get_sample_name)
-  print(challenge_concat)
-  print(len(challenge_concat))
+  train_merge['name'] = train_merge.loc[:, 'filename'].apply(get_sample_name)
+  print(train_merge)
+  print(len(train_merge))
+  test_merge['name'] = test_merge.loc[:, 'filename'].apply(get_sample_name)
+  print(test_merge)
+  print(len(test_merge))
+  challenge_merge['name'] = challenge_merge.loc[:, 'filename'].apply(get_sample_name)
+  print(challenge_merge)
+  print(len(challenge_merge))
 
 
 #  def expand_sets(working_set, images):
