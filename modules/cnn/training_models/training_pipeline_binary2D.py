@@ -233,9 +233,9 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 #    for sample in names:
     for i in temp:
       print(i)
-      sample = temp.loc[i, 'filename']
+      sample = temp.iloc[i, 0]
       print(sample)
-      label = temp.loc[i, 'ai_label']
+      label = temp.iloc[i, 1]
       print(label)
       sample_split = sample.split('/')
       name = sample_split[-1]
