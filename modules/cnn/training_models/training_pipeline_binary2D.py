@@ -219,6 +219,10 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                              + len(partition['train'])
                              + len(partition['challenge']))
 
+  print(data.columns)
+  print(X_train.columns)
+  print(y_train.columns)
+
 
   train_concat = pd.concat([X_train, y_train], axis = 1, ignore_index = True)
   train_concat.columns = data.columns
