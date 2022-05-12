@@ -219,29 +219,64 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                              + len(partition['train'])
                              + len(partition['challenge']))
 
+
+  train_concat = pd.concat([X_train, y_train], axis = 1, ignore_index = True)
+  test_concat = pd.concat([X_test, y_test], axis = 1, ignore_index = True)
+  challenge_concat = pd.concat([X_challenge, y_challenge], axis = 1, ignore_index = True)
   # expand X_train, X_test and X_validation from single MTZ to contain
   # the corresponding 60 image slices
-  def expand_sets(X_set, y_set, images):
-    temp = pd.concat([X_set, y_set], axis = 1, ignore_index = True)
-    df = pd.DataFrame(columns = ["filename", "ai_label"])
-    for i in range(len(temp)):
-      sample = temp.iloc[i, 0]
-      label = temp.iloc[i, -1]
-      sample_split = sample.split('/')
-      name = sample_split[-1]
-      target_name = sample_split[8]
-      homo = sample_split[12]
-      sample_stem = name.strip('.mtz')
-      file_stem = target_name+"_"+homo+"_"+sample_stem
-      file_list = (glob(os.path.join(image_dir_path, file_stem+"*.png")))
-      dummy = pd.DataFrame({'filename':file_list,
-                             'ai_label' : label})
-      df = pd.concat([df, dummy], axis=0, ignore_index=True)
-    return df
+  def get_sample_name(x):
+    try:
+      target_file = x.split("/")[-1]
+      target_file_stripped = target_file.strip('.mtz')
+    except Exception:
+      pass
+    try:
+      target_name = x.split("/")[8]
+    except Exception:
+      pass
+    try:
+      homo = x.split("/")[12]
+    except Exception:
+      homo = "none"
+      logging.error(f"Could not find homologue to work with. \n")
+      pass
+    name = target_name+"_"+homo+"_"+target_file_stripped
+    return name
+  
+  train_concat['name'] = train_concat.loc[:, 'filename'].apply(get_sample_name)
+  print(train_concat)
+  print(len(train_concat))
+  test_concat['name'] = test_concat.loc[:, 'filename'].apply(get_sample_name)
+  print(test_concat)
+  print(len(test_concat))
+  challenge_concat['name'] = challenge_concat.loc[:, 'filename'].apply(get_sample_name)
+  print(challenge_concat)
+  print(len(challenge_concat))
 
-  train_new = expand_sets(X_train, y_train, train_files)
-  test_new = expand_sets(X_test, y_test, train_files)
-  challenge_new = expand_sets(X_challenge, y_challenge, train_files)
+
+#  def expand_sets(working_set, images):
+##    temp = pd.concat([X_set, y_set], axis = 1, ignore_index = True)
+#    temp_indexed = working_set.set_index('name')
+#    df = pd.DataFrame(columns = ["filename", "ai_label"])
+#    for i in range(len(temp)):
+#      sample = temp.iloc[i, 0]
+#      label = temp.iloc[i, -1]
+#      sample_split = sample.split('/')
+#      name = sample_split[-1]
+#      target_name = sample_split[8]
+#      homo = sample_split[12]
+#      sample_stem = name.strip('.mtz')
+#      file_stem = target_name+"_"+homo+"_"+sample_stem
+#      file_list = (glob(os.path.join(image_dir_path, file_stem+"*.png")))
+#      dummy = pd.DataFrame({'filename':file_list,
+#                             'ai_label' : label})
+#      df = pd.concat([df, dummy], axis=0, ignore_index=True)
+#    return df
+#
+#  train_new = expand_sets(X_train, y_train, train_files)
+#  test_new = expand_sets(X_test, y_test, train_files)
+#  challenge_new = expand_sets(X_challenge, y_challenge, train_files)
 
   #Prepare data generators to get data out
   #Always rescale and also expand dictionary provided as parameter
