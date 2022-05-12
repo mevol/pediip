@@ -222,94 +222,46 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   # expand X_train, X_test and X_validation from single MTZ to contain
   # the corresponding 60 image slices
   def expand_sets(X_set, y_set, images):
-    print(X_set)
-    print(y_set)
     temp = pd.concat([X_set, y_set], axis = 1, ignore_index = True)
-    print(temp.head())
-#    print(temp.columns)
-#    print(6666666, len(temp))
-#    print(temp.index)
-#    temp = temp.reindex(np.arange(0, len(temp)))
-#    print(temp.index)
-#    names = X_set["filename"]
-#    labels = y_set["ai_label"]
     df = pd.DataFrame(columns = ["filename", "ai_label"])
-    #new_set = []
-#    for sample in names:
     for i in range(len(temp)):
-      print(i)
       sample = temp.iloc[i, 0]
-      print(sample)
       label = temp.iloc[i, -1]
-      print(label)
       sample_split = sample.split('/')
       name = sample_split[-1]
-      #print(name)
       target_name = sample_split[8]
-      #print(target_name)
       homo = sample_split[12]
-      #print(homo)
       sample_stem = name.strip('.mtz')
-      #print(sample_stem)
       file_stem = target_name+"_"+homo+"_"+sample_stem
-      #print(file_stem)
-      #new_set.append(glob(os.path.join(image_dir_path, file_stem+"*.png")))
       file_list = (glob(os.path.join(image_dir_path, file_stem+"*.png")))
       dummy = pd.DataFrame({'filename':file_list,
                              'ai_label' : label})
       df = pd.concat([df, dummy], axis=0, ignore_index=True)
-      print(len(df))
-#    print(new_set)
-#    
-#
-#    for item in new_set:
-#      print(item)
-      
-      
-#    single_list = list(map(int, chain.from_iterable(new_set)))
-#    print(single_list)
-#    df = pd.DataFrame(columns = ["filename", "ai_label"])
-#    df['filename'] = df.filename.apply(lambda x: sum(x, new_set))
-    print(df)
+    return df
 
-  expand_sets(X_challenge, y_challenge, train_files)
+  train_new = expand_sets(X_train, y_train, train_files)
+  test_new = expand_sets(X_test, y_test, train_files)
+  challenge_new = expand_sets(X_challenge, y_challenge, train_files)
 
-  1/0
+     #Prepare data generators to get data out
+     #Always rescale and also expand dictionary provided as parameter
+     train_datagen = ImageDataGenerator(
+         rescale=1.0 / 255, **parameters_dict["image_augmentation_dict"]
+     )
+     #Only rescale test and validation
+     test_datagen = ImageDataGenerator(rescale=1.0 / 255)
+     validation_datagen = ImageDataGenerator(rescale=1.0 / 255)
+ 
+     #Build model
+     if parameters_dict["rgb"] is True:
+         logging.info("Using 3 channel image input to model")
+         input_shape = (IMG_DIM[0], IMG_DIM[1], 3)
+         color_mode = "rgb"
+     else:
+         logging.info("Using single channel image input to model")
+         input_shape = (IMG_DIM[0], IMG_DIM[1], 1)
+         color_mode = "grayscale"
 
-# #anything below needs looking at; in particular how to split the data
-# 
-#     #remove image number from file name
-#     names = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in train_files]
-#     print(names)
-# 
-#     train_labels = []
-#     
-#     for name in names:
-#       sample = data.loc[data["filename"].str.contains(name)]#"file_path" original column name for sampels
-#       label = sample["ai_label"].values[0]#"map_class_autobuild" original column name for "label"
-#       train_labels.append(label)
-# 
-#     print(train_labels)
-#     
-#     
-#     #Prepare data generators to get data out
-#     #Always rescale and also expand dictionary provided as parameter
-#     train_datagen = ImageDataGenerator(
-#         rescale=1.0 / 255, **parameters_dict["image_augmentation_dict"]
-#     )
-#     #Only rescale validation
-#     validation_datagen = ImageDataGenerator(rescale=1.0 / 255)
-# 
-#     #Build model
-#     if parameters_dict["rgb"] is True:
-#         logging.info("Using 3 channel image input to model")
-#         input_shape = (IMG_DIM[0], IMG_DIM[1], 3)
-#         color_mode = "rgb"
-#     else:
-#         logging.info("Using single channel image input to model")
-#         input_shape = (IMG_DIM[0], IMG_DIM[1], 1)
-#         color_mode = "grayscale"
-#         
 #     #Create training dataframe
 #     training_dataframe = pandas.DataFrame(
 #         {"Files": train_files, "Labels": [str(label) for label in train_labels]}
