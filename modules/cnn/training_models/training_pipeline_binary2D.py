@@ -218,6 +218,10 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   assert len(label_dict) == (len(partition['validate'])
                              + len(partition['train'])
                              + len(partition['challenge']))
+                             
+  train_merge = X_train.merge(y_train,left_index=True, right_index=True)
+  print(train_merge.columns)
+  print(train_merge.head())
 
   column_names = {0:'filename', 1:'protocol',
                                   2:'stage', 3:'ai_label'}
