@@ -219,17 +219,13 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                              + len(partition['train'])
                              + len(partition['challenge']))
 
-  print(data.columns)
-  print(X_train.columns)
-  print(y_train.columns)
-
-
+  column_names = ['filename', 'protocol', 'stage', 'ai_label']
   train_concat = pd.concat([X_train, y_train], axis = 1, ignore_index = True)
-  train_concat.columns = data.columns
+  train_concat.columns = column_names
   test_concat = pd.concat([X_test, y_test], axis = 1, ignore_index = True, names=X.columns)
-  test_concat.columns = data.columns
+  test_concat.columns = column_names
   challenge_concat = pd.concat([X_challenge, y_challenge], axis = 1, ignore_index = True, names=X.columns)
-  challenge_concat.columns = data.columns
+  challenge_concat.columns = column_names
   # expand X_train, X_test and X_validation from single MTZ to contain
   # the corresponding 60 image slices
   def get_sample_name(x):
