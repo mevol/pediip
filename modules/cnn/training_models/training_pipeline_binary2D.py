@@ -242,10 +242,16 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
       #print(file_stem)
       new_set.append(glob(os.path.join(image_dir_path, file_stem+"*.png")))
     print(new_set)
+    
+    df = pd.DataFrame(columns = ["filename", "ai_label"])
+    for item in new_set:
+      print(item)
+      df = pd.concat([df, item], axis=0, ignore_index=True)
+      print(len(df))
 #    single_list = list(map(int, chain.from_iterable(new_set)))
 #    print(single_list)
-    df = pd.DataFrame(columns = ["filename", "ai_label"])
-    df['filename'] = df.filename.apply(lambda x: sum(x, new_set))
+#    df = pd.DataFrame(columns = ["filename", "ai_label"])
+#    df['filename'] = df.filename.apply(lambda x: sum(x, new_set))
     print(df)
 
   expand_sets(X_challenge, y_challenge, train_files)
