@@ -253,13 +253,18 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   train_merge['name'] = train_merge.loc[:, 'filename'].apply(get_sample_name)
   print(train_merge)
   print(len(train_merge))
+  train_indexed = train_merge.set_index("name")
+  print(train_indexed.head())
   test_merge['name'] = test_merge.loc[:, 'filename'].apply(get_sample_name)
   print(test_merge)
   print(len(test_merge))
+  test_indexed = test_merge.set_index("name")
+  print(test_indexed.head())
   challenge_merge['name'] = challenge_merge.loc[:, 'filename'].apply(get_sample_name)
   print(challenge_merge)
   print(len(challenge_merge))
-
+  challenge_indexed = challenge_merge.set_index("name")
+  print(challenge_indexed.head())
 
 #  def expand_sets(working_set, images):
 ##    temp = pd.concat([X_set, y_set], axis = 1, ignore_index = True)
