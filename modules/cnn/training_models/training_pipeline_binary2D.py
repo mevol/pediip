@@ -222,6 +222,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   column_names = ['filename', 'protocol', 'stage', 'ai_label']
   train_concat = pd.concat([X_train, y_train], axis = 1, ignore_index = True)
   print(train_concat.columns)
+  print(train_concat.head())
   train_concat.columns = column_names
   test_concat = pd.concat([X_test, y_test], axis = 1, ignore_index = True, names=X.columns)
   test_concat.columns = column_names
