@@ -249,7 +249,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
          rescale=1.0 / 255, **parameters_dict["image_augmentation_dict"])
   #Only rescale test and validation
   test_datagen = ImageDataGenerator(rescale=1.0 / 255)
-     validation_datagen = ImageDataGenerator(rescale=1.0 / 255)
+  validation_datagen = ImageDataGenerator(rescale=1.0 / 255)
  
   #Build model
   if parameters_dict["rgb"] is True:
