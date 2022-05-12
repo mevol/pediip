@@ -225,17 +225,17 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     print(X_set)
     print(y_set)
     temp = pd.concat([X_set, y_set], axis = 1, ignore_index = True)
-    print(temp.columns)
-    print(6666666, len(temp))
-    print(temp.index)
-    temp = temp.reindex(np.arange(0, len(temp)))
-    print(temp.index)
+#    print(temp.columns)
+#    print(6666666, len(temp))
+#    print(temp.index)
+#    temp = temp.reindex(np.arange(0, len(temp)))
+#    print(temp.index)
 #    names = X_set["filename"]
 #    labels = y_set["ai_label"]
     df = pd.DataFrame(columns = ["filename", "ai_label"])
     #new_set = []
 #    for sample in names:
-    for i in temp:
+    for i in enumerate(temp):
       print(i)
       sample = temp.iloc[i, 0]
       print(sample)
