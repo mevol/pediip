@@ -40,6 +40,7 @@ from sklearn.metrics import confusion_matrix
 from tensorflow.keras.utils import to_categorical
 from sklearn.preprocessing import LabelEncoder
 from glob import glob
+from itertools import chain
 
 from modules.cnn.training_models.plot_history import history_to_csv, figure_from_csv
 from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
@@ -223,6 +224,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   def expand_sets(X_set, y_set, images):
     print(X_set)
     names = X_set["filename"]
+    labels = y_set["ai_label"]
     new_set = []
     for sample in names:
       print(sample)
@@ -237,16 +239,13 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
       print(sample_stem)
       file_stem = target_name+"_"+homo+"_"+sample_stem
       print(file_stem)
-      
-      
-      
-      
-#      sample_images = [re.findall("(.*)(?=_[0-9]+)", Path(file).stem)[0] for file in images]
-#      print(sample_images)
-#      for img in sample_images:
-#        if sample_stem 
       new_set.append(glob(os.path.join(image_dir_path, file_stem+"*.png")))
     print(new_set)
+#    single_list = list(map(int, chain.from_iterable(new_set)))
+#    print(single_list)
+    df = pd.DataFrame(columns = ["filename", "ai_label"]
+    df['filename'] = df.filename.apply(lambda x: sum(x, new_set))
+    print(df['filename'])
 
   expand_sets(X_challenge, y_challenge, train_files)
 
