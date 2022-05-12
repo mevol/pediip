@@ -229,8 +229,14 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
       sample_split = sample.split('/')
       name = sample_split[-1]
       print(name)
+      target_name = sample_split[8]
+      print(target_name)
+      homo = sample_split[12]
+      print(homo)
       sample_stem = name.strip('.mtz')
       print(sample_stem)
+      file_stem = target_name+"_"+homo+"_"+sample_stem
+      print(file)
       
       
       
@@ -239,7 +245,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
 #      print(sample_images)
 #      for img in sample_images:
 #        if sample_stem 
-      new_set.append(glob(os.path.join(image_dir_path, sample_stem)))
+      new_set.append(glob(os.path.join(image_dir_path, file_stem)))
     print(new_set)
 
   expand_sets(X_challenge, y_challenge, train_files)
