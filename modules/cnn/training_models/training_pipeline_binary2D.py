@@ -270,12 +270,15 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     # Strip the image number from the filename
     names = [re.findall("(.*)", Path(file).stem)[0] for file in image_dir_path]
     train_labels = [train_indexed.at[name, "ai_label"] for name in names]
+    print(train_labels[0-5])
 
-    names = [re.findall("(.*)", Path(file).stem)[0] for file in image_dir_path]
+#    names = [re.findall("(.*)", Path(file).stem)[0] for file in image_dir_path]
     test_labels = [test_indexed.at[name, "ai_label"] for name in names]
+    print(test_labels[0-5])
 
-    names = [re.findall("(.*)", Path(file).stem)[0] for file in image_dir_path]
+#    names = [re.findall("(.*)", Path(file).stem)[0] for file in image_dir_path]
     challenge_labels = [challenge_indexed.at[name, "ai_label"] for name in names]
+    print(challenge_labels[0-5])
 
 #  def expand_sets(working_set, images):
 ##    temp = pd.concat([X_set, y_set], axis = 1, ignore_index = True)
