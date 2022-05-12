@@ -110,18 +110,29 @@ def prepare_training_data_volume(
       map_grid = data_to_map.grid
       map_array = np.array(map_grid, copy = False)
       length = int(xyz_limits[0])+1
-      edited_volume = np.zeros((length, length, length))
-      # Iterate through images, scale them and save them in output_directory
-      deg = np.random.choice(90, 1, replace=False)[0]
-      map_array = rotate(map_array, angle = deg, reshape=False)# see what happens with no rotation
-      
-      # normalize 3D array after rotation
-      Amax = np.max(map_array)
-      Amin = np.min(map_array)
-      Range = Amax - Amin
-      Anrm = ((map_array - Amin)/Range) * 255.0# try next without '-0.5)*2'
-      
-      
+
+      # normalise
+      array_max = np.max(map_array)
+      array_min = np.min(map_array)
+      diff = array_max - array_min
+      map_array_norm = ((map_array - array_min) / diff)#map_array
+
+
+
+
+
+#      edited_volume = np.zeros((length, length, length))
+#      # Iterate through images, scale them and save them in output_directory
+#      deg = np.random.choice(90, 1, replace=False)[0]
+#      map_array = rotate(map_array, angle = deg, reshape=False)# see what happens with no rotation
+#      
+#      # normalize 3D array after rotation
+#      Amax = np.max(map_array)
+#      Amin = np.min(map_array)
+#      Range = Amax - Amin
+#      Anrm = ((map_array - Amin)/Range) * 255.0# try next without '-0.5)*2'
+#      
+#      
 #      for slice_num in range(map_array.shape[0]):
 #      for slice_num in range(edited_volume.shape[0]):
 #        #print("Working on slice number: ", slice_num)
@@ -147,7 +158,7 @@ def prepare_training_data_volume(
     logging.error(f"Could not open input map list \n")
     raise
 #  return edited_volume
-  return Anrm
+  return map_array_norm
 
 
 def params_from_yaml(args):
