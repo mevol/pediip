@@ -224,7 +224,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   def expand_sets(X_set, y_set, images):
     print(X_set)
     print(y_set)
-    temp = pd.concat([X_set, y_set], axis = 1)
+    temp = pd.concat([X_set, y_set], axis = 1, ignore_index = True)
     print(temp.columns)
 #    names = X_set["filename"]
 #    labels = y_set["ai_label"]
