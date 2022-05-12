@@ -228,7 +228,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     print(temp.columns)
     print(6666666, len(temp))
     print(temp.index)
-    temp = temp.reindex()
+    temp = temp.reindex(np.arange(0, len(temp))
     print(temp.index)
 #    names = X_set["filename"]
 #    labels = y_set["ai_label"]
