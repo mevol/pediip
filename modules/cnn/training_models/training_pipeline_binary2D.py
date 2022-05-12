@@ -265,6 +265,17 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   print(len(challenge_merge))
   challenge_indexed = challenge_merge.set_index("name")
   print(challenge_indexed.head())
+  
+  
+    # Strip the image number from the filename
+    names = [re.findall("(.*)", Path(file).stem)[0] for file in image_dir_path]
+    train_labels = [train_indexed.at[name, "ai_label"] for name in names]
+
+    names = [re.findall("(.*)", Path(file).stem)[0] for file in image_dir_path]
+    test_labels = [test_indexed.at[name, "ai_label"] for name in names]
+
+    names = [re.findall("(.*)", Path(file).stem)[0] for file in image_dir_path]
+    challenge_labels = [challenge_indexed.at[name, "ai_label"] for name in names]
 
 #  def expand_sets(working_set, images):
 ##    temp = pd.concat([X_set, y_set], axis = 1, ignore_index = True)
