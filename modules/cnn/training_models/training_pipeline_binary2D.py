@@ -235,7 +235,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
       print(i)
       sample = temp.iloc[i, 0]
       print(sample)
-      label = temp.iloc[i, 1]
+      label = temp.iloc[i, -1]
       print(label)
       sample_split = sample.split('/')
       name = sample_split[-1]
