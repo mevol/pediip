@@ -236,7 +236,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
       sample_stem = name.strip('.mtz')
       print(sample_stem)
       file_stem = target_name+"_"+homo+"_"+sample_stem
-      print(file)
+      print(file_stem)
       
       
       
