@@ -224,11 +224,16 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   def expand_sets(X_set, y_set, images):
     print(X_set)
     print(y_set)
-    names = X_set["filename"]
+    temp = pd.concat([X_set, y_set], axis = 1)
+#    names = X_set["filename"]
 #    labels = y_set["ai_label"]
-    new_set = []
-    for sample in names:
-      #print(sample)
+    df = pd.DataFrame(columns = ["filename", "ai_label"])
+    #new_set = []
+#    for sample in names:
+    for row in temp:
+      print(row)
+      sample = row['filename']
+      label = row['ai_label']
       sample_split = sample.split('/')
       name = sample_split[-1]
       #print(name)
@@ -240,14 +245,19 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
       #print(sample_stem)
       file_stem = target_name+"_"+homo+"_"+sample_stem
       #print(file_stem)
-      new_set.append(glob(os.path.join(image_dir_path, file_stem+"*.png")))
-    print(new_set)
-    
-    df = pd.DataFrame(columns = ["filename", "ai_label"])
-    for item in new_set:
-      print(item)
-      df = pd.concat([df, item], axis=0, ignore_index=True)
+      #new_set.append(glob(os.path.join(image_dir_path, file_stem+"*.png")))
+      file_list = (glob(os.path.join(image_dir_path, file_stem+"*.png")))
+      dummy = pd.DataFrame({'filename':file_list,
+                             'ai_label' : label})
+      df = pd.concat([df, dummy], axis=0, ignore_index=True)
       print(len(df))
+#    print(new_set)
+#    
+#
+#    for item in new_set:
+#      print(item)
+      
+      
 #    single_list = list(map(int, chain.from_iterable(new_set)))
 #    print(single_list)
 #    df = pd.DataFrame(columns = ["filename", "ai_label"])
