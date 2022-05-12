@@ -231,11 +231,11 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     df = pd.DataFrame(columns = ["filename", "ai_label"])
     #new_set = []
 #    for sample in names:
-    for i in temp.index:
-      print(i)
-      sample = temp.iloc[i, 'filename']
+    for row in temp:
+      print(row)
+      sample = row.loc[:, 'filename']
       print(sample)
-      label = temp.loc[i, 'ai_label']
+      label = row.loc[:, 'ai_label']
       print(label)
       sample_split = sample.split('/')
       name = sample_split[-1]
