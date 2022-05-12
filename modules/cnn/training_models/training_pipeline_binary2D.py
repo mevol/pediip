@@ -219,12 +219,12 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
                              + len(partition['train'])
                              + len(partition['challenge']))
 
-  column_names = {'0':'filename', '1':'protocol',
-                                  '2':'stage', '3':'ai_label'}
+  column_names = {0:'filename', 1:'protocol',
+                                  2:'stage', 3:'ai_label'}
   train_concat = pd.concat([X_train, y_train], axis = 1, ignore_index = True)
   print(train_concat.columns)
   print(train_concat.head())
-  train_concat.rename(columns = column_names, inplace = True)
+  train_concat.rename(columns = column_names)
   print(train_concat.columns)
   test_concat = pd.concat([X_test, y_test], axis = 1, ignore_index = True)
   challenge_concat = pd.concat([X_challenge, y_challenge], axis = 1, ignore_index = True)
