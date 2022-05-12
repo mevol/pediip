@@ -225,6 +225,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     print(X_set)
     print(y_set)
     temp = pd.concat([X_set, y_set], axis = 1, ignore_index = True)
+    print(temp.head())
 #    print(temp.columns)
 #    print(6666666, len(temp))
 #    print(temp.index)
@@ -235,7 +236,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
     df = pd.DataFrame(columns = ["filename", "ai_label"])
     #new_set = []
 #    for sample in names:
-    for i in enumerate(temp):
+    for i in range(len(temp)):
       print(i)
       sample = temp.iloc[i, 0]
       print(sample)
