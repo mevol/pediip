@@ -268,7 +268,7 @@ def pipeline(create_model: Callable[[int, int, int], Model], parameters_dict: di
   
   
   # Strip the image number from the filename
-  names = [re.findall("(.*)(?=_[0-9]+", Path(file).stem)[0] for file in train_files]
+  names = [re.findall("(.*)(?=_[0-9]", Path(file).stem)[0] for file in train_files]
   train_labels = [train_indexed.at[name, "ai_label"] for name in names]
   print(train_labels[0-5])
 
