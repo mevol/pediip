@@ -108,14 +108,29 @@ def prepare_training_data_volume(
       box.add_margin(1e-5)
       data_to_map.set_extent(box)
       map_grid = data_to_map.grid
-      map_array = np.array(map_grid, copy = False)
-      length = int(xyz_limits[0])+1
+#      map_grid_normed = map_grid.clone() # normalize map
+#      map_grid_normed.normalize()
 
       # normalise
       array_max = np.max(map_array)
       array_min = np.min(map_array)
       diff = array_max - array_min
-      map_array_norm = ((map_array - array_min) / diff)#map_array
+      map_array_normed = ((map_array - array_min) / diff)#map_array
+
+
+      map_grid_normed = np.array(map_grid_normed, copy = False)
+      length = int(xyz_limits[0])+1
+
+
+      # define some rotation angles
+      angles = [-20, -10, -5, 5, 10, 20]
+      # pick angles at random
+      angle = random.choice(angles)
+      # rotate volume
+      map_grid_normed = ndimage.rotate(map_grid_normed, angle, reshape=False)
+
+      map_grid_normed[map_grid_normed < 0] = 0
+      map_grid_normed[map_grid_normed > 1] = 1
 
 
 
