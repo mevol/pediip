@@ -3,6 +3,7 @@
 from typing import Tuple
 
 from tensorflow import keras
+from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.optimizers import SGD
