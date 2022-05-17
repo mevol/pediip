@@ -128,7 +128,7 @@ def prepare_training_data_volume(
         # pick angles at random
         angle = random.choice(angles)
         # rotate volume
-        map_grid_normed = ndimage.rotate(map_grid_normed, angle, reshape=False)
+        map_grid_normed = rotate(map_grid_normed, angle, reshape=False)
 
         map_grid_normed[map_grid_normed < 0] = 0
         #map_grid_normed[map_grid_normed > 1] = 1
