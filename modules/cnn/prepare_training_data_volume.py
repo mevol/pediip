@@ -166,7 +166,7 @@ def prepare_training_data_volume(
 #        #slice_scaled_int = rotate(slice_scaled_int, angle = deg, reshape=False)# see what happens with no rotation
 #        # combine the slices to a new image stack for training
 #        edited_volume[slice_num, :, :] = slice_scaled_int
-      logging.info(f"Size of standardise map when finished: {map_array.shape} \n")
+      logging.info(f"Size of standardise map when finished: {map_grid_normed.shape} \n")
     except Exception:
       logging.error(f"Could not expand map {map_file_path} \n")
       raise
