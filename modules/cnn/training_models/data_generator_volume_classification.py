@@ -66,7 +66,7 @@ class DataGenerator(Sequence):
       y[i] = self.labels[ID]
       
 #    print(X)
-    print(y)
+#    print(y)
     #return X, to_categorical(y, num_classes=self.n_classes)
     return X, y
 
