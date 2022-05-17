@@ -121,15 +121,15 @@ def prepare_training_data_volume(
         # pick angles at random
         angle = random.choice(angles)
         # rotate volume
-        map_array_normed = rotate(map_array_normed, angle, reshape=False)
+        #map_array_normed = rotate(map_array_normed, angle, reshape=False)
 
-#      deg = np.random.choice(90, 1, replace=False)[0]
-#      map_array = rotate(map_array, angle = deg, reshape=False)# see what happens with no rotation
+        deg = np.random.choice(90, 1, replace=False)[0]
+        map_array_normed = rotate(map_array_normed, angle = deg, reshape=False)# see what happens with no rotation
 
 
 
-#      map_array_normed[map_array_normed < 0] = 0
-#      map_array_normed[map_array_normed > 1] = 1
+      map_array_normed[map_array_normed < 0] = 0
+      map_array_normed[map_array_normed > 1] = 1
 
       logging.info(f"Size of standardise map when finished: {map_array_normed.shape} \n")
     except Exception:
