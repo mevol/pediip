@@ -119,7 +119,7 @@ def prepare_training_data_volume(
 #      map_array_normed = ((map_array - array_min) / diff)#map_array
 
 
-      map_grid_normed = np.array(map_grid_normed, copy = False)
+      map_array_normed = np.array(map_grid_normed, copy = False)
       length = int(xyz_limits[0])+1
 
       if augmentation == True:
@@ -128,45 +128,12 @@ def prepare_training_data_volume(
         # pick angles at random
         angle = random.choice(angles)
         # rotate volume
-        map_grid_normed = rotate(map_grid_normed, angle, reshape=False)
+        map_array_normed = rotate(map_array_normed, angle, reshape=False)
 
-        map_grid_normed[map_grid_normed < 0] = 0
-        #map_grid_normed[map_grid_normed > 1] = 1
+      map_array_normed[map_array_normed < 0] = 0
+      map_array_normed[map_array_normed > 1] = 1
 
-
-
-
-
-#      edited_volume = np.zeros((length, length, length))
-#      # Iterate through images, scale them and save them in output_directory
-#      deg = np.random.choice(90, 1, replace=False)[0]
-#      map_array = rotate(map_array, angle = deg, reshape=False)# see what happens with no rotation
-#      
-#      # normalize 3D array after rotation
-#      Amax = np.max(map_array)
-#      Amin = np.min(map_array)
-#      Range = Amax - Amin
-#      Anrm = ((map_array - Amin)/Range) * 255.0# try next without '-0.5)*2'
-#      
-#      
-#      for slice_num in range(map_array.shape[0]):
-#      for slice_num in range(edited_volume.shape[0]):
-#        #print("Working on slice number: ", slice_num)
-#        # Get slice
-#        slice = map_array[slice_num, :, :]
-#        # Scale slice
-#        slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
-#        # Round to the nearest integer
-#        slice_scaled_int = np.rint(slice_scaled)
-#        # do data augmentation as rotation for a random angle between 0 and 90 deg
-#        # for all even numbers in the total image stack
-#        # check that the remainder of division is 0 and hence the result even
-#        # get a random number between 0 and 90 deg
-#        # rotate the slice by this deg
-#        #slice_scaled_int = rotate(slice_scaled_int, angle = deg, reshape=False)# see what happens with no rotation
-#        # combine the slices to a new image stack for training
-#        edited_volume[slice_num, :, :] = slice_scaled_int
-      logging.info(f"Size of standardise map when finished: {map_grid_normed.shape} \n")
+      logging.info(f"Size of standardise map when finished: {map_array_normed.shape} \n")
     except Exception:
       logging.error(f"Could not expand map {map_file_path} \n")
       raise
@@ -247,3 +214,36 @@ if __name__ == "__main__":
             parameters["xyz_limits"])
   except KeyError as e:
     logging.error(f"Could not find parameter {e} to prepare training data \n")
+
+
+
+###############################################################################
+#      edited_volume = np.zeros((length, length, length))
+#      # Iterate through images, scale them and save them in output_directory
+#      deg = np.random.choice(90, 1, replace=False)[0]
+#      map_array = rotate(map_array, angle = deg, reshape=False)# see what happens with no rotation
+#      
+#      # normalize 3D array after rotation
+#      Amax = np.max(map_array)
+#      Amin = np.min(map_array)
+#      Range = Amax - Amin
+#      Anrm = ((map_array - Amin)/Range) * 255.0# try next without '-0.5)*2'
+#      
+#      
+#      for slice_num in range(map_array.shape[0]):
+#      for slice_num in range(edited_volume.shape[0]):
+#        #print("Working on slice number: ", slice_num)
+#        # Get slice
+#        slice = map_array[slice_num, :, :]
+#        # Scale slice
+#        slice_scaled = ((slice - slice.min()) / (slice.max() - slice.min())) * 255.0
+#        # Round to the nearest integer
+#        slice_scaled_int = np.rint(slice_scaled)
+#        # do data augmentation as rotation for a random angle between 0 and 90 deg
+#        # for all even numbers in the total image stack
+#        # check that the remainder of division is 0 and hence the result even
+#        # get a random number between 0 and 90 deg
+#        # rotate the slice by this deg
+#        #slice_scaled_int = rotate(slice_scaled_int, angle = deg, reshape=False)# see what happens with no rotation
+#        # combine the slices to a new image stack for training
+#        edited_volume[slice_num, :, :] = slice_scaled_int
