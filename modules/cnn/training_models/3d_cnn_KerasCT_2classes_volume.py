@@ -13,8 +13,7 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
   model = Sequential()
 
   #reduced number of filters 32 --> 16 20210303
-  inputs = keras.Input((width, height, depth, 1))
-
+  inputs = keras.Input(input_shape)
   x = layers.Conv3D(filters=64, kernel_size=3, activation="relu")(inputs)
   x = layers.MaxPool3D(pool_size=2)(x)
   x = layers.BatchNormalization()(x)
