@@ -112,13 +112,6 @@ def prepare_training_data_volume(
       map_grid_normed = map_grid.clone() # normalize map
       map_grid_normed.normalize()
 
-#      # normalise
-#      array_max = np.max(map_array)
-#      array_min = np.min(map_array)
-#      diff = array_max - array_min
-#      map_array_normed = ((map_array - array_min) / diff)#map_array
-
-
       map_array_normed = np.array(map_grid_normed, copy = False)
       length = int(xyz_limits[0])+1
 
@@ -130,8 +123,13 @@ def prepare_training_data_volume(
         # rotate volume
         map_array_normed = rotate(map_array_normed, angle, reshape=False)
 
-      map_array_normed[map_array_normed < 0] = 0
-      map_array_normed[map_array_normed > 1] = 1
+#      deg = np.random.choice(90, 1, replace=False)[0]
+#      map_array = rotate(map_array, angle = deg, reshape=False)# see what happens with no rotation
+
+
+
+#      map_array_normed[map_array_normed < 0] = 0
+#      map_array_normed[map_array_normed > 1] = 1
 
       logging.info(f"Size of standardise map when finished: {map_array_normed.shape} \n")
     except Exception:
