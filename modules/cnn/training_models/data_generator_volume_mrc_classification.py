@@ -72,7 +72,7 @@ class DataGenerator(Sequence):
       edited_volume = np.zeros((length, length, length))
       # rotate entire volume
       deg = np.random.choice(90, 1, replace=False)[0]
-      volume_rot = ndimage.rotate(volume_normed, deg, reshape=False)
+      volume_rot = rotate(volume_normed, deg, reshape=False)
 
 #      # rotation around x-axis
 #      deg1 = np.random.choice(90, 1, replace=False)[0]
