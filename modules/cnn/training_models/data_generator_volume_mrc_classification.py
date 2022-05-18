@@ -1,5 +1,6 @@
 import numpy as np
 import mrcfile
+import os
 
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.utils import to_categorical
