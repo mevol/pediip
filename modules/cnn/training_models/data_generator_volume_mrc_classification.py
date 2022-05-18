@@ -60,8 +60,8 @@ class DataGenerator(Sequence):
         volume = mrc.data
 
       # normalise
-      array_max = np.max(map_array)
-      array_min = np.min(map_array)
+      array_max = np.max(volume)
+      array_min = np.min(volume)
       diff = array_max - array_min
       volume_normed = ((volume - array_min) / diff)#map_array
 
