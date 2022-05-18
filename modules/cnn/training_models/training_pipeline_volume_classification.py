@@ -176,6 +176,18 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     label_dict[i] = last_challenge_y
     y_challenge.loc[i] = last_challenge_y
     X_challenge.loc[i] = last_challenge_X
+  
+  
+#  # repeat each train sample and lable multiple times to increase number of samples
+#  train_merge = X_train.merge(y_train, left_index=True, right_index=True)
+#  print(train_merge.columns)
+#  print(train_merge.head())
+#  
+#  train_new = []
+#  train_new.append([train_merge]*5,ignore_index=True)
+#  
+#  print(train_new)
+
 
   partition = {"train" : X_train,
                "validate" : X_test,
