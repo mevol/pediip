@@ -20,6 +20,7 @@ class DataGenerator(Sequence):
     self.shuffle = shuffle
     self.map_dir = map_dir
     self.on_epoch_end()
+#    self.replace_filename()
 
   def __len__(self):
     'Denotes the number of batches per epoch'
@@ -44,7 +45,7 @@ class DataGenerator(Sequence):
     if self.shuffle == True:
       np.random.shuffle(self.indexes)
 
-  def replace_filename(self, x):
+  def __replace_filename(self, x):
     try:
       target_file = x.split("/")[-1]
       target_file_stripped = target_file.split(".")[0]
@@ -95,7 +96,7 @@ class DataGenerator(Sequence):
       # so it can be found on disk from within the container;
       # the function is currently in training pipeline and iterates over
       # a pandas dataframe --> bad
-      with mrcfile.open(replace_filename(self.list_IDs.iloc[ID, 0]), mode='r+') as mrc:
+      with mrcfile.open(self.__replace_filename(self.list_IDs.iloc[ID, 0]), mode='r+') as mrc:
         mrc.voxel_size = 1.0
         volume = mrc.data
 
