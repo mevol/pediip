@@ -51,9 +51,9 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
         loss="binary_crossentropy",#categorical_crossentropy
         #optimizer='adam',
 #        optimizer=Adam(learning_rate=0.0001), # was added 20220506
-#        optimizer=Adam(learning_rate=lr_schedule), # was added 20220513
+        optimizer=Adam(learning_rate=lr_schedule), # was added 20220513
 #        optimizer=SGD(learning_rate=0.0001), # was added 20220509
-        optimizer=SGD(learning_rate=lr_schedule), # was added 20220517
+#        optimizer=SGD(learning_rate=lr_schedule), # was added 20220517
         metrics=["accuracy"],)
 
   return model
