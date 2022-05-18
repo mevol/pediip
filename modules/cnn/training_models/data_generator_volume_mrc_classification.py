@@ -64,24 +64,25 @@ class DataGenerator(Sequence):
     sample_path = os.path.join(self.map_dir,
                           target_name+"_"+homo+"_"+target_file_stripped+".ccp4")
     print(sample_path)
-    try:
-      # expand this path to its real path as it is a sym link pointing to my local,
-      # hand-crafted PDB-redo version; this one has the same subfolder arrangement
-      # as my local PDB version; makes traversing easier; however, in order to create
-      # this custom PDB-redo version I created again sym links to the original
-      # PDB-redo; hence I need two levels to expand the real file path
-      real_input_path = os.path.realpath(sample_path)
-      # replace "/dls/" with "/opt/" to read files in the mount pount
-      real_input_path_opt = real_input_path.replace("/dls/", "/opt/")
-      # expand the next level of sym link to the real path
-      real_path_to_map = os.path.realpath(real_input_path_opt)
-      # replace "/dls/" with "/opt/" to read files in the mount pount
-      real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
-      map_file_path = Path(os.path.realpath(real_path_to_map_opt))
-      print(map_file_path)
-    except Exception:
-      pass
-    return map_file_path
+#    try:
+#      # expand this path to its real path as it is a sym link pointing to my local,
+#      # hand-crafted PDB-redo version; this one has the same subfolder arrangement
+#      # as my local PDB version; makes traversing easier; however, in order to create
+#      # this custom PDB-redo version I created again sym links to the original
+#      # PDB-redo; hence I need two levels to expand the real file path
+#      real_input_path = os.path.realpath(sample_path)
+#      # replace "/dls/" with "/opt/" to read files in the mount pount
+#      real_input_path_opt = real_input_path.replace("/dls/", "/opt/")
+#      # expand the next level of sym link to the real path
+#      real_path_to_map = os.path.realpath(real_input_path_opt)
+#      # replace "/dls/" with "/opt/" to read files in the mount pount
+#      real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
+#      map_file_path = Path(os.path.realpath(real_path_to_map_opt))
+#      print(map_file_path)
+#    except Exception:
+#      pass
+#    return map_file_path
+    return sample_path
 
   def __data_generation(self, list_IDs_temp):
     'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
