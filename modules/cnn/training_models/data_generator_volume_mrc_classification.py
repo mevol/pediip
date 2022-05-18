@@ -63,6 +63,7 @@ class DataGenerator(Sequence):
       pass
     sample_path = os.path.join(self.map_dir,
                           target_name+"_"+homo+"_"+target_file_stripped+".ccp4")
+    print(sample_path)
     try:
       # expand this path to its real path as it is a sym link pointing to my local,
       # hand-crafted PDB-redo version; this one has the same subfolder arrangement
@@ -77,6 +78,7 @@ class DataGenerator(Sequence):
       # replace "/dls/" with "/opt/" to read files in the mount pount
       real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
       map_file_path = Path(os.path.realpath(real_path_to_map_opt))
+      print(map_file_path)
     except Exception:
       pass
     return map_file_path
