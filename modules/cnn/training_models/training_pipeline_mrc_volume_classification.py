@@ -122,52 +122,52 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   X = data[['filename', 'protocol', 'stage']]
   y = data['ai_label']
 
-  # replacing filename from original MTZ with file name pointing at map
-  logging.info(f"Making map file paths locatable \n")
-  def replace_filename(x):
-    try:
-      target_file = x.split("/")[-1]
-      target_file_stripped = target_file.split(".")[0]
-    except Exception:
-      pass
-    try:
-      target_name = x.split("/")[8]
-    except Exception:
-      pass
-    try:
-      homo = x.split("/")[12]
-    except Exception:
-      homo = "none"
-      logging.error(f"Could not find homologue to work with. \n")
-      pass
-    sample_path = os.path.join(parameters_dict["map_dir"],
-                                   target_name+"_"+homo+"_"+target_file_stripped+".ccp4")
-    try:
-      os.path.exists(sample_path)
-    except Exception:
-      logging.error(f"Could not find input map. \n")
-      pass
-    try:
-      # expand this path to its real path as it is a sym link pointing to my local,
-      # hand-crafted PDB-redo version; this one has the same subfolder arrangement
-      # as my local PDB version; makes traversing easier; however, in order to create
-      # this custom PDB-redo version I created again sym links to the original
-      # PDB-redo; hence I need two levels to expand the real file path
-      real_input_path = os.path.realpath(sample_path)
-      # replace "/dls/" with "/opt/" to read files in the mount pount
-      real_input_path_opt = real_input_path.replace("/dls/", "/opt/")
-      # expand the next level of sym link to the real path
-      real_path_to_map = os.path.realpath(real_input_path_opt)
-      # replace "/dls/" with "/opt/" to read files in the mount pount
-      real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
-      map_file_path = Path(os.path.realpath(real_path_to_map_opt))
-      assert map_file_path.exists()
-    except Exception:
-      logging.error(f"Could not find mtz directory at {map_file_path} \n")
-      pass
-    return map_file_path
-
-  X['filename'] = X.loc[:, 'filename'].apply(replace_filename)
+#  # replacing filename from original MTZ with file name pointing at map
+#  logging.info(f"Making map file paths locatable \n")
+#  def replace_filename(x):
+#    try:
+#      target_file = x.split("/")[-1]
+#      target_file_stripped = target_file.split(".")[0]
+#    except Exception:
+#      pass
+#    try:
+#      target_name = x.split("/")[8]
+#    except Exception:
+#      pass
+#    try:
+#      homo = x.split("/")[12]
+#    except Exception:
+#      homo = "none"
+#      logging.error(f"Could not find homologue to work with. \n")
+#      pass
+#    sample_path = os.path.join(parameters_dict["map_dir"],
+#                                   target_name+"_"+homo+"_"+target_file_stripped+".ccp4")
+#    try:
+#      os.path.exists(sample_path)
+#    except Exception:
+#      logging.error(f"Could not find input map. \n")
+#      pass
+#    try:
+#      # expand this path to its real path as it is a sym link pointing to my local,
+#      # hand-crafted PDB-redo version; this one has the same subfolder arrangement
+#      # as my local PDB version; makes traversing easier; however, in order to create
+#      # this custom PDB-redo version I created again sym links to the original
+#      # PDB-redo; hence I need two levels to expand the real file path
+#      real_input_path = os.path.realpath(sample_path)
+#      # replace "/dls/" with "/opt/" to read files in the mount pount
+#      real_input_path_opt = real_input_path.replace("/dls/", "/opt/")
+#      # expand the next level of sym link to the real path
+#      real_path_to_map = os.path.realpath(real_input_path_opt)
+#      # replace "/dls/" with "/opt/" to read files in the mount pount
+#      real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
+#      map_file_path = Path(os.path.realpath(real_path_to_map_opt))
+#      assert map_file_path.exists()
+#    except Exception:
+#      logging.error(f"Could not find mtz directory at {map_file_path} \n")
+#      pass
+#    return map_file_path
+#
+#  X['filename'] = X.loc[:, 'filename'].apply(replace_filename)
 
   # split the data into training and test set; this is splitting the input CSV data;
   # and an additional challenge set of 5% of the data; this latter set is used to
@@ -271,6 +271,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   training_generator = DataGenerator(
                                        partition["train"],#X
                                        label_dict,#y_train,#y
+                                       map_dir=parameters_dict["map_dir"],
                                        dim=MAP_DIM,
                                        batch_size=batch_size,
                                        n_classes=num_classes,
@@ -279,6 +280,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   testing_generator = DataGenerator(
                                       partition["validate"],
                                       label_dict,#y_test,
+                                      map_dir=parameters_dict["map_dir"],
                                       dim=MAP_DIM,
                                       batch_size=batch_size,
                                       n_classes=num_classes,
@@ -287,6 +289,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   challenge_generator = DataGenerator(
                                       partition["challenge"],
                                       label_dict,#y_test,
+                                      map_dir=parameters_dict["map_dir"],
                                       dim=MAP_DIM,
                                       batch_size=batch_size,
                                       n_classes=num_classes,

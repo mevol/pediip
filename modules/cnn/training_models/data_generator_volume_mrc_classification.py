@@ -7,7 +7,7 @@ from scipy.ndimage import rotate
 
 class DataGenerator(Sequence):
   'Generates data for Keras'
-  def __init__(self, list_IDs, labels, batch_size=32, dim=(32,32,32),
+  def __init__(self, list_IDs, labels, map_dir, batch_size=32, dim=(32,32,32),
                n_classes=2, n_channels=1, shuffle=True):
     'Initialization'
     self.dim = dim
@@ -18,6 +18,7 @@ class DataGenerator(Sequence):
     self.n_channels = n_channels
     self.n_classes = n_classes
     self.shuffle = shuffle
+    self.map_dir = map_dir
     self.on_epoch_end()
 
   def __len__(self):
@@ -43,6 +44,41 @@ class DataGenerator(Sequence):
     if self.shuffle == True:
       np.random.shuffle(self.indexes)
 
+  def replace_filename(self, x):
+    try:
+      target_file = x.split("/")[-1]
+      target_file_stripped = target_file.split(".")[0]
+    except Exception:
+      pass
+    try:
+      target_name = x.split("/")[8]
+    except Exception:
+      pass
+    try:
+      homo = x.split("/")[12]
+    except Exception:
+      homo = "none"
+      pass
+    sample_path = os.path.join(self.map_dir,
+                          target_name+"_"+homo+"_"+target_file_stripped+".ccp4")
+    try:
+      # expand this path to its real path as it is a sym link pointing to my local,
+      # hand-crafted PDB-redo version; this one has the same subfolder arrangement
+      # as my local PDB version; makes traversing easier; however, in order to create
+      # this custom PDB-redo version I created again sym links to the original
+      # PDB-redo; hence I need two levels to expand the real file path
+      real_input_path = os.path.realpath(sample_path)
+      # replace "/dls/" with "/opt/" to read files in the mount pount
+      real_input_path_opt = real_input_path.replace("/dls/", "/opt/")
+      # expand the next level of sym link to the real path
+      real_path_to_map = os.path.realpath(real_input_path_opt)
+      # replace "/dls/" with "/opt/" to read files in the mount pount
+      real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
+      map_file_path = Path(os.path.realpath(real_path_to_map_opt))
+    except Exception:
+      pass
+    return map_file_path
+
   def __data_generation(self, list_IDs_temp):
     'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
     # Initialization
@@ -55,6 +91,10 @@ class DataGenerator(Sequence):
 
     # Generate data
     for i, ID in enumerate(list_IDs_temp):
+      # add a function to convert file path self.list_IDs.iloc[ID, 0]
+      # so it can be found on disk from within the container;
+      # the function is currently in training pipeline and iterates over
+      # a pandas dataframe --> bad
       with mrcfile.open(self.list_IDs.iloc[ID, 0], mode='r+') as mrc:
         mrc.voxel_size = 1.0
         volume = mrc.data
