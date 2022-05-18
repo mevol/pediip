@@ -95,7 +95,7 @@ class DataGenerator(Sequence):
       # so it can be found on disk from within the container;
       # the function is currently in training pipeline and iterates over
       # a pandas dataframe --> bad
-      with mrcfile.open(self.list_IDs.iloc[ID, 0], mode='r+') as mrc:
+      with mrcfile.open(replace_filename(self.list_IDs.iloc[ID, 0]), mode='r+') as mrc:
         mrc.voxel_size = 1.0
         volume = mrc.data
 
