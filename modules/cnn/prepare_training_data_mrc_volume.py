@@ -49,6 +49,7 @@ def prepare_training_data(
     next(data_reader)
     for sample in data_reader:
       mtz_path = sample[1]
+      print(55555555, mtz_path)
       try:
         os.path.exists(mtz_path)
       except Exception:
