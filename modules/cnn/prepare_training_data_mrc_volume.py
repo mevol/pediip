@@ -48,7 +48,7 @@ def prepare_training_data(
     data_reader = csv.reader(map_files, delimiter=',')
     next(data_reader)
     for sample in data_reader:
-      mtz_path = sample[1]
+      mtz_path = sample[2]
       print(55555555, mtz_path)
       try:
         os.path.exists(mtz_path)
