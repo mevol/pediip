@@ -48,7 +48,7 @@ def prepare_training_data(
     data_reader = csv.reader(map_files, delimiter=',')
     next(data_reader)
     for sample in data_reader:
-      mtz_path = sample[0]
+      mtz_path = sample[4]# this should be fixed; perhaps turn into a dataframe for better indexing
       print(55555555, mtz_path)
       try:
         os.path.exists(mtz_path)
