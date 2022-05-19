@@ -150,7 +150,7 @@ def params_from_cmd(args):
         "xyz_limits": args.xyz_limits,
         "output_dir": args.output_dir,}
 
-    return params
+  return params
 
 
 if __name__ == "__main__":
