@@ -40,6 +40,7 @@ def prepare_training_data(
     assert os.path.exists(maps_list)
   except Exception:
     logging.error(f"No LIST of samples provided; working on single sample instead \n")
+    print("Colud not find input LIST")
     pass
 
   # opening sample list to iterate over
