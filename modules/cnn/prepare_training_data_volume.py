@@ -82,14 +82,16 @@ def prepare_training_data_volume(
       recip_grid = data.get_size_for_hkl()
       logging.info(f"Original size of reciprocal lattice grid: {recip_grid} \n")
       # get grid size in relation to resolution and a sample rate of 4
-      size1 = data.get_size_for_hkl(sample_rate=6)
+      #size1 = data.get_size_for_hkl(sample_rate=6)
+      size1 = data.get_size_for_hkl(sample_rate=1)
       logging.info(f"Reciprocal lattice grid size at sample_rate=6: {size1} \n")
       # create an empty map grid
       data_to_map = gemmi.Ccp4Map()
       # turn MTZ file into map using a sample_rate=6; minimal grid size is
       # placed in relation to the resolution, dmin/sample_rate; sample_rate=4
       # doubles the original grid size
-      data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=6)#was 4
+      #data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=6)#was 4
+      data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=1)
       data_to_map.update_ccp4_header(2, True)
     except Exception:
       logging.error(f"Could not open MTZ and convert to MAP {map_file_path} \n")
