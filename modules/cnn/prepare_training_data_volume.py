@@ -98,7 +98,10 @@ def prepare_training_data_volume(
       # turn MTZ file into map using a sample_rate=6; minimal grid size is
       # placed in relation to the resolution, dmin/sample_rate; sample_rate=4
       # doubles the original grid size
-      data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=av_rate)#was 4
+      #data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=av_rate)
+      data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', min_size=[int(xyz_limits[0]),
+                                                               int(xyz_limits[1]),
+                                                               int(xyz_limits[2])])#was 4
       data_to_map.update_ccp4_header(2, True)
     except Exception:
       logging.error(f"Could not open MTZ and convert to MAP {map_file_path} \n")
