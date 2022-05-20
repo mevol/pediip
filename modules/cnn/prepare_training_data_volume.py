@@ -87,8 +87,10 @@ def prepare_training_data_volume(
       rateb = xyz_limits[1]/cellb
       ratec = xyz_limits[2]/cellc
       av_rate = ((ratea + rateb + ratec)/3) * 2
-      print("Average rate: ", round(av_rate, 2))
+      #print("Average rate: ", round(av_rate, 2))
+      shape = [round(a/1.0/2)*2 for a in data.cell.parameters[:3]]
       logging.info(f"Original size of reciprocal lattice grid: {recip_grid} \n")
+      logging.info(f"Shape for grid conversion: {shape} \n")
       logging.info(f"Average sampling rate for grid when converting: {av_rate} \n")
       # get grid size in relation to resolution and a sample rate of 4
       size1 = data.get_size_for_hkl(sample_rate=av_rate)
@@ -98,8 +100,15 @@ def prepare_training_data_volume(
       # turn MTZ file into map using a sample_rate=6; minimal grid size is
       # placed in relation to the resolution, dmin/sample_rate; sample_rate=4
       # doubles the original grid size
+      try:
+        data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', exact_size=shape)
+      except Exception:
+        data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', min_size=[int(xyz_limits[0]),
+                                                               int(xyz_limits[1]),
+                                                               int(xyz_limits[2])])
+        pass
       #data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=av_rate)
-      data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', min_size=[int(xyz_limits[0]),
+      #data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', min_size=[int(xyz_limits[0]),
                                                                int(xyz_limits[1]),
                                                                int(xyz_limits[2])])#was 4
       data_to_map.update_ccp4_header(2, True)
@@ -140,8 +149,8 @@ def prepare_training_data_volume(
 
 
 
-      map_array_normed[map_array_normed < 0] = 0
-      map_array_normed[map_array_normed > 1] = 1
+      #map_array_normed[map_array_normed < 0] = 0
+      #map_array_normed[map_array_normed > 1] = 1
 
       logging.info(f"Size of standardise map when finished: {map_array_normed.shape} \n")
     except Exception:
