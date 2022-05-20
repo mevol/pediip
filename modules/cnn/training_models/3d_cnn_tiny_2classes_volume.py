@@ -28,10 +28,9 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
 
     print(model.output_shape)
 
-  initial_learning_rate = 0.0001
-  lr_schedule = keras.optimizers.schedules.ExponentialDecay(
-    initial_learning_rate, decay_steps=100000, decay_rate=0.96, staircase=True
-)
+    initial_learning_rate = 0.0001
+    lr_schedule = keras.optimizers.schedules.ExponentialDecay(
+      initial_learning_rate, decay_steps=100000, decay_rate=0.96, staircase=True)
 
     model.compile(
         loss="binary_crossentropy",
