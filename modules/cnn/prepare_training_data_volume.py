@@ -80,18 +80,25 @@ def prepare_training_data_volume(
       data = gemmi.read_mtz_file(str(map_file_path))
       # get reciprocal lattice grid size
       recip_grid = data.get_size_for_hkl()
+      cella = recip_grid[0]
+      cellb = recip_grid[1]
+      cellc = recip_grid[2]
+      ratea = dim/cella
+      rateb = dim/cellb
+      ratec = dim/cellc
+      av_rate = ((ratea + rateb + ratec)/3) * 2
+      print("Average rate: ", round(av_rate, 2))
       logging.info(f"Original size of reciprocal lattice grid: {recip_grid} \n")
+      logging.info(f"Average sampling rate for grid when converting: {av_rate} \n")
       # get grid size in relation to resolution and a sample rate of 4
-      #size1 = data.get_size_for_hkl(sample_rate=6)
-      size1 = data.get_size_for_hkl(sample_rate=1)
-      logging.info(f"Reciprocal lattice grid size at sample_rate=6: {size1} \n")
+      size1 = data.get_size_for_hkl(sample_rate=av_rate)
+      logging.info(f"Reciprocal lattice grid size at sample_rate={av_rate}: {size1} \n")
       # create an empty map grid
       data_to_map = gemmi.Ccp4Map()
       # turn MTZ file into map using a sample_rate=6; minimal grid size is
       # placed in relation to the resolution, dmin/sample_rate; sample_rate=4
       # doubles the original grid size
-      #data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=6)#was 4
-      data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=1)
+      data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=av_rate)#was 4
       data_to_map.update_ccp4_header(2, True)
     except Exception:
       logging.error(f"Could not open MTZ and convert to MAP {map_file_path} \n")
@@ -119,9 +126,9 @@ def prepare_training_data_volume(
 
       if augmentation == True:
         # define some rotation angles
-        angles = [-20, -10, -5, 5, 10, 20]
+        #angles = [-20, -10, -5, 5, 10, 20]
         # pick angles at random
-        angle = random.choice(angles)
+        #angle = random.choice(angles)
         # rotate volume
         #map_array_normed = rotate(map_array_normed, angle, reshape=False)
 
