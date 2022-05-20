@@ -83,9 +83,9 @@ def prepare_training_data_volume(
       cella = recip_grid[0]
       cellb = recip_grid[1]
       cellc = recip_grid[2]
-      ratea = dim/cella
-      rateb = dim/cellb
-      ratec = dim/cellc
+      ratea = xyz_limits[0]/cella
+      rateb = xyz_limits[1]/cellb
+      ratec = xyz_limits[2]/cellc
       av_rate = ((ratea + rateb + ratec)/3) * 2
       print("Average rate: ", round(av_rate, 2))
       logging.info(f"Original size of reciprocal lattice grid: {recip_grid} \n")
