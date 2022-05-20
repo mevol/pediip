@@ -23,17 +23,23 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     model.add(GlobalAveragePooling3D())
     model.add(Dense(16, activation="relu", kernel_regularizer = regularizers.l2(1e-4)))#was 128
 #    model.add(Dropout(0.3))
-    model.add(Dense(2, activation="softmax"))#was tanh
+ #   model.add(Dense(2, activation="softmax"))#was tanh
+    model.add(Dense(1, activation="sigmoid"))
 
     print(model.output_shape)
 
+  initial_learning_rate = 0.0001
+  lr_schedule = keras.optimizers.schedules.ExponentialDecay(
+    initial_learning_rate, decay_steps=100000, decay_rate=0.96, staircase=True
+)
 
     model.compile(
         loss="binary_crossentropy",
 #        optimizer=optimizers.adam(lr=1e-5),
 #        optimizer='adam',
 #        optimizer=Adam(learning_rate=0.0001),
-        optimizer=SGD(learning_rate=0.001), # was added 20220509
+#        optimizer=SGD(learning_rate=0.001), # was added 20220509
+        optimizer=Adam(learning_rate=lr_schedule), # was added 20220513
         metrics=["accuracy"],
     )
 
