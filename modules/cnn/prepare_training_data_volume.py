@@ -129,7 +129,7 @@ def prepare_training_data_volume(
       tr.mat.fromlist([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
       tr.vec.fromlist([int(xyz_limits[0])+1, int(xyz_limits[2])+1, int(xyz_limits[2])+1])
       # finally we calculate interpolated values
-      map_grid.interpolate_values(arr, tr)
+      map_grid.interpolate_values(map_array, tr)
 
       # normalize array
       map_array_normed = normalise_zero_one(map_array)
