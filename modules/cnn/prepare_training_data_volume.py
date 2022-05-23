@@ -117,7 +117,7 @@ def prepare_training_data_volume(
       data_to_map.update_ccp4_header(2, True)
 
       map_grid = data_to_map.grid
-      print(f"Grid after expansion of MAP for sample_rate = {sample_rate} to {map_grid}): ", data_to_map.grid)
+      print(f"Grid after expansion of MAP for sample_rate = 1 to {map_grid}): ", data_to_map.grid)
     
     
       #arr = np.zeros([32, 32, 32], dtype=np.float32)
