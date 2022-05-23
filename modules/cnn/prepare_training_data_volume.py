@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import List
 
 from scipy.ndimage import rotate
+from dltk.io.preprocessing import *
 
 
 def prepare_training_data_volume(
@@ -114,28 +115,48 @@ def prepare_training_data_volume(
       #                                                         int(xyz_limits[1]),
       #                                                         int(xyz_limits[2])])#was 4
       data_to_map.update_ccp4_header(2, True)
+
+      map_grid = data_to_map.grid
+      print(f"Grid after expansion of MAP for sample_rate = {sample_rate} to {map_grid}): ", data_to_map.grid)
+    
+    
+      #arr = np.zeros([32, 32, 32], dtype=np.float32)
+      map_array = np.zeros([dim+1, dim+1, dim+1], dtype=np.float32)
+      print(arr.shape)
+    
+      tr = gemmi.Transform()
+      #tr.mat.fromlist([[0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1]])
+      tr.mat.fromlist([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+      tr.vec.fromlist([dim+1, dim+1, dim+1])
+      # finally we calculate interpolated values
+      map_grid.interpolate_values(arr, tr)
+
+      # normalize array
+      map_array_normed = normalise_zero_one(map_array)
+
+
     except Exception:
       logging.error(f"Could not open MTZ and convert to MAP {map_file_path} \n")
       raise
     try:
-      #this bit here expands the unit cell to be 200A^3;
-      #Can I expand the unit cell to standard volume and then extract a
-      #grid cube (200, 200, 200) or whatever value has been passed through YAML file
-      upper_limit = gemmi.Position(*xyz_limits)
-      box = gemmi.FractionalBox()
-      box.minimum = gemmi.Fractional(0, 0, 0)
-      box.maximum = data_to_map.grid.unit_cell.fractionalize(upper_limit)
-      box.maximum = data_to_map.grid.point_to_fractional(
-                                    data_to_map.grid.get_point(int(xyz_limits[0]),
-                                                               int(xyz_limits[1]),
-                                                               int(xyz_limits[2])))
-      box.add_margin(1e-5)
-      data_to_map.set_extent(box)
-      map_grid = data_to_map.grid
-      map_grid_normed = map_grid.clone() # normalize map
-      map_grid_normed.normalize()
-
-      map_array_normed = np.array(map_grid_normed, copy = False)
+#      #this bit here expands the unit cell to be 200A^3;
+#      #Can I expand the unit cell to standard volume and then extract a
+#      #grid cube (200, 200, 200) or whatever value has been passed through YAML file
+#      upper_limit = gemmi.Position(*xyz_limits)
+#      box = gemmi.FractionalBox()
+#      box.minimum = gemmi.Fractional(0, 0, 0)
+#      box.maximum = data_to_map.grid.unit_cell.fractionalize(upper_limit)
+#      box.maximum = data_to_map.grid.point_to_fractional(
+#                                    data_to_map.grid.get_point(int(xyz_limits[0]),
+#                                                               int(xyz_limits[1]),
+#                                                               int(xyz_limits[2])))
+#      box.add_margin(1e-5)
+#      data_to_map.set_extent(box)
+#      map_grid = data_to_map.grid
+#      map_grid_normed = map_grid.clone() # normalize map
+#      map_grid_normed.normalize()
+#
+#      map_array_normed = np.array(map_grid_normed, copy = False)
       length = int(xyz_limits[0])+1
 
       if augmentation == True:
