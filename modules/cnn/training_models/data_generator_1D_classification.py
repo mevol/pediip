@@ -9,7 +9,7 @@ from modules.cnn.prepare_training_data_volume import prepare_training_data_volum
 
 class DataGenerator(Sequence):
   'Generates data for Keras'
-  def __init__(self, xyz_limits, list_IDs, labels, batch_size=32, dim=(32,32,32),
+  def __init__(self, xyz_limits, list_IDs, labels, batch_size=32, dim=(32),
                n_classes=2, n_channels=1, shuffle=True):
     'Initialization'
     self.dim = dim
@@ -47,8 +47,8 @@ class DataGenerator(Sequence):
     'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
     # Initialization
     X = np.zeros((self.batch_size,
-                  *self.dim,
-                  self.n_channels))
+                  *self.dim,))
+                  #self.n_channels))
     y = np.empty((self.batch_size), dtype=int)
     # Generate data
     for i, ID in enumerate(list_IDs_temp):
@@ -59,7 +59,7 @@ class DataGenerator(Sequence):
       # Store sample
       volume = prepare_training_data_volume(path,
                                             self.xyz_limits)
-      X[i,] = volume.reshape(*self.dim, self.n_channels)
+      X[i,] = volume.reshape(*self.dim)#, self.n_channels
       # Store class
       y[i] = self.labels[ID]
       

@@ -110,6 +110,7 @@ def prepare_training_data_volume(
     try:
       # flatten the 3D volume into a 1D array
       flattened_array = map_array_normed.ravel()
+      #flattened_array = map_array_normed.reshape(-1)
       logging.info(f"Size of standardise map when finished: {flattened_array.shape} \n")
     except Exception:
       logging.error(f"Could not expand map {map_file_path} \n")
