@@ -14,7 +14,9 @@ def create_1D_cnn_model(input_shape: Tuple[int, int]):#Tuple[int, int]
 
   #reduced number of filters 32 --> 16 20210303
   inputs = keras.Input(input_shape)
+  print(inputs.shape)
   x = layers.Conv1D(filters=64, kernel_size=3, activation="relu")(inputs)
+  print(x.shape)
   x = layers.MaxPool1D(pool_size=2)(x)
   x = layers.BatchNormalization()(x)
 
