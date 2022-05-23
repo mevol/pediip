@@ -96,9 +96,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   with open(output_dir_path / "parameters.yaml", "w") as f:
       yaml.dump(parameters_dict, f)
 
-  MAP_DIM = tuple((parameters_dict["xyz_limits"][0] + 1,
-                   parameters_dict["xyz_limits"][1] + 1,
-                   parameters_dict["xyz_limits"][2] + 1))
+  MAP_DIM = tuple((parameters_dict["xyz_limits"][0],
+                   parameters_dict["xyz_limits"][1],
+                   parameters_dict["xyz_limits"][2]))
 
   # Check if input CSV holding sample filepaths does exist and open the file
   try:

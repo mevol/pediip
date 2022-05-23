@@ -128,7 +128,7 @@ def prepare_training_data_volume(
       tr = gemmi.Transform()
       #tr.mat.fromlist([[0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1]])
       tr.mat.fromlist([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
-      tr.vec.fromlist([int(xyz_limits[0])+1, int(xyz_limits[2])+1, int(xyz_limits[2])+1])
+      tr.vec.fromlist([int(xyz_limits[0]), int(xyz_limits[2]), int(xyz_limits[2])])
       # finally we calculate interpolated values
       map_grid.interpolate_values(map_array, tr)
 
