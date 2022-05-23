@@ -122,7 +122,7 @@ def prepare_training_data_volume(
     
       #arr = np.zeros([32, 32, 32], dtype=np.float32)
       map_array = np.zeros([int(xyz_limits[0])+1, int(xyz_limits[2])+1, int(xyz_limits[2])+1], dtype=np.float32)
-      print(arr.shape)
+      print(map_array.shape)
     
       tr = gemmi.Transform()
       #tr.mat.fromlist([[0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1]])
