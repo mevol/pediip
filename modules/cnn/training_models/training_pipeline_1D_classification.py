@@ -37,7 +37,7 @@ logging.basicConfig(level=logging.INFO, filename="training.log", filemode="w")
 
 
 #def pipeline(create_model: Callable[[int, int], Model], parameters_dict: dict):
-def pipeline(create_model: Callable[[int], Model], parameters_dict: dict):
+def pipeline(create_model: Callable[[int, int], Model], parameters_dict: dict):
   """
   Execute the pipeline on the model provided.
 
@@ -209,7 +209,7 @@ def pipeline(create_model: Callable[[int], Model], parameters_dict: dict):
     color_mode = "rgb"
   else:
     logging.info("Using single channel image input to model \n")
-    input_shape = (MAP_DIM[0])#, 1)
+    input_shape = (MAP_DIM[0], 1)#, 1)
     color_mode = "grayscale"
 
   # Prepare data generators to get data out

@@ -9,7 +9,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.optimizers import SGD
 from modules.cnn.training_models.training_pipeline_1D_classification import pipeline_from_command_line
 
-def create_1D_cnn_model(input_shape: int):#Tuple[int, int]
+def create_1D_cnn_model(input_shape: Tuple[int, int]):#Tuple[int, int]
   model = Sequential()
 
   #reduced number of filters 32 --> 16 20210303
@@ -59,4 +59,4 @@ def create_1D_cnn_model(input_shape: int):#Tuple[int, int]
 
 if __name__ == "__main__":
 
-  pipeline_from_command_line(create_1D_cnn_model)#, rgb=False
+  pipeline_from_command_line(create_1D_cnn_model, rgb=False)#, rgb=False
