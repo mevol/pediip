@@ -12,7 +12,8 @@ from pathlib import Path
 from typing import List
 
 from scipy.ndimage import rotate
-from dltk.io.preprocessing import *
+from dltk.io.preprocessing import normalise_zero_one
+from dltk.io.augmentation import add_gaussian_offset
 
 
 def prepare_training_data_volume(
@@ -81,21 +82,21 @@ def prepare_training_data_volume(
       data = gemmi.read_mtz_file(str(map_file_path))
       # get reciprocal lattice grid size
       recip_grid = data.get_size_for_hkl()
-      cella = recip_grid[0]
-      cellb = recip_grid[1]
-      cellc = recip_grid[2]
-      ratea = xyz_limits[0]/cella
-      rateb = xyz_limits[1]/cellb
-      ratec = xyz_limits[2]/cellc
-      av_rate = ((ratea + rateb + ratec)/3) * 2
-      #print("Average rate: ", round(av_rate, 2))
-      shape = [round(a/1.0/2)*2 for a in data.cell.parameters[:3]]
+#      cella = recip_grid[0]
+#      cellb = recip_grid[1]
+#      cellc = recip_grid[2]
+#      ratea = xyz_limits[0]/cella
+#      rateb = xyz_limits[1]/cellb
+#      ratec = xyz_limits[2]/cellc
+#      av_rate = ((ratea + rateb + ratec)/3) * 2
+#      #print("Average rate: ", round(av_rate, 2))
+#      shape = [round(a/1.0/2)*2 for a in data.cell.parameters[:3]]
       logging.info(f"Original size of reciprocal lattice grid: {recip_grid} \n")
-      logging.info(f"Shape for grid conversion: {shape} \n")
-      logging.info(f"Average sampling rate for grid when converting: {av_rate} \n")
+#      logging.info(f"Shape for grid conversion: {shape} \n")
+#      logging.info(f"Average sampling rate for grid when converting: {av_rate} \n")
       # get grid size in relation to resolution and a sample rate of 4
-      size1 = data.get_size_for_hkl(sample_rate=av_rate)
-      logging.info(f"Reciprocal lattice grid size at sample_rate={av_rate}: {size1} \n")
+#      size1 = data.get_size_for_hkl(sample_rate=av_rate)
+#      logging.info(f"Reciprocal lattice grid size at sample_rate={av_rate}: {size1} \n")
       # create an empty map grid
       data_to_map = gemmi.Ccp4Map()
       # turn MTZ file into map using a sample_rate=6; minimal grid size is
@@ -117,12 +118,12 @@ def prepare_training_data_volume(
       data_to_map.update_ccp4_header(2, True)
 
       map_grid = data_to_map.grid
-      print(f"Grid after expansion of MAP for sample_rate = 1 to {map_grid}): ", data_to_map.grid)
-    
-    
+
       #arr = np.zeros([32, 32, 32], dtype=np.float32)
-      map_array = np.zeros([int(xyz_limits[0])+1, int(xyz_limits[2])+1, int(xyz_limits[2])+1], dtype=np.float32)
-      print(map_array.shape)
+      map_array = np.zeros([int(xyz_limits[0]), int(xyz_limits[2]),
+                            int(xyz_limits[2])], dtype=np.float32)
+#      print(map_array.shape)
+      logging.info(f"Grid after expansion of MAP for sample_rate = 1 to {map_array.shape}) ")
     
       tr = gemmi.Transform()
       #tr.mat.fromlist([[0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1]])
@@ -160,20 +161,24 @@ def prepare_training_data_volume(
       length = int(xyz_limits[0])+1
 
       if augmentation == True:
-        # define some rotation angles
-        #angles = [-20, -10, -5, 5, 10, 20]
-        # pick angles at random
-        #angle = random.choice(angles)
-        # rotate volume
-        #map_array_normed = rotate(map_array_normed, angle, reshape=False)
+        pick_list = [0, 1, 2, 3, 4, 5, 6]
 
-        deg = np.random.choice(90, 1, replace=False)[0]
-        map_array_normed = rotate(map_array_normed, angle = deg, reshape=False)# see what happens with no rotation
+        if pick in random.choice(pick_list) == 2 
+          or pick in random.choice(pick_list) == 4:
 
+          deg = np.random.choice(90, 1, replace=False)[0]
+          map_array_normed = rotate(map_array_normed, angle = deg, axes=(1, 0), reshape=False)
 
+        if pick in random.choice(pick_list) == 0 
+          or pick in random.choice(pick_list) == 6:
 
-      #map_array_normed[map_array_normed < 0] = 0
-      #map_array_normed[map_array_normed > 1] = 1
+          deg = np.random.choice(90, 1, replace=False)[0]
+          map_array_normed = rotate(map_array_normed, angle = deg, axes=(1, 2), reshape=False)
+
+        if pick in random.choice(pick_list) == 3 
+          or pick in random.choice(pick_list) == 5:
+          map_array_normed = add_gaussian_offset(map_array_normed, sigma=0.5)
+
 
       logging.info(f"Size of standardise map when finished: {map_array_normed.shape} \n")
     except Exception:
