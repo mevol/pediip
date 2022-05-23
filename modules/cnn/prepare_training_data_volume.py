@@ -121,13 +121,13 @@ def prepare_training_data_volume(
     
     
       #arr = np.zeros([32, 32, 32], dtype=np.float32)
-      map_array = np.zeros([dim+1, dim+1, dim+1], dtype=np.float32)
+      map_array = np.zeros([int(xyz_limits[0])+1, int(xyz_limits[2])+1, int(xyz_limits[2])+1], dtype=np.float32)
       print(arr.shape)
     
       tr = gemmi.Transform()
       #tr.mat.fromlist([[0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1]])
       tr.mat.fromlist([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
-      tr.vec.fromlist([dim+1, dim+1, dim+1])
+      tr.vec.fromlist([int(xyz_limits[0])+1, int(xyz_limits[2])+1, int(xyz_limits[2])+1])
       # finally we calculate interpolated values
       map_grid.interpolate_values(arr, tr)
 
