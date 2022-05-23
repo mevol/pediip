@@ -162,18 +162,19 @@ def prepare_training_data_volume(
 
       if augmentation == True:
         pick_list = [0, 1, 2, 3, 4, 5, 6]
+        pick = random.choice(pick_list)
 
-        if pick in random.choice(pick_list) == 2 or pick in random.choice(pick_list) == 4:
+        if pick == 2 or pick == 4:
 
           deg = np.random.choice(90, 1, replace=False)[0]
           map_array_normed = rotate(map_array_normed, angle = deg, axes=(1, 0), reshape=False)
 
-        if pick in random.choice(pick_list) == 0 or pick in random.choice(pick_list) == 6:
+        if pick == 0 or pick == 6:
 
           deg = np.random.choice(90, 1, replace=False)[0]
           map_array_normed = rotate(map_array_normed, angle = deg, axes=(1, 2), reshape=False)
 
-        if pick in random.choice(pick_list) == 3 or pick in random.choice(pick_list) == 5:
+        if pick == 3 or pick == 5:
           map_array_normed = add_gaussian_offset(map_array_normed, sigma=0.5)
 
 
