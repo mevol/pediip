@@ -15,20 +15,20 @@ def create_1D_cnn_model(input_shape: Tuple[int, int]):#Tuple[int, int]
   #reduced number of filters 32 --> 16 20210303
   inputs = keras.Input(input_shape)
   print(inputs.shape)
-  x = layers.Conv1D(filters=64, kernel_size=2, stride = 1, activation="relu")(inputs)
+  x = layers.Conv1D(filters=64, kernel_size=2, strides = 1, activation="relu")(inputs)
   print(x.shape)
   x = layers.MaxPool1D(pool_size=2)(x)
   x = layers.BatchNormalization()(x)
 
-  x = layers.Conv1D(filters=64, kernel_size=2, stride = 1, activation="relu")(x)
+  x = layers.Conv1D(filters=64, kernel_size=2, strides = 1, activation="relu")(x)
   x = layers.MaxPool1D(pool_size=2)(x)
   x = layers.BatchNormalization()(x)
 
-  x = layers.Conv1D(filters=128, kernel_size=2, stride = 1, activation="relu")(x)
+  x = layers.Conv1D(filters=128, kernel_size=2, strides = 1, activation="relu")(x)
   x = layers.MaxPool1D(pool_size=2)(x)
   x = layers.BatchNormalization()(x)
 
-  x = layers.Conv1D(filters=256, kernel_size=2, stride = 1, activation="relu")(x)
+  x = layers.Conv1D(filters=256, kernel_size=2, strides = 1, activation="relu")(x)
   x = layers.MaxPool1D(pool_size=2)(x)
   x = layers.BatchNormalization()(x)
 
