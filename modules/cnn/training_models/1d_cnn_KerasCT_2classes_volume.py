@@ -59,4 +59,4 @@ def create_1D_cnn_model(input_shape: Tuple[int, int]):
 
 if __name__ == "__main__":
 
-  pipeline_from_command_line(create_3D_cnn_model, rgb=False)
+  pipeline_from_command_line(create_1D_cnn_model, rgb=False)

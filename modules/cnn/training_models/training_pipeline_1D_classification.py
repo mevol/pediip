@@ -36,7 +36,7 @@ print(tensorflow.__version__)
 logging.basicConfig(level=logging.INFO, filename="training.log", filemode="w")
 
 
-def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dict: dict):
+def pipeline(create_model: Callable[[int, int], Model], parameters_dict: dict):
   """
   Execute the pipeline on the model provided.
 
