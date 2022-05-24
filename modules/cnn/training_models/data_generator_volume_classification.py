@@ -55,8 +55,8 @@ class DataGenerator(Sequence):
     for i, ID in enumerate(list_IDs_temp):
       sample = self.list_IDs.iloc[ID, :]
       path = sample["filename"]
-      protocol = sample["protocol"]
-      stage = sample["stage"]
+      #protocol = sample["protocol"]
+      #stage = sample["stage"]
       # Store sample
       volume = prepare_training_data_volume(path,
                                             self.xyz_limits,

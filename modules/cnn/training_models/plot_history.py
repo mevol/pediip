@@ -36,6 +36,19 @@ def figure_from_csv(history_file, filename):
     return f
 
 
+def reg_figure_from_csv(history_file, filename):
+  epochs = len(history["loss"])
+  epoch_list = range(epochs)
+  plt.plot(history.history['loss'], label='loss')
+  plt.plot(history.history['val_loss'], label='val_loss')
+  plt.ylim([0, 10])
+  plt.xlabel('Epoch')
+  plt.ylabel('Error [mean_phase_error]')
+  plt.legend()
+  plt.grid(True)
+  plt.savefig(filename)
+  return plt
+
 def history_to_csv(history, filename):
     """Put the history in a csv file with known format"""
     history_data = pd.DataFrame(
@@ -47,6 +60,15 @@ def history_to_csv(history, filename):
     history_data.to_csv(file_path)
     return file_path.absolute()
 
+
+def reg_history_to_csv(history, filename):
+    """Put the history in a csv file with known format"""
+    history_data = pd.DataFrame(
+        {"Loss": history.history["loss"],
+         "Val Loss": history.history["val_loss"]})
+    file_path = Path(filename)
+    history_data.to_csv(file_path)
+    return file_path.absolute()
 
 def confusion_matrix_and_stats(y_test, y_pred, filename):
     # Plot predictions in confusion matrix

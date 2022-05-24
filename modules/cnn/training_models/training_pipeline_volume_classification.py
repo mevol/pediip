@@ -28,6 +28,7 @@ from modules.cnn.training_models.plot_history import history_to_csv, figure_from
 from modules.cnn.training_models.plot_history import confusion_matrix_and_stats
 from modules.cnn.training_models.plot_history import plot_precision_recall_vs_threshold
 from modules.cnn.training_models.plot_history import plot_roc_curve, confusion_matrix_and_stats_multiclass
+from modules.cnn.training_models.plot_history import reg_history_to_csv, reg_figure_from_csv
 from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
 from modules.cnn.training_models.data_generator_volume_classification import DataGenerator
 
@@ -111,8 +112,11 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.error(f"Could not open input map list \n")
 
   # separate data X from labels y; assigning labels based on rfree
-  X = data[['filename', 'protocol', 'stage']]
-  y = data['ai_label']
+#  X = data[['filename', 'protocol', 'stage']]
+  X = data['filename']
+
+#  y = data['ai_label']#classification
+  y = data['phase_error']#regression
 
   # getting the class distribution
   class_frequency = data.groupby(y).size()
@@ -268,10 +272,15 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
         use_multiprocessing=True,
         workers=8)#8)
 
-  # Send history to csv
-  history_to_csv(history, histories_path / f"history.csv")
-  figure_from_csv(os.path.join(histories_path, "history.csv"),
+#  # Send history to csv for classification
+#  history_to_csv(history, histories_path / f"history.csv")
+#  figure_from_csv(os.path.join(histories_path, "history.csv"),
+#                  histories_path / f"history.png")
+  # Send history to csv for regression
+  reg_history_to_csv(history, histories_path / f"history.csv")
+  reg_figure_from_csv(os.path.join(histories_path, "history.csv"),
                   histories_path / f"history.png")
+
   # Save model as h5
   model.save(str(models_path / f"model.h5"))
 
