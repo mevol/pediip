@@ -97,7 +97,7 @@ def pipeline(create_model: Callable[[int, int], Model], parameters_dict: dict):
   with open(output_dir_path / "parameters.yaml", "w") as f:
       yaml.dump(parameters_dict, f)
 
-  MAP_DIM = tuple((np.array(parameters_dict["xyz_limits"][0],
+  MAP_DIM = tuple((np.zeros(parameters_dict["xyz_limits"][0],
                    parameters_dict["xyz_limits"][1],
                    parameters_dict["xyz_limits"][2])).reshape(-1))
   
