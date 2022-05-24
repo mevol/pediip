@@ -57,7 +57,6 @@ def prepare_training_data_volume(
     real_path_to_map = os.path.realpath(real_input_path_opt)
     # replace "/dls/" with "/opt/" to read files in the mount pount
     real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
-    print(real_path_to_map_opt)
     try:
       target = input_map_path.split("/")[8]
       logging.info(f"Working on target: {target} \n")

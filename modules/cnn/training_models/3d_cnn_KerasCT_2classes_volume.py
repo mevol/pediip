@@ -48,8 +48,7 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
     initial_learning_rate, decay_steps=100000, decay_rate=0.96, staircase=True
 )
   model.compile(
-        loss='mean_absolute_error',#for regression
-#        loss="binary_crossentropy",#categorical_crossentropy
+        loss="binary_crossentropy",#categorical_crossentropy
         #optimizer='adam',
 #        optimizer=Adam(learning_rate=0.0001), # was added 20220506
         optimizer=Adam(learning_rate=lr_schedule), # was added 20220513

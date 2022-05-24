@@ -28,7 +28,6 @@ from modules.cnn.training_models.plot_history import history_to_csv, figure_from
 from modules.cnn.training_models.plot_history import confusion_matrix_and_stats
 from modules.cnn.training_models.plot_history import plot_precision_recall_vs_threshold
 from modules.cnn.training_models.plot_history import plot_roc_curve, confusion_matrix_and_stats_multiclass
-from modules.cnn.training_models.plot_history import reg_history_to_csv, reg_figure_from_csv
 from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
 from modules.cnn.training_models.data_generator_volume_classification import DataGenerator
 
@@ -112,11 +111,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
     logging.error(f"Could not open input map list \n")
 
   # separate data X from labels y; assigning labels based on rfree
-#  X = data[['filename', 'protocol', 'stage']]
-  X = data['filename']
+  X = data[['filename', 'protocol', 'stage']]
 
-#  y = data['ai_label']#classification
-  y = data['phase_error']#regression
+  y = data['ai_label']#classification
 
   # getting the class distribution
   class_frequency = data.groupby(y).size()
@@ -155,8 +152,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   new_keys = last_y_key + diff_batch_samples
   # getting last sample of y_test and X_test
   last_y = y_test.iloc[-1]
-#  last_X = X_test.iloc[-1].values
-  last_X = X_test.iloc[-1]
+  last_X = X_test.iloc[-1].values
 
   for i in range(last_y_key + 1, new_keys + 1):
     label_dict[i] = last_y
@@ -174,8 +170,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   # get the ID of the last sample to expand from there
   new_keys2 = last_y_key2 + diff_batch_samples2
   # getting last sample of y_test and X_test
-#  last_challenge_X = X_challenge.iloc[-1].values
-  last_challenge_X = X_challenge.iloc[-1]
+  last_challenge_X = X_challenge.iloc[-1].values
   last_challenge_y = y_challenge.iloc[-1]
 
   for i in range(last_y_key2 + 1, new_keys2 + 1):
@@ -274,13 +269,9 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
         use_multiprocessing=True,
         workers=8)#8)
 
-#  # Send history to csv for classification
-#  history_to_csv(history, histories_path / f"history.csv")
-#  figure_from_csv(os.path.join(histories_path, "history.csv"),
-#                  histories_path / f"history.png")
-  # Send history to csv for regression
-  reg_history_to_csv(history, histories_path / f"history.csv")
-  reg_figure_from_csv(os.path.join(histories_path, "history.csv"),
+  # Send history to csv for classification
+  history_to_csv(history, histories_path / f"history.csv")
+  figure_from_csv(os.path.join(histories_path, "history.csv"),
                   histories_path / f"history.png")
 
   # Save model as h5
