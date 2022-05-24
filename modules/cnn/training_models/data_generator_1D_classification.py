@@ -47,7 +47,7 @@ class DataGenerator(Sequence):
     'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
     # Initialization
     X = np.zeros((self.batch_size,
-                  *self.dim,
+                  self.dim,#*self.dim
                   self.n_channels))
     y = np.empty((self.batch_size), dtype=int)
     # Generate data
