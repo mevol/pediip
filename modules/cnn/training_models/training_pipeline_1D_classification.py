@@ -101,7 +101,7 @@ def pipeline(create_model: Callable[[int, int], Model], parameters_dict: dict):
 
   #MAP_DIM = tuple(np.zeros((length, length, length)).reshape(-1))[0]
   #MAP_DIM = len(np.zeros((length, length, length)).reshape(-1))
-  MAP_DIM = np.zeros((length, length, length)).ravel().shape
+  MAP_DIM = np.zeros((length, length, length)).ravel().shape[0]
   
   print("Shape of flattened target array: ", MAP_DIM)
 
