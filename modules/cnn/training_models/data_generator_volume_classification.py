@@ -55,6 +55,7 @@ class DataGenerator(Sequence):
     for i, ID in enumerate(list_IDs_temp):
 #      sample = self.list_IDs.iloc[ID, :]
       sample = self.list_IDs.iloc[ID]
+      print(sample)
       path = sample["filename"]
       #protocol = sample["protocol"]
       #stage = sample["stage"]
