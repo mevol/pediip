@@ -37,6 +37,7 @@ def prepare_training_data_volume(
   # opening either a submitted list of files to iterate over or an individual sample
   try:
     data = pd.read_csv(maps_list)
+    print(data)
     total_num_maps = len(data)
     logging.info(f"Found {total_num_maps} samples for training")
   except Exception:
