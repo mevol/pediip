@@ -96,10 +96,10 @@ def pipeline(create_model: Callable[[int, int], Model], parameters_dict: dict):
   # Log the key information about the model and run
   with open(output_dir_path / "parameters.yaml", "w") as f:
       yaml.dump(parameters_dict, f)
+      
+  length = int(parameters_dict["xyz_limits"][0])
 
-  MAP_DIM = tuple((np.zeros(parameters_dict["xyz_limits"][0],
-                   parameters_dict["xyz_limits"][1],
-                   parameters_dict["xyz_limits"][2])).reshape(-1))
+  MAP_DIM = tuple(np.zeros((length, length, length)).reshape(-1))
   
   print("Shape of flattened target array: ", MAP_DIM.shape)
 
