@@ -29,7 +29,7 @@ from modules.cnn.training_models.plot_history import plot_precision_recall_vs_th
 from modules.cnn.training_models.plot_history import plot_roc_curve, confusion_matrix_and_stats_multiclass
 from modules.cnn.training_models.plot_history import reg_history_to_csv, reg_figure_from_csv
 from modules.cnn.training_models.k_fold_boundaries import k_fold_boundaries
-from modules.cnn.training_models.data_generator_volume_classification import DataGenerator
+from modules.cnn.training_models.data_generator_volume_regression import DataGenerator
 
 print(tensorflow.__version__)
 
