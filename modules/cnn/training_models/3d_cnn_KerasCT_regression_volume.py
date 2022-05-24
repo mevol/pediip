@@ -9,7 +9,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.layers import Conv3D, Dense, Dropout, Flatten, MaxPooling3D
 from tensorflow.keras.layers import BatchNormalization #added 20210226
-from modules.cnn.training_models.training_pipeline_volume_classification import pipeline_from_command_line
+from modules.cnn.training_models.training_pipeline_volume_regression import pipeline_from_command_line
 
 def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
   model = Sequential()

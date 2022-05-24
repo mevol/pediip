@@ -4,7 +4,7 @@ import gemmi
 from tensorflow.keras.utils import Sequence
 from tensorflow.keras.utils import to_categorical
 
-from modules.cnn.prepare_training_data_volume import prepare_training_data_volume
+from modules.cnn.prepare_training_data_volume_regression import prepare_training_data_volume
 
 
 class DataGenerator(Sequence):

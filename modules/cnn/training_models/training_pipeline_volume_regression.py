@@ -236,7 +236,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                        label_dict,#y_train,#y
                                        dim=MAP_DIM,
                                        batch_size=batch_size,
-                                       n_classes=num_classes,
                                        shuffle=True,
                                        augmentation=True)
 
@@ -246,7 +245,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                       label_dict,#y_test,
                                       dim=MAP_DIM,
                                       batch_size=batch_size,
-                                      n_classes=num_classes,
                                       shuffle=False,
                                       augmentation=False)
 
@@ -256,7 +254,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
                                       label_dict,#y_test,
                                       dim=MAP_DIM,
                                       batch_size=batch_size,
-                                      n_classes=num_classes,
                                       shuffle=False,
                                       augmentation=False)
 
