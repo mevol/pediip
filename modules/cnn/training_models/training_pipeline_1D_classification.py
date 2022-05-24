@@ -101,7 +101,7 @@ def pipeline(create_model: Callable[[int, int], Model], parameters_dict: dict):
 
   MAP_DIM = tuple(np.zeros((length, length, length)).reshape(-1))
   
-  print("Shape of flattened target array: ", MAP_DIM.shape)
+  print("Shape of flattened target array: ", MAP_DIM)
 
   # Check if input CSV holding sample filepaths does exist and open the file
   try:
