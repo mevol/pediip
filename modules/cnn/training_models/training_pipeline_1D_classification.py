@@ -208,11 +208,11 @@ def pipeline(create_model: Callable[[int, int], Model], parameters_dict: dict):
   # grayscale is used
   if parameters_dict["rgb"] is True:
     logging.info("Using 3 channel image input to model")
-    input_shape = (MAP_DIM[0], 3)#MAP_DIM[0]
+    input_shape = (MAP_DIM, 3)#MAP_DIM[0]
     color_mode = "rgb"
   else:
     logging.info("Using single channel image input to model \n")
-    input_shape = (MAP_DIM[0], 1)#MAP_DIM[0]
+    input_shape = (MAP_DIM, 1)#MAP_DIM[0]
     color_mode = "grayscale"
 
   # Prepare data generators to get data out
