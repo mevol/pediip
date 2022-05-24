@@ -56,7 +56,9 @@ class DataGenerator(Sequence):
 #      sample = self.list_IDs.iloc[ID, :]
       sample = self.list_IDs.iloc[ID]
       print(sample)
-      path = sample["filename"]
+#      path = sample["filename"]
+      path = sample[0]
+
       #protocol = sample["protocol"]
       #stage = sample["stage"]
       # Store sample
