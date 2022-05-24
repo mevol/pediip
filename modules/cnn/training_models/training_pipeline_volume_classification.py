@@ -155,7 +155,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   new_keys = last_y_key + diff_batch_samples
   # getting last sample of y_test and X_test
   last_y = y_test.iloc[-1]
-  last_X = X_test.iloc[-1].values
+#  last_X = X_test.iloc[-1].values
+  last_X = X_test.iloc[-1]
 
   for i in range(last_y_key + 1, new_keys + 1):
     label_dict[i] = last_y
@@ -173,7 +174,8 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   # get the ID of the last sample to expand from there
   new_keys2 = last_y_key2 + diff_batch_samples2
   # getting last sample of y_test and X_test
-  last_challenge_X = X_challenge.iloc[-1].values
+#  last_challenge_X = X_challenge.iloc[-1].values
+  last_challenge_X = X_challenge.iloc[-1]
   last_challenge_y = y_challenge.iloc[-1]
 
   for i in range(last_y_key2 + 1, new_keys2 + 1):
