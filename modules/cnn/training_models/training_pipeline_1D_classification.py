@@ -101,7 +101,7 @@ def pipeline(create_model: Callable[[int, int], Model], parameters_dict: dict):
 
   #MAP_DIM = tuple(np.zeros((length, length, length)).reshape(-1))[0]
   #MAP_DIM = len(np.zeros((length, length, length)).reshape(-1))
-  MAP_DIM = np.zeros((length, length, length)).ravel().shape[0]
+  MAP_DIM = np.zeros((length, length, length)).ravel().shape#[0]
   
   print("Shape of flattened target array: ", MAP_DIM)
 
@@ -209,11 +209,11 @@ def pipeline(create_model: Callable[[int, int], Model], parameters_dict: dict):
   # grayscale is used
   if parameters_dict["rgb"] is True:
     logging.info("Using 3 channel image input to model")
-    input_shape = (MAP_DIM, 3)#MAP_DIM[0]
+    input_shape = (MAP_DIM[0], 3)#MAP_DIM[0]
     color_mode = "rgb"
   else:
     logging.info("Using single channel image input to model \n")
-    input_shape = (MAP_DIM, 1)#MAP_DIM[0]
+    input_shape = (MAP_DIM[0], 1)#MAP_DIM[0]
     color_mode = "grayscale"
 
   # Prepare data generators to get data out
@@ -263,6 +263,9 @@ def pipeline(create_model: Callable[[int, int], Model], parameters_dict: dict):
                                       n_classes=num_classes,
                                       shuffle=False,
                                       augmentation=False)
+
+
+  #history = model.fit(trainX, trainy, epochs=epochs, batch_size=batch_size, verbose=verbose)
 
   history = model.fit(
         training_generator,
