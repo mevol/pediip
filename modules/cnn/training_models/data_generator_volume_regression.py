@@ -59,7 +59,7 @@ class DataGenerator(Sequence):
       #protocol = sample["protocol"]
       #stage = sample["stage"]
       # Store sample
-      volume = prepare_training_data_volume(path,
+      volume = prepare_training_data_volume(str(path),
                                             self.xyz_limits,
                                             self.augmentation)
       X[i,] = volume.reshape(*self.dim, self.n_channels)
