@@ -5,6 +5,7 @@ from typing import Tuple
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
+from tensorflow.keras.metrics import RootMeanSquaredError()
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.layers import Conv3D, Dense, Dropout, Flatten, MaxPooling3D
@@ -51,10 +52,11 @@ def create_3D_cnn_model(input_shape: Tuple[int, int, int, int]):
         loss='mean_absolute_error',#for regression
         #optimizer='adam',
 #        optimizer=Adam(learning_rate=0.0001), # was added 20220506
-        optimizer=Adam(learning_rate=lr_schedule), # was added 20220513
+#        optimizer=Adam(learning_rate=lr_schedule), # was added 20220513
 #        optimizer=SGD(learning_rate=0.0001), # was added 20220509
-#        optimizer=SGD(learning_rate=lr_schedule), # was added 20220517
-        metrics=["accuracy"],)
+        optimizer=SGD(learning_rate=lr_schedule), # was added 20220517
+        metrics = [RootMeanSquaredError()])
+#        metrics=["accuracy"],)
 
   return model
 
