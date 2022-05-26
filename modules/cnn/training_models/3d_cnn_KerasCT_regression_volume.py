@@ -5,7 +5,7 @@ from typing import Tuple
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.metrics import RootMeanSquaredError()
+from tensorflow.keras.metrics import RootMeanSquaredError
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.layers import Conv3D, Dense, Dropout, Flatten, MaxPooling3D
