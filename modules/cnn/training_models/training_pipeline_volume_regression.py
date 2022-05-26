@@ -217,7 +217,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   # Model run parameters
   epochs = parameters_dict["epochs"]
   batch_size = parameters_dict["batch_size"]
-  num_classes = parameters_dict["num_classes"]
 
   # New model
   model = create_model(input_shape)
@@ -303,81 +302,7 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   except Exception:
     logging.warning("Could not round predictions for X_test\n")
     raise
-##### 2-class case
-  if num_classes == 2:
-  # get classification report for the test set
-    try:
-      classes = list(y_test.unique())
-      target_names = []
-      for cl in classes:
-        name = "class_" + str(cl)
-        target_names.append(name)
-      labels = np.arange(len(classes))
-      report = classification_report(y_test, y_pred1, labels=labels,
-                                     target_names=target_names, zero_division = 0)
-      print(report)
-      logging.info(f"Classification report for X_test\n")
-      logging.info(report)
-    except Exception:
-      logging.warning("Could not get classification report for X_test\n")
-      raise
-    # calculate and draw confusion matrix for the test set
-    try:
-      logging.info("Drawing confusion matrix for X_test. \n")
-      cat_labels = pd.DataFrame(y_test)
-      cat_preds = pd.DataFrame(y_pred1)
-      conf_mat_dict = confusion_matrix_and_stats(cat_labels, cat_preds,
-                         evaluations_path / f"confusion_matrix_test_{date}.png")
-      logging.info(conf_mat_dict)
-    except Exception:
-      logging.warning("Could not calculate confusion matrix for X_test\n")
-      raise
-    # get precision and recall curve for test set
-    try:
-      plot_precision_recall_vs_threshold(cat_labels, cat_preds,
-                  evaluations_path / f"precision_recall_curve_test_{date}.png")
-    except Exception:
-      logging.warning("Could not draw precision-recall curve for X_test. \n")
-      raise
-    # get ROC curve for test set
-    try:
-      fpr, tpr, thresholds = plot_roc_curve(cat_labels, cat_preds,
-                                evaluations_path / f"ROC_curve_test_{date}.png")
-      logging.info(f"False-positive rate for X_test: {fpr} \n"
-                   f"True-negative rate for X_test: {tpr} \n"
-              f"Probability threshold for X_test for class 1 to be True: {thresholds} \n")
-    except Exception:
-      logging.warning("Could not draw precision-recall curve for X_test. \n")
-      raise
-##### multi-class case
-  else:
-  # get classification report for the test set
-    try:
-      classes = list(y_test.unique())
-      target_names = []
-      for cl in classes:
-        name = "class_" + str(cl)
-        target_names.append(name)
-      labels = np.arange(len(classes))
-      report = classification_report(y_test, y_pred1, labels=labels,
-                                     target_names=target_names, zero_division = 0)
-      print(report)
-      logging.info(f"Classification report for X_test\n")
-      logging.info(report)
-    except Exception:
-      logging.warning("Could not get classification report for X_test\n")
-      raise
-    # calculate and draw confusion matrix for test set
-    try:
-      logging.info("Drawing confusion matrix for X_test. \n")
-      cat_labels = pd.DataFrame(y_test)
-      cat_preds = pd.DataFrame(y_pred1)
-      conf_mat_dict = confusion_matrix_and_stats_multiclass(cat_labels, cat_preds,
-                       evaluations_path / f"confusion_matrix_test_{date}.png")
-      logging.info(conf_mat_dict)
-    except Exception:
-      logging.warning("Could not calculate confusion matrix for X_test\n")
-      raise
+
   # calculate the number of steps to be used in prediction and model evaluation
   # X_challenge
   challenge_steps = int(math.ceil(len(X_challenge) / batch_size))
@@ -396,82 +321,6 @@ def pipeline(create_model: Callable[[int, int, int, int], Model], parameters_dic
   except Exception:
     logging.warning("Could not round predictions \n")
     raise
-##### 2-class case
-  if num_classes == 2:
-  # get classification report for the challenge data
-    try:
-      classes = list(y_test.unique())
-      target_names = []
-      for cl in classes:
-        name = "class_" + str(cl)
-        target_names.append(name)
-      labels = np.arange(len(classes))
-      report_challenge = classification_report(y_challenge, y_pred_challenge1, labels=labels,
-                                   target_names=target_names, zero_division = 0)
-      print(report_challenge)
-      logging.info(f"Classification report for challenge data \n")
-      logging.info(report_challenge)
-    except Exception:
-      logging.warning("Could not get classification report for challenge data \n")
-      raise
-    # calculate and draw confusion matrix for the challenge data
-    try:
-      logging.info("Drawing confusion matrix for challenge data. \n")
-      challenge_cat_labels = pd.DataFrame(y_challenge)
-      challenge_cat_preds = pd.DataFrame(y_pred_challenge1)
-      conf_mat_dict_challenge = confusion_matrix_and_stats(cat_labels, cat_preds,
-                  evaluations_path / f"confusion_matrix_challenge_{date}.png")
-      logging.info(conf_mat_dict_challenge)
-    except Exception:
-      logging.warning("Could not calculate confusion matrix for challenge data \n")
-      raise
-    # get precision-recall curve for challenge data
-    try:
-      plot_precision_recall_vs_threshold(challenge_cat_labels, challenge_cat_preds,
-            evaluations_path / f"precision_recall_curve_challenge_{date}.png")
-    except Exception:
-      logging.warning("Could not draw precision-recall curve for challenge data. \n")
-      raise
-    # get ROC curve for challenge data
-    try:
-      fpr_challenge, tpr_challenge, thresholds_challenge = plot_roc_curve(challenge_cat_labels, challenge_cat_preds,
-                              evaluations_path / f"ROC_curve_challenge_{date}.png")
-      logging.info(f"False-positive rate: {fpr_challenge} \n"
-                  f"True-negative rate: {tpr_challenge} \n"
-        f"Probability threshold for challenge datafor class 1 to be True: {thresholds_challenge} \n")
-    except Exception:
-      logging.warning("Could not draw precision-recall curve for challenge data. \n")
-      raise
-##### multi-class case
-  else:
-  # get classification report for the challenge data
-    try:
-      classes = list(y_test.unique())
-      target_names = []
-      for cl in classes:
-        name = "class_" + str(cl)
-        target_names.append(name)
-      labels = np.arange(len(classes))
-      report_challenge = classification_report(y_challenge, y_pred_challenge1, labels=labels,
-                                   target_names=target_names, zero_division = 0)
-      print(report_challenge)
-      logging.info(f"Classification report for challenge data \n")
-      logging.info(report_challenge)
-    except Exception:
-      logging.warning("Could not get classification report for challenge data \n")
-      raise
-    # calculate and draw confusion matrix for the challenge data
-    try:
-      logging.info("Drawing confusion matrix for challenge data. \n")
-      challenge_cat_labels = pd.DataFrame(y_challenge)
-      challenge_cat_preds = pd.DataFrame(y_pred_challenge1)
-      conf_mat_dict_challenge = confusion_matrix_and_stats_multiclass(cat_labels, cat_preds,
-                  evaluations_path / f"confusion_matrix_challenge_{date}.png")
-      logging.info(conf_mat_dict_challenge)
-    except Exception:
-      logging.warning("Could not calculate confusion matrix for challenge data \n")
-      raise
-
 
   # Load the model config information as a yaml file
   with open(output_dir_path / "model_info.yaml", "w") as f:
@@ -546,11 +395,6 @@ def get_pipeline_parameters() -> dict:
       "--output_dir",
       required=True,
       help="directory to output results files to. Will be appended with date and time of program run")
-  parser.add_argument(
-      "--num_classes",
-      required=True,
-      type=int,
-      help="number of classes")
   parser.add_argument(
       "--k_folds",
       required=True,

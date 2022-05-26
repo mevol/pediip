@@ -37,7 +37,6 @@ def prepare_training_data_volume(
   # opening either a submitted list of files to iterate over or an individual sample
   try:
     data = pd.read_csv(maps_list)
-    print(data)
     total_num_maps = len(data)
     logging.info(f"Found {total_num_maps} samples for training")
   except Exception:
@@ -45,24 +44,19 @@ def prepare_training_data_volume(
     pass
   try:
     data = maps_list
-    print(00000, data)
     input_path = data
-    print(11111, input_path)
     # expand this path to its real path as it is a sym link pointing to my local,
     # hand-crafted PDB-redo version; this one has the same subfolder arrangement
     # as my local PDB version; makes traversing easier; however, in order to create
     # this custom PDB-redo version I created again sym links to the original
     # PDB-redo; hence I need two levels to expand the real file path
     real_input_path = os.path.realpath(input_path)
-    print(22222, real_input_path)
     # replace "/dls/" with "/opt/" to read files in the mount pount
     real_input_path_opt = real_input_path.replace("/dls/", "/opt/")
-    print(33333, real_input_path_opt)
     # expand the next level of sym link to the real path
     real_path_to_map = os.path.realpath(real_input_path_opt)
     # replace "/dls/" with "/opt/" to read files in the mount pount
     real_path_to_map_opt = real_path_to_map.replace("/dls/", "/opt/")
-    print(real_path_to_map_opt)
     try:
       target = input_map_path.split("/")[8]
       logging.info(f"Working on target: {target} \n")
@@ -88,82 +82,34 @@ def prepare_training_data_volume(
       data = gemmi.read_mtz_file(str(map_file_path))
       # get reciprocal lattice grid size
       recip_grid = data.get_size_for_hkl()
-#      cella = recip_grid[0]
-#      cellb = recip_grid[1]
-#      cellc = recip_grid[2]
-#      ratea = xyz_limits[0]/cella
-#      rateb = xyz_limits[1]/cellb
-#      ratec = xyz_limits[2]/cellc
-#      av_rate = ((ratea + rateb + ratec)/3) * 2
-#      #print("Average rate: ", round(av_rate, 2))
-#      shape = [round(a/1.0/2)*2 for a in data.cell.parameters[:3]]
       logging.info(f"Original size of reciprocal lattice grid: {recip_grid} \n")
-#      logging.info(f"Shape for grid conversion: {shape} \n")
-#      logging.info(f"Average sampling rate for grid when converting: {av_rate} \n")
-      # get grid size in relation to resolution and a sample rate of 4
-#      size1 = data.get_size_for_hkl(sample_rate=av_rate)
-#      logging.info(f"Reciprocal lattice grid size at sample_rate={av_rate}: {size1} \n")
       # create an empty map grid
       data_to_map = gemmi.Ccp4Map()
       # turn MTZ file into map using a sample_rate=6; minimal grid size is
       # placed in relation to the resolution, dmin/sample_rate; sample_rate=4
-      # doubles the original grid size
-#      try:
-#        data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', exact_size=shape)
-#      except Exception:
-#        data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', min_size=[int(xyz_limits[0]),
-#                                                               int(xyz_limits[1]),
-#                                                               int(xyz_limits[2])])
-#        pass
-      #data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=av_rate)
+      # keeps the original grid size --> voxel size = 1
       data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', sample_rate=1)
+      # set space group to P1
       data_to_map.grid.spacegroup = gemmi.find_spacegroup_by_name('P1')
-      #data_to_map.grid = data.transform_f_phi_to_map('FWT', 'PHWT', min_size=[int(xyz_limits[0]),
-      #                                                         int(xyz_limits[1]),
-      #                                                         int(xyz_limits[2])])#was 4
+      # update the map header
       data_to_map.update_ccp4_header(2, True)
-
+      # create a new grid for the updated map
       map_grid = data_to_map.grid
-
-      #arr = np.zeros([32, 32, 32], dtype=np.float32)
+      # create an empty array to write the interpolated density into
       map_array = np.zeros([int(xyz_limits[0]), int(xyz_limits[2]),
                             int(xyz_limits[2])], dtype=np.float32)
-#      print(map_array.shape)
       logging.info(f"Grid after expansion of MAP for sample_rate = 1 to {map_array.shape}) ")
-    
       tr = gemmi.Transform()
-      #tr.mat.fromlist([[0.1, 0, 0], [0, 0.1, 0], [0, 0, 0.1]])
       tr.mat.fromlist([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
       tr.vec.fromlist([int(xyz_limits[0]), int(xyz_limits[2]), int(xyz_limits[2])])
       # finally we calculate interpolated values
       map_grid.interpolate_values(map_array, tr)
-
       # normalize array
       map_array_normed = normalise_zero_one(map_array)
-
-
     except Exception:
       logging.error(f"Could not open MTZ and convert to MAP {map_file_path} \n")
       raise
     try:
-#      #this bit here expands the unit cell to be 200A^3;
-#      #Can I expand the unit cell to standard volume and then extract a
-#      #grid cube (200, 200, 200) or whatever value has been passed through YAML file
-#      upper_limit = gemmi.Position(*xyz_limits)
-#      box = gemmi.FractionalBox()
-#      box.minimum = gemmi.Fractional(0, 0, 0)
-#      box.maximum = data_to_map.grid.unit_cell.fractionalize(upper_limit)
-#      box.maximum = data_to_map.grid.point_to_fractional(
-#                                    data_to_map.grid.get_point(int(xyz_limits[0]),
-#                                                               int(xyz_limits[1]),
-#                                                               int(xyz_limits[2])))
-#      box.add_margin(1e-5)
-#      data_to_map.set_extent(box)
-#      map_grid = data_to_map.grid
-#      map_grid_normed = map_grid.clone() # normalize map
-#      map_grid_normed.normalize()
-#
-#      map_array_normed = np.array(map_grid_normed, copy = False)
       length = int(xyz_limits[0])+1
 
       if augmentation == True:
@@ -183,7 +129,6 @@ def prepare_training_data_volume(
         if pick == 3 or pick == 5:
           map_array_normed = add_gaussian_offset(map_array_normed, sigma=0.5)
 
-
       logging.info(f"Size of standardise map when finished: {map_array_normed.shape} \n")
     except Exception:
       logging.error(f"Could not expand map {map_file_path} \n")
@@ -191,7 +136,6 @@ def prepare_training_data_volume(
   except Exception:
     logging.error(f"Could not open input map list \n")
     raise
-#  return edited_volume
   return map_array_normed
 
 

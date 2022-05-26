@@ -56,8 +56,6 @@ class DataGenerator(Sequence):
       print(sample)
       path = sample
 
-      #protocol = sample["protocol"]
-      #stage = sample["stage"]
       # Store sample
       volume = prepare_training_data_volume(str(path),
                                             self.xyz_limits,
