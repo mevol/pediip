@@ -37,23 +37,46 @@ def figure_from_csv(history_file, filename):
 
 
 def reg_figure_from_csv(history_file, filename):
-  epochs = len(history["loss"])
-  epoch_list = range(epochs)
-  plt.plot(history.history['loss'], label='loss')
-  plt.plot(history.history['val_loss'], label='val_loss')
-  plt.ylim([0, 10])
-  plt.xlabel('Epoch')
-  plt.ylabel('Error [mean_phase_error]')
-  plt.legend()
-  plt.grid(True)
-  plt.savefig(filename)
-  return plt
+    history = pd.read_csv(history_file)
+    f, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+    f.suptitle(Path(history_file).stem, fontsize=12)
+    f.subplots_adjust(top=0.85, wspace=0.3)
+    epochs = len(history["Accuracy"])
+    epoch_list = range(epochs)
+    ax1.plot(epoch_list, history["Root Mean Squared Error"], label="Train Root Mean Squared Error")
+    ax1.plot(epoch_list, history["Val Root Mean Squared Error"], label="Validation Root Mean Squared Error")
+    ax1.set_ylabel("Root Mean Squared Error Value")
+    ax1.set_ylim(-0.1, 1.1)
+    ax1.set_xlabel("Epoch")
+    ax1.set_title("Root Mean Squared Error")
+    ax1.legend(loc="best")
+    ax2.plot(epoch_list, history["Loss"], label="Train Loss")
+    ax2.plot(epoch_list, history["Val Loss"], label="Validation Loss")
+    ax2.set_ylabel("Loss Value")
+    ax2.set_xlabel("Epoch")
+    ax2.set_title("Loss")
+    ax2.legend(loc="best")
+    plt.savefig(filename)
+    return f
+
+#  history = pd.read_csv(history_file)
+#  epochs = len(history["loss"])
+#  epoch_list = range(epochs)
+#  plt.plot(history.history['loss'], label='loss')
+#  plt.plot(history.history['val_loss'], label='val_loss')
+#  plt.ylim([0, 10])
+#  plt.xlabel('Epoch')
+#  plt.ylabel('Error [mean_phase_error]')
+#  plt.legend()
+#  plt.grid(True)
+#  plt.savefig(filename)
+#  return plt
 
 def history_to_csv(history, filename):
     """Put the history in a csv file with known format"""
     history_data = pd.DataFrame(
-        {"Accuracy": history.history["accuracy"],
-         "Val Accuracy": history.history["val_accuracy"],
+        {"Root Mean Squared Error": history.history["root_mean_squared_error"],
+         "Val Root Mean Squared Error": history.history["val_root_mean_squared_error"],
          "Loss": history.history["loss"],
          "Val Loss": history.history["val_loss"]})
     file_path = Path(filename)

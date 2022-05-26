@@ -53,7 +53,6 @@ class DataGenerator(Sequence):
     # Generate data
     for i, ID in enumerate(list_IDs_temp):
       sample = self.list_IDs.iloc[ID]
-      print(sample)
       path = sample
 
       # Store sample
