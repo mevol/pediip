@@ -46,7 +46,6 @@ def reg_figure_from_csv(history_file, filename):
     ax1.plot(epoch_list, history["Root Mean Squared Error"], label="Train Root Mean Squared Error")
     ax1.plot(epoch_list, history["Val Root Mean Squared Error"], label="Validation Root Mean Squared Error")
     ax1.set_ylabel("Root Mean Squared Error Value")
-    ax1.set_ylim(-0.1, 1.1)
     ax1.set_xlabel("Epoch")
     ax1.set_title("Root Mean Squared Error")
     ax1.legend(loc="best")
