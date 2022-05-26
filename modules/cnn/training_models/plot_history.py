@@ -59,24 +59,11 @@ def reg_figure_from_csv(history_file, filename):
     plt.savefig(filename)
     return f
 
-#  history = pd.read_csv(history_file)
-#  epochs = len(history["loss"])
-#  epoch_list = range(epochs)
-#  plt.plot(history.history['loss'], label='loss')
-#  plt.plot(history.history['val_loss'], label='val_loss')
-#  plt.ylim([0, 10])
-#  plt.xlabel('Epoch')
-#  plt.ylabel('Error [mean_phase_error]')
-#  plt.legend()
-#  plt.grid(True)
-#  plt.savefig(filename)
-#  return plt
-
 def history_to_csv(history, filename):
     """Put the history in a csv file with known format"""
     history_data = pd.DataFrame(
-        {"Root Mean Squared Error": history.history["root_mean_squared_error"],
-         "Val Root Mean Squared Error": history.history["val_root_mean_squared_error"],
+        {"Accuracy": history.history["accuracy"],
+         "Val Accuracy": history.history["val_accuracy"],
          "Loss": history.history["loss"],
          "Val Loss": history.history["val_loss"]})
     file_path = Path(filename)
@@ -87,7 +74,9 @@ def history_to_csv(history, filename):
 def reg_history_to_csv(history, filename):
     """Put the history in a csv file with known format"""
     history_data = pd.DataFrame(
-        {"Loss": history.history["loss"],
+        {"Root Mean Squared Error": history.history["root_mean_squared_error"],
+         "Val Root Mean Squared Error": history.history["val_root_mean_squared_error"],
+         "Loss": history.history["loss"],
          "Val Loss": history.history["val_loss"]})
     file_path = Path(filename)
     history_data.to_csv(file_path)
