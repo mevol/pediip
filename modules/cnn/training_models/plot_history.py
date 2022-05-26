@@ -41,7 +41,7 @@ def reg_figure_from_csv(history_file, filename):
     f, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
     f.suptitle(Path(history_file).stem, fontsize=12)
     f.subplots_adjust(top=0.85, wspace=0.3)
-    epochs = len(history["Accuracy"])
+    epochs = len(history["Root Mean Squared Error"])
     epoch_list = range(epochs)
     ax1.plot(epoch_list, history["Root Mean Squared Error"], label="Train Root Mean Squared Error")
     ax1.plot(epoch_list, history["Val Root Mean Squared Error"], label="Validation Root Mean Squared Error")
