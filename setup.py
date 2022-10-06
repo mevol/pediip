@@ -28,7 +28,7 @@ setup(
 #         "numpy==1.19.2",
          "numpy",
 #         "tensorflow==2.5.3",
-         "tensorflow==2.7.1",
+         "tensorflow==2.7.2",
 #         "h5py==3.1.0",
          "h5py==3.6.0",
 #         "tensorflow<=1.13",
